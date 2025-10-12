@@ -107,7 +107,7 @@ export default function LoginVariant4() {
         <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl p-12 max-w-2xl mx-auto border-4 border-white/50">
           <div className="text-center mb-8">
             <h2 className="text-4xl font-black bg-gradient-to-r from-orange-600 to-pink-600 bg-clip-text text-transparent mb-2">
-              Let's Get Started!
+              Let&apos;s Get Started!
             </h2>
             <p className="text-gray-600 text-lg">Sign in to unlock your financial potential</p>
           </div>

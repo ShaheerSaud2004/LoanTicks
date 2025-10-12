@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { LogIn, Loader2, Lock } from 'lucide-react';
+import { Loader2, Lock } from 'lucide-react';
 import Link from 'next/link';
 
 export default function LoginVariant3() {
