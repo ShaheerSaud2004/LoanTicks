@@ -62,15 +62,6 @@ export default function LoginVariant2() {
         <Link href="/login/variant2" className="px-2.5 py-1.5 bg-white text-purple-600 text-xs font-semibold rounded-lg shadow-lg">
           D2
         </Link>
-        <Link href="/login/variant3" className="px-2.5 py-1.5 bg-white/20 hover:bg-white/30 text-white text-xs font-semibold rounded-lg backdrop-blur-sm transition">
-          D3
-        </Link>
-        <Link href="/login/variant4" className="px-2.5 py-1.5 bg-white/20 hover:bg-white/30 text-white text-xs font-semibold rounded-lg backdrop-blur-sm transition">
-          D4
-        </Link>
-        <Link href="/login/variant5" className="px-2.5 py-1.5 bg-white/20 hover:bg-white/30 text-white text-xs font-semibold rounded-lg backdrop-blur-sm transition">
-          D5
-        </Link>
       </div>
 
       {/* Animated Background Elements */}

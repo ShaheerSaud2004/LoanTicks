@@ -64,15 +64,6 @@ export default function LoginPage() {
         <Link href="/login/variant2" className="px-2.5 py-1.5 bg-white hover:bg-gray-100 text-gray-700 text-xs font-semibold rounded-lg shadow-sm transition">
           D2
         </Link>
-        <Link href="/login/variant3" className="px-2.5 py-1.5 bg-white hover:bg-gray-100 text-gray-700 text-xs font-semibold rounded-lg shadow-sm transition">
-          D3
-        </Link>
-        <Link href="/login/variant4" className="px-2.5 py-1.5 bg-white hover:bg-gray-100 text-gray-700 text-xs font-semibold rounded-lg shadow-sm transition">
-          D4
-        </Link>
-        <Link href="/login/variant5" className="px-2.5 py-1.5 bg-white hover:bg-gray-100 text-gray-700 text-xs font-semibold rounded-lg shadow-sm transition">
-          D5
-        </Link>
       </div>
       
       {/* Left Side - Branding */}
