@@ -11,21 +11,21 @@ import connectDB from '../lib/mongodb';
 const demoUsers = [
   {
     name: 'Admin User',
-    email: 'admin@loanticks.com',
+    email: 'admin@loanaticks.com',
     password: 'admin123',
     role: 'admin',
     phone: '+1-555-0101',
   },
   {
     name: 'Employee User',
-    email: 'employee@loanticks.com',
+    email: 'employee@loanaticks.com',
     password: 'employee123',
     role: 'employee',
     phone: '+1-555-0102',
   },
   {
     name: 'Customer User',
-    email: 'customer@loanticks.com',
+    email: 'customer@loanaticks.com',
     password: 'customer123',
     role: 'customer',
     phone: '+1-555-0103',

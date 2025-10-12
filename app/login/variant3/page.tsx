@@ -77,10 +77,10 @@ export default function LoginVariant3() {
       <div className="hidden lg:flex lg:w-1/2 bg-black text-white flex-col justify-between p-12 lg:p-16 border-r-4 border-white relative">
         <div className="flex items-center gap-3">
           <div className="h-14 w-14 bg-white rounded-xl flex items-center justify-center overflow-hidden">
-            <img src="/logo.jpg" alt="LoanTicks" className="h-full w-full object-contain" />
+            <img src="/logo.jpg" alt="LOANATicks" className="h-full w-full object-contain" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold">LoanTicks</h1>
+            <h1 className="text-2xl font-bold">LOANATicks</h1>
             <p className="text-gray-400 text-sm">Financial Services</p>
           </div>
         </div>
@@ -110,7 +110,7 @@ export default function LoginVariant3() {
         </div>
 
         <div className="text-sm text-gray-500">
-          © 2025 LoanTicks. Enterprise-grade security.
+          © 2025 LOANATicks. Enterprise-grade security.
         </div>
       </div>
 
@@ -121,9 +121,9 @@ export default function LoginVariant3() {
           <div className="lg:hidden mb-8 sm:mb-12 text-center">
             <div className="inline-flex items-center gap-3">
               <div className="h-12 w-12 bg-black rounded-xl flex items-center justify-center overflow-hidden">
-                <img src="/logo.jpg" alt="LoanTicks" className="h-full w-full object-contain" />
+                <img src="/logo.jpg" alt="LOANATicks" className="h-full w-full object-contain" />
               </div>
-              <h1 className="text-2xl font-bold">LoanTicks</h1>
+              <h1 className="text-2xl font-bold">LOANATicks</h1>
             </div>
           </div>
 
@@ -209,15 +209,15 @@ export default function LoginVariant3() {
               <div className="space-y-2 sm:space-y-3 text-xs sm:text-sm">
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center py-2 border-b border-gray-100 gap-1 sm:gap-0">
                   <span className="font-medium text-gray-900">Administrator</span>
-                  <span className="text-gray-500 font-mono text-[10px] sm:text-xs">admin@loanticks.com</span>
+                  <span className="text-gray-500 font-mono text-[10px] sm:text-xs">admin@loanaticks.com</span>
                 </div>
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center py-2 border-b border-gray-100 gap-1 sm:gap-0">
                   <span className="font-medium text-gray-900">Employee</span>
-                  <span className="text-gray-500 font-mono text-[10px] sm:text-xs">employee@loanticks.com</span>
+                  <span className="text-gray-500 font-mono text-[10px] sm:text-xs">employee@loanaticks.com</span>
                 </div>
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center py-2 border-b border-gray-100 gap-1 sm:gap-0">
                   <span className="font-medium text-gray-900">Customer</span>
-                  <span className="text-gray-500 font-mono text-[10px] sm:text-xs">customer@loanticks.com</span>
+                  <span className="text-gray-500 font-mono text-[10px] sm:text-xs">customer@loanaticks.com</span>
                 </div>
                 <p className="text-xs text-gray-400 mt-2">Password for all: [role]123</p>
               </div>

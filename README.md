@@ -1,4 +1,4 @@
-# 🏦 LoanTicks - Loan Management System
+# 🏦 LOANATicks - Loan Management System
 
 A modern, full-stack loan management platform built with Next.js 14, TypeScript, MongoDB, and NextAuth.js. Features role-based authentication for Admins, Employees, and Customers.
 
@@ -52,7 +52,7 @@ A modern, full-stack loan management platform built with Next.js 14, TypeScript,
 ### 1. Clone the repository
 
 ```bash
-cd /Users/shaheersaud/LoanTicks/loanticks
+cd /Users/shaheersaud/LOANATicks/loanaticks
 ```
 
 ### 2. Install dependencies
@@ -73,8 +73,8 @@ Edit `.env.local` with your configuration:
 
 ```env
 # MongoDB Connection
-MONGODB_URI=mongodb://localhost:27017/loanticks
-# For production: mongodb+srv://<username>:<password>@cluster.mongodb.net/loanticks
+MONGODB_URI=mongodb://localhost:27017/loanaticks
+# For production: mongodb+srv://<username>:<password>@cluster.mongodb.net/loanaticks
 
 # NextAuth Configuration
 NEXTAUTH_URL=http://localhost:3000
@@ -105,9 +105,9 @@ npm run seed
 ```
 
 This will create three demo accounts:
-- **Admin:** admin@loanticks.com / admin123
-- **Employee:** employee@loanticks.com / employee123
-- **Customer:** customer@loanticks.com / customer123
+- **Admin:** admin@loanaticks.com / admin123
+- **Employee:** employee@loanaticks.com / employee123
+- **Customer:** customer@loanaticks.com / customer123
 
 ### 6. Start the development server
 
@@ -132,7 +132,7 @@ Visit [http://localhost:3000](http://localhost:3000)
 ## 📁 Project Structure
 
 ```
-loanticks/
+loanaticks/
 ├── app/
 │   ├── api/
 │   │   └── auth/[...nextauth]/    # NextAuth API routes
@@ -216,7 +216,7 @@ npm install
 
 | Variable | Description | Example |
 |----------|-------------|---------|
-| `MONGODB_URI` | MongoDB connection string | `mongodb://localhost:27017/loanticks` |
+| `MONGODB_URI` | MongoDB connection string | `mongodb://localhost:27017/loanaticks` |
 | `NEXTAUTH_URL` | Application URL | `http://localhost:3000` |
 | `NEXTAUTH_SECRET` | Secret for JWT signing | Generate with `openssl rand -base64 32` |
 

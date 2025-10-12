@@ -78,12 +78,12 @@ export default function LoginVariant4() {
           {/* Logo and Header */}
           <div className="text-center mb-8">
             <div className="inline-flex items-center justify-center h-16 w-16 bg-blue-600 rounded-xl mb-4 overflow-hidden">
-              <img src="/logo.jpg" alt="LoanTicks" className="h-full w-full object-contain" />
+              <img src="/logo.jpg" alt="LOANATicks" className="h-full w-full object-contain" />
             </div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
               Welcome Back
             </h1>
-            <p className="text-gray-600">Sign in to continue to LoanTicks</p>
+            <p className="text-gray-600">Sign in to continue to LOANATicks</p>
           </div>
 
           <form className="space-y-5" onSubmit={handleSubmit}>
@@ -159,15 +159,15 @@ export default function LoginVariant4() {
             <div className="space-y-2 text-sm">
               <div className="flex justify-between items-center py-2 px-3 bg-gray-50 rounded-lg">
                 <span className="font-medium text-gray-900">Admin</span>
-                <span className="text-gray-600 text-xs font-mono">admin@loanticks.com</span>
+                <span className="text-gray-600 text-xs font-mono">admin@loanaticks.com</span>
               </div>
               <div className="flex justify-between items-center py-2 px-3 bg-gray-50 rounded-lg">
                 <span className="font-medium text-gray-900">Employee</span>
-                <span className="text-gray-600 text-xs font-mono">employee@loanticks.com</span>
+                <span className="text-gray-600 text-xs font-mono">employee@loanaticks.com</span>
               </div>
               <div className="flex justify-between items-center py-2 px-3 bg-gray-50 rounded-lg">
                 <span className="font-medium text-gray-900">Customer</span>
-                <span className="text-gray-600 text-xs font-mono">customer@loanticks.com</span>
+                <span className="text-gray-600 text-xs font-mono">customer@loanaticks.com</span>
               </div>
               <p className="text-xs text-gray-500 mt-3 text-center">Password for all: [role]123</p>
             </div>
@@ -175,7 +175,7 @@ export default function LoginVariant4() {
         </div>
 
         <div className="text-center mt-6 text-gray-600 text-xs">
-          <p>© 2025 LoanTicks. All rights reserved.</p>
+          <p>© 2025 LOANATicks. All rights reserved.</p>
         </div>
       </div>
     </div>

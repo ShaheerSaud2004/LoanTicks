@@ -1,8 +1,8 @@
-# 📊 LoanTicks - Project Summary
+# 📊 LOANATicks - Project Summary
 
 ## Project Overview
 
-**Project Name:** LoanTicks - Financial Loan Management Platform  
+**Project Name:** LOANATicks - Financial Loan Management Platform  
 **Client:** Ruqayya Yasin  
 **Developer:** Cipher Consulting (Shaheer Saud)  
 **Start Date:** October 12, 2025  
@@ -68,7 +68,7 @@
 ## 📁 File Structure
 
 ```
-loanticks/
+loanaticks/
 ├── app/
 │   ├── api/auth/[...nextauth]/route.ts  # Auth API
 │   ├── admin/dashboard/page.tsx         # Admin dashboard
@@ -185,9 +185,9 @@ npm run dev
 
 | Role | Email | Password |
 |------|-------|----------|
-| Admin | admin@loanticks.com | admin123 |
-| Employee | employee@loanticks.com | employee123 |
-| Customer | customer@loanticks.com | customer123 |
+| Admin | admin@loanaticks.com | admin123 |
+| Employee | employee@loanaticks.com | employee123 |
+| Customer | customer@loanaticks.com | customer123 |
 
 ## 📋 Next Steps (Phase 2)
 

@@ -1,4 +1,4 @@
-# 🚀 Deploy LoanTicks to Vercel
+# 🚀 Deploy LOANATicks to Vercel
 
 Your code has been successfully pushed to GitHub! Now let's deploy it to Vercel.
 
@@ -41,9 +41,9 @@ Before deploying, you'll need:
    ```
 5. Replace `<username>` with your database username
 6. Replace `<password>` with your database password
-7. Add `/loanticks` before the `?` to specify the database:
+7. Add `/loanaticks` before the `?` to specify the database:
    ```
-   mongodb+srv://myuser:mypassword@cluster0.xxxxx.mongodb.net/loanticks?retryWrites=true&w=majority
+   mongodb+srv://myuser:mypassword@cluster0.xxxxx.mongodb.net/loanaticks?retryWrites=true&w=majority
    ```
 
 ---
@@ -54,12 +54,12 @@ Before deploying, you'll need:
 1. Go to [vercel.com/new](https://vercel.com/new)
 2. Click **Import Git Repository**
 3. Authorize GitHub if needed
-4. Find and import: `ShaheerSaud2004/LoanTicks`
+4. Find and import: `ShaheerSaud2004/LOANATicks`
 5. Click **Import**
 
 ### 2.2 Configure Project
 1. **Framework Preset:** Next.js (should auto-detect)
-2. **Root Directory:** `loanticks`
+2. **Root Directory:** `loanaticks`
 3. **Build Command:** `npm run build`
 4. **Output Directory:** `.next`
 
@@ -87,7 +87,7 @@ Click **Environment Variables** and add these:
 ### 2.4 Deploy
 1. Click **Deploy**
 2. Wait 2-3 minutes for the build to complete
-3. You'll get a URL like: `https://loanticks.vercel.app`
+3. You'll get a URL like: `https://loanaticks.vercel.app`
 
 ---
 
@@ -104,7 +104,7 @@ npm i -g vercel
 vercel login
 
 # Link to your project
-cd /Users/shaheersaud/LoanTicks/loanticks
+cd /Users/shaheersaud/LOANATicks/loanaticks
 vercel link
 
 # Run seed script on Vercel
@@ -115,7 +115,7 @@ npm run seed
 ### Option B: Manual Database Seeding
 1. Install [MongoDB Compass](https://www.mongodb.com/products/compass)
 2. Connect using your MongoDB Atlas connection string
-3. Create database: `loanticks`
+3. Create database: `loanaticks`
 4. Create collection: `users`
 5. Insert these documents:
 
@@ -123,7 +123,7 @@ npm run seed
 ```json
 {
   "name": "Admin User",
-  "email": "admin@loanticks.com",
+  "email": "admin@loanaticks.com",
   "password": "$2a$10$[hashed_password]",
   "role": "admin",
   "phone": "+1-555-0101",
@@ -141,19 +141,19 @@ npm run seed
 1. Visit your Vercel URL: `https://your-app.vercel.app`
 2. You should see the login page with your logo
 3. Try logging in with demo credentials:
-   - **Admin:** admin@loanticks.com / admin123
-   - **Employee:** employee@loanticks.com / employee123
-   - **Customer:** customer@loanticks.com / customer123
+   - **Admin:** admin@loanaticks.com / admin123
+   - **Employee:** employee@loanaticks.com / employee123
+   - **Customer:** customer@loanaticks.com / customer123
 
 ---
 
 ## 🎉 You're Live!
 
-Your LoanTicks application is now deployed and accessible worldwide!
+Your LOANATicks application is now deployed and accessible worldwide!
 
 **Your URLs:**
-- **Production:** `https://loanticks.vercel.app` (or your custom domain)
-- **GitHub:** https://github.com/ShaheerSaud2004/LoanTicks
+- **Production:** `https://loanaticks.vercel.app` (or your custom domain)
+- **GitHub:** https://github.com/ShaheerSaud2004/LOANATicks
 
 ---
 
@@ -161,7 +161,7 @@ Your LoanTicks application is now deployed and accessible worldwide!
 
 ### Build Failed
 - Check Vercel build logs
-- Ensure root directory is set to `loanticks`
+- Ensure root directory is set to `loanaticks`
 - Verify all dependencies are in `package.json`
 
 ### Can't Connect to Database
@@ -186,7 +186,7 @@ Your LoanTicks application is now deployed and accessible worldwide!
 
 1. Go to your Vercel project settings
 2. Click **Domains**
-3. Add your custom domain (e.g., `loanticks.com`)
+3. Add your custom domain (e.g., `loanaticks.com`)
 4. Follow Vercel's DNS instructions
 5. Update `NEXTAUTH_URL` environment variable to your custom domain
 
@@ -223,7 +223,7 @@ git push origin main
 
 **Developer:** Shaheer Saud  
 **Email:** shaheersaud2004@gmail.com  
-**GitHub:** https://github.com/ShaheerSaud2004/LoanTicks
+**GitHub:** https://github.com/ShaheerSaud2004/LOANATicks
 
 ---
 

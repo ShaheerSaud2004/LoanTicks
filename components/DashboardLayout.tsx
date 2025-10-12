@@ -73,10 +73,10 @@ export default function DashboardLayout({
             {/* Logo */}
             <div className="flex items-center">
               <div className="h-10 w-10 rounded-lg overflow-hidden bg-white border border-gray-200">
-                <img src="/logo.jpg" alt="LoanTicks" className="h-full w-full object-cover" />
+                <img src="/logo.jpg" alt="LOANATicks" className="h-full w-full object-cover" />
               </div>
               <span className="ml-3 text-xl font-bold text-gray-900">
-                LoanTicks
+                LOANATicks
               </span>
             </div>
 

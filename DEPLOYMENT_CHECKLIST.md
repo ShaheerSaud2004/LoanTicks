@@ -1,10 +1,10 @@
-# ✅ LoanTicks Deployment Checklist
+# ✅ LOANATicks Deployment Checklist
 
 Use this checklist to ensure smooth deployment to Vercel.
 
 ## Pre-Deployment ✅
 
-- [x] Code pushed to GitHub: https://github.com/ShaheerSaud2004/LoanTicks
+- [x] Code pushed to GitHub: https://github.com/ShaheerSaud2004/LOANATicks
 - [x] Logo added to project
 - [x] All features tested locally
 - [x] No linting errors
@@ -22,14 +22,14 @@ Use this checklist to ensure smooth deployment to Vercel.
 
 **Connection String Format:**
 ```
-mongodb+srv://USERNAME:PASSWORD@cluster0.xxxxx.mongodb.net/loanticks?retryWrites=true&w=majority
+mongodb+srv://USERNAME:PASSWORD@cluster0.xxxxx.mongodb.net/loanaticks?retryWrites=true&w=majority
 ```
 
 ## Vercel Deployment
 
 - [ ] Sign up/login to Vercel: https://vercel.com
 - [ ] Import GitHub repository
-- [ ] Set root directory to: `loanticks`
+- [ ] Set root directory to: `loanaticks`
 - [ ] Configure environment variables:
 
 ### Required Environment Variables:
@@ -99,25 +99,25 @@ NEXTAUTH_URL=https://your-app.vercel.app
 ## Quick Reference
 
 **GitHub Repository:**
-https://github.com/ShaheerSaud2004/LoanTicks
+https://github.com/ShaheerSaud2004/LOANATicks
 
 **Local Development:**
 ```bash
-cd /Users/shaheersaud/LoanTicks/loanticks
+cd /Users/shaheersaud/LOANATicks/loanaticks
 npm run dev
 ```
 
 **Deploy to Vercel:**
 1. Go to: https://vercel.com/new
-2. Import: ShaheerSaud2004/LoanTicks
-3. Set root: loanticks
+2. Import: ShaheerSaud2004/LOANATicks
+3. Set root: loanaticks
 4. Add environment variables
 5. Deploy!
 
 **Demo Credentials:**
-- Admin: admin@loanticks.com / admin123
-- Employee: employee@loanticks.com / employee123
-- Customer: customer@loanticks.com / customer123
+- Admin: admin@loanaticks.com / admin123
+- Employee: employee@loanaticks.com / employee123
+- Customer: customer@loanaticks.com / customer123
 
 ---
 

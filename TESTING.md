@@ -1,29 +1,29 @@
-# 🧪 LoanTicks - Testing Guide
+# 🧪 LOANATicks - Testing Guide
 
 ## ✅ How to Test Login (Step by Step)
 
 ### Step 1: Open the Site
-Go to: **https://loanticks.vercel.app**
+Go to: **https://loanaticks.vercel.app**
 
-You should be automatically redirected to: **https://loanticks.vercel.app/login**
+You should be automatically redirected to: **https://loanaticks.vercel.app/login**
 
 ### Step 2: Use These EXACT Credentials
 
 #### Test Admin Login:
 ```
-Email: admin@loanticks.com
+Email: admin@loanaticks.com
 Password: admin123
 ```
 
 #### Test Employee Login:
 ```
-Email: employee@loanticks.com
+Email: employee@loanaticks.com
 Password: employee123
 ```
 
 #### Test Customer Login:
 ```
-Email: customer@loanticks.com
+Email: customer@loanaticks.com
 Password: customer123
 ```
 
@@ -77,8 +77,8 @@ Password: customer123
 
 ## 📊 Current Status
 
-✅ **Login Page:** https://loanticks.vercel.app/login  
-✅ **Auth API:** https://loanticks.vercel.app/api/auth/providers  
+✅ **Login Page:** https://loanaticks.vercel.app/login  
+✅ **Auth API:** https://loanaticks.vercel.app/api/auth/providers  
 ✅ **Database:** MongoDB Atlas (Connected)  
 ✅ **Demo Users:** Seeded and ready  
 
@@ -89,13 +89,13 @@ Password: customer123
 ### Check 1: Are demo users in database?
 Run locally:
 ```bash
-cd /Users/shaheersaud/LoanTicks
+cd /Users/shaheersaud/LOANATicks
 npm run seed
 ```
 
 ### Check 2: Check Vercel logs
 ```bash
-vercel logs https://loanticks.vercel.app
+vercel logs https://loanaticks.vercel.app
 ```
 
 ### Check 3: Test locally
@@ -110,7 +110,7 @@ npm run dev
 ## ✅ Expected Flow
 
 ```
-1. Visit loanticks.vercel.app
+1. Visit loanaticks.vercel.app
    └─> Redirects to /login
 
 2. Enter credentials & click "Sign In"

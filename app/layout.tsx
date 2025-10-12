@@ -5,7 +5,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "LoanTicks - Loan Management System",
+  title: "LOANATicks - Loan Management System",
   description: "Professional loan management platform for admins, employees, and customers",
 };
 

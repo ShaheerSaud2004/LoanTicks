@@ -90,10 +90,10 @@ export default function LoginPage() {
           <div className="mb-12">
             <div className="flex items-center gap-4 mb-8">
               <div className="h-20 w-20 bg-white rounded-xl flex items-center justify-center shadow-2xl overflow-hidden ring-4 ring-white/20">
-                <img src="/logo.jpg" alt="LoanTicks" className="h-full w-full object-contain" />
+                <img src="/logo.jpg" alt="LOANATicks" className="h-full w-full object-contain" />
               </div>
               <div>
-                <h1 className="text-4xl font-bold text-white tracking-tight">LoanTicks</h1>
+                <h1 className="text-4xl font-bold text-white tracking-tight">LOANATicks</h1>
                 <p className="text-blue-200 text-sm font-medium">Financial Services</p>
               </div>
             </div>
@@ -120,7 +120,7 @@ export default function LoginPage() {
           </div>
 
           <div className="text-blue-200 text-sm border-t border-white/10 pt-6">
-            <p className="font-medium">© 2025 LoanTicks Financial Services</p>
+            <p className="font-medium">© 2025 LOANATicks Financial Services</p>
             <p className="mt-1 text-blue-300">🔒 Secured by enterprise-grade encryption</p>
           </div>
         </div>
@@ -133,10 +133,10 @@ export default function LoginPage() {
           <div className="lg:hidden text-center mb-10">
             <div className="inline-flex items-center gap-3 bg-white rounded-2xl p-4 shadow-lg border border-slate-200">
               <div className="h-14 w-14 bg-blue-900 rounded-xl flex items-center justify-center overflow-hidden">
-                <img src="/logo.jpg" alt="LoanTicks" className="h-full w-full object-contain" />
+                <img src="/logo.jpg" alt="LOANATicks" className="h-full w-full object-contain" />
               </div>
               <div className="text-left">
-                <h1 className="text-2xl font-bold text-slate-900">LoanTicks</h1>
+                <h1 className="text-2xl font-bold text-slate-900">LOANATicks</h1>
                 <p className="text-slate-600 text-xs font-medium">Financial Services</p>
               </div>
             </div>
@@ -251,21 +251,21 @@ export default function LoginPage() {
                   <div className="font-bold text-slate-900 text-sm">Administrator</div>
                   <span className="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full font-semibold">Admin</span>
                 </div>
-                <div className="text-slate-600 text-xs font-mono bg-white/60 px-2 py-1 rounded">admin@loanticks.com · admin123</div>
+                <div className="text-slate-600 text-xs font-mono bg-white/60 px-2 py-1 rounded">admin@loanaticks.com · admin123</div>
               </div>
               <div className="group bg-gradient-to-r from-blue-50 to-cyan-50 border border-blue-100 p-4 rounded-xl hover:shadow-md transition-all cursor-pointer">
                 <div className="flex items-center justify-between mb-2">
                   <div className="font-bold text-slate-900 text-sm">Employee</div>
                   <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-semibold">Staff</span>
                 </div>
-                <div className="text-slate-600 text-xs font-mono bg-white/60 px-2 py-1 rounded">employee@loanticks.com · employee123</div>
+                <div className="text-slate-600 text-xs font-mono bg-white/60 px-2 py-1 rounded">employee@loanaticks.com · employee123</div>
               </div>
               <div className="group bg-gradient-to-r from-green-50 to-emerald-50 border border-green-100 p-4 rounded-xl hover:shadow-md transition-all cursor-pointer">
                 <div className="flex items-center justify-between mb-2">
                   <div className="font-bold text-slate-900 text-sm">Customer</div>
                   <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-semibold">User</span>
                 </div>
-                <div className="text-slate-600 text-xs font-mono bg-white/60 px-2 py-1 rounded">customer@loanticks.com · customer123</div>
+                <div className="text-slate-600 text-xs font-mono bg-white/60 px-2 py-1 rounded">customer@loanaticks.com · customer123</div>
               </div>
             </div>
           </div>

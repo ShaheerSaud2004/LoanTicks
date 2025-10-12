@@ -1,6 +1,6 @@
 # 🚀 Quick Setup Guide
 
-Follow these steps to get LoanTicks running on your machine in under 5 minutes!
+Follow these steps to get LOANATicks running on your machine in under 5 minutes!
 
 ## Prerequisites Check
 
@@ -14,7 +14,7 @@ Make sure you have:
 ### 1️⃣ Install Dependencies
 
 ```bash
-cd /Users/shaheersaud/LoanTicks/loanticks
+cd /Users/shaheersaud/LOANATicks/loanaticks
 npm install
 ```
 
@@ -28,7 +28,7 @@ cp .env.example .env.local
 
 **For Local MongoDB:**
 ```env
-MONGODB_URI=mongodb://localhost:27017/loanticks
+MONGODB_URI=mongodb://localhost:27017/loanaticks
 NEXTAUTH_URL=http://localhost:3000
 NEXTAUTH_SECRET=replace-with-your-generated-secret
 ```
@@ -63,9 +63,9 @@ npm run seed
 
 You should see:
 ```
-✓ Created admin: admin@loanticks.com
-✓ Created employee: employee@loanticks.com
-✓ Created customer: customer@loanticks.com
+✓ Created admin: admin@loanaticks.com
+✓ Created employee: employee@loanaticks.com
+✓ Created customer: customer@loanaticks.com
 ✅ Database seeded successfully!
 ```
 
@@ -83,9 +83,9 @@ Open browser: **http://localhost:3000**
 
 | Role | Email | Password |
 |------|-------|----------|
-| **Admin** | admin@loanticks.com | admin123 |
-| **Employee** | employee@loanticks.com | employee123 |
-| **Customer** | customer@loanticks.com | customer123 |
+| **Admin** | admin@loanaticks.com | admin123 |
+| **Employee** | employee@loanaticks.com | employee123 |
+| **Customer** | customer@loanaticks.com | customer123 |
 
 ## 🐛 Common Issues
 

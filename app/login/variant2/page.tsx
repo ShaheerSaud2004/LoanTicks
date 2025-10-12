@@ -84,10 +84,10 @@ export default function LoginVariant2() {
         <div className="text-white space-y-6 lg:space-y-8 p-6 lg:p-8">
           <div className="flex items-center gap-3 sm:gap-4">
             <div className="h-12 w-12 sm:h-14 sm:w-14 lg:h-16 lg:w-16 bg-white rounded-xl lg:rounded-2xl flex items-center justify-center shadow-2xl overflow-hidden flex-shrink-0">
-              <img src="/logo.jpg" alt="LoanTicks" className="h-full w-full object-contain" />
+              <img src="/logo.jpg" alt="LOANATicks" className="h-full w-full object-contain" />
             </div>
             <div>
-              <h1 className="text-2xl sm:text-3xl font-bold">LoanTicks</h1>
+              <h1 className="text-2xl sm:text-3xl font-bold">LOANATicks</h1>
               <p className="text-white/80 text-xs sm:text-sm">Modern Financial Platform</p>
             </div>
           </div>
@@ -203,15 +203,15 @@ export default function LoginVariant2() {
             <div className="space-y-2 text-xs sm:text-sm">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-2.5 sm:p-3 bg-purple-50 rounded-lg gap-1 sm:gap-0">
                 <span className="font-semibold text-gray-900">Admin</span>
-                <span className="text-gray-600 font-mono text-[10px] sm:text-xs">admin@loanticks.com · admin123</span>
+                <span className="text-gray-600 font-mono text-[10px] sm:text-xs">admin@loanaticks.com · admin123</span>
               </div>
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-2.5 sm:p-3 bg-blue-50 rounded-lg gap-1 sm:gap-0">
                 <span className="font-semibold text-gray-900">Employee</span>
-                <span className="text-gray-600 font-mono text-[10px] sm:text-xs">employee@loanticks.com · employee123</span>
+                <span className="text-gray-600 font-mono text-[10px] sm:text-xs">employee@loanaticks.com · employee123</span>
               </div>
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-2.5 sm:p-3 bg-green-50 rounded-lg gap-1 sm:gap-0">
                 <span className="font-semibold text-gray-900">Customer</span>
-                <span className="text-gray-600 font-mono text-[10px] sm:text-xs">customer@loanticks.com · customer123</span>
+                <span className="text-gray-600 font-mono text-[10px] sm:text-xs">customer@loanaticks.com · customer123</span>
               </div>
             </div>
           </div>

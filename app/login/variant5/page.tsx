@@ -78,11 +78,11 @@ export default function LoginVariant5() {
             <div className="space-y-4 lg:space-y-6">
               <div className="inline-flex items-center gap-3 group">
                 <div className="h-12 w-12 sm:h-14 sm:w-14 lg:h-16 lg:w-16 bg-gradient-to-br from-purple-500 to-blue-500 rounded-xl lg:rounded-2xl flex items-center justify-center shadow-2xl overflow-hidden ring-2 ring-white/20 group-hover:ring-white/40 transition-all flex-shrink-0">
-                  <img src="/logo.jpg" alt="LoanTicks" className="h-full w-full object-contain" />
+                  <img src="/logo.jpg" alt="LOANATicks" className="h-full w-full object-contain" />
                 </div>
                 <div>
                   <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white tracking-tight">
-                    LoanTicks
+                    LOANATicks
                   </h1>
                   <p className="text-purple-300 text-xs sm:text-sm font-medium">Smart Financial Solutions</p>
                 </div>
@@ -142,7 +142,7 @@ export default function LoginVariant5() {
             </div>
 
             <div className="hidden lg:block text-center lg:text-left text-slate-400 text-sm">
-              <p>© 2025 LoanTicks. All rights reserved.</p>
+              <p>© 2025 LOANATicks. All rights reserved.</p>
             </div>
           </div>
 
@@ -230,7 +230,7 @@ export default function LoginVariant5() {
                 <button
                   type="button"
                   onClick={() => {
-                    setEmail('admin@loanticks.com');
+                    setEmail('admin@loanaticks.com');
                     setPassword('admin123');
                   }}
                   className="w-full bg-white/5 hover:bg-white/10 backdrop-blur-xl border border-white/10 rounded-lg p-2.5 sm:p-3 transition text-left group"
@@ -239,12 +239,12 @@ export default function LoginVariant5() {
                     <span className="font-semibold text-white text-xs sm:text-sm">Administrator</span>
                     <span className="bg-purple-500/20 text-purple-300 px-2 sm:px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-medium border border-purple-500/30">Admin</span>
                   </div>
-                  <div className="text-[10px] sm:text-xs text-slate-400 font-mono">admin@loanticks.com</div>
+                  <div className="text-[10px] sm:text-xs text-slate-400 font-mono">admin@loanaticks.com</div>
                 </button>
                 <button
                   type="button"
                   onClick={() => {
-                    setEmail('employee@loanticks.com');
+                    setEmail('employee@loanaticks.com');
                     setPassword('employee123');
                   }}
                   className="w-full bg-white/5 hover:bg-white/10 backdrop-blur-xl border border-white/10 rounded-lg p-2.5 sm:p-3 transition text-left group"
@@ -253,12 +253,12 @@ export default function LoginVariant5() {
                     <span className="font-semibold text-white text-xs sm:text-sm">Employee</span>
                     <span className="bg-blue-500/20 text-blue-300 px-2 sm:px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-medium border border-blue-500/30">Staff</span>
                   </div>
-                  <div className="text-[10px] sm:text-xs text-slate-400 font-mono">employee@loanticks.com</div>
+                  <div className="text-[10px] sm:text-xs text-slate-400 font-mono">employee@loanaticks.com</div>
                 </button>
                 <button
                   type="button"
                   onClick={() => {
-                    setEmail('customer@loanticks.com');
+                    setEmail('customer@loanaticks.com');
                     setPassword('customer123');
                   }}
                   className="w-full bg-white/5 hover:bg-white/10 backdrop-blur-xl border border-white/10 rounded-lg p-2.5 sm:p-3 transition text-left group"
@@ -267,14 +267,14 @@ export default function LoginVariant5() {
                     <span className="font-semibold text-white text-xs sm:text-sm">Customer</span>
                     <span className="bg-green-500/20 text-green-300 px-2 sm:px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-medium border border-green-500/30">User</span>
                   </div>
-                  <div className="text-[10px] sm:text-xs text-slate-400 font-mono">customer@loanticks.com</div>
+                  <div className="text-[10px] sm:text-xs text-slate-400 font-mono">customer@loanaticks.com</div>
                 </button>
               </div>
             </div>
 
             {/* Mobile Copyright */}
             <div className="lg:hidden text-center text-slate-400 text-xs mt-6 sm:mt-8">
-              <p>© 2025 LoanTicks. All rights reserved.</p>
+              <p>© 2025 LOANATicks. All rights reserved.</p>
             </div>
           </div>
         </div>

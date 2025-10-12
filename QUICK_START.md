@@ -1,4 +1,4 @@
-# ⚡ Quick Start - LoanTicks
+# ⚡ Quick Start - LOANATicks
 
 ## 🎯 3-Step Setup
 
@@ -9,7 +9,7 @@ cp .env.example .env.local
 
 Edit `.env.local`:
 ```env
-MONGODB_URI=mongodb://localhost:27017/loanticks
+MONGODB_URI=mongodb://localhost:27017/loanaticks
 NEXTAUTH_URL=http://localhost:3000
 NEXTAUTH_SECRET=your-secret-here
 ```
@@ -30,9 +30,9 @@ npm run dev
 
 | Role | Email | Password |
 |------|-------|----------|
-| Admin | admin@loanticks.com | admin123 |
-| Employee | employee@loanticks.com | employee123 |
-| Customer | customer@loanticks.com | customer123 |
+| Admin | admin@loanaticks.com | admin123 |
+| Employee | employee@loanaticks.com | employee123 |
+| Customer | customer@loanaticks.com | customer123 |
 
 ## 📱 Dashboards
 
