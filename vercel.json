@@ -1,0 +1,21 @@
+{
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install",
+  "framework": "nextjs",
+  "env": {
+    "MONGODB_URI": {
+      "description": "MongoDB connection string (use MongoDB Atlas for production)",
+      "required": true
+    },
+    "NEXTAUTH_SECRET": {
+      "description": "Secret key for NextAuth.js (generate with: openssl rand -base64 32)",
+      "required": true
+    },
+    "NEXTAUTH_URL": {
+      "description": "Your production URL (Vercel will auto-set this)",
+      "required": false
+    }
+  }
+}
+
