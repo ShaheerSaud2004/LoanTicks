@@ -74,7 +74,7 @@ export default function LoginVariant3() {
       </div>
 
       {/* Left Side - Minimal Branding */}
-      <div className="hidden lg:flex lg:w-1/2 bg-black text-white flex-col justify-between p-12 lg:p-16">
+      <div className="hidden lg:flex lg:w-1/2 bg-black text-white flex-col justify-between p-12 lg:p-16 border-r-4 border-white relative">
         <div className="flex items-center gap-3">
           <div className="h-14 w-14 bg-white rounded-xl flex items-center justify-center overflow-hidden">
             <img src="/logo.jpg" alt="LoanTicks" className="h-full w-full object-contain" />
@@ -86,11 +86,13 @@ export default function LoginVariant3() {
         </div>
 
         <div className="space-y-12">
-          <div className="space-y-4">
-            <div className="text-7xl font-bold leading-none">
+          <div className="space-y-4 relative">
+            {/* White glow effect behind text */}
+            <div className="absolute -inset-8 bg-white/10 rounded-full blur-3xl"></div>
+            <div className="text-7xl font-bold leading-none relative z-10" style={{textShadow: '0 0 80px rgba(255, 255, 255, 0.3), 0 0 40px rgba(255, 255, 255, 0.2)'}}>
               Elegant<br/>Banking
             </div>
-            <p className="text-xl text-gray-400 max-w-md">
+            <p className="text-xl text-gray-400 max-w-md relative z-10">
               Sophistication meets simplicity in modern financial management.
             </p>
           </div>
@@ -113,7 +115,7 @@ export default function LoginVariant3() {
       </div>
 
       {/* Right Side - Minimalist Login */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-8">
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-8 bg-white">
         <div className="w-full max-w-md">
           {/* Mobile Logo */}
           <div className="lg:hidden mb-8 sm:mb-12 text-center">
