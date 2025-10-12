@@ -17,10 +17,14 @@ export default function LoginPage() {
     e.preventDefault();
     setError('');
     setLoading(true);
-    setLoginStatus('Authenticating credentials...');
+    setLoginStatus('Verifying credentials...');
 
     try {
-      await new Promise(resolve => setTimeout(resolve, 800)); // Show status
+      // Show initial status
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      setLoginStatus('Checking user database...');
+      await new Promise(resolve => setTimeout(resolve, 600));
       
       const result = await signIn('credentials', {
         email,
@@ -29,21 +33,21 @@ export default function LoginPage() {
       });
 
       if (result?.error) {
-        setError(result.error);
+        setError('Incorrect email or password. Please check your credentials and try again.');
         setLoading(false);
         setLoginStatus('');
       } else {
-        setLoginStatus('Authentication successful!');
-        await new Promise(resolve => setTimeout(resolve, 500));
-        setLoginStatus('Redirecting to dashboard...');
+        setLoginStatus('✓ Login successful!');
         await new Promise(resolve => setTimeout(resolve, 800));
+        setLoginStatus('Loading your dashboard...');
+        await new Promise(resolve => setTimeout(resolve, 1000));
         
         // Redirect will be handled by middleware based on user role
         router.push('/');
         router.refresh();
       }
     } catch {
-      setError('An error occurred. Please try again.');
+      setError('Connection error. Please check your internet and try again.');
       setLoading(false);
       setLoginStatus('');
     }
@@ -131,25 +135,25 @@ export default function LoginPage() {
           {/* Login Form */}
           <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-8 lg:p-10">
           <form className="space-y-5" onSubmit={handleSubmit}>
-            {/* Loading Status */}
+            {/* Loading Status - MORE PROMINENT */}
             {loading && (
-              <div className="bg-blue-50 border border-blue-200 text-blue-900 px-4 py-3 rounded-lg text-sm flex items-center gap-3 animate-slideIn">
-                <Loader2 className="h-5 w-5 animate-spin text-blue-600" />
+              <div className="bg-gradient-to-r from-blue-500 to-indigo-500 border-2 border-blue-400 text-white px-5 py-4 rounded-xl shadow-lg flex items-center gap-4 animate-slideIn">
+                <Loader2 className="h-6 w-6 animate-spin flex-shrink-0" />
                 <div className="flex-1">
-                  <strong className="font-semibold">{loginStatus}</strong>
-                  <div className="w-full bg-blue-200 h-1 mt-2 rounded-full overflow-hidden">
-                    <div className="h-full bg-blue-600 animate-pulse" style={{width: '100%'}}></div>
+                  <strong className="font-bold text-base">{loginStatus}</strong>
+                  <div className="w-full bg-blue-400/30 h-2 mt-2.5 rounded-full overflow-hidden">
+                    <div className="h-full bg-white shadow-lg rounded-full animate-pulse" style={{width: '100%'}}></div>
                   </div>
                 </div>
               </div>
             )}
 
             {error && !loading && (
-              <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg text-sm flex items-start gap-2 animate-shake">
-                <div className="text-red-500">⚠</div>
-                <div>
-                  <strong className="font-semibold">Authentication Failed</strong>
-                  <p className="text-sm mt-0.5">{error}</p>
+              <div className="bg-red-500 border-2 border-red-600 text-white px-5 py-4 rounded-xl shadow-lg flex items-start gap-3 animate-shake">
+                <div className="text-2xl">❌</div>
+                <div className="flex-1">
+                  <strong className="font-bold text-base block mb-1">Login Failed</strong>
+                  <p className="text-sm text-red-50">{error}</p>
                 </div>
               </div>
             )}
@@ -197,12 +201,12 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex justify-center items-center gap-2 py-3.5 px-4 bg-blue-900 hover:bg-blue-800 text-white font-semibold rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full flex justify-center items-center gap-2 py-4 px-4 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold rounded-xl shadow-lg hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all disabled:opacity-70 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-[0.98]"
             >
               {loading ? (
                 <>
                   <Loader2 className="animate-spin h-5 w-5" />
-                  Authenticating...
+                  Please Wait...
                 </>
               ) : (
                 <>
