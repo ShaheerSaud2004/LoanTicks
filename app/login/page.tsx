@@ -52,36 +52,53 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex bg-gradient-to-br from-slate-50 to-slate-100">
       {/* Left Side - Branding */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-blue-900 via-blue-800 to-slate-900 p-12 flex-col justify-between relative overflow-hidden">
+      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-blue-900 via-blue-800 to-slate-900 p-12 flex-col justify-center relative overflow-hidden">
         {/* Background pattern */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute inset-0" style={{backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '40px 40px'}}></div>
         </div>
         
-        <div className="relative z-10">
-          <div className="flex items-center gap-4 mb-8">
-            <div className="h-16 w-16 bg-white rounded-lg flex items-center justify-center shadow-xl overflow-hidden">
-              <img src="/logo.jpg" alt="LoanTicks" className="h-full w-full object-contain" />
+        {/* Animated circles */}
+        <div className="absolute top-20 right-20 w-64 h-64 bg-blue-500/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-20 left-20 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
+        
+        <div className="relative z-10 max-w-md">
+          <div className="mb-12">
+            <div className="flex items-center gap-4 mb-8">
+              <div className="h-20 w-20 bg-white rounded-xl flex items-center justify-center shadow-2xl overflow-hidden ring-4 ring-white/20">
+                <img src="/logo.jpg" alt="LoanTicks" className="h-full w-full object-contain" />
+              </div>
+              <div>
+                <h1 className="text-4xl font-bold text-white tracking-tight">LoanTicks</h1>
+                <p className="text-blue-200 text-sm font-medium">Financial Services</p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-3xl font-bold text-white">LoanTicks</h1>
-              <p className="text-blue-200 text-sm">Financial Services</p>
+            
+            <div className="space-y-6 text-white">
+              <h2 className="text-5xl font-bold leading-tight tracking-tight">
+                Secure Loan<br/>Management<br/>System
+              </h2>
+              <p className="text-blue-100 text-lg leading-relaxed">
+                Professional financial solutions trusted by businesses and individuals worldwide
+              </p>
+              
+              <div className="flex items-center gap-8 pt-4">
+                <div>
+                  <div className="text-3xl font-bold">50K+</div>
+                  <div className="text-blue-200 text-sm">Active Users</div>
+                </div>
+                <div>
+                  <div className="text-3xl font-bold">$2.5B</div>
+                  <div className="text-blue-200 text-sm">Loans Processed</div>
+                </div>
+              </div>
             </div>
           </div>
-          
-          <div className="space-y-6 text-white">
-            <h2 className="text-4xl font-bold leading-tight">
-              Secure Loan<br/>Management System
-            </h2>
-            <p className="text-blue-200 text-lg">
-              Professional financial solutions for businesses and individuals
-            </p>
-          </div>
-        </div>
 
-        <div className="relative z-10 text-blue-200 text-sm">
-          <p>© 2025 LoanTicks Financial Services. All rights reserved.</p>
-          <p className="mt-1">Secured by enterprise-grade encryption</p>
+          <div className="text-blue-200 text-sm border-t border-white/10 pt-6">
+            <p className="font-medium">© 2025 LoanTicks Financial Services</p>
+            <p className="mt-1 text-blue-300">🔒 Secured by enterprise-grade encryption</p>
+          </div>
         </div>
       </div>
 
@@ -89,30 +106,30 @@ export default function LoginPage() {
       <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12">
         <div className="w-full max-w-md space-y-8">
           {/* Mobile Logo */}
-          <div className="lg:hidden text-center mb-8">
-            <div className="inline-flex items-center gap-3">
-              <div className="h-12 w-12 bg-blue-900 rounded-lg flex items-center justify-center overflow-hidden">
+          <div className="lg:hidden text-center mb-10">
+            <div className="inline-flex items-center gap-3 bg-white rounded-2xl p-4 shadow-lg border border-slate-200">
+              <div className="h-14 w-14 bg-blue-900 rounded-xl flex items-center justify-center overflow-hidden">
                 <img src="/logo.jpg" alt="LoanTicks" className="h-full w-full object-contain" />
               </div>
               <div className="text-left">
                 <h1 className="text-2xl font-bold text-slate-900">LoanTicks</h1>
-                <p className="text-slate-600 text-xs">Financial Services</p>
+                <p className="text-slate-600 text-xs font-medium">Financial Services</p>
               </div>
             </div>
           </div>
 
           {/* Login Header */}
-          <div>
-            <h2 className="text-3xl font-bold text-slate-900">
-              Sign In
+          <div className="text-center lg:text-left">
+            <h2 className="text-3xl font-bold text-slate-900 tracking-tight">
+              Welcome Back
             </h2>
             <p className="mt-2 text-slate-600">
-              Access your account securely
+              Sign in to access your account
             </p>
           </div>
 
           {/* Login Form */}
-          <div className="bg-white rounded-xl shadow-lg border border-slate-200 p-8">
+          <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-8 lg:p-10">
           <form className="space-y-5" onSubmit={handleSubmit}>
             {/* Loading Status */}
             {loading && (
@@ -197,29 +214,50 @@ export default function LoginPage() {
           </form>
 
           {/* Demo Credentials */}
-          <div className="mt-8 pt-6 border-t border-slate-200">
-            <p className="text-xs font-semibold text-slate-500 mb-4 uppercase tracking-wider">
-              Demo Access Credentials
-            </p>
-            <div className="space-y-2 text-sm">
-              <div className="bg-slate-50 border border-slate-200 p-3 rounded-lg">
-                <div className="font-semibold text-slate-900 mb-1">Administrator</div>
-                <div className="text-slate-600 text-xs font-mono">admin@loanticks.com · admin123</div>
+          <div className="mt-8 pt-8 border-t-2 border-slate-100">
+            <div className="flex items-center justify-between mb-4">
+              <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                Demo Access Credentials
+              </p>
+              <span className="text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded-full font-semibold">Test Accounts</span>
+            </div>
+            <div className="space-y-3">
+              <div className="group bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-100 p-4 rounded-xl hover:shadow-md transition-all cursor-pointer">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="font-bold text-slate-900 text-sm">Administrator</div>
+                  <span className="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full font-semibold">Admin</span>
+                </div>
+                <div className="text-slate-600 text-xs font-mono bg-white/60 px-2 py-1 rounded">admin@loanticks.com · admin123</div>
               </div>
-              <div className="bg-slate-50 border border-slate-200 p-3 rounded-lg">
-                <div className="font-semibold text-slate-900 mb-1">Employee</div>
-                <div className="text-slate-600 text-xs font-mono">employee@loanticks.com · employee123</div>
+              <div className="group bg-gradient-to-r from-blue-50 to-cyan-50 border border-blue-100 p-4 rounded-xl hover:shadow-md transition-all cursor-pointer">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="font-bold text-slate-900 text-sm">Employee</div>
+                  <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-semibold">Staff</span>
+                </div>
+                <div className="text-slate-600 text-xs font-mono bg-white/60 px-2 py-1 rounded">employee@loanticks.com · employee123</div>
               </div>
-              <div className="bg-slate-50 border border-slate-200 p-3 rounded-lg">
-                <div className="font-semibold text-slate-900 mb-1">Customer</div>
-                <div className="text-slate-600 text-xs font-mono">customer@loanticks.com · customer123</div>
+              <div className="group bg-gradient-to-r from-green-50 to-emerald-50 border border-green-100 p-4 rounded-xl hover:shadow-md transition-all cursor-pointer">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="font-bold text-slate-900 text-sm">Customer</div>
+                  <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-semibold">User</span>
+                </div>
+                <div className="text-slate-600 text-xs font-mono bg-white/60 px-2 py-1 rounded">customer@loanticks.com · customer123</div>
               </div>
             </div>
           </div>
         </div>
         
-        <div className="mt-8 text-center text-xs text-slate-500">
-          <p>Secured with SSL encryption · Protected by enterprise security</p>
+        <div className="mt-10 text-center">
+          <div className="flex items-center justify-center gap-6 text-xs text-slate-400">
+            <div className="flex items-center gap-1">
+              <span className="text-green-500">●</span>
+              <span>SSL Secured</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <span className="text-blue-500">●</span>
+              <span>Bank-Grade Security</span>
+            </div>
+          </div>
         </div>
       </div>
       </div>
