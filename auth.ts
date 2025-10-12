@@ -1,7 +1,7 @@
 import NextAuth, { DefaultSession } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import connectDB from '@/lib/mongodb';
-import User, { UserRole } from '@/models/User';
+
+export type UserRole = 'admin' | 'employee' | 'customer';
 
 declare module 'next-auth' {
   interface Session {
@@ -37,6 +37,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         if (!credentials?.email || !credentials?.password) {
           throw new Error('Please enter your email and password');
         }
+
+        // Dynamic imports to avoid loading in Edge Runtime
+        const connectDB = (await import('@/lib/mongodb')).default;
+        const User = (await import('@/models/User')).default;
 
         await connectDB();
 
