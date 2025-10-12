@@ -87,9 +87,10 @@ export default function LoginVariant3() {
 
         <div className="space-y-12">
           <div className="space-y-4 relative">
-            {/* White glow effect behind text */}
-            <div className="absolute -inset-8 bg-white/10 rounded-full blur-3xl"></div>
-            <div className="text-7xl font-bold leading-none relative z-10" style={{textShadow: '0 0 80px rgba(255, 255, 255, 0.3), 0 0 40px rgba(255, 255, 255, 0.2)'}}>
+            {/* White circular glow effect behind text */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-white/20 rounded-full blur-3xl"></div>
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-white/15 rounded-full blur-2xl"></div>
+            <div className="text-7xl font-bold leading-none relative z-10">
               Elegant<br/>Banking
             </div>
             <p className="text-xl text-gray-400 max-w-md relative z-10">
