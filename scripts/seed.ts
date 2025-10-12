@@ -1,3 +1,9 @@
+import dotenv from 'dotenv';
+import { resolve } from 'path';
+
+// Load environment variables from .env.local
+dotenv.config({ path: resolve(__dirname, '../.env.local') });
+
 import mongoose from 'mongoose';
 import User from '../models/User';
 import connectDB from '../lib/mongodb';
