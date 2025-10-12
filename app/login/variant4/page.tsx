@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { LogIn, Loader2, Sparkles, Zap, Award } from 'lucide-react';
+import { LogIn, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 
 export default function LoginVariant4() {
@@ -53,93 +53,61 @@ export default function LoginVariant4() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-500 via-pink-500 to-purple-600 flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center p-4 relative overflow-hidden">
       {/* Design Switcher */}
       <div className="absolute top-4 right-4 flex flex-wrap gap-2 z-20 max-w-[calc(100%-2rem)]">
-        <Link href="/login" className="px-2.5 py-1.5 bg-white/20 hover:bg-white/30 text-white text-xs font-semibold rounded-lg backdrop-blur-sm transition">
+        <Link href="/login" className="px-2.5 py-1.5 bg-white hover:bg-gray-50 text-gray-700 text-xs font-semibold rounded-lg shadow-sm transition">
           D1
         </Link>
-        <Link href="/login/variant2" className="px-2.5 py-1.5 bg-white/20 hover:bg-white/30 text-white text-xs font-semibold rounded-lg backdrop-blur-sm transition">
+        <Link href="/login/variant2" className="px-2.5 py-1.5 bg-white hover:bg-gray-50 text-gray-700 text-xs font-semibold rounded-lg shadow-sm transition">
           D2
         </Link>
-        <Link href="/login/variant3" className="px-2.5 py-1.5 bg-white/20 hover:bg-white/30 text-white text-xs font-semibold rounded-lg backdrop-blur-sm transition">
+        <Link href="/login/variant3" className="px-2.5 py-1.5 bg-white hover:bg-gray-50 text-gray-700 text-xs font-semibold rounded-lg shadow-sm transition">
           D3
         </Link>
-        <Link href="/login/variant4" className="px-2.5 py-1.5 bg-white text-orange-600 text-xs font-semibold rounded-lg shadow-lg">
+        <Link href="/login/variant4" className="px-2.5 py-1.5 bg-blue-600 text-white text-xs font-semibold rounded-lg shadow-lg">
           D4
         </Link>
-        <Link href="/login/variant5" className="px-2.5 py-1.5 bg-white/20 hover:bg-white/30 text-white text-xs font-semibold rounded-lg backdrop-blur-sm transition">
+        <Link href="/login/variant5" className="px-2.5 py-1.5 bg-white hover:bg-gray-50 text-gray-700 text-xs font-semibold rounded-lg shadow-sm transition">
           D5
         </Link>
       </div>
 
-      {/* Animated Background */}
-      <div className="absolute inset-0">
-        <div className="absolute top-20 left-20 w-72 h-72 bg-yellow-300/30 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-20 w-96 h-96 bg-pink-300/30 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
-      </div>
-
-      <div className="w-full max-w-5xl relative z-10">
-        <div className="text-center mb-8 sm:mb-10 lg:mb-12 text-white px-4">
-          <div className="flex items-center justify-center gap-3 mb-4 sm:mb-6">
-            <div className="h-16 w-16 sm:h-18 sm:w-18 lg:h-20 lg:w-20 bg-white rounded-xl sm:rounded-2xl flex items-center justify-center shadow-2xl overflow-hidden ring-4 ring-white/30">
+      <div className="w-full max-w-md relative z-10">
+        <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
+          {/* Logo and Header */}
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center justify-center h-16 w-16 bg-blue-600 rounded-xl mb-4 overflow-hidden">
               <img src="/logo.jpg" alt="LoanTicks" className="h-full w-full object-contain" />
             </div>
-          </div>
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black mb-3 sm:mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white to-yellow-200">
-            LoanTicks
-          </h1>
-          <p className="text-lg sm:text-xl lg:text-2xl font-bold mb-6 sm:mb-8">The Future of Financial Management</p>
-          
-          <div className="flex items-center justify-center gap-6 sm:gap-8 lg:gap-12 mb-6 sm:mb-8 flex-wrap">
-            <div className="text-center">
-              <Sparkles className="h-8 w-8 sm:h-9 sm:w-9 lg:h-10 lg:w-10 mx-auto mb-1 sm:mb-2" />
-              <div className="text-xl sm:text-2xl lg:text-3xl font-bold">AI-Powered</div>
-            </div>
-            <div className="text-center">
-              <Zap className="h-8 w-8 sm:h-9 sm:w-9 lg:h-10 lg:w-10 mx-auto mb-1 sm:mb-2" />
-              <div className="text-xl sm:text-2xl lg:text-3xl font-bold">Lightning Fast</div>
-            </div>
-            <div className="text-center">
-              <Award className="h-8 w-8 sm:h-9 sm:w-9 lg:h-10 lg:w-10 mx-auto mb-1 sm:mb-2" />
-              <div className="text-xl sm:text-2xl lg:text-3xl font-bold">Award Winning</div>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white/95 backdrop-blur-xl rounded-2xl sm:rounded-3xl shadow-2xl p-6 sm:p-8 lg:p-12 max-w-2xl mx-auto border-2 sm:border-4 border-white/50">
-          <div className="text-center mb-6 sm:mb-8">
-            <h2 className="text-3xl sm:text-4xl font-black bg-gradient-to-r from-orange-600 to-pink-600 bg-clip-text text-transparent mb-2">
-              Let&apos;s Get Started!
-            </h2>
-            <p className="text-gray-600 text-base sm:text-lg">Sign in to unlock your financial potential</p>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              Welcome Back
+            </h1>
+            <p className="text-gray-600">Sign in to continue to LoanTicks</p>
           </div>
 
-          <form className="space-y-4 sm:space-y-6" onSubmit={handleSubmit}>
+          <form className="space-y-5" onSubmit={handleSubmit}>
             {loading && (
-              <div className="bg-gradient-to-r from-orange-500 to-pink-500 border-2 border-orange-400 text-white px-5 py-4 rounded-2xl shadow-lg flex items-center gap-4 animate-slideIn">
-                <Loader2 className="h-6 w-6 animate-spin flex-shrink-0" />
+              <div className="bg-blue-50 border border-blue-200 text-blue-800 px-4 py-3 rounded-lg flex items-center gap-3">
+                <Loader2 className="h-5 w-5 animate-spin flex-shrink-0" />
                 <div className="flex-1">
-                  <strong className="font-bold text-base">{loginStatus}</strong>
-                  <div className="w-full bg-orange-400/30 h-2 mt-2.5 rounded-full overflow-hidden">
-                    <div className="h-full bg-white shadow-lg rounded-full animate-pulse" style={{width: '100%'}}></div>
-                  </div>
+                  <p className="font-medium text-sm">{loginStatus}</p>
                 </div>
               </div>
             )}
 
             {error && !loading && (
-              <div className="bg-red-500 border-2 border-red-600 text-white px-5 py-4 rounded-2xl shadow-lg flex items-start gap-3 animate-shake">
-                <div className="text-2xl">❌</div>
+              <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg flex items-start gap-3">
+                <div className="text-lg">⚠️</div>
                 <div className="flex-1">
-                  <strong className="font-bold text-base block mb-1">Login Failed</strong>
-                  <p className="text-sm text-red-50">{error}</p>
+                  <strong className="font-medium text-sm block mb-1">Login Failed</strong>
+                  <p className="text-xs text-red-700">{error}</p>
                 </div>
               </div>
             )}
 
             <div>
-              <label className="block text-sm font-bold text-gray-700 mb-3 uppercase tracking-wide">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 Email Address
               </label>
               <input
@@ -147,13 +115,13 @@ export default function LoginVariant4() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-5 py-4 border-3 border-gray-300 rounded-2xl text-lg focus:border-orange-500 focus:outline-none transition shadow-sm"
-                placeholder="your.email@company.com"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg text-base focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+                placeholder="you@example.com"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-bold text-gray-700 mb-3 uppercase tracking-wide">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 Password
               </label>
               <input
@@ -161,7 +129,7 @@ export default function LoginVariant4() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-5 py-4 border-3 border-gray-300 rounded-2xl text-lg focus:border-orange-500 focus:outline-none transition shadow-sm"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg text-base focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
                 placeholder="Enter your password"
               />
             </div>
@@ -169,51 +137,45 @@ export default function LoginVariant4() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-5 bg-gradient-to-r from-orange-500 via-pink-500 to-purple-600 hover:from-orange-600 hover:via-pink-600 hover:to-purple-700 text-white font-black text-lg rounded-2xl shadow-xl hover:shadow-2xl transition-all disabled:opacity-70 flex items-center justify-center gap-3 transform hover:scale-105 active:scale-95"
+              className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-sm hover:shadow transition-all disabled:opacity-70 flex items-center justify-center gap-2 mt-6"
             >
               {loading ? (
                 <>
-                  <Loader2 className="animate-spin h-6 w-6" />
-                  Please Wait...
+                  <Loader2 className="animate-spin h-5 w-5" />
+                  Signing In...
                 </>
               ) : (
                 <>
-                  <LogIn className="h-6 w-6" />
-                  SIGN IN NOW
+                  <LogIn className="h-5 w-5" />
+                  Sign In
                 </>
               )}
             </button>
           </form>
 
           {/* Demo Credentials */}
-          <div className="mt-6 sm:mt-8 lg:mt-10 pt-6 sm:pt-8 border-t-2 border-gray-200">
-            <div className="text-center mb-4 sm:mb-6">
-              <span className="bg-gradient-to-r from-orange-500 to-pink-500 text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs font-bold uppercase tracking-wider shadow-lg">
-                🎉 Demo Access Available
-              </span>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
-              <div className="text-center p-3 sm:p-4 bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl sm:rounded-2xl border-2 border-purple-200">
-                <div className="font-black text-gray-900 mb-1 sm:mb-2 text-sm sm:text-base">Admin</div>
-                <div className="text-[10px] sm:text-xs text-gray-600 font-mono break-all">admin@loanticks.com</div>
-                <div className="text-[10px] sm:text-xs text-gray-500 mt-1">admin123</div>
+          <div className="mt-8 pt-6 border-t border-gray-200">
+            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">Demo Accounts</p>
+            <div className="space-y-2 text-sm">
+              <div className="flex justify-between items-center py-2 px-3 bg-gray-50 rounded-lg">
+                <span className="font-medium text-gray-900">Admin</span>
+                <span className="text-gray-600 text-xs font-mono">admin@loanticks.com</span>
               </div>
-              <div className="text-center p-3 sm:p-4 bg-gradient-to-br from-blue-50 to-cyan-50 rounded-xl sm:rounded-2xl border-2 border-blue-200">
-                <div className="font-black text-gray-900 mb-1 sm:mb-2 text-sm sm:text-base">Employee</div>
-                <div className="text-[10px] sm:text-xs text-gray-600 font-mono break-all">employee@loanticks.com</div>
-                <div className="text-[10px] sm:text-xs text-gray-500 mt-1">employee123</div>
+              <div className="flex justify-between items-center py-2 px-3 bg-gray-50 rounded-lg">
+                <span className="font-medium text-gray-900">Employee</span>
+                <span className="text-gray-600 text-xs font-mono">employee@loanticks.com</span>
               </div>
-              <div className="text-center p-3 sm:p-4 bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl sm:rounded-2xl border-2 border-green-200">
-                <div className="font-black text-gray-900 mb-1 sm:mb-2 text-sm sm:text-base">Customer</div>
-                <div className="text-[10px] sm:text-xs text-gray-600 font-mono break-all">customer@loanticks.com</div>
-                <div className="text-[10px] sm:text-xs text-gray-500 mt-1">customer123</div>
+              <div className="flex justify-between items-center py-2 px-3 bg-gray-50 rounded-lg">
+                <span className="font-medium text-gray-900">Customer</span>
+                <span className="text-gray-600 text-xs font-mono">customer@loanticks.com</span>
               </div>
+              <p className="text-xs text-gray-500 mt-3 text-center">Password for all: [role]123</p>
             </div>
           </div>
         </div>
 
-        <div className="text-center mt-6 sm:mt-8 text-white text-xs sm:text-sm px-4">
-          <p className="font-semibold">© 2025 LoanTicks • Secured by Military-Grade Encryption 🔒</p>
+        <div className="text-center mt-6 text-gray-600 text-xs">
+          <p>© 2025 LoanTicks. All rights reserved.</p>
         </div>
       </div>
     </div>

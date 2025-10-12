@@ -88,14 +88,7 @@ export default function LoginVariant3() {
         <div className="space-y-12">
           <div className="space-y-4">
             <div className="relative inline-block">
-              {/* White circular glow effect directly behind text */}
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-[500px] h-[500px] bg-white/20 rounded-full blur-3xl"></div>
-              </div>
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-[350px] h-[350px] bg-white/25 rounded-full blur-2xl"></div>
-              </div>
-              <div className="text-7xl font-bold leading-none relative z-10">
+              <div className="text-7xl font-bold leading-none">
                 Elegant<br/>Banking
               </div>
             </div>
