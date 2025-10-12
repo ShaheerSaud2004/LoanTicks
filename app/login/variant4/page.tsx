@@ -55,21 +55,21 @@ export default function LoginVariant4() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-500 via-pink-500 to-purple-600 flex items-center justify-center p-4 relative overflow-hidden">
       {/* Design Switcher */}
-      <div className="absolute top-4 right-4 flex gap-2 z-20">
-        <Link href="/login" className="px-3 py-1.5 bg-white/20 hover:bg-white/30 text-white text-xs font-semibold rounded-lg backdrop-blur-sm transition">
-          Design 1
+      <div className="absolute top-4 right-4 flex flex-wrap gap-2 z-20 max-w-[calc(100%-2rem)]">
+        <Link href="/login" className="px-2.5 py-1.5 bg-white/20 hover:bg-white/30 text-white text-xs font-semibold rounded-lg backdrop-blur-sm transition">
+          D1
         </Link>
-        <Link href="/login/variant2" className="px-3 py-1.5 bg-white/20 hover:bg-white/30 text-white text-xs font-semibold rounded-lg backdrop-blur-sm transition">
-          Design 2
+        <Link href="/login/variant2" className="px-2.5 py-1.5 bg-white/20 hover:bg-white/30 text-white text-xs font-semibold rounded-lg backdrop-blur-sm transition">
+          D2
         </Link>
-        <Link href="/login/variant3" className="px-3 py-1.5 bg-white/20 hover:bg-white/30 text-white text-xs font-semibold rounded-lg backdrop-blur-sm transition">
-          Design 3
+        <Link href="/login/variant3" className="px-2.5 py-1.5 bg-white/20 hover:bg-white/30 text-white text-xs font-semibold rounded-lg backdrop-blur-sm transition">
+          D3
         </Link>
-        <Link href="/login/variant4" className="px-3 py-1.5 bg-white text-orange-600 text-xs font-semibold rounded-lg shadow-lg">
-          Design 4
+        <Link href="/login/variant4" className="px-2.5 py-1.5 bg-white text-orange-600 text-xs font-semibold rounded-lg shadow-lg">
+          D4
         </Link>
-        <Link href="/login/variant5" className="px-3 py-1.5 bg-white/20 hover:bg-white/30 text-white text-xs font-semibold rounded-lg backdrop-blur-sm transition">
-          Design 5
+        <Link href="/login/variant5" className="px-2.5 py-1.5 bg-white/20 hover:bg-white/30 text-white text-xs font-semibold rounded-lg backdrop-blur-sm transition">
+          D5
         </Link>
       </div>
 
@@ -80,42 +80,42 @@ export default function LoginVariant4() {
       </div>
 
       <div className="w-full max-w-5xl relative z-10">
-        <div className="text-center mb-12 text-white">
-          <div className="flex items-center justify-center gap-3 mb-6">
-            <div className="h-20 w-20 bg-white rounded-2xl flex items-center justify-center shadow-2xl overflow-hidden ring-4 ring-white/30">
+        <div className="text-center mb-8 sm:mb-10 lg:mb-12 text-white px-4">
+          <div className="flex items-center justify-center gap-3 mb-4 sm:mb-6">
+            <div className="h-16 w-16 sm:h-18 sm:w-18 lg:h-20 lg:w-20 bg-white rounded-xl sm:rounded-2xl flex items-center justify-center shadow-2xl overflow-hidden ring-4 ring-white/30">
               <img src="/logo.jpg" alt="LoanTicks" className="h-full w-full object-contain" />
             </div>
           </div>
-          <h1 className="text-6xl font-black mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white to-yellow-200">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black mb-3 sm:mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white to-yellow-200">
             LoanTicks
           </h1>
-          <p className="text-2xl font-bold mb-8">The Future of Financial Management</p>
+          <p className="text-lg sm:text-xl lg:text-2xl font-bold mb-6 sm:mb-8">The Future of Financial Management</p>
           
-          <div className="flex items-center justify-center gap-12 mb-8">
+          <div className="flex items-center justify-center gap-6 sm:gap-8 lg:gap-12 mb-6 sm:mb-8 flex-wrap">
             <div className="text-center">
-              <Sparkles className="h-10 w-10 mx-auto mb-2" />
-              <div className="text-3xl font-bold">AI-Powered</div>
+              <Sparkles className="h-8 w-8 sm:h-9 sm:w-9 lg:h-10 lg:w-10 mx-auto mb-1 sm:mb-2" />
+              <div className="text-xl sm:text-2xl lg:text-3xl font-bold">AI-Powered</div>
             </div>
             <div className="text-center">
-              <Zap className="h-10 w-10 mx-auto mb-2" />
-              <div className="text-3xl font-bold">Lightning Fast</div>
+              <Zap className="h-8 w-8 sm:h-9 sm:w-9 lg:h-10 lg:w-10 mx-auto mb-1 sm:mb-2" />
+              <div className="text-xl sm:text-2xl lg:text-3xl font-bold">Lightning Fast</div>
             </div>
             <div className="text-center">
-              <Award className="h-10 w-10 mx-auto mb-2" />
-              <div className="text-3xl font-bold">Award Winning</div>
+              <Award className="h-8 w-8 sm:h-9 sm:w-9 lg:h-10 lg:w-10 mx-auto mb-1 sm:mb-2" />
+              <div className="text-xl sm:text-2xl lg:text-3xl font-bold">Award Winning</div>
             </div>
           </div>
         </div>
 
-        <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl p-12 max-w-2xl mx-auto border-4 border-white/50">
-          <div className="text-center mb-8">
-            <h2 className="text-4xl font-black bg-gradient-to-r from-orange-600 to-pink-600 bg-clip-text text-transparent mb-2">
+        <div className="bg-white/95 backdrop-blur-xl rounded-2xl sm:rounded-3xl shadow-2xl p-6 sm:p-8 lg:p-12 max-w-2xl mx-auto border-2 sm:border-4 border-white/50">
+          <div className="text-center mb-6 sm:mb-8">
+            <h2 className="text-3xl sm:text-4xl font-black bg-gradient-to-r from-orange-600 to-pink-600 bg-clip-text text-transparent mb-2">
               Let&apos;s Get Started!
             </h2>
-            <p className="text-gray-600 text-lg">Sign in to unlock your financial potential</p>
+            <p className="text-gray-600 text-base sm:text-lg">Sign in to unlock your financial potential</p>
           </div>
 
-          <form className="space-y-6" onSubmit={handleSubmit}>
+          <form className="space-y-4 sm:space-y-6" onSubmit={handleSubmit}>
             {loading && (
               <div className="bg-gradient-to-r from-orange-500 to-pink-500 border-2 border-orange-400 text-white px-5 py-4 rounded-2xl shadow-lg flex items-center gap-4 animate-slideIn">
                 <Loader2 className="h-6 w-6 animate-spin flex-shrink-0" />
@@ -186,33 +186,33 @@ export default function LoginVariant4() {
           </form>
 
           {/* Demo Credentials */}
-          <div className="mt-10 pt-8 border-t-2 border-gray-200">
-            <div className="text-center mb-6">
-              <span className="bg-gradient-to-r from-orange-500 to-pink-500 text-white px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider shadow-lg">
+          <div className="mt-6 sm:mt-8 lg:mt-10 pt-6 sm:pt-8 border-t-2 border-gray-200">
+            <div className="text-center mb-4 sm:mb-6">
+              <span className="bg-gradient-to-r from-orange-500 to-pink-500 text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs font-bold uppercase tracking-wider shadow-lg">
                 🎉 Demo Access Available
               </span>
             </div>
-            <div className="grid grid-cols-3 gap-4">
-              <div className="text-center p-4 bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl border-2 border-purple-200">
-                <div className="font-black text-gray-900 mb-2">Admin</div>
-                <div className="text-xs text-gray-600 font-mono">admin@loanticks.com</div>
-                <div className="text-xs text-gray-500 mt-1">admin123</div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+              <div className="text-center p-3 sm:p-4 bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl sm:rounded-2xl border-2 border-purple-200">
+                <div className="font-black text-gray-900 mb-1 sm:mb-2 text-sm sm:text-base">Admin</div>
+                <div className="text-[10px] sm:text-xs text-gray-600 font-mono break-all">admin@loanticks.com</div>
+                <div className="text-[10px] sm:text-xs text-gray-500 mt-1">admin123</div>
               </div>
-              <div className="text-center p-4 bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl border-2 border-blue-200">
-                <div className="font-black text-gray-900 mb-2">Employee</div>
-                <div className="text-xs text-gray-600 font-mono">employee@loanticks.com</div>
-                <div className="text-xs text-gray-500 mt-1">employee123</div>
+              <div className="text-center p-3 sm:p-4 bg-gradient-to-br from-blue-50 to-cyan-50 rounded-xl sm:rounded-2xl border-2 border-blue-200">
+                <div className="font-black text-gray-900 mb-1 sm:mb-2 text-sm sm:text-base">Employee</div>
+                <div className="text-[10px] sm:text-xs text-gray-600 font-mono break-all">employee@loanticks.com</div>
+                <div className="text-[10px] sm:text-xs text-gray-500 mt-1">employee123</div>
               </div>
-              <div className="text-center p-4 bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl border-2 border-green-200">
-                <div className="font-black text-gray-900 mb-2">Customer</div>
-                <div className="text-xs text-gray-600 font-mono">customer@loanticks.com</div>
-                <div className="text-xs text-gray-500 mt-1">customer123</div>
+              <div className="text-center p-3 sm:p-4 bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl sm:rounded-2xl border-2 border-green-200">
+                <div className="font-black text-gray-900 mb-1 sm:mb-2 text-sm sm:text-base">Customer</div>
+                <div className="text-[10px] sm:text-xs text-gray-600 font-mono break-all">customer@loanticks.com</div>
+                <div className="text-[10px] sm:text-xs text-gray-500 mt-1">customer123</div>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="text-center mt-8 text-white text-sm">
+        <div className="text-center mt-6 sm:mt-8 text-white text-xs sm:text-sm px-4">
           <p className="font-semibold">© 2025 LoanTicks • Secured by Military-Grade Encryption 🔒</p>
         </div>
       </div>

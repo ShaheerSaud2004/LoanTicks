@@ -57,21 +57,21 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex bg-gradient-to-br from-slate-50 to-slate-100">
       {/* Design Switcher */}
-      <div className="absolute top-4 right-4 flex gap-2 z-20">
-        <Link href="/login" className="px-3 py-1.5 bg-blue-900 text-white text-xs font-semibold rounded-lg shadow-lg">
-          Design 1
+      <div className="absolute top-4 right-4 flex flex-wrap gap-2 z-20 max-w-[calc(100%-2rem)]">
+        <Link href="/login" className="px-2.5 py-1.5 bg-blue-900 text-white text-xs font-semibold rounded-lg shadow-lg">
+          D1
         </Link>
-        <Link href="/login/variant2" className="px-3 py-1.5 bg-white hover:bg-gray-100 text-gray-700 text-xs font-semibold rounded-lg shadow-sm transition">
-          Design 2
+        <Link href="/login/variant2" className="px-2.5 py-1.5 bg-white hover:bg-gray-100 text-gray-700 text-xs font-semibold rounded-lg shadow-sm transition">
+          D2
         </Link>
-        <Link href="/login/variant3" className="px-3 py-1.5 bg-white hover:bg-gray-100 text-gray-700 text-xs font-semibold rounded-lg shadow-sm transition">
-          Design 3
+        <Link href="/login/variant3" className="px-2.5 py-1.5 bg-white hover:bg-gray-100 text-gray-700 text-xs font-semibold rounded-lg shadow-sm transition">
+          D3
         </Link>
-        <Link href="/login/variant4" className="px-3 py-1.5 bg-white hover:bg-gray-100 text-gray-700 text-xs font-semibold rounded-lg shadow-sm transition">
-          Design 4
+        <Link href="/login/variant4" className="px-2.5 py-1.5 bg-white hover:bg-gray-100 text-gray-700 text-xs font-semibold rounded-lg shadow-sm transition">
+          D4
         </Link>
-        <Link href="/login/variant5" className="px-3 py-1.5 bg-white hover:bg-gray-100 text-gray-700 text-xs font-semibold rounded-lg shadow-sm transition">
-          Design 5
+        <Link href="/login/variant5" className="px-2.5 py-1.5 bg-white hover:bg-gray-100 text-gray-700 text-xs font-semibold rounded-lg shadow-sm transition">
+          D5
         </Link>
       </div>
       

@@ -55,21 +55,21 @@ export default function LoginVariant2() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-600 via-blue-600 to-cyan-500 flex items-center justify-center p-4 relative overflow-hidden">
       {/* Design Switcher */}
-      <div className="absolute top-4 right-4 flex gap-2 z-20">
-        <Link href="/login" className="px-3 py-1.5 bg-white/20 hover:bg-white/30 text-white text-xs font-semibold rounded-lg backdrop-blur-sm transition">
-          Design 1
+      <div className="absolute top-4 right-4 flex flex-wrap gap-2 z-20 max-w-[calc(100%-2rem)]">
+        <Link href="/login" className="px-2.5 py-1.5 bg-white/20 hover:bg-white/30 text-white text-xs font-semibold rounded-lg backdrop-blur-sm transition">
+          D1
         </Link>
-        <Link href="/login/variant2" className="px-3 py-1.5 bg-white text-purple-600 text-xs font-semibold rounded-lg shadow-lg">
-          Design 2
+        <Link href="/login/variant2" className="px-2.5 py-1.5 bg-white text-purple-600 text-xs font-semibold rounded-lg shadow-lg">
+          D2
         </Link>
-        <Link href="/login/variant3" className="px-3 py-1.5 bg-white/20 hover:bg-white/30 text-white text-xs font-semibold rounded-lg backdrop-blur-sm transition">
-          Design 3
+        <Link href="/login/variant3" className="px-2.5 py-1.5 bg-white/20 hover:bg-white/30 text-white text-xs font-semibold rounded-lg backdrop-blur-sm transition">
+          D3
         </Link>
-        <Link href="/login/variant4" className="px-3 py-1.5 bg-white/20 hover:bg-white/30 text-white text-xs font-semibold rounded-lg backdrop-blur-sm transition">
-          Design 4
+        <Link href="/login/variant4" className="px-2.5 py-1.5 bg-white/20 hover:bg-white/30 text-white text-xs font-semibold rounded-lg backdrop-blur-sm transition">
+          D4
         </Link>
-        <Link href="/login/variant5" className="px-3 py-1.5 bg-white/20 hover:bg-white/30 text-white text-xs font-semibold rounded-lg backdrop-blur-sm transition">
-          Design 5
+        <Link href="/login/variant5" className="px-2.5 py-1.5 bg-white/20 hover:bg-white/30 text-white text-xs font-semibold rounded-lg backdrop-blur-sm transition">
+          D5
         </Link>
       </div>
 
@@ -79,55 +79,55 @@ export default function LoginVariant2() {
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-white/10 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
       </div>
 
-      <div className="w-full max-w-6xl grid md:grid-cols-2 gap-8 items-center relative z-10">
+      <div className="w-full max-w-6xl grid md:grid-cols-2 gap-6 lg:gap-8 items-center relative z-10">
         {/* Left Side - Hero Content */}
-        <div className="text-white space-y-8 p-8">
-          <div className="flex items-center gap-4">
-            <div className="h-16 w-16 bg-white rounded-2xl flex items-center justify-center shadow-2xl overflow-hidden">
+        <div className="text-white space-y-6 lg:space-y-8 p-6 lg:p-8">
+          <div className="flex items-center gap-3 sm:gap-4">
+            <div className="h-12 w-12 sm:h-14 sm:w-14 lg:h-16 lg:w-16 bg-white rounded-xl lg:rounded-2xl flex items-center justify-center shadow-2xl overflow-hidden flex-shrink-0">
               <img src="/logo.jpg" alt="LoanTicks" className="h-full w-full object-contain" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold">LoanTicks</h1>
-              <p className="text-white/80 text-sm">Modern Financial Platform</p>
+              <h1 className="text-2xl sm:text-3xl font-bold">LoanTicks</h1>
+              <p className="text-white/80 text-xs sm:text-sm">Modern Financial Platform</p>
             </div>
           </div>
 
           <div>
-            <h2 className="text-5xl font-bold leading-tight mb-4">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-3 lg:mb-4">
               Smart Lending,<br/>Simplified
             </h2>
-            <p className="text-xl text-white/90 leading-relaxed">
+            <p className="text-base sm:text-lg lg:text-xl text-white/90 leading-relaxed">
               Experience next-generation loan management with cutting-edge technology and unparalleled security.
             </p>
           </div>
 
-          <div className="grid grid-cols-3 gap-6">
+          <div className="grid grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
             <div className="text-center">
-              <Shield className="h-8 w-8 mx-auto mb-2" />
-              <div className="text-2xl font-bold">100%</div>
-              <div className="text-sm text-white/80">Secure</div>
+              <Shield className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8 mx-auto mb-1 sm:mb-2" />
+              <div className="text-xl sm:text-2xl font-bold">100%</div>
+              <div className="text-xs sm:text-sm text-white/80">Secure</div>
             </div>
             <div className="text-center">
-              <Users className="h-8 w-8 mx-auto mb-2" />
-              <div className="text-2xl font-bold">50K+</div>
-              <div className="text-sm text-white/80">Users</div>
+              <Users className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8 mx-auto mb-1 sm:mb-2" />
+              <div className="text-xl sm:text-2xl font-bold">50K+</div>
+              <div className="text-xs sm:text-sm text-white/80">Users</div>
             </div>
             <div className="text-center">
-              <TrendingUp className="h-8 w-8 mx-auto mb-2" />
-              <div className="text-2xl font-bold">$2.5B</div>
-              <div className="text-sm text-white/80">Processed</div>
+              <TrendingUp className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8 mx-auto mb-1 sm:mb-2" />
+              <div className="text-xl sm:text-2xl font-bold">$2.5B</div>
+              <div className="text-xs sm:text-sm text-white/80">Processed</div>
             </div>
           </div>
         </div>
 
         {/* Right Side - Login Card */}
-        <div className="bg-white rounded-3xl shadow-2xl p-10">
-          <div className="mb-8">
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h2>
-            <p className="text-gray-600">Sign in to continue to your account</p>
+        <div className="bg-white rounded-2xl sm:rounded-3xl shadow-2xl p-6 sm:p-8 lg:p-10">
+          <div className="mb-6 sm:mb-8">
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Welcome Back</h2>
+            <p className="text-gray-600 text-sm sm:text-base">Sign in to continue to your account</p>
           </div>
 
-          <form className="space-y-6" onSubmit={handleSubmit}>
+          <form className="space-y-4 sm:space-y-6" onSubmit={handleSubmit}>
             {loading && (
               <div className="bg-gradient-to-r from-blue-500 to-indigo-500 border-2 border-blue-400 text-white px-5 py-4 rounded-xl shadow-lg flex items-center gap-4 animate-slideIn">
                 <Loader2 className="h-6 w-6 animate-spin flex-shrink-0" />
@@ -198,20 +198,20 @@ export default function LoginVariant2() {
           </form>
 
           {/* Demo Credentials */}
-          <div className="mt-8 pt-8 border-t-2 border-gray-100">
-            <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">Demo Accounts</p>
-            <div className="space-y-2 text-sm">
-              <div className="flex items-center justify-between p-3 bg-purple-50 rounded-lg">
+          <div className="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t-2 border-gray-100">
+            <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3 sm:mb-4">Demo Accounts</p>
+            <div className="space-y-2 text-xs sm:text-sm">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-2.5 sm:p-3 bg-purple-50 rounded-lg gap-1 sm:gap-0">
                 <span className="font-semibold text-gray-900">Admin</span>
-                <span className="text-gray-600 font-mono text-xs">admin@loanticks.com · admin123</span>
+                <span className="text-gray-600 font-mono text-[10px] sm:text-xs">admin@loanticks.com · admin123</span>
               </div>
-              <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-2.5 sm:p-3 bg-blue-50 rounded-lg gap-1 sm:gap-0">
                 <span className="font-semibold text-gray-900">Employee</span>
-                <span className="text-gray-600 font-mono text-xs">employee@loanticks.com · employee123</span>
+                <span className="text-gray-600 font-mono text-[10px] sm:text-xs">employee@loanticks.com · employee123</span>
               </div>
-              <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-2.5 sm:p-3 bg-green-50 rounded-lg gap-1 sm:gap-0">
                 <span className="font-semibold text-gray-900">Customer</span>
-                <span className="text-gray-600 font-mono text-xs">customer@loanticks.com · customer123</span>
+                <span className="text-gray-600 font-mono text-[10px] sm:text-xs">customer@loanticks.com · customer123</span>
               </div>
             </div>
           </div>
