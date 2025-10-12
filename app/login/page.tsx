@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { LogIn, Loader2 } from 'lucide-react';
+import { LogIn, Loader2, CheckCircle, User } from 'lucide-react';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -11,13 +11,17 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [loginStatus, setLoginStatus] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setLoading(true);
+    setLoginStatus('Authenticating credentials...');
 
     try {
+      await new Promise(resolve => setTimeout(resolve, 800)); // Show status
+      
       const result = await signIn('credentials', {
         email,
         password,
@@ -27,7 +31,13 @@ export default function LoginPage() {
       if (result?.error) {
         setError(result.error);
         setLoading(false);
+        setLoginStatus('');
       } else {
+        setLoginStatus('Authentication successful!');
+        await new Promise(resolve => setTimeout(resolve, 500));
+        setLoginStatus('Redirecting to dashboard...');
+        await new Promise(resolve => setTimeout(resolve, 800));
+        
         // Redirect will be handled by middleware based on user role
         router.push('/');
         router.refresh();
@@ -35,6 +45,7 @@ export default function LoginPage() {
     } catch {
       setError('An error occurred. Please try again.');
       setLoading(false);
+      setLoginStatus('');
     }
   };
 
@@ -103,8 +114,21 @@ export default function LoginPage() {
           {/* Login Form */}
           <div className="bg-white rounded-xl shadow-lg border border-slate-200 p-8">
           <form className="space-y-5" onSubmit={handleSubmit}>
-            {error && (
-              <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg text-sm flex items-start gap-2">
+            {/* Loading Status */}
+            {loading && (
+              <div className="bg-blue-50 border border-blue-200 text-blue-900 px-4 py-3 rounded-lg text-sm flex items-center gap-3 animate-slideIn">
+                <Loader2 className="h-5 w-5 animate-spin text-blue-600" />
+                <div className="flex-1">
+                  <strong className="font-semibold">{loginStatus}</strong>
+                  <div className="w-full bg-blue-200 h-1 mt-2 rounded-full overflow-hidden">
+                    <div className="h-full bg-blue-600 animate-pulse" style={{width: '100%'}}></div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {error && !loading && (
+              <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg text-sm flex items-start gap-2 animate-shake">
                 <div className="text-red-500">⚠</div>
                 <div>
                   <strong className="font-semibold">Authentication Failed</strong>
