@@ -86,14 +86,20 @@ export default function LoginVariant3() {
         </div>
 
         <div className="space-y-12">
-          <div className="space-y-4 relative">
-            {/* White circular glow effect behind text */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-white/20 rounded-full blur-3xl"></div>
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-white/15 rounded-full blur-2xl"></div>
-            <div className="text-7xl font-bold leading-none relative z-10">
-              Elegant<br/>Banking
+          <div className="space-y-4">
+            <div className="relative inline-block">
+              {/* White circular glow effect directly behind text */}
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-[500px] h-[500px] bg-white/20 rounded-full blur-3xl"></div>
+              </div>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-[350px] h-[350px] bg-white/25 rounded-full blur-2xl"></div>
+              </div>
+              <div className="text-7xl font-bold leading-none relative z-10">
+                Elegant<br/>Banking
+              </div>
             </div>
-            <p className="text-xl text-gray-400 max-w-md relative z-10">
+            <p className="text-xl text-gray-400 max-w-md">
               Sophistication meets simplicity in modern financial management.
             </p>
           </div>
