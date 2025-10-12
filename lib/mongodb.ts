@@ -16,7 +16,7 @@ declare global {
 }
 
 // Use globalThis instead of global for better compatibility
-let cached: MongooseCache = globalThis.mongoose || {
+const cached: MongooseCache = globalThis.mongoose || {
   conn: null,
   promise: null,
 };

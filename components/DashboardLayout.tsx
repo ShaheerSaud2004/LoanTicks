@@ -2,7 +2,7 @@
 
 import { signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { LogOut, User } from 'lucide-react';
+import { LogOut } from 'lucide-react';
 import { ReactNode } from 'react';
 
 interface DashboardLayoutProps {

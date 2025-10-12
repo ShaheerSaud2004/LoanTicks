@@ -61,7 +61,7 @@ export default async function AdminDashboard() {
             Welcome back, {session.user.name}! 👋
           </h1>
           <p className="text-indigo-100">
-            Here's what's happening with your loan management system today.
+            Here&apos;s what&apos;s happening with your loan management system today.
           </p>
         </div>
 

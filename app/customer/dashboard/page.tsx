@@ -6,7 +6,6 @@ import {
   FileText,
   DollarSign,
   Calendar,
-  AlertCircle,
   CheckCircle,
 } from 'lucide-react';
 
