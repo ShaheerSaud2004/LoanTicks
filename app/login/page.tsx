@@ -55,6 +55,22 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex bg-gradient-to-br from-slate-50 to-slate-100">
+      {/* Design Switcher */}
+      <div className="absolute top-4 right-4 flex gap-2 z-20">
+        <Link href="/login" className="px-3 py-1.5 bg-blue-900 text-white text-xs font-semibold rounded-lg shadow-lg">
+          Design 1
+        </Link>
+        <Link href="/login/variant2" className="px-3 py-1.5 bg-white hover:bg-gray-100 text-gray-700 text-xs font-semibold rounded-lg shadow-sm transition">
+          Design 2
+        </Link>
+        <Link href="/login/variant3" className="px-3 py-1.5 bg-white hover:bg-gray-100 text-gray-700 text-xs font-semibold rounded-lg shadow-sm transition">
+          Design 3
+        </Link>
+        <Link href="/login/variant4" className="px-3 py-1.5 bg-white hover:bg-gray-100 text-gray-700 text-xs font-semibold rounded-lg shadow-sm transition">
+          Design 4
+        </Link>
+      </div>
+      
       {/* Left Side - Branding */}
       <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-blue-900 via-blue-800 to-slate-900 p-12 flex-col justify-center relative overflow-hidden">
         {/* Background pattern */}
