@@ -39,41 +39,84 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 px-4 py-12 relative overflow-hidden">
-      {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-white/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-white/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
-      </div>
-
-      <div className="max-w-md w-full space-y-8 relative z-10">
-        {/* Logo and Header */}
-        <div className="text-center">
-          <div className="mx-auto h-24 w-24 rounded-2xl flex items-center justify-center shadow-2xl overflow-hidden bg-white/95 backdrop-blur-sm border-4 border-white/50 transition-transform hover:scale-110 duration-300">
-            <img src="/logo.jpg" alt="LoanTicks Logo" className="h-full w-full object-cover" />
+    <div className="min-h-screen flex bg-gradient-to-br from-slate-50 to-slate-100">
+      {/* Left Side - Branding */}
+      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-blue-900 via-blue-800 to-slate-900 p-12 flex-col justify-between relative overflow-hidden">
+        {/* Background pattern */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute inset-0" style={{backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '40px 40px'}}></div>
+        </div>
+        
+        <div className="relative z-10">
+          <div className="flex items-center gap-4 mb-8">
+            <div className="h-16 w-16 bg-white rounded-lg flex items-center justify-center shadow-xl overflow-hidden">
+              <img src="/logo.jpg" alt="LoanTicks" className="h-full w-full object-contain" />
+            </div>
+            <div>
+              <h1 className="text-3xl font-bold text-white">LoanTicks</h1>
+              <p className="text-blue-200 text-sm">Financial Services</p>
+            </div>
           </div>
-          <h2 className="mt-6 text-4xl font-black text-white drop-shadow-lg">
-            LoanTicks
-          </h2>
-          <p className="mt-2 text-base text-white/90 font-medium">
-            Professional Loan Management Platform
-          </p>
+          
+          <div className="space-y-6 text-white">
+            <h2 className="text-4xl font-bold leading-tight">
+              Secure Loan<br/>Management System
+            </h2>
+            <p className="text-blue-200 text-lg">
+              Professional financial solutions for businesses and individuals
+            </p>
+          </div>
         </div>
 
-        {/* Login Form */}
-        <div className="bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl p-8 border border-white/20">
-          <form className="space-y-6" onSubmit={handleSubmit}>
+        <div className="relative z-10 text-blue-200 text-sm">
+          <p>© 2025 LoanTicks Financial Services. All rights reserved.</p>
+          <p className="mt-1">Secured by enterprise-grade encryption</p>
+        </div>
+      </div>
+
+      {/* Right Side - Login Form */}
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12">
+        <div className="w-full max-w-md space-y-8">
+          {/* Mobile Logo */}
+          <div className="lg:hidden text-center mb-8">
+            <div className="inline-flex items-center gap-3">
+              <div className="h-12 w-12 bg-blue-900 rounded-lg flex items-center justify-center overflow-hidden">
+                <img src="/logo.jpg" alt="LoanTicks" className="h-full w-full object-contain" />
+              </div>
+              <div className="text-left">
+                <h1 className="text-2xl font-bold text-slate-900">LoanTicks</h1>
+                <p className="text-slate-600 text-xs">Financial Services</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Login Header */}
+          <div>
+            <h2 className="text-3xl font-bold text-slate-900">
+              Sign In
+            </h2>
+            <p className="mt-2 text-slate-600">
+              Access your account securely
+            </p>
+          </div>
+
+          {/* Login Form */}
+          <div className="bg-white rounded-xl shadow-lg border border-slate-200 p-8">
+          <form className="space-y-5" onSubmit={handleSubmit}>
             {error && (
-              <div className="bg-red-50 border-l-4 border-red-500 text-red-700 px-4 py-3 rounded-lg text-sm shadow-sm animate-shake">
-                <strong className="font-bold">Error! </strong>
-                <span>{error}</span>
+              <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg text-sm flex items-start gap-2">
+                <div className="text-red-500">⚠</div>
+                <div>
+                  <strong className="font-semibold">Authentication Failed</strong>
+                  <p className="text-sm mt-0.5">{error}</p>
+                </div>
               </div>
             )}
 
             <div>
               <label
                 htmlFor="email"
-                className="block text-sm font-semibold text-gray-800 mb-2"
+                className="block text-sm font-medium text-slate-700 mb-2"
               >
                 Email Address
               </label>
@@ -85,15 +128,15 @@ export default function LoginPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="appearance-none block w-full px-4 py-3.5 border-2 border-gray-200 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 hover:border-gray-300"
-                placeholder="you@example.com"
+                className="block w-full px-4 py-3 border border-slate-300 rounded-lg text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                placeholder="name@company.com"
               />
             </div>
 
             <div>
               <label
                 htmlFor="password"
-                className="block text-sm font-semibold text-gray-800 mb-2"
+                className="block text-sm font-medium text-slate-700 mb-2"
               >
                 Password
               </label>
@@ -105,51 +148,56 @@ export default function LoginPage() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="appearance-none block w-full px-4 py-3.5 border-2 border-gray-200 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 hover:border-gray-300"
-                placeholder="••••••••"
+                className="block w-full px-4 py-3 border border-slate-300 rounded-lg text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                placeholder="Enter your password"
               />
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex justify-center items-center gap-2 py-4 px-4 border border-transparent rounded-xl shadow-lg text-base font-bold text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-4 focus:ring-indigo-300 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-[0.98]"
+              className="w-full flex justify-center items-center gap-2 py-3.5 px-4 bg-blue-900 hover:bg-blue-800 text-white font-semibold rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? (
                 <>
                   <Loader2 className="animate-spin h-5 w-5" />
-                  Signing in...
+                  Authenticating...
                 </>
               ) : (
                 <>
                   <LogIn className="h-5 w-5" />
-                  Sign In
+                  Sign In to Account
                 </>
               )}
             </button>
           </form>
 
           {/* Demo Credentials */}
-          <div className="mt-6 pt-6 border-t-2 border-gray-100">
-            <p className="text-xs font-bold text-gray-500 text-center mb-4 uppercase tracking-wide">
-              🔑 Demo Credentials
+          <div className="mt-8 pt-6 border-t border-slate-200">
+            <p className="text-xs font-semibold text-slate-500 mb-4 uppercase tracking-wider">
+              Demo Access Credentials
             </p>
-            <div className="space-y-2.5 text-xs">
-              <div className="bg-gradient-to-r from-purple-50 to-indigo-50 p-3 rounded-xl border border-purple-100 hover:shadow-md transition-shadow">
-                <strong className="text-purple-700 font-bold">👑 Admin:</strong> 
-                <span className="text-gray-700 ml-2">admin@loanticks.com / admin123</span>
+            <div className="space-y-2 text-sm">
+              <div className="bg-slate-50 border border-slate-200 p-3 rounded-lg">
+                <div className="font-semibold text-slate-900 mb-1">Administrator</div>
+                <div className="text-slate-600 text-xs font-mono">admin@loanticks.com · admin123</div>
               </div>
-              <div className="bg-gradient-to-r from-blue-50 to-cyan-50 p-3 rounded-xl border border-blue-100 hover:shadow-md transition-shadow">
-                <strong className="text-blue-700 font-bold">💼 Employee:</strong> 
-                <span className="text-gray-700 ml-2">employee@loanticks.com / employee123</span>
+              <div className="bg-slate-50 border border-slate-200 p-3 rounded-lg">
+                <div className="font-semibold text-slate-900 mb-1">Employee</div>
+                <div className="text-slate-600 text-xs font-mono">employee@loanticks.com · employee123</div>
               </div>
-              <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-3 rounded-xl border border-green-100 hover:shadow-md transition-shadow">
-                <strong className="text-green-700 font-bold">👤 Customer:</strong> 
-                <span className="text-gray-700 ml-2">customer@loanticks.com / customer123</span>
+              <div className="bg-slate-50 border border-slate-200 p-3 rounded-lg">
+                <div className="font-semibold text-slate-900 mb-1">Customer</div>
+                <div className="text-slate-600 text-xs font-mono">customer@loanticks.com · customer123</div>
               </div>
             </div>
           </div>
         </div>
+        
+        <div className="mt-8 text-center text-xs text-slate-500">
+          <p>Secured with SSL encryption · Protected by enterprise security</p>
+        </div>
+      </div>
       </div>
     </div>
   );
