@@ -82,40 +82,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
       return session;
     },
-    authorized({ auth, request: { nextUrl } }) {
-      const isLoggedIn = !!auth?.user;
-      const userRole = auth?.user?.role;
-      const { pathname } = nextUrl;
-
-      // Public routes
-      if (pathname === '/login' || pathname === '/') {
-        if (isLoggedIn && pathname === '/login') {
-          // Redirect logged-in users away from login
-          const redirectUrl = 
-            userRole === 'admin' ? '/admin/dashboard' :
-            userRole === 'employee' ? '/employee/dashboard' :
-            '/customer/dashboard';
-          return Response.redirect(new URL(redirectUrl, nextUrl));
-        }
-        return true;
-      }
-
-      // Protect dashboard routes
-      if (pathname.startsWith('/admin')) {
-        return userRole === 'admin';
-      }
-
-      if (pathname.startsWith('/employee')) {
-        return userRole === 'employee' || userRole === 'admin';
-      }
-
-      if (pathname.startsWith('/customer')) {
-        return isLoggedIn;
-      }
-
-      // Require authentication for all other routes
-      return isLoggedIn;
-    },
   },
   pages: {
     signIn: '/login',
