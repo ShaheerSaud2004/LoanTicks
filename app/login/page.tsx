@@ -70,6 +70,9 @@ export default function LoginPage() {
         <Link href="/login/variant4" className="px-3 py-1.5 bg-white hover:bg-gray-100 text-gray-700 text-xs font-semibold rounded-lg shadow-sm transition">
           Design 4
         </Link>
+        <Link href="/login/variant5" className="px-3 py-1.5 bg-white hover:bg-gray-100 text-gray-700 text-xs font-semibold rounded-lg shadow-sm transition">
+          Design 5
+        </Link>
       </div>
       
       {/* Left Side - Branding */}

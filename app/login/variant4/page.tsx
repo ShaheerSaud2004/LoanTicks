@@ -68,6 +68,9 @@ export default function LoginVariant4() {
         <Link href="/login/variant4" className="px-3 py-1.5 bg-white text-orange-600 text-xs font-semibold rounded-lg shadow-lg">
           Design 4
         </Link>
+        <Link href="/login/variant5" className="px-3 py-1.5 bg-white/20 hover:bg-white/30 text-white text-xs font-semibold rounded-lg backdrop-blur-sm transition">
+          Design 5
+        </Link>
       </div>
 
       {/* Animated Background */}
