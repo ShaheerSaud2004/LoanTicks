@@ -23,7 +23,6 @@ export default function DashboardLayout({
 
   const handleLogout = async () => {
     setIsLoggingOut(true);
-    await new Promise(resolve => setTimeout(resolve, 800));
     await signOut({ redirect: false });
     router.push('/login');
     router.refresh();
@@ -73,6 +72,7 @@ export default function DashboardLayout({
             {/* Logo */}
             <div className="flex items-center">
               <div className="h-10 w-10 rounded-lg overflow-hidden bg-white border border-gray-200">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src="/logo.jpg" alt="LOANATicks" className="h-full w-full object-cover" />
               </div>
               <span className="ml-3 text-xl font-bold text-gray-900">

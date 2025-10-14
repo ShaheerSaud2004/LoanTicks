@@ -1,0 +1,134 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { auth } from '@/src/auth';
+import connectDB from '@/lib/mongodb';
+import LoanApplication from '@/models/LoanApplication';
+
+export async function POST(request: NextRequest) {
+  try {
+    const session = await auth();
+
+    if (!session || session.user.role !== 'customer') {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    await connectDB();
+
+    const data = await request.json();
+
+    const loanApplication = new LoanApplication({
+      ...data,
+      userId: session.user.id,
+    });
+
+    await loanApplication.save();
+
+    return NextResponse.json({
+      success: true,
+      applicationId: loanApplication._id,
+      message: 'Loan application saved successfully',
+    });
+  } catch (error) {
+    console.error('Error saving loan application:', error);
+    return NextResponse.json(
+      { error: 'Failed to save loan application' },
+      { status: 500 }
+    );
+  }
+}
+
+export async function GET(request: NextRequest) {
+  try {
+    const session = await auth();
+
+    if (!session) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    await connectDB();
+
+    const { searchParams } = new URL(request.url);
+    const applicationId = searchParams.get('id');
+
+    if (applicationId) {
+      // Get specific application
+      const application = await LoanApplication.findById(applicationId);
+      
+      if (!application) {
+        return NextResponse.json({ error: 'Application not found' }, { status: 404 });
+      }
+
+      // Check permission
+      if (
+        session.user.role === 'customer' &&
+        application.userId !== session.user.id
+      ) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      }
+
+      return NextResponse.json({ application });
+    } else {
+      // Get all applications for user
+      const query =
+        session.user.role === 'customer'
+          ? { userId: session.user.id }
+          : {}; // Admin/Employee can see all
+
+      const applications = await LoanApplication.find(query).sort({
+        createdAt: -1,
+      });
+
+      return NextResponse.json({ applications });
+    }
+  } catch (error) {
+    console.error('Error fetching loan applications:', error);
+    return NextResponse.json(
+      { error: 'Failed to fetch loan applications' },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PATCH(request: NextRequest) {
+  try {
+    const session = await auth();
+
+    if (!session) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    await connectDB();
+
+    const { applicationId, ...updates } = await request.json();
+
+    const application = await LoanApplication.findById(applicationId);
+
+    if (!application) {
+      return NextResponse.json({ error: 'Application not found' }, { status: 404 });
+    }
+
+    // Check permission
+    if (
+      session.user.role === 'customer' &&
+      application.userId !== session.user.id
+    ) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    // Update application
+    Object.assign(application, updates);
+    await application.save();
+
+    return NextResponse.json({
+      success: true,
+      application,
+      message: 'Loan application updated successfully',
+    });
+  } catch (error) {
+    console.error('Error updating loan application:', error);
+    return NextResponse.json(
+      { error: 'Failed to update loan application' },
+      { status: 500 }
+    );
+  }
+}
+

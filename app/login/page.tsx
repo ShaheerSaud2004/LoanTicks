@@ -12,22 +12,17 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [loginStatus, setLoginStatus] = useState('');
+  const [showSuccessAnimation, setShowSuccessAnimation] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleLogin = async (userEmail: string, userPassword: string) => {
     setError('');
     setLoading(true);
-    setLoginStatus('Verifying credentials...');
+    setLoginStatus('Authenticating...');
 
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      setLoginStatus('Checking user database...');
-      await new Promise(resolve => setTimeout(resolve, 600));
-      
       const result = await signIn('credentials', {
-        email,
-        password,
+        email: userEmail,
+        password: userPassword,
         redirect: false,
       });
 
@@ -37,12 +32,13 @@ export default function LoginPage() {
         setLoginStatus('');
       } else {
         setLoginStatus('✓ Login successful!');
-        await new Promise(resolve => setTimeout(resolve, 800));
-        setLoginStatus('Loading your dashboard...');
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        setShowSuccessAnimation(true);
         
-        router.push('/');
-        router.refresh();
+        // Quick animation then redirect
+        setTimeout(() => {
+          router.push('/');
+          router.refresh();
+        }, 800);
       }
     } catch {
       setError('Connection error. Please check your internet and try again.');
@@ -51,8 +47,53 @@ export default function LoginPage() {
     }
   };
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await handleLogin(email, password);
+  };
+
+  const handleQuickLogin = (userEmail: string, userPassword: string) => {
+    setEmail(userEmail);
+    setPassword(userPassword);
+    handleLogin(userEmail, userPassword);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-600 via-blue-600 to-cyan-500 flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Success Animation Overlay */}
+      {showSuccessAnimation && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-purple-600 via-blue-600 to-cyan-500 animate-fadeIn">
+          <div className="text-center">
+            <div className="relative">
+              {/* Animated Checkmark Circle */}
+              <div className="w-32 h-32 mx-auto mb-6 relative">
+                <div className="absolute inset-0 bg-white rounded-full animate-scaleIn"></div>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <svg className="w-20 h-20 text-green-500 animate-checkmark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+              </div>
+              
+              {/* Success Text */}
+              <h2 className="text-3xl font-bold text-white mb-2 animate-slideUp">
+                Welcome Back!
+              </h2>
+              <p className="text-white/90 text-lg animate-slideUp" style={{animationDelay: '0.2s'}}>
+                Redirecting to your dashboard...
+              </p>
+              
+              {/* Loading Dots */}
+              <div className="flex justify-center gap-2 mt-6 animate-slideUp" style={{animationDelay: '0.3s'}}>
+                <div className="w-2 h-2 bg-white rounded-full animate-bounce"></div>
+                <div className="w-2 h-2 bg-white rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
+                <div className="w-2 h-2 bg-white rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-white/10 rounded-full blur-3xl animate-pulse"></div>
@@ -64,6 +105,7 @@ export default function LoginPage() {
         <div className="text-white space-y-6 lg:space-y-8 p-6 lg:p-8">
           <div className="flex items-center gap-3 sm:gap-4">
             <div className="h-12 w-12 sm:h-14 sm:w-14 lg:h-16 lg:w-16 bg-white rounded-xl lg:rounded-2xl flex items-center justify-center shadow-2xl overflow-hidden flex-shrink-0">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/logo.jpg" alt="LOANATicks" className="h-full w-full object-contain" />
             </div>
             <div>
@@ -177,22 +219,46 @@ export default function LoginPage() {
             </button>
           </form>
 
-          {/* Demo Credentials */}
+          {/* Quick Login Options */}
           <div className="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t-2 border-gray-100">
-            <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3 sm:mb-4">Demo Accounts</p>
+            <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3 sm:mb-4">Quick Login</p>
             <div className="space-y-2 text-xs sm:text-sm">
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-2.5 sm:p-3 bg-purple-50 rounded-lg gap-1 sm:gap-0">
-                <span className="font-semibold text-gray-900">Admin</span>
-                <span className="text-gray-600 font-mono text-[10px] sm:text-xs">admin@loanaticks.com · admin123</span>
-              </div>
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-2.5 sm:p-3 bg-blue-50 rounded-lg gap-1 sm:gap-0">
-                <span className="font-semibold text-gray-900">Employee</span>
-                <span className="text-gray-600 font-mono text-[10px] sm:text-xs">employee@loanaticks.com · employee123</span>
-              </div>
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-2.5 sm:p-3 bg-green-50 rounded-lg gap-1 sm:gap-0">
-                <span className="font-semibold text-gray-900">Customer</span>
-                <span className="text-gray-600 font-mono text-[10px] sm:text-xs">customer@loanaticks.com · customer123</span>
-              </div>
+              <button
+                type="button"
+                onClick={() => handleQuickLogin('admin@loanaticks.com', 'admin123')}
+                disabled={loading}
+                className="w-full flex items-center justify-between p-3 sm:p-4 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white rounded-lg transition-all shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <span className="font-semibold flex items-center gap-2">
+                  <Shield className="h-4 w-4" />
+                  Admin Login
+                </span>
+                <span className="text-xs opacity-90">Click to login →</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => handleQuickLogin('employee@loanaticks.com', 'employee123')}
+                disabled={loading}
+                className="w-full flex items-center justify-between p-3 sm:p-4 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg transition-all shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <span className="font-semibold flex items-center gap-2">
+                  <Users className="h-4 w-4" />
+                  Employee Login
+                </span>
+                <span className="text-xs opacity-90">Click to login →</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => handleQuickLogin('customer@loanaticks.com', 'customer123')}
+                disabled={loading}
+                className="w-full flex items-center justify-between p-3 sm:p-4 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-lg transition-all shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <span className="font-semibold flex items-center gap-2">
+                  <TrendingUp className="h-4 w-4" />
+                  Customer Login
+                </span>
+                <span className="text-xs opacity-90">Click to login →</span>
+              </button>
             </div>
           </div>
         </div>

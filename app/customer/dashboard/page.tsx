@@ -1,5 +1,6 @@
-import { auth } from '@/auth';
+import { auth } from '@/src/auth';
 import { redirect } from 'next/navigation';
+import Link from 'next/link';
 import DashboardLayout from '@/components/DashboardLayout';
 import {
   Plus,
@@ -8,12 +9,34 @@ import {
   Calendar,
   CheckCircle,
 } from 'lucide-react';
+import { headers } from 'next/headers';
+import CustomerApplicationTracker from '@/components/CustomerApplicationTracker';
 
 export default async function CustomerDashboard() {
   const session = await auth();
 
   if (!session) {
     redirect('/login');
+  }
+
+  // Fetch real loan applications
+  const request = await headers();
+  let recentApplications = [];
+  
+  try {
+    const res = await fetch(`${process.env.NEXTAUTH_URL}/api/loan-application`, {
+      headers: {
+        Cookie: request.get('cookie') || '',
+      },
+      cache: 'no-store',
+    });
+    
+    if (res.ok) {
+      const apps = await res.json();
+      recentApplications = apps.slice(0, 3); // Get latest 3 applications
+    }
+  } catch (error) {
+    console.error('Error fetching applications:', error);
   }
 
   const stats = [
@@ -64,15 +87,6 @@ export default async function CustomerDashboard() {
     },
   ];
 
-  const recentApplications = [
-    {
-      id: 'A-003',
-      type: 'Home Loan',
-      amount: '$150,000',
-      status: 'pending',
-      date: 'Oct 10, 2025',
-    },
-  ];
 
   return (
     <DashboardLayout
@@ -89,10 +103,13 @@ export default async function CustomerDashboard() {
           <p className="text-green-100 mb-4">
             Your next payment of $850 is due on October 15, 2025.
           </p>
-          <button className="flex items-center gap-2 px-6 py-3 bg-white text-green-600 rounded-lg hover:bg-green-50 transition-colors font-medium shadow-md">
+          <Link 
+            href="/customer/loan-application"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-white text-green-600 rounded-lg hover:bg-green-50 transition-colors font-medium shadow-md"
+          >
             <Plus className="h-5 w-5" />
             Apply for New Loan
-          </button>
+          </Link>
         </div>
 
         {/* Stats Grid */}
@@ -179,41 +196,7 @@ export default async function CustomerDashboard() {
         </div>
 
         {/* Recent Applications */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200">
-          <div className="p-6 border-b border-gray-200">
-            <h2 className="text-xl font-bold text-gray-900">
-              Recent Applications
-            </h2>
-          </div>
-          <div className="p-6">
-            {recentApplications.map((app) => (
-              <div
-                key={app.id}
-                className="flex items-center justify-between p-4 border border-gray-200 rounded-lg"
-              >
-                <div className="flex items-center gap-4">
-                  <div className="bg-orange-100 p-3 rounded-lg">
-                    <FileText className="h-6 w-6 text-orange-600" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-gray-900">{app.type}</h3>
-                    <p className="text-sm text-gray-500">
-                      {app.amount} • Applied {app.date}
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <span className="px-3 py-1 bg-orange-100 text-orange-700 text-xs font-semibold rounded-full capitalize">
-                    {app.status}
-                  </span>
-                  <button className="text-indigo-600 hover:text-indigo-700 font-medium text-sm">
-                    Track →
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+        <CustomerApplicationTracker applications={recentApplications} />
       </div>
     </DashboardLayout>
   );
