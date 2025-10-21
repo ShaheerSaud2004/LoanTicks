@@ -97,10 +97,10 @@ export default function EmployeeDashboardClient() {
 
   const filteredApplications = applications.filter(app => {
     const matchesSearch = 
-      app.userId.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      app.userId.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      app.userId.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      app._id.toLowerCase().includes(searchTerm.toLowerCase());
+      (app.userId?.firstName || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (app.userId?.lastName || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (app.userId?.email || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (app._id || '').toLowerCase().includes(searchTerm.toLowerCase());
     
     const matchesStatus = statusFilter === 'all' || app.status === statusFilter;
     const matchesAssigned = assignedFilter === 'all' || 
@@ -275,15 +275,15 @@ export default function EmployeeDashboardClient() {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div>
                           <div className="text-sm font-medium text-gray-900">
-                            {application.userId.firstName} {application.userId.lastName}
+                            {application.userId?.firstName || 'Unknown'} {application.userId?.lastName || 'User'}
                           </div>
-                          <div className="text-sm text-gray-500">{application.userId.email}</div>
+                          <div className="text-sm text-gray-500">{application.userId?.email || 'No email'}</div>
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm text-gray-900">
-                          <div>Loan: ${application.loanAmount.toLocaleString()}</div>
-                          <div className="text-gray-500">Property: ${application.propertyValue.toLocaleString()}</div>
+                          <div>Loan: ${(application.loanAmount || 0).toLocaleString()}</div>
+                          <div className="text-gray-500">Property: ${(application.propertyValue || 0).toLocaleString()}</div>
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
