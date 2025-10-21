@@ -121,6 +121,40 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    // Track employee actions
+    if (session.user.role === 'employee') {
+      // If employee is viewing/working on application, assign it to them
+      if (!application.assignedTo) {
+        application.assignedTo = session.user.id;
+        application.assignedAt = new Date();
+      }
+      
+      // Track status changes
+      if (updates.status && updates.status !== application.status) {
+        const statusHistoryEntry = {
+          status: updates.status,
+          changedBy: session.user.id,
+          changedAt: new Date(),
+          notes: `Status changed to ${updates.status} by employee`
+        };
+        application.statusHistory = [...(application.statusHistory || []), statusHistoryEntry];
+      }
+      
+      // Track decision changes
+      if (updates.decision && updates.decision !== application.decision) {
+        application.reviewedBy = session.user.id;
+        application.reviewedAt = new Date();
+        
+        const statusHistoryEntry = {
+          status: updates.decision,
+          changedBy: session.user.id,
+          changedAt: new Date(),
+          notes: `Decision: ${updates.decision}${updates.decisionNotes ? ` - ${updates.decisionNotes}` : ''}`
+        };
+        application.statusHistory = [...(application.statusHistory || []), statusHistoryEntry];
+      }
+    }
+
     // Update application
     Object.assign(application, updates);
     await application.save();
