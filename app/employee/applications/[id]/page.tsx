@@ -162,21 +162,21 @@ export default function ApplicationView({ params }: { params: { id: string } }) 
                 <div>
                   <h3 className="font-semibold text-gray-700 mb-3">Personal Details</h3>
                   <div className="space-y-2">
-                    <p><span className="font-medium">Name:</span> {application.borrowerInfo?.firstName as string} {application.borrowerInfo?.lastName as string}</p>
-                    <p><span className="font-medium">Email:</span> {application.borrowerInfo?.email as string}</p>
-                    <p><span className="font-medium">Phone:</span> {application.borrowerInfo?.phone as string}</p>
-                    <p><span className="font-medium">DOB:</span> {application.borrowerInfo?.dateOfBirth ? new Date(application.borrowerInfo.dateOfBirth as string).toLocaleDateString() : 'N/A'}</p>
-                    <p><span className="font-medium">SSN:</span> {application.borrowerInfo?.ssn as string || 'N/A'}</p>
-                    <p><span className="font-medium">Marital Status:</span> {application.borrowerInfo?.maritalStatus as string || 'N/A'}</p>
-                    <p><span className="font-medium">Dependents:</span> {application.borrowerInfo?.dependents as number || 0}</p>
+                    <p><span className="font-medium">Name:</span> {String(application.borrowerInfo?.firstName || '')} {String(application.borrowerInfo?.lastName || '')}</p>
+                    <p><span className="font-medium">Email:</span> {String(application.borrowerInfo?.email || '')}</p>
+                    <p><span className="font-medium">Phone:</span> {String(application.borrowerInfo?.phone || '')}</p>
+                    <p><span className="font-medium">DOB:</span> {application.borrowerInfo?.dateOfBirth ? new Date(String(application.borrowerInfo.dateOfBirth)).toLocaleDateString() : 'N/A'}</p>
+                    <p><span className="font-medium">SSN:</span> {String(application.borrowerInfo?.ssn || 'N/A')}</p>
+                    <p><span className="font-medium">Marital Status:</span> {String(application.borrowerInfo?.maritalStatus || 'N/A')}</p>
+                    <p><span className="font-medium">Dependents:</span> {Number(application.borrowerInfo?.dependents || 0)}</p>
                   </div>
                 </div>
                 
                 <div>
                   <h3 className="font-semibold text-gray-700 mb-3">Contact Information</h3>
                   <div className="space-y-2">
-                    <p><span className="font-medium">Email:</span> {application.borrowerInfo?.email || 'N/A'}</p>
-                    <p><span className="font-medium">Phone:</span> {application.borrowerInfo?.phone || 'N/A'}</p>
+                    <p><span className="font-medium">Email:</span> {String(application.borrowerInfo?.email || 'N/A')}</p>
+                    <p><span className="font-medium">Phone:</span> {String(application.borrowerInfo?.phone || 'N/A')}</p>
                   </div>
                 </div>
               </div>
@@ -190,14 +190,14 @@ export default function ApplicationView({ params }: { params: { id: string } }) 
               </div>
               
               <div className="space-y-2">
-                <p><span className="font-medium">Address:</span> {application.currentAddress?.street || 'N/A'}</p>
-                {application.currentAddress?.unit && <p><span className="font-medium">Unit:</span> {application.currentAddress.unit}</p>}
-                <p><span className="font-medium">City:</span> {application.currentAddress?.city || 'N/A'}</p>
-                <p><span className="font-medium">State:</span> {application.currentAddress?.state || 'N/A'}</p>
-                <p><span className="font-medium">ZIP:</span> {application.currentAddress?.zipCode || 'N/A'}</p>
-                <p><span className="font-medium">Residency Type:</span> {application.currentAddress?.residencyType || 'N/A'}</p>
-                <p><span className="font-medium">Monthly Payment:</span> ${application.currentAddress?.monthlyPayment || 0}</p>
-                <p><span className="font-medium">Years at Address:</span> {application.currentAddress?.yearsAtAddress || 'N/A'}</p>
+                <p><span className="font-medium">Address:</span> {String(application.currentAddress?.street || 'N/A')}</p>
+                {application.currentAddress?.unit && <p><span className="font-medium">Unit:</span> {String(application.currentAddress.unit)}</p>}
+                <p><span className="font-medium">City:</span> {String(application.currentAddress?.city || 'N/A')}</p>
+                <p><span className="font-medium">State:</span> {String(application.currentAddress?.state || 'N/A')}</p>
+                <p><span className="font-medium">ZIP:</span> {String(application.currentAddress?.zipCode || 'N/A')}</p>
+                <p><span className="font-medium">Residency Type:</span> {String(application.currentAddress?.residencyType || 'N/A')}</p>
+                <p><span className="font-medium">Monthly Payment:</span> ${Number(application.currentAddress?.monthlyPayment || 0)}</p>
+                <p><span className="font-medium">Years at Address:</span> {String(application.currentAddress?.yearsAtAddress || 'N/A')}</p>
               </div>
             </div>
 
@@ -209,12 +209,12 @@ export default function ApplicationView({ params }: { params: { id: string } }) 
               </div>
               
               <div className="space-y-2">
-                <p><span className="font-medium">Status:</span> {application.employment?.employmentStatus || 'N/A'}</p>
-                <p><span className="font-medium">Employer:</span> {application.employment?.employerName || 'N/A'}</p>
-                <p><span className="font-medium">Position:</span> {application.employment?.position || 'N/A'}</p>
-                <p><span className="font-medium">Years Employed:</span> {application.employment?.yearsEmployed || 'N/A'}</p>
-                <p><span className="font-medium">Monthly Income:</span> ${application.employment?.monthlyIncome || 0}</p>
-                <p><span className="font-medium">Employer Phone:</span> {application.employment?.employerPhone || 'N/A'}</p>
+                <p><span className="font-medium">Status:</span> {String(application.employment?.employmentStatus || 'N/A')}</p>
+                <p><span className="font-medium">Employer:</span> {String(application.employment?.employerName || 'N/A')}</p>
+                <p><span className="font-medium">Position:</span> {String(application.employment?.position || 'N/A')}</p>
+                <p><span className="font-medium">Years Employed:</span> {String(application.employment?.yearsEmployed || 'N/A')}</p>
+                <p><span className="font-medium">Monthly Income:</span> ${Number(application.employment?.monthlyIncome || 0)}</p>
+                <p><span className="font-medium">Employer Phone:</span> {String(application.employment?.employerPhone || 'N/A')}</p>
               </div>
             </div>
 
@@ -229,19 +229,19 @@ export default function ApplicationView({ params }: { params: { id: string } }) 
                 <div>
                   <h3 className="font-semibold text-gray-700 mb-3">Income</h3>
                   <div className="space-y-2">
-                    <p><span className="font-medium">Gross Monthly Income:</span> ${application.financialInfo?.grossMonthlyIncome || 0}</p>
-                    <p><span className="font-medium">Other Income:</span> ${application.financialInfo?.otherIncome || 0}</p>
-                    <p><span className="font-medium">Other Income Source:</span> {application.financialInfo?.otherIncomeSource || 'N/A'}</p>
+                    <p><span className="font-medium">Gross Monthly Income:</span> ${Number(application.financialInfo?.grossMonthlyIncome || 0)}</p>
+                    <p><span className="font-medium">Other Income:</span> ${Number(application.financialInfo?.otherIncome || 0)}</p>
+                    <p><span className="font-medium">Other Income Source:</span> {String(application.financialInfo?.otherIncomeSource || 'N/A')}</p>
                   </div>
                 </div>
                 
                 <div>
                   <h3 className="font-semibold text-gray-700 mb-3">Assets</h3>
                   <div className="space-y-2">
-                    <p><span className="font-medium">Checking Balance:</span> ${application.financialInfo?.checkingAccountBalance || 0}</p>
-                    <p><span className="font-medium">Savings Balance:</span> ${application.financialInfo?.savingsAccountBalance || 0}</p>
-                    <p><span className="font-medium">Total Assets:</span> ${application.financialInfo?.totalAssets || 0}</p>
-                    <p><span className="font-medium">Total Liabilities:</span> ${application.financialInfo?.totalLiabilities || 0}</p>
+                    <p><span className="font-medium">Checking Balance:</span> ${Number(application.financialInfo?.checkingAccountBalance || 0)}</p>
+                    <p><span className="font-medium">Savings Balance:</span> ${Number(application.financialInfo?.savingsAccountBalance || 0)}</p>
+                    <p><span className="font-medium">Total Assets:</span> ${Number(application.financialInfo?.totalAssets || 0)}</p>
+                    <p><span className="font-medium">Total Liabilities:</span> ${Number(application.financialInfo?.totalLiabilities || 0)}</p>
                   </div>
                 </div>
               </div>
@@ -258,22 +258,22 @@ export default function ApplicationView({ params }: { params: { id: string } }) 
                 <div>
                   <h3 className="font-semibold text-gray-700 mb-3">Property Details</h3>
                   <div className="space-y-2">
-                    <p><span className="font-medium">Address:</span> {application.propertyInfo?.propertyAddress || 'N/A'}</p>
-                    <p><span className="font-medium">City:</span> {application.propertyInfo?.propertyCity || 'N/A'}</p>
-                    <p><span className="font-medium">State:</span> {application.propertyInfo?.propertyState || 'N/A'}</p>
-                    <p><span className="font-medium">ZIP:</span> {application.propertyInfo?.propertyZipCode || 'N/A'}</p>
-                    <p><span className="font-medium">Property Type:</span> {application.propertyInfo?.propertyType || 'N/A'}</p>
-                    <p><span className="font-medium">Property Value:</span> ${application.propertyInfo?.propertyValue || 0}</p>
+                    <p><span className="font-medium">Address:</span> {String(application.propertyInfo?.propertyAddress || 'N/A')}</p>
+                    <p><span className="font-medium">City:</span> {String(application.propertyInfo?.propertyCity || 'N/A')}</p>
+                    <p><span className="font-medium">State:</span> {String(application.propertyInfo?.propertyState || 'N/A')}</p>
+                    <p><span className="font-medium">ZIP:</span> {String(application.propertyInfo?.propertyZipCode || 'N/A')}</p>
+                    <p><span className="font-medium">Property Type:</span> {String(application.propertyInfo?.propertyType || 'N/A')}</p>
+                    <p><span className="font-medium">Property Value:</span> ${Number(application.propertyInfo?.propertyValue || 0)}</p>
                   </div>
                 </div>
                 
                 <div>
                   <h3 className="font-semibold text-gray-700 mb-3">Loan Details</h3>
                   <div className="space-y-2">
-                    <p><span className="font-medium">Loan Amount:</span> ${application.propertyInfo?.loanAmount || 0}</p>
-                    <p><span className="font-medium">Loan Purpose:</span> {application.propertyInfo?.loanPurpose || 'N/A'}</p>
-                    <p><span className="font-medium">Down Payment:</span> ${application.propertyInfo?.downPaymentAmount || 0}</p>
-                    <p><span className="font-medium">Down Payment %:</span> {application.propertyInfo?.downPaymentPercentage?.toFixed(2) || 0}%</p>
+                    <p><span className="font-medium">Loan Amount:</span> ${Number(application.propertyInfo?.loanAmount || 0)}</p>
+                    <p><span className="font-medium">Loan Purpose:</span> {String(application.propertyInfo?.loanPurpose || 'N/A')}</p>
+                    <p><span className="font-medium">Down Payment:</span> ${Number(application.propertyInfo?.downPaymentAmount || 0)}</p>
+                    <p><span className="font-medium">Down Payment %:</span> {Number(application.propertyInfo?.downPaymentPercentage || 0).toFixed(2)}%</p>
                   </div>
                 </div>
               </div>
@@ -288,16 +288,16 @@ export default function ApplicationView({ params }: { params: { id: string } }) 
               
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <p><span className="font-medium">US Citizen:</span> {application.declarations?.usCitizen ? 'Yes' : 'No'}</p>
-                  <p><span className="font-medium">Primary Residence:</span> {application.declarations?.primaryResidence ? 'Yes' : 'No'}</p>
-                  <p><span className="font-medium">Outstanding Judgments:</span> {application.declarations?.outstandingJudgments ? 'Yes' : 'No'}</p>
-                  <p><span className="font-medium">Bankruptcy (7 years):</span> {application.declarations?.declaredBankruptcy ? 'Yes' : 'No'}</p>
+                  <p><span className="font-medium">US Citizen:</span> {Boolean(application.declarations?.usCitizen) ? 'Yes' : 'No'}</p>
+                  <p><span className="font-medium">Primary Residence:</span> {Boolean(application.declarations?.primaryResidence) ? 'Yes' : 'No'}</p>
+                  <p><span className="font-medium">Outstanding Judgments:</span> {Boolean(application.declarations?.outstandingJudgments) ? 'Yes' : 'No'}</p>
+                  <p><span className="font-medium">Bankruptcy (7 years):</span> {Boolean(application.declarations?.declaredBankruptcy) ? 'Yes' : 'No'}</p>
                 </div>
                 <div className="space-y-2">
-                  <p><span className="font-medium">Property Foreclosed:</span> {application.declarations?.propertyForeclosed ? 'Yes' : 'No'}</p>
-                  <p><span className="font-medium">Party to Lawsuit:</span> {application.declarations?.lawsuitParty ? 'Yes' : 'No'}</p>
-                  <p><span className="font-medium">Loan on Property:</span> {application.declarations?.loanOnProperty ? 'Yes' : 'No'}</p>
-                  <p><span className="font-medium">Co-maker on Note:</span> {application.declarations?.coMakerOnNote ? 'Yes' : 'No'}</p>
+                  <p><span className="font-medium">Property Foreclosed:</span> {Boolean(application.declarations?.propertyForeclosed) ? 'Yes' : 'No'}</p>
+                  <p><span className="font-medium">Party to Lawsuit:</span> {Boolean(application.declarations?.lawsuitParty) ? 'Yes' : 'No'}</p>
+                  <p><span className="font-medium">Loan on Property:</span> {Boolean(application.declarations?.loanOnProperty) ? 'Yes' : 'No'}</p>
+                  <p><span className="font-medium">Co-maker on Note:</span> {Boolean(application.declarations?.coMakerOnNote) ? 'Yes' : 'No'}</p>
                 </div>
               </div>
             </div>
@@ -313,9 +313,9 @@ export default function ApplicationView({ params }: { params: { id: string } }) 
                   <div key={index} className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
                     <div className="w-2 h-2 bg-green-600 rounded-full mt-2"></div>
                     <div className="flex-1">
-                      <p className="text-sm font-medium text-gray-900">{entry.status}</p>
-                      <p className="text-xs text-gray-500">{new Date(entry.changedAt).toLocaleString()}</p>
-                      {entry.notes && <p className="text-xs text-gray-600 mt-1">{entry.notes}</p>}
+                      <p className="text-sm font-medium text-gray-900">{String(entry.status)}</p>
+                      <p className="text-xs text-gray-500">{new Date(String(entry.changedAt)).toLocaleString()}</p>
+                      {entry.notes && <p className="text-xs text-gray-600 mt-1">{String(entry.notes)}</p>}
                     </div>
                   </div>
                 )) || (
@@ -333,9 +333,9 @@ export default function ApplicationView({ params }: { params: { id: string } }) 
                     <div key={index} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
                       <FileText className="w-5 h-5 text-gray-600" />
                       <div className="flex-1">
-                        <p className="text-sm font-medium text-gray-900">{doc.name}</p>
+                        <p className="text-sm font-medium text-gray-900">{String(doc.name)}</p>
                         <p className="text-xs text-gray-500">
-                          {(doc.size / 1024 / 1024).toFixed(2)} MB
+                          {(Number(doc.size) / 1024 / 1024).toFixed(2)} MB
                         </p>
                       </div>
                     </div>
