@@ -7,7 +7,7 @@ import {
   CheckCircle,
   ArrowRight
 } from 'lucide-react';
-import ComprehensiveLoanForm from '@/components/ComprehensiveLoanForm';
+import URLA2019ComprehensiveForm from '@/components/URLA2019ComprehensiveForm';
 
 export default function LoanApplicationPage() {
   const router = useRouter();
@@ -251,6 +251,6 @@ You can now return to your dashboard to track progress.
     );
   }
 
-  return <ComprehensiveLoanForm onSubmit={handleFormSubmit} saving={saving} />;
+          return <URLA2019ComprehensiveForm onSubmit={handleFormSubmit} saving={saving} />;
 }
 
