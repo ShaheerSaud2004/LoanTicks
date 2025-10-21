@@ -136,6 +136,11 @@ export interface ILoanApplication extends Document {
   decision?: 'approved' | 'rejected' | 'pending';
   decisionNotes?: string;
   
+  // Rate Information
+  rateQuotes?: any[];
+  rateAnalysis?: any;
+  rateLastUpdated?: Date;
+
   // Metadata
   submittedAt?: Date;
   notes?: string;
@@ -308,6 +313,11 @@ const LoanApplicationSchema = new Schema<ILoanApplication>(
       default: 'pending',
     },
     decisionNotes: String,
+    
+    // Rate Information
+    rateQuotes: [Schema.Types.Mixed],
+    rateAnalysis: Schema.Types.Mixed,
+    rateLastUpdated: Date,
     
     // Metadata
     submittedAt: Date,
