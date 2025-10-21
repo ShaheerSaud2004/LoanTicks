@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
-
 // Force dynamic rendering to prevent static generation issues with useSession
 export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
+import { useState, useEffect, useCallback } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { 
