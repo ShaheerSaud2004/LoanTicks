@@ -15,12 +15,16 @@ import {
   User,
   Briefcase,
   X,
+  UserCheck,
 } from 'lucide-react';
 
 interface LoanApplication {
   _id: string;
   userId: string;
   status: string;
+  decision?: string;
+  assignedTo?: string;
+  reviewedBy?: string;
   borrowerInfo: {
     firstName: string;
     lastName: string;
@@ -66,6 +70,20 @@ interface LoanApplication {
     propertyForeclosed: boolean;
     usCitizen: boolean;
   };
+  assignedToUser?: {
+    firstName: string;
+    lastName: string;
+  };
+  reviewedByUser?: {
+    firstName: string;
+    lastName: string;
+  };
+  statusHistory?: Array<{
+    status: string;
+    changedBy: string;
+    changedAt: string;
+    notes?: string;
+  }>;
   submittedAt: string;
   createdAt: string;
 }
@@ -230,6 +248,98 @@ export default function LoanApplicationsManager({ employeeName }: { employeeName
         ))}
       </div>
 
+      {/* Employee Performance Overview */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+          <UserCheck className="w-6 h-6 text-green-600" />
+          Employee Performance Overview
+        </h2>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {(() => {
+            // Calculate employee statistics
+            const employeeStats = new Map();
+            applications.forEach(app => {
+              if (app.assignedToUser) {
+                const employeeName = `${app.assignedToUser.firstName} ${app.assignedToUser.lastName}`;
+                if (!employeeStats.has(employeeName)) {
+                  employeeStats.set(employeeName, {
+                    name: employeeName,
+                    totalAssigned: 0,
+                    approved: 0,
+                    rejected: 0,
+                    pending: 0
+                  });
+                }
+                
+                const stats = employeeStats.get(employeeName);
+                stats.totalAssigned++;
+                
+                if (app.status === 'approved') stats.approved++;
+                else if (app.status === 'rejected') stats.rejected++;
+                else stats.pending++;
+              }
+            });
+            
+            return Array.from(employeeStats.values()).map(emp => (
+              <div key={emp.name} className="bg-gray-50 rounded-lg p-4">
+                <h3 className="font-semibold text-gray-900 mb-3">{emp.name}</h3>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-600">Total Assigned:</span>
+                    <span className="font-medium">{emp.totalAssigned}</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-green-600">Approved:</span>
+                    <span className="font-medium text-green-600">{emp.approved}</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-red-600">Rejected:</span>
+                    <span className="font-medium text-red-600">{emp.rejected}</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-yellow-600">Pending:</span>
+                    <span className="font-medium text-yellow-600">{emp.pending}</span>
+                  </div>
+                  <div className="flex justify-between text-sm pt-2 border-t border-gray-200">
+                    <span className="text-gray-600">Success Rate:</span>
+                    <span className="font-medium">
+                      {emp.totalAssigned > 0 ? ((emp.approved / emp.totalAssigned) * 100).toFixed(1) : 0}%
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ));
+          })()}
+        </div>
+        
+        {(() => {
+          const employeeStats = new Map();
+          applications.forEach(app => {
+            if (app.assignedToUser) {
+              const employeeName = `${app.assignedToUser.firstName} ${app.assignedToUser.lastName}`;
+              if (!employeeStats.has(employeeName)) {
+                employeeStats.set(employeeName, { name: employeeName, totalAssigned: 0, approved: 0, rejected: 0, pending: 0 });
+              }
+              const stats = employeeStats.get(employeeName);
+              stats.totalAssigned++;
+              if (app.status === 'approved') stats.approved++;
+              else if (app.status === 'rejected') stats.rejected++;
+              else stats.pending++;
+            }
+          });
+          
+          if (employeeStats.size === 0) {
+            return (
+              <div className="text-center py-8 text-gray-500">
+                <UserCheck className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+                <p>No employee assignments found</p>
+              </div>
+            );
+          }
+        })()}
+      </div>
+
       {/* Filters */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
         <div className="flex flex-wrap gap-2">
@@ -310,6 +420,12 @@ export default function LoanApplicationsManager({ employeeName }: { employeeName
                   Status
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  Assigned To
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  Reviewed By
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                   Submitted
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
@@ -320,7 +436,7 @@ export default function LoanApplicationsManager({ employeeName }: { employeeName
             <tbody className="divide-y divide-gray-200">
               {filteredApplications.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-6 py-12 text-center text-gray-500">
+                  <td colSpan={8} className="px-6 py-12 text-center text-gray-500">
                     No applications found
                   </td>
                 </tr>
@@ -350,6 +466,30 @@ export default function LoanApplicationsManager({ employeeName }: { employeeName
                     </td>
                     <td className="px-6 py-4">
                       {getStatusBadge(app.status)}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-600">
+                      {app.assignedToUser ? (
+                        <div>
+                          <div className="font-medium text-gray-900">
+                            {app.assignedToUser.firstName} {app.assignedToUser.lastName}
+                          </div>
+                          <div className="text-xs text-gray-500">Employee</div>
+                        </div>
+                      ) : (
+                        <span className="text-gray-400">Unassigned</span>
+                      )}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-600">
+                      {app.reviewedByUser ? (
+                        <div>
+                          <div className="font-medium text-gray-900">
+                            {app.reviewedByUser.firstName} {app.reviewedByUser.lastName}
+                          </div>
+                          <div className="text-xs text-gray-500">Reviewer</div>
+                        </div>
+                      ) : (
+                        <span className="text-gray-400">Not reviewed</span>
+                      )}
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-600">
                       {formatDate(app.submittedAt || app.createdAt)}

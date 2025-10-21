@@ -105,7 +105,7 @@ All imports updated to reflect new structure:
 
 ```typescript
 // Auth
-import { auth } from '@/src/auth';
+import { auth } from '@/lib/auth';
 
 // Components
 import DashboardLayout from '@/components/DashboardLayout';

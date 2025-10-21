@@ -71,13 +71,10 @@ export default function DashboardLayout({
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
             <div className="flex items-center">
-              <div className="h-10 w-10 rounded-lg overflow-hidden bg-white border border-gray-200">
+              <div className="h-12 w-auto rounded-lg overflow-hidden bg-white border border-gray-200">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/logo.jpg" alt="LOANATicks" className="h-full w-full object-cover" />
+                <img src="/logo.jpg" alt="LOANATicks" className="h-full w-full object-contain" />
               </div>
-              <span className="ml-3 text-xl font-bold text-gray-900">
-                LOANATicks
-              </span>
             </div>
 
             {/* User Info and Logout */}

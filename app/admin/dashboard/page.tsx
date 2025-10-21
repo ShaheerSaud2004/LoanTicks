@@ -1,4 +1,4 @@
-import { auth } from '@/src/auth';
+import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import DashboardLayout from '@/components/DashboardLayout';
 import LoanApplicationsManager from '@/components/LoanApplicationsManager';

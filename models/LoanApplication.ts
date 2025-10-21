@@ -17,6 +17,9 @@ export interface ILoanApplication extends Document {
     ssn: string;
     maritalStatus: 'married' | 'unmarried' | 'separated';
     dependents: number;
+    race?: string;
+    ethnicity?: string;
+    sex?: string;
   };
 
   // Section 2: Current Address
@@ -103,12 +106,38 @@ export interface ILoanApplication extends Document {
     usCitizen: boolean;
     permanentResident: boolean;
     primaryResidence: boolean;
+    intendToOccupy: boolean;
   };
 
+  // Documents
+  documents?: Array<{
+    name: string;
+    size: number;
+    type: string;
+    uploadedAt: Date;
+    url: string;
+  }>;
+
+  // Employee Assignment & Workflow
+  assignedTo?: string; // Employee ID who is working on this application
+  assignedAt?: Date;
+  
+  // Status History & Audit Trail
+  statusHistory: Array<{
+    status: string;
+    changedBy: string; // User ID (employee/admin)
+    changedAt: Date;
+    notes?: string;
+  }>;
+  
+  // Review & Decision
+  reviewedBy?: string; // Employee ID
+  reviewedAt?: Date;
+  decision?: 'approved' | 'rejected' | 'pending';
+  decisionNotes?: string;
+  
   // Metadata
   submittedAt?: Date;
-  reviewedBy?: string;
-  reviewedAt?: Date;
   notes?: string;
   createdAt: Date;
   updatedAt: Date;
@@ -139,6 +168,9 @@ const LoanApplicationSchema = new Schema<ILoanApplication>(
         required: true,
       },
       dependents: { type: Number, default: 0 },
+      race: String,
+      ethnicity: String,
+      sex: String,
     },
 
     currentAddress: {
@@ -240,11 +272,45 @@ const LoanApplicationSchema = new Schema<ILoanApplication>(
       usCitizen: { type: Boolean, default: true },
       permanentResident: { type: Boolean, default: false },
       primaryResidence: { type: Boolean, default: true },
+      intendToOccupy: { type: Boolean, default: true },
     },
 
-    submittedAt: Date,
+    documents: [
+      {
+        name: String,
+        size: Number,
+        type: String,
+        uploadedAt: { type: Date, default: Date.now },
+        url: String,
+      },
+    ],
+
+    // Employee Assignment & Workflow
+    assignedTo: String,
+    assignedAt: Date,
+    
+    // Status History & Audit Trail
+    statusHistory: [
+      {
+        status: { type: String, required: true },
+        changedBy: { type: String, required: true },
+        changedAt: { type: Date, default: Date.now },
+        notes: String,
+      },
+    ],
+    
+    // Review & Decision
     reviewedBy: String,
     reviewedAt: Date,
+    decision: {
+      type: String,
+      enum: ['approved', 'rejected', 'pending'],
+      default: 'pending',
+    },
+    decisionNotes: String,
+    
+    // Metadata
+    submittedAt: Date,
     notes: String,
   },
   {
