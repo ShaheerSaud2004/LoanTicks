@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   FileText, 
   User, 
@@ -959,7 +959,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
             {/* Step Info */}
             <div className="flex items-center gap-4 mb-6">
               <div className="p-3 bg-green-100 rounded-xl">
-                {steps[currentStep].icon && <steps[currentStep].icon className="w-6 h-6 text-green-600" />}
+                {steps[currentStep].icon && React.createElement(steps[currentStep].icon, { className: "w-6 h-6 text-green-600" })}
               </div>
               <div>
                 <h2 className="text-xl font-bold text-gray-900">{steps[currentStep].title}</h2>
