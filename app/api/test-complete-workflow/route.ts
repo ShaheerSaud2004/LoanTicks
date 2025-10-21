@@ -11,20 +11,16 @@ export async function GET() {
     // Create test users if they don't exist
     const testUsers = [
       {
-        firstName: 'Test',
-        lastName: 'Customer',
+        name: 'Test Customer',
         email: 'testcustomer@example.com',
         password: 'test123',
-        role: 'customer',
-        status: 'active'
+        role: 'customer'
       },
       {
-        firstName: 'Test',
-        lastName: 'Employee',
+        name: 'Test Employee',
         email: 'testemployee@loanticks.com',
         password: 'test123',
-        role: 'employee',
-        status: 'active'
+        role: 'employee'
       }
     ];
 

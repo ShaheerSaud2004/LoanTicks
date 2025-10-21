@@ -11,54 +11,42 @@ export async function POST() {
     const testAccounts = [
       // Admin Account
       {
-        firstName: 'Admin',
-        lastName: 'User',
+        name: 'Admin User',
         email: 'admin@loanticks.com',
         password: 'admin123',
-        role: 'admin',
-        status: 'active'
+        role: 'admin'
       },
       // Customer Accounts
       {
-        firstName: 'John',
-        lastName: 'Customer',
+        name: 'John Customer',
         email: 'customer1@test.com',
         password: 'customer123',
-        role: 'customer',
-        status: 'active'
+        role: 'customer'
       },
       {
-        firstName: 'Jane',
-        lastName: 'Smith',
+        name: 'Jane Smith',
         email: 'customer2@test.com',
         password: 'customer123',
-        role: 'customer',
-        status: 'active'
+        role: 'customer'
       },
       // Employee Accounts
       {
-        firstName: 'Mike',
-        lastName: 'Employee',
+        name: 'Mike Employee',
         email: 'employee1@loanticks.com',
         password: 'employee123',
-        role: 'employee',
-        status: 'active'
+        role: 'employee'
       },
       {
-        firstName: 'Sarah',
-        lastName: 'Johnson',
+        name: 'Sarah Johnson',
         email: 'employee2@loanticks.com',
         password: 'employee123',
-        role: 'senior_employee',
-        status: 'active'
+        role: 'employee'
       },
       {
-        firstName: 'David',
-        lastName: 'Supervisor',
+        name: 'David Supervisor',
         email: 'supervisor@loanticks.com',
         password: 'supervisor123',
-        role: 'supervisor',
-        status: 'active'
+        role: 'employee'
       }
     ];
 
@@ -77,12 +65,10 @@ export async function POST() {
       } else {
         const hashedPassword = await bcrypt.hash(accountData.password, 12);
         user = new User({
-          firstName: accountData.firstName,
-          lastName: accountData.lastName,
+          name: accountData.name,
           email: accountData.email,
           password: hashedPassword,
-          role: accountData.role,
-          status: accountData.status
+          role: accountData.role
         });
         await user.save();
         
