@@ -48,8 +48,7 @@ export async function GET() {
 
         return {
           _id: employee._id,
-          firstName: employee.firstName,
-          lastName: employee.lastName,
+          name: employee.name,
           email: employee.email,
           role: employee.role,
           status: employee.status || 'active',
