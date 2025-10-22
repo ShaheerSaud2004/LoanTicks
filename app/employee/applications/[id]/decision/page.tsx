@@ -51,7 +51,7 @@ export default function ApplicationDecision({ params }: { params: { id: string }
     } finally {
       setLoading(false);
     }
-  }, [params.id]);
+  }, [params.id, router]);
 
   useEffect(() => {
     if (status === 'loading') return;

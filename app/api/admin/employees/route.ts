@@ -145,11 +145,10 @@ export async function POST(request: NextRequest) {
       message: 'Employee created successfully',
       employee: {
         _id: newEmployee._id,
-        firstName: newEmployee.firstName,
-        lastName: newEmployee.lastName,
+        name: newEmployee.name,
         email: newEmployee.email,
         role: newEmployee.role,
-        status: newEmployee.status
+        status: 'active'
       }
     });
 

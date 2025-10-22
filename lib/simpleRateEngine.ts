@@ -172,6 +172,7 @@ export function analyzeSimpleRates(quotes: SimpleRateQuote[]) {
 }
 
 // Integration with external rate services (optional)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function getExternalRates(_loanData: SimpleLoanData): Promise<SimpleRateQuote[]> {
   const externalRates: SimpleRateQuote[] = [];
   
@@ -194,6 +195,7 @@ export async function getExternalRates(_loanData: SimpleLoanData): Promise<Simpl
     // const bankrateRates = await bankrateResponse.json();
     // externalRates.push(...bankrateRates);
     
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (_error) {
     console.log('External rate services not available, using market data');
   }

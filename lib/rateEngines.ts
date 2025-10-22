@@ -380,7 +380,7 @@ async function getCustomRates(loanData: LoanData): Promise<RateResponse> {
 
 // Helper functions for custom rate calculation
 function calculateBaseRate(loanData: LoanData): number {
-  const { loan, property, borrower } = loanData;
+  const { loan, property } = loanData;
   
   // Base rates (these would be updated regularly)
   let baseRate = 6.5; // Current market rate
