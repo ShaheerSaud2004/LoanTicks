@@ -4,7 +4,7 @@
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { 
@@ -34,18 +34,7 @@ export default function ApplicationDecision({ params }: { params: { id: string }
   const [notes, setNotes] = useState('');
   const [showConfirm, setShowConfirm] = useState(false);
 
-  useEffect(() => {
-    if (status === 'loading') return;
-    
-    if (!session || session.user.role !== 'employee') {
-      router.push('/login');
-      return;
-    }
-
-    fetchApplication();
-  }, [session, status, router, params.id, fetchApplication]);
-
-  const fetchApplication = async () => {
+  const fetchApplication = useCallback(async () => {
     try {
       const response = await fetch(`/api/loan-application?id=${params.id}`);
       const data = await response.json();
@@ -62,7 +51,18 @@ export default function ApplicationDecision({ params }: { params: { id: string }
     } finally {
       setLoading(false);
     }
-  };
+  }, [params.id]);
+
+  useEffect(() => {
+    if (status === 'loading') return;
+    
+    if (!session || session.user.role !== 'employee') {
+      router.push('/login');
+      return;
+    }
+
+    fetchApplication();
+  }, [session, status, router, fetchApplication]);
 
   const handleSubmitDecision = async () => {
     if (!decision) {

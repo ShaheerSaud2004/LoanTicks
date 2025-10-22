@@ -51,9 +51,9 @@ export async function GET() {
           name: employee.name,
           email: employee.email,
           role: employee.role,
-          status: employee.status || 'active',
+          status: 'active', // Default status
           createdAt: employee.createdAt,
-          lastLogin: employee.lastLogin,
+          lastLogin: undefined,
           totalApplications,
           pendingApplications,
           approvedApplications,

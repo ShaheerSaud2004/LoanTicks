@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { 
   FileText, 
   User, 
@@ -232,7 +232,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
   };
 
 
-  const calculateTotalMonthlyLiabilities = () => {
+  const calculateTotalMonthlyLiabilities = useCallback(() => {
     const mortgage = parseFloat(formData.mortgagePayment) || 0;
     const secondMortgage = parseFloat(formData.secondMortgagePayment) || 0;
     const homeEquity = parseFloat(formData.homeEquityPayment) || 0;
@@ -245,9 +245,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
       ...prev,
       totalMonthlyLiabilities: total.toString()
     }));
-  };
+  }, [formData.mortgagePayment, formData.secondMortgagePayment, formData.homeEquityPayment, formData.creditCardPayments, formData.installmentLoanPayments, formData.otherMonthlyPayments]);
 
-  const calculateTotalAssets = () => {
+  const calculateTotalAssets = useCallback(() => {
     const checking = parseFloat(formData.checkingAccountBalance) || 0;
     const savings = parseFloat(formData.savingsAccountBalance) || 0;
     const moneyMarket = parseFloat(formData.moneyMarketBalance) || 0;
@@ -263,9 +263,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
       ...prev,
       totalAssets: total.toString()
     }));
-  };
+  }, [formData.checkingAccountBalance, formData.savingsAccountBalance, formData.moneyMarketBalance, formData.cdsBalance, formData.realEstateValue, formData.stockBondValue, formData.lifeInsuranceValue, formData.retirementAccountValue, formData.otherAssetValue]);
 
-  const calculateTotalMonthlyIncome = () => {
+  const calculateTotalMonthlyIncome = useCallback(() => {
     const base = parseFloat(formData.baseIncome) || 0;
     const overtime = parseFloat(formData.overtimeIncome) || 0;
     const bonus = parseFloat(formData.bonusIncome) || 0;
@@ -277,19 +277,19 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
       ...prev,
       totalMonthlyIncome: total.toString()
     }));
-  };
+  }, [formData.baseIncome, formData.overtimeIncome, formData.bonusIncome, formData.commissionIncome, formData.otherIncomeAmount]);
 
   useEffect(() => {
     calculateTotalMonthlyLiabilities();
-  }, [formData.mortgagePayment, formData.secondMortgagePayment, formData.homeEquityPayment, formData.creditCardPayments, formData.installmentLoanPayments, formData.otherMonthlyPayments, calculateTotalMonthlyLiabilities]);
+  }, [calculateTotalMonthlyLiabilities]);
 
   useEffect(() => {
     calculateTotalAssets();
-  }, [formData.checkingAccountBalance, formData.savingsAccountBalance, formData.moneyMarketBalance, formData.cdsBalance, formData.realEstateValue, formData.stockBondValue, formData.lifeInsuranceValue, formData.retirementAccountValue, formData.otherAssetValue, calculateTotalAssets]);
+  }, [calculateTotalAssets]);
 
   useEffect(() => {
     calculateTotalMonthlyIncome();
-  }, [formData.baseIncome, formData.overtimeIncome, formData.bonusIncome, formData.commissionIncome, formData.otherIncomeAmount, calculateTotalMonthlyIncome]);
+  }, [calculateTotalMonthlyIncome]);
 
   const nextStep = () => {
     if (currentStep < steps.length - 1) {

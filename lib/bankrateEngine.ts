@@ -109,7 +109,7 @@ export function calculateBankrateRates(loanData: BankrateLoanData): BankrateQuot
   baseRate += occupancyAdjustment;
   
   // Generate quotes from Bankrate-style lenders
-  BANKRATE_LENDERS.forEach((lender, index) => {
+  BANKRATE_LENDERS.forEach((lender) => {
     const rate = Math.max(3.5, baseRate + lender.baseAdjustment); // Minimum 3.5%
     const apr = rate + 0.25 + (Math.random() * 0.1); // APR with slight variation
     const monthlyPayment = calculateMonthlyPayment(loanData.loanAmount, rate, 30);

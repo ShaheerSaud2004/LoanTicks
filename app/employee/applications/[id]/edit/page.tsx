@@ -4,7 +4,7 @@
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { 
@@ -44,18 +44,7 @@ export default function EditApplication({ params }: { params: { id: string } }) 
   const [formData, setFormData] = useState<any>({});
   const [notes, setNotes] = useState('');
 
-  useEffect(() => {
-    if (status === 'loading') return;
-    
-    if (!session || session.user.role !== 'employee') {
-      router.push('/login');
-      return;
-    }
-
-    fetchApplication();
-  }, [session, status, router, params.id, fetchApplication]);
-
-  const fetchApplication = async () => {
+  const fetchApplication = useCallback(async () => {
     try {
       const response = await fetch(`/api/loan-application?id=${params.id}`);
       const data = await response.json();
@@ -73,7 +62,18 @@ export default function EditApplication({ params }: { params: { id: string } }) 
     } finally {
       setLoading(false);
     }
-  };
+  }, [params.id, router]);
+
+  useEffect(() => {
+    if (status === 'loading') return;
+    
+    if (!session || session.user.role !== 'employee') {
+      router.push('/login');
+      return;
+    }
+
+    fetchApplication();
+  }, [session, status, router, fetchApplication]);
 
   const handleInputChange = (section: string, field: string, value: any) => {
     setFormData((prev: any) => ({
