@@ -12,9 +12,7 @@ import {
   ArrowLeft,
   Save,
   AlertTriangle,
-  Info,
-  Plus,
-  Trash2
+  Info
 } from 'lucide-react';
 
 interface URLA2019ComprehensiveFormProps {
@@ -233,67 +231,6 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
     }));
   };
 
-  const handleArrayChange = (field: string, index: number, subField: string, value: any) => {
-    setFormData(prev => {
-      const currentArray = prev[field as keyof typeof prev] as any[];
-      if (Array.isArray(currentArray)) {
-        return {
-          ...prev,
-          [field]: currentArray.map((item, i) =>
-            i === index ? { ...item, [subField]: value } : item
-          )
-        };
-      }
-      return prev;
-    });
-  };
-
-  const addArrayItem = (field: string, defaultItem: any) => {
-    setFormData(prev => {
-      const currentArray = prev[field as keyof typeof prev] as any[];
-      if (Array.isArray(currentArray)) {
-        return {
-          ...prev,
-          [field]: [...currentArray, defaultItem]
-        };
-      }
-      return prev;
-    });
-  };
-
-  const removeArrayItem = (field: string, index: number) => {
-    setFormData(prev => {
-      const currentArray = prev[field as keyof typeof prev] as any[];
-      if (Array.isArray(currentArray)) {
-        return {
-          ...prev,
-          [field]: currentArray.filter((_, i) => i !== index)
-        };
-      }
-      return prev;
-    });
-  };
-
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (files) {
-      const fileArray = Array.from(files);
-      setFormData(prev => ({
-        ...prev,
-        uploadedDocuments: [...(prev.uploadedDocuments as File[]), ...fileArray]
-      }));
-    }
-  };
-
-  const removeFile = (index: number) => {
-    setFormData(prev => {
-      const files = prev.uploadedDocuments as File[];
-      return {
-        ...prev,
-        uploadedDocuments: files.filter((_, i) => i !== index)
-      };
-    });
-  };
 
   const calculateTotalMonthlyLiabilities = () => {
     const mortgage = parseFloat(formData.mortgagePayment) || 0;
@@ -344,15 +281,15 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
 
   useEffect(() => {
     calculateTotalMonthlyLiabilities();
-  }, [formData.mortgagePayment, formData.secondMortgagePayment, formData.homeEquityPayment, formData.creditCardPayments, formData.installmentLoanPayments, formData.otherMonthlyPayments]);
+  }, [formData.mortgagePayment, formData.secondMortgagePayment, formData.homeEquityPayment, formData.creditCardPayments, formData.installmentLoanPayments, formData.otherMonthlyPayments, calculateTotalMonthlyLiabilities]);
 
   useEffect(() => {
     calculateTotalAssets();
-  }, [formData.checkingAccountBalance, formData.savingsAccountBalance, formData.moneyMarketBalance, formData.cdsBalance, formData.realEstateValue, formData.stockBondValue, formData.lifeInsuranceValue, formData.retirementAccountValue, formData.otherAssetValue]);
+  }, [formData.checkingAccountBalance, formData.savingsAccountBalance, formData.moneyMarketBalance, formData.cdsBalance, formData.realEstateValue, formData.stockBondValue, formData.lifeInsuranceValue, formData.retirementAccountValue, formData.otherAssetValue, calculateTotalAssets]);
 
   useEffect(() => {
     calculateTotalMonthlyIncome();
-  }, [formData.baseIncome, formData.overtimeIncome, formData.bonusIncome, formData.commissionIncome, formData.otherIncomeAmount]);
+  }, [formData.baseIncome, formData.overtimeIncome, formData.bonusIncome, formData.commissionIncome, formData.otherIncomeAmount, calculateTotalMonthlyIncome]);
 
   const nextStep = () => {
     if (currentStep < steps.length - 1) {

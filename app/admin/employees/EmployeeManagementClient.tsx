@@ -3,26 +3,20 @@
 import { useState, useEffect } from 'react';
 import { 
   Users, 
-  Plus, 
-  Edit, 
   Trash2, 
   Eye, 
   UserPlus,
   TrendingUp,
-  TrendingDown,
   Clock,
   CheckCircle,
   XCircle,
   FileText,
-  Search,
-  Filter,
-  Download
+  Search
 } from 'lucide-react';
 
 interface Employee {
   _id: string;
-  firstName: string;
-  lastName: string;
+  name: string;
   email: string;
   role: string;
   status: 'active' | 'inactive';
@@ -56,8 +50,7 @@ export default function EmployeeManagementClient() {
 
   // Form state for creating new employee
   const [newEmployee, setNewEmployee] = useState({
-    firstName: '',
-    lastName: '',
+    name: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -99,8 +92,7 @@ export default function EmployeeManagementClient() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          firstName: newEmployee.firstName,
-          lastName: newEmployee.lastName,
+          name: newEmployee.name,
           email: newEmployee.email,
           password: newEmployee.password,
           role: newEmployee.role
@@ -111,8 +103,7 @@ export default function EmployeeManagementClient() {
         alert('Employee created successfully!');
         setShowCreateForm(false);
         setNewEmployee({
-          firstName: '',
-          lastName: '',
+          name: '',
           email: '',
           password: '',
           confirmPassword: '',
@@ -181,8 +172,7 @@ export default function EmployeeManagementClient() {
 
   const filteredEmployees = employees.filter(employee => {
     const matchesSearch = 
-      employee.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      employee.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      employee.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       employee.email.toLowerCase().includes(searchTerm.toLowerCase());
     
     const matchesStatus = statusFilter === 'all' || employee.status === statusFilter;
@@ -297,7 +287,7 @@ export default function EmployeeManagementClient() {
                   Top Performer This Month
                 </h3>
                 <p className="text-yellow-800">
-                  <strong>{stats.topPerformer.firstName} {stats.topPerformer.lastName}</strong> - 
+                  <strong>{stats.topPerformer.name}</strong> - 
                   {stats.topPerformer.approvedApplications} approved applications, 
                   {stats.topPerformer.averageProcessingTime.toFixed(1)} days avg. processing time
                 </p>
@@ -388,7 +378,7 @@ export default function EmployeeManagementClient() {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div>
                           <div className="text-sm font-medium text-gray-900">
-                            {employee.firstName} {employee.lastName}
+                            {employee.name}
                           </div>
                           <div className="text-sm text-gray-500">{employee.email}</div>
                         </div>
@@ -476,31 +466,17 @@ export default function EmployeeManagementClient() {
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Create New Employee</h2>
             
             <form onSubmit={handleCreateEmployee} className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    First Name *
-                  </label>
-                  <input
-                    type="text"
-                    value={newEmployee.firstName}
-                    onChange={(e) => setNewEmployee(prev => ({ ...prev, firstName: e.target.value }))}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Last Name *
-                  </label>
-                  <input
-                    type="text"
-                    value={newEmployee.lastName}
-                    onChange={(e) => setNewEmployee(prev => ({ ...prev, lastName: e.target.value }))}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition"
-                    required
-                  />
-                </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Full Name *
+                </label>
+                <input
+                  type="text"
+                  value={newEmployee.name}
+                  onChange={(e) => setNewEmployee(prev => ({ ...prev, name: e.target.value }))}
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition"
+                  required
+                />
               </div>
               
               <div>
@@ -583,7 +559,7 @@ export default function EmployeeManagementClient() {
           <div className="bg-white rounded-2xl p-8 max-w-2xl w-full mx-4">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-bold text-gray-900">
-                {selectedEmployee.firstName} {selectedEmployee.lastName}
+                {selectedEmployee.name}
               </h2>
               <button
                 onClick={() => setShowEmployeeDetails(false)}
@@ -598,7 +574,7 @@ export default function EmployeeManagementClient() {
                 <div>
                   <h3 className="font-semibold text-gray-700 mb-3">Personal Information</h3>
                   <div className="space-y-2">
-                    <p><span className="font-medium">Name:</span> {selectedEmployee.firstName} {selectedEmployee.lastName}</p>
+                    <p><span className="font-medium">Name:</span> {selectedEmployee.name}</p>
                     <p><span className="font-medium">Email:</span> {selectedEmployee.email}</p>
                     <p><span className="font-medium">Role:</span> {selectedEmployee.role}</p>
                     <p><span className="font-medium">Status:</span> 

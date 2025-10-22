@@ -43,7 +43,7 @@ export default function ApplicationDecision({ params }: { params: { id: string }
     }
 
     fetchApplication();
-  }, [session, status, router, params.id]);
+  }, [session, status, router, params.id, fetchApplication]);
 
   const fetchApplication = async () => {
     try {

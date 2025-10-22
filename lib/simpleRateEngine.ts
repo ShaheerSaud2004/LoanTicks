@@ -172,7 +172,7 @@ export function analyzeSimpleRates(quotes: SimpleRateQuote[]) {
 }
 
 // Integration with external rate services (optional)
-export async function getExternalRates(loanData: SimpleLoanData): Promise<SimpleRateQuote[]> {
+export async function getExternalRates(_loanData: SimpleLoanData): Promise<SimpleRateQuote[]> {
   const externalRates: SimpleRateQuote[] = [];
   
   try {
@@ -194,7 +194,7 @@ export async function getExternalRates(loanData: SimpleLoanData): Promise<Simple
     // const bankrateRates = await bankrateResponse.json();
     // externalRates.push(...bankrateRates);
     
-  } catch (error) {
+  } catch (_error) {
     console.log('External rate services not available, using market data');
   }
   

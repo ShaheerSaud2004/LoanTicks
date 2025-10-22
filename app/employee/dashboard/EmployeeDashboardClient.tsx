@@ -5,14 +5,11 @@ import { useRouter } from 'next/navigation';
 import { 
   FileText, 
   Search, 
-  Filter, 
   Eye, 
   Edit, 
   CheckCircle, 
   Clock,
-  User,
-  Calendar,
-  DollarSign
+  User
 } from 'lucide-react';
 
 interface Application {
