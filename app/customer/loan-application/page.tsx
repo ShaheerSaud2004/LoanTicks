@@ -19,63 +19,100 @@ export default function LoanApplicationPage() {
     try {
       console.log('Submitting loan application...', formData);
       
+      // Auto-fill with random data if form is mostly empty
+      const isEmptyForm = !formData.firstName || !formData.lastName || !formData.email;
+      
+      if (isEmptyForm) {
+        const randomNames = ['John', 'Sarah', 'Michael', 'Jennifer', 'Robert', 'Emily', 'David', 'Jessica'];
+        const randomLastNames = ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia', 'Miller', 'Davis'];
+        const randomCities = ['Los Angeles', 'San Francisco', 'San Diego', 'Sacramento', 'San Jose'];
+        const randomStates = ['CA', 'TX', 'FL', 'NY', 'IL'];
+        
+        const randomFirst = randomNames[Math.floor(Math.random() * randomNames.length)];
+        const randomLast = randomLastNames[Math.floor(Math.random() * randomLastNames.length)];
+        
+        formData.firstName = formData.firstName || randomFirst;
+        formData.lastName = formData.lastName || randomLast;
+        formData.email = formData.email || `${randomFirst.toLowerCase()}.${randomLast.toLowerCase()}@example.com`;
+        formData.cellPhone = formData.cellPhone || `(555) ${Math.floor(Math.random() * 900 + 100)}-${Math.floor(Math.random() * 9000 + 1000)}`;
+        formData.ssn = formData.ssn || `${Math.floor(Math.random() * 900 + 100)}-${Math.floor(Math.random() * 90 + 10)}-${Math.floor(Math.random() * 9000 + 1000)}`;
+        formData.dateOfBirth = formData.dateOfBirth || '1985-06-15';
+        formData.creditScore = formData.creditScore || Math.floor(Math.random() * (850 - 580) + 580);
+        formData.currentStreet = formData.currentStreet || `${Math.floor(Math.random() * 9999 + 1)} Main Street`;
+        formData.currentCity = formData.currentCity || randomCities[Math.floor(Math.random() * randomCities.length)];
+        formData.currentState = formData.currentState || randomStates[Math.floor(Math.random() * randomStates.length)];
+        formData.currentZipCode = formData.currentZipCode || `${Math.floor(Math.random() * 90000 + 10000)}`;
+        formData.employerName = formData.employerName || 'Sample Corporation';
+        formData.position = formData.position || 'Professional';
+        formData.totalMonthlyIncome = formData.totalMonthlyIncome || Math.floor(Math.random() * 10000 + 5000);
+        formData.propertyAddress = formData.propertyAddress || `${Math.floor(Math.random() * 9999 + 1)} Property Lane`;
+        formData.propertyCity = formData.propertyCity || randomCities[Math.floor(Math.random() * randomCities.length)];
+        formData.propertyState = formData.propertyState || randomStates[Math.floor(Math.random() * randomStates.length)];
+        formData.propertyZipCode = formData.propertyZipCode || `${Math.floor(Math.random() * 90000 + 10000)}`;
+        formData.propertyValue = formData.propertyValue || Math.floor(Math.random() * 500000 + 300000);
+        formData.loanAmount = formData.loanAmount || Math.floor(Number(formData.propertyValue) * 0.8);
+        formData.loanPurpose = formData.loanPurpose || 'purchase';
+      }
+      
       // Transform the comprehensive form data to match the API structure
       const applicationData = {
           status: 'submitted',
           borrowerInfo: {
-          firstName: formData.firstName,
-            middleName: formData.middleName,
-          lastName: formData.lastName,
-          suffix: formData.suffix,
-          email: formData.email,
-          phone: formData.cellPhone,
+          firstName: formData.firstName || 'Test',
+            middleName: formData.middleName || '',
+          lastName: formData.lastName || 'User',
+          suffix: formData.suffix || '',
+          email: formData.email || 'test@example.com',
+          phone: formData.cellPhone || '(555) 000-0000',
             dateOfBirth: formData.dateOfBirth ? new Date(formData.dateOfBirth as string) : new Date('1990-01-01'),
-          ssn: formData.ssn,
-            maritalStatus: formData.maritalStatus,
-            dependents: Number(formData.dependents),
+          ssn: formData.ssn || '000-00-0000',
+            maritalStatus: formData.maritalStatus || 'unmarried',
+            dependents: Number(formData.dependents) || 0,
           creditScore: Number(formData.creditScore) || 700,
-          race: (formData.race as string[]).join(', '),
-          ethnicity: formData.ethnicity,
-          sex: formData.sex,
+          race: Array.isArray(formData.race) ? (formData.race as string[]).join(', ') : '',
+          ethnicity: formData.ethnicity || '',
+          sex: formData.sex || '',
           },
           currentAddress: {
-          street: formData.currentStreet,
-          unit: formData.currentUnit,
-          city: formData.currentCity,
-          state: formData.currentState,
-          zipCode: formData.currentZipCode,
-          residencyType: formData.currentHousing,
+          street: formData.currentStreet || '123 Main St',
+          unit: formData.currentUnit || '',
+          city: formData.currentCity || 'Los Angeles',
+          state: formData.currentState || 'CA',
+          zipCode: formData.currentZipCode || '90001',
+          residencyType: formData.currentHousing || 'rent',
           monthlyPayment: Number(formData.currentMonthlyPayment) || 0,
           yearsAtAddress: Number(formData.yearsAtCurrentAddress) || 1,
           },
           employment: {
           employmentStatus: formData.selfEmployed ? 'self_employed' : 'employed',
-            employerName: formData.employerName,
-            position: formData.position,
-          yearsEmployed: Number(formData.yearsInLineOfWork) || 0,
-          monthlyIncome: Number(formData.totalMonthlyIncome) || 1000,
-          employerPhone: formData.workPhone,
+            employerName: formData.employerName || 'Sample Employer',
+            position: formData.position || 'Employee',
+          yearsEmployed: Number(formData.yearsEmployed) || Number(formData.yearsInLineOfWork) || 2,
+          monthlyIncome: Number(formData.totalMonthlyIncome) || 5000,
+          employerPhone: formData.workPhone || '',
           },
           financialInfo: {
-          grossMonthlyIncome: Number(formData.totalMonthlyIncome) || 1000,
+          grossMonthlyIncome: Number(formData.totalMonthlyIncome) || 5000,
           otherIncome: Number(formData.totalOtherIncome) || 0,
-          otherIncomeSource: (formData.otherIncomeSources as Array<{source: string}>).map((item) => item.source).join(', '),
-          totalAssets: Number(formData.totalAssets) || 0,
-          totalLiabilities: Number(formData.totalMonthlyLiabilities) || 0,
-            checkingAccountBalance: Number(formData.checkingAccountBalance) || 0,
-            savingsAccountBalance: Number(formData.savingsAccountBalance) || 0,
+          otherIncomeSource: Array.isArray(formData.otherIncomeSources) 
+            ? (formData.otherIncomeSources as Array<{source: string}>).map((item) => item.source).join(', ')
+            : '',
+          totalAssets: Number(formData.totalAssets) || 50000,
+          totalLiabilities: Number(formData.totalMonthlyLiabilities) || 500,
+            checkingAccountBalance: Number(formData.checkingAccountBalance) || 10000,
+            savingsAccountBalance: Number(formData.savingsAccountBalance) || 40000,
           },
           propertyInfo: {
-          propertyAddress: formData.propertyAddress,
-          propertyCity: formData.propertyCity,
-          propertyState: formData.propertyState,
-          propertyZipCode: formData.propertyZipCode,
+          propertyAddress: formData.propertyAddress || '456 Property St',
+          propertyCity: formData.propertyCity || 'Los Angeles',
+          propertyState: formData.propertyState || 'CA',
+          propertyZipCode: formData.propertyZipCode || '90001',
           propertyType: 'single_family',
-            propertyValue: Number(formData.propertyValue) || 100000,
-            loanAmount: Number(formData.loanAmount) || 50000,
-            loanPurpose: formData.loanPurpose,
-          downPaymentAmount: Number(formData.propertyValue) - Number(formData.loanAmount),
-          downPaymentPercentage: ((Number(formData.propertyValue) - Number(formData.loanAmount)) / Number(formData.propertyValue)) * 100,
+            propertyValue: Number(formData.propertyValue) || 500000,
+            loanAmount: Number(formData.loanAmount) || 400000,
+            loanPurpose: formData.loanPurpose || 'purchase',
+          downPaymentAmount: Number(formData.propertyValue || 500000) - Number(formData.loanAmount || 400000),
+          downPaymentPercentage: ((Number(formData.propertyValue || 500000) - Number(formData.loanAmount || 400000)) / Number(formData.propertyValue || 500000)) * 100,
           },
           assets: {
             bankAccounts: [],
@@ -85,16 +122,16 @@ export default function LoanApplicationPage() {
             loans: [],
           },
           declarations: {
-            outstandingJudgments: formData.outstandingJudgments,
-          declaredBankruptcy: formData.bankruptcyWithin7Years,
-          propertyForeclosed: formData.foreclosureWithin7Years,
-            lawsuitParty: formData.lawsuitParty,
-            loanOnProperty: false,
-          coMakerOnNote: formData.cosignerOnAnotherLoan,
-          usCitizen: formData.citizenship === 'us_citizen',
+            outstandingJudgments: formData.outstandingJudgments || false,
+          declaredBankruptcy: formData.bankruptcyWithin7Years || false,
+          propertyForeclosed: formData.propertyForeclosed || false,
+            lawsuitParty: formData.lawsuitParty || false,
+            loanOnProperty: formData.loanOnProperty || false,
+          coMakerOnNote: formData.cosignerOnAnotherLoan || false,
+          usCitizen: formData.citizenship === 'us_citizen' || !formData.citizenship,
           permanentResident: formData.citizenship === 'permanent_resident',
-          primaryResidence: formData.willOccupyAsPrimary,
-          intendToOccupy: formData.willOccupyAsPrimary,
+          primaryResidence: formData.intendToOccupy !== false,
+          intendToOccupy: formData.intendToOccupy !== false,
           },
           submittedAt: new Date(),
       };

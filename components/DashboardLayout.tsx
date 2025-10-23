@@ -69,11 +69,64 @@ export default function DashboardLayout({
       <nav className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            {/* Logo */}
-            <div className="flex items-center">
-              <div className="h-12 w-auto rounded-lg overflow-hidden bg-white border border-gray-200">
+            {/* Logo and Navigation */}
+            <div className="flex items-center gap-8">
+              <button
+                onClick={() => router.push(
+                  userRole === 'admin' ? '/admin/dashboard' :
+                  userRole === 'employee' ? '/employee/dashboard' :
+                  '/customer/dashboard'
+                )}
+                className="h-12 w-auto rounded-lg overflow-hidden bg-white border border-gray-200 hover:border-gray-300 transition cursor-pointer"
+              >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/logo.jpg" alt="LOANATicks" className="h-full w-full object-contain" />
+                <img src="/logo.jpg" alt="LOANATICKS" className="h-full w-full object-contain" />
+              </button>
+              
+              {/* Navigation Menu */}
+              <div className="hidden md:flex items-center gap-1">
+                {userRole === 'customer' && (
+                  <>
+                    <button
+                      onClick={() => router.push('/customer/dashboard')}
+                      className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition"
+                    >
+                      Dashboard
+                    </button>
+                    <button
+                      onClick={() => router.push('/customer/loan-application')}
+                      className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition"
+                    >
+                      Apply for Loan
+                    </button>
+                  </>
+                )}
+                {userRole === 'employee' && (
+                  <>
+                    <button
+                      onClick={() => router.push('/employee/dashboard')}
+                      className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition"
+                    >
+                      Dashboard
+                    </button>
+                  </>
+                )}
+                {userRole === 'admin' && (
+                  <>
+                    <button
+                      onClick={() => router.push('/admin/dashboard')}
+                      className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition"
+                    >
+                      Dashboard
+                    </button>
+                    <button
+                      onClick={() => router.push('/admin/employees')}
+                      className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition"
+                    >
+                      Employees
+                    </button>
+                  </>
+                )}
               </div>
             </div>
 
