@@ -47,14 +47,17 @@ export default function ApplicationView({ params }: { params: { id: string } }) 
       const response = await fetch(`/api/loan-application?id=${params.id}`);
       const data = await response.json();
       
-      if (response.ok) {
+      if (response.ok && data.application) {
+        console.log('Application loaded:', data.application);
         setApplication(data.application);
       } else {
-        console.error('Failed to fetch application:', data.error);
+        console.error('Failed to fetch application:', data.error || 'No application data');
+        alert(`Could not load application: ${data.error || 'Application not found'}`);
         router.push('/employee/dashboard');
       }
     } catch (error) {
       console.error('Error fetching application:', error);
+      alert('Error loading application. Please try again.');
       router.push('/employee/dashboard');
     } finally {
       setLoading(false);

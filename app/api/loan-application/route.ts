@@ -58,21 +58,35 @@ export async function GET(request: NextRequest) {
 
     if (applicationId) {
       // Get specific application
-      const application = await LoanApplication.findById(applicationId);
+      const application = await LoanApplication.findById(applicationId).lean();
       
       if (!application) {
         return NextResponse.json({ error: 'Application not found' }, { status: 404 });
       }
 
+      // Convert ObjectId to string for comparison
+      const appUserId = application.userId?.toString() || application.userId;
+      
       // Check permission
       if (
         session.user.role === 'customer' &&
-        application.userId !== session.user.id
+        appUserId !== session.user.id
       ) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
       }
 
-      return NextResponse.json({ application });
+      return NextResponse.json({ 
+        application: {
+          ...application,
+          _id: application._id.toString(),
+          userId: appUserId,
+          createdAt: application.createdAt?.toISOString(),
+          updatedAt: application.updatedAt?.toISOString(),
+          submittedAt: application.submittedAt?.toISOString(),
+          reviewedAt: application.reviewedAt?.toISOString(),
+          assignedAt: application.assignedAt?.toISOString()
+        }
+      });
     } else {
       // Get all applications for user
       const query =
