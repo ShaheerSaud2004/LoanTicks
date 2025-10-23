@@ -186,13 +186,9 @@ You can now return to your dashboard to track progress.
         <div className="max-w-4xl w-full">
           {/* Logo Header */}
           <div className="flex justify-center mb-6">
-            <div className="bg-white rounded-2xl shadow-lg p-4 flex items-center gap-3">
+            <div className="bg-white rounded-2xl shadow-lg p-4">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/logo.jpg" alt="LoanTicks" className="h-12 w-12 object-contain" />
-              <div>
-                <h2 className="text-2xl font-bold text-gray-900">LoanTicks</h2>
-                <p className="text-sm text-gray-600">Your Trusted Lender</p>
-              </div>
+              <img src="/logo.jpg" alt="LOANATICKS" className="h-16 w-16 object-contain" />
             </div>
           </div>
           
