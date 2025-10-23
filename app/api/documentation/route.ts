@@ -184,7 +184,14 @@ export async function GET() {
     
     support: {
       documentation: "https://loanticks.vercel.app/api/documentation",
+      mobileFriendlyDocs: "https://loanticks.vercel.app/api/docs",
       contact: "For API access and integration support, contact your LOANATICKS representative"
+    },
+    
+    links: {
+      jsonDocs: "https://loanticks.vercel.app/api/documentation",
+      webDocs: "https://loanticks.vercel.app/api/docs",
+      demo: "https://loanticks.vercel.app/demo"
     }
   };
 
