@@ -11,28 +11,22 @@ export async function GET() {
     // Create test employees if they don't exist
     const testEmployees = [
       {
-        firstName: 'John',
-        lastName: 'Smith',
+        name: 'John Smith',
         email: 'john.smith@loanticks.com',
         password: 'password123',
-        role: 'employee',
-        status: 'active'
+        role: 'employee' as const
       },
       {
-        firstName: 'Sarah',
-        lastName: 'Johnson',
+        name: 'Sarah Johnson',
         email: 'sarah.johnson@loanticks.com',
         password: 'password123',
-        role: 'senior_employee',
-        status: 'active'
+        role: 'employee' as const
       },
       {
-        firstName: 'Mike',
-        lastName: 'Davis',
+        name: 'Mike Davis',
         email: 'mike.davis@loanticks.com',
         password: 'password123',
-        role: 'supervisor',
-        status: 'active'
+        role: 'employee' as const
       }
     ];
 
@@ -49,11 +43,9 @@ export async function GET() {
       }
       createdEmployees.push({
         _id: employee._id,
-        firstName: employee.firstName,
-        lastName: employee.lastName,
+        name: employee.name,
         email: employee.email,
         role: employee.role,
-        status: employee.status,
         password: employeeData.password // Include for testing
       });
     }

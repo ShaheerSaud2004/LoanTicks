@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 import DashboardLayout from '@/components/DashboardLayout';
 import LoanApplicationsManager from '@/components/LoanApplicationsManager';
 import Link from 'next/link';
+import { Users, FileText, TrendingUp, Activity } from 'lucide-react';
 
 export default async function AdminDashboard() {
   const session = await auth();
@@ -17,30 +18,103 @@ export default async function AdminDashboard() {
       userRole={session.user.role}
       userEmail={session.user.email || ''}
     >
-      <div className="mb-6">
+      <div className="space-y-6">
+        {/* Welcome Header */}
         <div className="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-xl p-8 text-white shadow-lg">
-          <div className="flex justify-between items-center">
-            <div>
-              <h1 className="text-3xl font-bold mb-2">
-                Admin Dashboard - Loan Applications
-              </h1>
-              <p className="text-purple-100">
-                Full system access - Review and manage all loan applications
-              </p>
+          <h1 className="text-3xl font-bold mb-2">
+            Admin Dashboard
+          </h1>
+          <p className="text-purple-100">
+            Full system access - Manage employees, applications, and system settings
+          </p>
+        </div>
+
+        {/* Quick Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div className="flex items-center justify-between mb-4">
+              <div className="bg-blue-100 p-3 rounded-lg">
+                <FileText className="h-6 w-6 text-blue-600" />
+              </div>
             </div>
-            <Link
-              href="/admin/employees"
-              className="flex items-center gap-2 px-6 py-3 bg-white/20 hover:bg-white/30 text-white rounded-xl transition backdrop-blur-sm"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
-              </svg>
-              Manage Employees
-            </Link>
+            <h3 className="text-gray-600 text-sm font-medium mb-1">Total Applications</h3>
+            <p className="text-2xl font-bold text-gray-900">-</p>
+          </div>
+          
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div className="flex items-center justify-between mb-4">
+              <div className="bg-green-100 p-3 rounded-lg">
+                <Users className="h-6 w-6 text-green-600" />
+              </div>
+            </div>
+            <h3 className="text-gray-600 text-sm font-medium mb-1">Active Employees</h3>
+            <p className="text-2xl font-bold text-gray-900">-</p>
+          </div>
+          
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div className="flex items-center justify-between mb-4">
+              <div className="bg-orange-100 p-3 rounded-lg">
+                <TrendingUp className="h-6 w-6 text-orange-600" />
+              </div>
+            </div>
+            <h3 className="text-gray-600 text-sm font-medium mb-1">Approval Rate</h3>
+            <p className="text-2xl font-bold text-gray-900">-</p>
+          </div>
+          
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div className="flex items-center justify-between mb-4">
+              <div className="bg-purple-100 p-3 rounded-lg">
+                <Activity className="h-6 w-6 text-purple-600" />
+              </div>
+            </div>
+            <h3 className="text-gray-600 text-sm font-medium mb-1">Pending Review</h3>
+            <p className="text-2xl font-bold text-gray-900">-</p>
           </div>
         </div>
+
+        {/* Admin Actions */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <h2 className="text-xl font-bold text-gray-900 mb-4">Admin Actions</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Link
+              href="/admin/employees"
+              className="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-xl hover:border-purple-500 hover:shadow-md transition group"
+            >
+              <div className="bg-purple-100 group-hover:bg-purple-200 p-3 rounded-lg transition">
+                <Users className="h-6 w-6 text-purple-600" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-gray-900 group-hover:text-purple-600 transition">
+                  Manage Employees
+                </h3>
+                <p className="text-sm text-gray-500">
+                  Add, edit, or remove employee accounts
+                </p>
+              </div>
+            </Link>
+            
+            <div className="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-xl opacity-50">
+              <div className="bg-gray-100 p-3 rounded-lg">
+                <Activity className="h-6 w-6 text-gray-400" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-gray-900">
+                  System Settings
+                </h3>
+                <p className="text-sm text-gray-500">
+                  Configure system preferences (Coming Soon)
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Applications Section */}
+        <div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">All Loan Applications</h2>
+          <LoanApplicationsManager employeeName={session.user.name || 'Admin'} />
+        </div>
       </div>
-      <LoanApplicationsManager employeeName={session.user.name || 'Admin'} />
     </DashboardLayout>
   );
 }

@@ -9,7 +9,6 @@ import {
   Calendar,
   CheckCircle,
 } from 'lucide-react';
-import { headers } from 'next/headers';
 import CustomerApplicationTracker from '@/components/CustomerApplicationTracker';
 
 export default async function CustomerDashboard() {
@@ -20,21 +19,26 @@ export default async function CustomerDashboard() {
   }
 
   // Fetch real loan applications
-  const request = await headers();
   let recentApplications = [];
   
   try {
-    const res = await fetch(`${process.env.NEXTAUTH_URL}/api/loan-application`, {
-      headers: {
-        Cookie: request.get('cookie') || '',
-      },
-      cache: 'no-store',
-    });
+    // Use server-side API call
+    const connectDB = (await import('@/lib/mongodb')).default;
+    const LoanApplication = (await import('@/models/LoanApplication')).default;
     
-    if (res.ok) {
-      const apps = await res.json();
-      recentApplications = apps.slice(0, 3); // Get latest 3 applications
-    }
+    await connectDB();
+    const apps = await LoanApplication.find({ userId: session.user.id })
+      .sort({ createdAt: -1 })
+      .limit(3)
+      .lean();
+    
+    recentApplications = apps.map(app => ({
+      ...app,
+      _id: app._id.toString(),
+      createdAt: app.createdAt.toISOString(),
+      updatedAt: app.updatedAt.toISOString(),
+      submittedAt: app.submittedAt ? app.submittedAt.toISOString() : null,
+    }));
   } catch (error) {
     console.error('Error fetching applications:', error);
   }

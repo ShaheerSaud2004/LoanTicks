@@ -32,6 +32,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
     alternateNames: '',
     ssn: '',
     dateOfBirth: '',
+    creditScore: '',
     citizenship: 'us_citizen',
     
     // 1b. Credit Type and Joint Borrowers
@@ -47,7 +48,6 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
     // SECTION 2: CONTACT INFORMATION
     homePhone: '',
     cellPhone: '',
-    workPhone: '',
     email: '',
     alternateEmail: '',
     preferredContactMethod: 'phone',
@@ -188,7 +188,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
     intendToOccupy: true,
     
     // SECTION 12: MILITARY SERVICE
-    militaryService: false,
+    militaryService: 'none',
     militaryBranch: '',
     militaryRank: '',
     militaryServiceDates: '',
@@ -416,6 +416,40 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition"
                   required
                 />
+              </div>
+            </div>
+
+            <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-4">
+              <h3 className="font-bold text-blue-900 mb-3 flex items-center gap-2">
+                <Info className="w-5 h-5" />
+                Credit Information
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Estimated Credit Score
+                  </label>
+                  <input
+                    type="number"
+                    min="300"
+                    max="850"
+                    value={formData.creditScore}
+                    onChange={(e) => handleInputChange('creditScore', e.target.value)}
+                    placeholder="e.g., 720"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">Range: 300-850 (Optional, helps with rate estimation)</p>
+                </div>
+                <div className="flex items-center">
+                  <div className="text-sm text-gray-600">
+                    <p className="font-semibold mb-1">Credit Score Ranges:</p>
+                    <p className="text-xs">• 800-850: Excellent</p>
+                    <p className="text-xs">• 740-799: Very Good</p>
+                    <p className="text-xs">• 670-739: Good</p>
+                    <p className="text-xs">• 580-669: Fair</p>
+                    <p className="text-xs">• 300-579: Poor</p>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -860,7 +894,354 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
           </div>
         );
 
-      // Continue with other steps...
+      case 3: // Prior Address
+        return (
+          <div className="space-y-6">
+            <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-4">
+              <h3 className="font-bold text-blue-900 mb-2">Section 3b: Prior Address</h3>
+              <p className="text-blue-800 text-sm">If you lived at your current address for less than 2 years, provide prior address.</p>
+            </div>
+            {parseInt(formData.yearsAtCurrentAddress) >= 2 ? (
+              <div className="text-center py-8">
+                <CheckCircle className="w-12 h-12 text-green-600 mx-auto mb-4" />
+                <p className="text-gray-600">No prior address needed (2+ years at current address)</p>
+              </div>
+            ) : (
+              <div className="space-y-6">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Prior Street Address</label>
+                  <input type="text" value={formData.priorStreet} onChange={(e) => handleInputChange('priorStreet', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" />
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">City</label>
+                    <input type="text" value={formData.priorCity} onChange={(e) => handleInputChange('priorCity', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">State</label>
+                    <input type="text" value={formData.priorState} onChange={(e) => handleInputChange('priorState', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">ZIP Code</label>
+                    <input type="text" value={formData.priorZipCode} onChange={(e) => handleInputChange('priorZipCode', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Years at Prior Address</label>
+                    <input type="number" value={formData.yearsAtPriorAddress} onChange={(e) => handleInputChange('yearsAtPriorAddress', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" />
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        );
+
+      case 4: // Current Employment
+        return (
+          <div className="space-y-6">
+            <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-4">
+              <h3 className="font-bold text-blue-900 mb-2">Section 5a: Current Employment</h3>
+              <p className="text-blue-800 text-sm">Provide details about your current employment</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Employer Name *</label>
+                <input type="text" value={formData.employerName} onChange={(e) => handleInputChange('employerName', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" required />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Position/Title *</label>
+                <input type="text" value={formData.position} onChange={(e) => handleInputChange('position', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" required />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Years in Line of Work *</label>
+                <input type="number" value={formData.yearsEmployed} onChange={(e) => handleInputChange('yearsEmployed', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" required />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Work Phone</label>
+                <input type="tel" value={formData.workPhone} onChange={(e) => handleInputChange('workPhone', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" />
+              </div>
+            </div>
+          </div>
+        );
+
+      case 5: // Previous Employment  
+        return (
+          <div className="space-y-6">
+            <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-4">
+              <h3 className="font-bold text-blue-900 mb-2">Section 5b: Previous Employment</h3>
+              <p className="text-blue-800 text-sm">If less than 2 years at current job, provide previous employment</p>
+            </div>
+            {parseInt(formData.yearsEmployed) >= 2 ? (
+              <div className="text-center py-8">
+                <CheckCircle className="w-12 h-12 text-green-600 mx-auto mb-4" />
+                <p className="text-gray-600">No previous employment needed (2+ years at current job)</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Previous Employer</label>
+                  <input type="text" value={formData.previousEmployerName} onChange={(e) => handleInputChange('previousEmployerName', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Previous Position</label>
+                  <input type="text" value={formData.previousPosition} onChange={(e) => handleInputChange('previousPosition', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Years at Previous Job</label>
+                  <input type="number" value={formData.previousYearsEmployed} onChange={(e) => handleInputChange('previousYearsEmployed', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" />
+                </div>
+              </div>
+            )}
+          </div>
+        );
+
+      case 6: // Income Details
+        return (
+          <div className="space-y-6">
+            <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-4">
+              <h3 className="font-bold text-blue-900 mb-2">Section 6: Income Details</h3>
+              <p className="text-blue-800 text-sm">Provide detailed breakdown of your monthly income</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Base Income *</label>
+                <input type="number" value={formData.baseIncome} onChange={(e) => handleInputChange('baseIncome', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" required />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Overtime Income</label>
+                <input type="number" value={formData.overtimeIncome} onChange={(e) => handleInputChange('overtimeIncome', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Bonus Income</label>
+                <input type="number" value={formData.bonusIncome} onChange={(e) => handleInputChange('bonusIncome', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Commission Income</label>
+                <input type="number" value={formData.commissionIncome} onChange={(e) => handleInputChange('commissionIncome', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" />
+              </div>
+            </div>
+            <div className="bg-green-50 border-2 border-green-200 rounded-xl p-4">
+              <h4 className="font-bold text-green-900 mb-1">Total Monthly Income</h4>
+              <p className="text-2xl font-bold text-green-600">${formData.totalMonthlyIncome || '0'}</p>
+            </div>
+          </div>
+        );
+
+      case 7: // Assets
+        return (
+          <div className="space-y-6">
+            <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-4">
+              <h3 className="font-bold text-blue-900 mb-2">Section 7: Assets</h3>
+              <p className="text-blue-800 text-sm">List your financial assets</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Checking Account Balance</label>
+                <input type="number" value={formData.checkingAccountBalance} onChange={(e) => handleInputChange('checkingAccountBalance', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Savings Account Balance</label>
+                <input type="number" value={formData.savingsAccountBalance} onChange={(e) => handleInputChange('savingsAccountBalance', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Money Market Balance</label>
+                <input type="number" value={formData.moneyMarketBalance} onChange={(e) => handleInputChange('moneyMarketBalance', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Retirement Account Value</label>
+                <input type="number" value={formData.retirementAccountValue} onChange={(e) => handleInputChange('retirementAccountValue', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" />
+              </div>
+            </div>
+            <div className="bg-green-50 border-2 border-green-200 rounded-xl p-4">
+              <h4 className="font-bold text-green-900 mb-1">Total Assets</h4>
+              <p className="text-2xl font-bold text-green-600">${formData.totalAssets || '0'}</p>
+            </div>
+          </div>
+        );
+
+      case 8: // Liabilities
+        return (
+          <div className="space-y-6">
+            <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-4">
+              <h3 className="font-bold text-blue-900 mb-2">Section 8: Liabilities</h3>
+              <p className="text-blue-800 text-sm">List your monthly debts and liabilities</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Credit Card Payments</label>
+                <input type="number" value={formData.creditCardPayments} onChange={(e) => handleInputChange('creditCardPayments', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Installment Loan Payments (Auto, Student, etc.)</label>
+                <input type="number" value={formData.installmentLoanPayments} onChange={(e) => handleInputChange('installmentLoanPayments', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Other Monthly Payments</label>
+                <input type="number" value={formData.otherMonthlyPayments} onChange={(e) => handleInputChange('otherMonthlyPayments', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" />
+              </div>
+            </div>
+            <div className="bg-orange-50 border-2 border-orange-200 rounded-xl p-4">
+              <h4 className="font-bold text-orange-900 mb-1">Total Monthly Liabilities</h4>
+              <p className="text-2xl font-bold text-orange-600">${formData.totalMonthlyLiabilities || '0'}</p>
+            </div>
+          </div>
+        );
+
+      case 9: // Property Information
+        return (
+          <div className="space-y-6">
+            <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-4">
+              <h3 className="font-bold text-blue-900 mb-2">Section 9: Property Information</h3>
+              <p className="text-blue-800 text-sm">Details about the property</p>
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Property Address *</label>
+              <input type="text" value={formData.propertyAddress} onChange={(e) => handleInputChange('propertyAddress', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" required />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">City *</label>
+                <input type="text" value={formData.propertyCity} onChange={(e) => handleInputChange('propertyCity', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" required />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">State *</label>
+                <input type="text" value={formData.propertyState} onChange={(e) => handleInputChange('propertyState', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" required />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">ZIP Code *</label>
+                <input type="text" value={formData.propertyZipCode} onChange={(e) => handleInputChange('propertyZipCode', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" required />
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Property Value *</label>
+              <input type="number" value={formData.propertyValue} onChange={(e) => handleInputChange('propertyValue', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" required />
+            </div>
+          </div>
+        );
+
+      case 10: // Loan Details
+        return (
+          <div className="space-y-6">
+            <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-4">
+              <h3 className="font-bold text-blue-900 mb-2">Section 10: Loan Details</h3>
+              <p className="text-blue-800 text-sm">Specify loan amount and purpose</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Loan Amount Requested *</label>
+                <input type="number" value={formData.loanAmount} onChange={(e) => handleInputChange('loanAmount', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" required />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Loan Purpose *</label>
+                <select value={formData.loanPurpose} onChange={(e) => handleInputChange('loanPurpose', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" required>
+                  <option value="">Select Purpose</option>
+                  <option value="purchase">Purchase</option>
+                  <option value="refinance">Refinance</option>
+                  <option value="construction">Construction</option>
+                </select>
+              </div>
+            </div>
+            <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-4">
+              <h4 className="font-bold text-blue-900 mb-2">Loan-to-Value Ratio</h4>
+              <p className="text-lg text-blue-800">
+                {formData.propertyValue && formData.loanAmount 
+                  ? `${((Number(formData.loanAmount) / Number(formData.propertyValue)) * 100).toFixed(2)}%` 
+                  : 'N/A'}
+              </p>
+            </div>
+          </div>
+        );
+
+      case 11: // Declarations
+        return (
+          <div className="space-y-6">
+            <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-4">
+              <h3 className="font-bold text-blue-900 mb-2">Section 11: Declarations</h3>
+              <p className="text-blue-800 text-sm">Please answer the following declarations truthfully</p>
+            </div>
+            <div className="space-y-4">
+              <label className="flex items-start">
+                <input type="checkbox" checked={formData.propertyForeclosed} onChange={(e) => handleInputChange('propertyForeclosed', e.target.checked)} className="mt-1 mr-3" />
+                <span className="text-gray-700">Have you had property foreclosed upon or given title/deed in lieu of foreclosure?</span>
+              </label>
+              <label className="flex items-start">
+                <input type="checkbox" checked={formData.lawsuitParty} onChange={(e) => handleInputChange('lawsuitParty', e.target.checked)} className="mt-1 mr-3" />
+                <span className="text-gray-700">Are you party to a lawsuit?</span>
+              </label>
+              <label className="flex items-start">
+                <input type="checkbox" checked={formData.loanOnProperty} onChange={(e) => handleInputChange('loanOnProperty', e.target.checked)} className="mt-1 mr-3" />
+                <span className="text-gray-700">Are you currently obligated on any loan secured by a property?</span>
+              </label>
+              <label className="flex items-start">
+                <input type="checkbox" checked={formData.intendToOccupy} onChange={(e) => handleInputChange('intendToOccupy', e.target.checked)} className="mt-1 mr-3" />
+                <span className="text-gray-700">Will you occupy the property as your primary residence?</span>
+              </label>
+            </div>
+          </div>
+        );
+
+      case 12: // Military Service
+        return (
+          <div className="space-y-6">
+            <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-4">
+              <h3 className="font-bold text-blue-900 mb-2">Section 12: Military Service</h3>
+              <p className="text-blue-800 text-sm">Military service information</p>
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Military Service Status</label>
+              <select value={formData.militaryService} onChange={(e) => handleInputChange('militaryService', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition">
+                <option value="none">No Military Service</option>
+                <option value="active">Active Duty</option>
+                <option value="reserve">Reserves/National Guard</option>
+                <option value="veteran">Veteran</option>
+                <option value="surviving_spouse">Surviving Spouse</option>
+              </select>
+            </div>
+          </div>
+        );
+
+      case 13: // Demographics
+        return (
+          <div className="space-y-6">
+            <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-4">
+              <h3 className="font-bold text-blue-900 mb-2">Section 13: Demographics (Optional)</h3>
+              <p className="text-blue-800 text-sm">This information is optional and for monitoring purposes</p>
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Citizenship Status</label>
+              <select value={formData.citizenship} onChange={(e) => handleInputChange('citizenship', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition">
+                <option value="us_citizen">U.S. Citizen</option>
+                <option value="permanent_resident">Permanent Resident Alien</option>
+                <option value="non_permanent_resident">Non-Permanent Resident Alien</option>
+              </select>
+            </div>
+          </div>
+        );
+
+      case 14: // Documents
+        return (
+          <div className="space-y-6">
+            <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-4">
+              <h3 className="font-bold text-blue-900 mb-2">Section 14: Documents Upload</h3>
+              <p className="text-blue-800 text-sm">Upload supporting documents (optional)</p>
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Upload Documents</label>
+              <input type="file" multiple onChange={(e) => handleInputChange('uploadedDocuments', Array.from(e.target.files || []))} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" />
+              <p className="text-sm text-gray-500 mt-2">Accepted: PDF, JPG, PNG (Max 10MB each)</p>
+            </div>
+            {(formData.uploadedDocuments as File[])?.length > 0 && (
+              <div className="bg-green-50 border-2 border-green-200 rounded-xl p-4">
+                <h4 className="font-bold text-green-900 mb-2">Files Selected:</h4>
+                <ul className="space-y-1">
+                  {(formData.uploadedDocuments as File[]).map((file: File, idx: number) => (
+                    <li key={idx} className="text-green-800 text-sm">• {file.name}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        );
+
       default:
         return (
           <div className="text-center py-12">
@@ -875,6 +1256,18 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-600 via-emerald-600 to-teal-500">
       <div className="max-w-4xl mx-auto px-4 py-8">
+        {/* Logo Header */}
+        <div className="flex justify-center mb-6">
+          <div className="bg-white rounded-2xl shadow-lg p-4 flex items-center gap-3">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/logo.jpg" alt="LoanTicks" className="h-12 w-12 object-contain" />
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900">LoanTicks</h2>
+              <p className="text-sm text-gray-600">Your Trusted Lender</p>
+            </div>
+          </div>
+        </div>
+        
         {/* Progress Bar */}
         <div className="bg-white rounded-2xl shadow-2xl mb-8 overflow-hidden">
           <div className="bg-gradient-to-r from-green-600 to-emerald-600 p-6 text-white">

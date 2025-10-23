@@ -1,0 +1,61 @@
+
+> loanaticks@0.1.0 build
+> next build --turbopack
+
+   ▲ Next.js 15.5.4 (Turbopack)
+   - Environments: .env.local
+
+   Creating an optimized production build ...
+ ✓ Finished writing to disk in 58ms
+ ✓ Compiled successfully in 3.0s
+   Linting and checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/26) ...
+   Generating static pages (6/26) 
+   Generating static pages (12/26) 
+   Generating static pages (19/26) 
+ ✓ Generating static pages (26/26)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                  Size  First Load JS
+┌ ƒ /                                         0 B         115 kB
+├ ○ /_not-found                               0 B         115 kB
+├ ƒ /admin/dashboard                      11.7 kB         127 kB
+├ ƒ /admin/employees                      5.04 kB         120 kB
+├ ƒ /api/admin/employees                      0 B            0 B
+├ ƒ /api/auth/[...nextauth]                   0 B            0 B
+├ ƒ /api/bankrate-rates                       0 B            0 B
+├ ƒ /api/create-test-accounts                 0 B            0 B
+├ ƒ /api/employee/applications                0 B            0 B
+├ ƒ /api/export-loan-data                     0 B            0 B
+├ ƒ /api/get-rates                            0 B            0 B
+├ ƒ /api/loan-application                     0 B            0 B
+├ ƒ /api/simple-rates                         0 B            0 B
+├ ƒ /api/test-all-routes                      0 B            0 B
+├ ƒ /api/test-complete-workflow               0 B            0 B
+├ ƒ /api/test-loan-data                       0 B            0 B
+├ ƒ /api/test-rates                           0 B            0 B
+├ ƒ /api/test-system                          0 B            0 B
+├ ƒ /api/test-workflow                        0 B            0 B
+├ ƒ /api/upload-documents                     0 B            0 B
+├ ƒ /customer/dashboard                   9.41 kB         124 kB
+├ ○ /customer/loan-application            11.6 kB         127 kB
+├ ƒ /employee/applications/[id]           6.32 kB         121 kB
+├ ƒ /employee/applications/[id]/decision  5.82 kB         121 kB
+├ ƒ /employee/applications/[id]/edit      6.17 kB         121 kB
+├ ƒ /employee/dashboard                   3.49 kB         118 kB
+└ ○ /login                                 5.5 kB         120 kB
++ First Load JS shared by all              126 kB
+  ├ chunks/e0854a8ea47c7e5f.js            59.2 kB
+  ├ chunks/f0380d005ebc03eb.js            17.2 kB
+  ├ chunks/ff6011de1fb59def.js              14 kB
+  ├ chunks/b38da6c873378cbb.css           11.4 kB
+  └ other shared chunks (total)           24.6 kB
+
+
+ƒ Middleware                               245 kB
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

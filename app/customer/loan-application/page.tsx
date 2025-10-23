@@ -17,6 +17,8 @@ export default function LoanApplicationPage() {
   const handleFormSubmit = async (formData: Record<string, unknown>) => {
     setSaving(true);
     try {
+      console.log('Submitting loan application...', formData);
+      
       // Transform the comprehensive form data to match the API structure
       const applicationData = {
           status: 'submitted',
@@ -31,6 +33,7 @@ export default function LoanApplicationPage() {
           ssn: formData.ssn,
             maritalStatus: formData.maritalStatus,
             dependents: Number(formData.dependents),
+          creditScore: Number(formData.creditScore) || 700,
           race: (formData.race as string[]).join(', '),
           ethnicity: formData.ethnicity,
           sex: formData.sex,
@@ -125,6 +128,29 @@ export default function LoanApplicationPage() {
           }
         }
 
+        // Automatically fetch rates for the application
+        try {
+          console.log('Fetching rates for application:', applicationId);
+          const ratesResponse = await fetch('/api/get-rates', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+              applicationId,
+              forceRefresh: true 
+            }),
+          });
+          
+          if (ratesResponse.ok) {
+            const ratesData = await ratesResponse.json();
+            console.log('Rates fetched successfully:', ratesData);
+          } else {
+            console.error('Failed to fetch rates');
+          }
+        } catch (ratesError) {
+          console.error('Error fetching rates:', ratesError);
+          // Don't fail the submission if rates fail - they can be fetched later
+        }
+
         // Show success message
         const successMessage = `
 🎉 Application Submitted Successfully!
@@ -158,6 +184,18 @@ You can now return to your dashboard to track progress.
     return (
       <div className="min-h-screen bg-gradient-to-br from-green-600 via-emerald-600 to-teal-500 flex items-center justify-center p-4">
         <div className="max-w-4xl w-full">
+          {/* Logo Header */}
+          <div className="flex justify-center mb-6">
+            <div className="bg-white rounded-2xl shadow-lg p-4 flex items-center gap-3">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/logo.jpg" alt="LoanTicks" className="h-12 w-12 object-contain" />
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900">LoanTicks</h2>
+                <p className="text-sm text-gray-600">Your Trusted Lender</p>
+              </div>
+            </div>
+          </div>
+          
           <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
             <div className="bg-gradient-to-r from-green-600 to-emerald-600 p-8 sm:p-12 text-white text-center">
               <div className="w-20 h-20 bg-white rounded-full mx-auto mb-6 flex items-center justify-center">

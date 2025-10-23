@@ -281,7 +281,7 @@ export async function GET() {
       if (action.reviewedBy) {
         application.reviewedBy = action.reviewedBy;
         application.reviewedAt = action.reviewedAt;
-        application.decision = action.decision;
+        application.decision = action.decision as 'approved' | 'rejected' | 'pending';
         application.decisionNotes = action.decisionNotes;
       }
     }

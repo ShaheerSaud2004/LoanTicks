@@ -17,6 +17,7 @@ export interface ILoanApplication extends Document {
     ssn: string;
     maritalStatus: 'married' | 'unmarried' | 'separated';
     dependents: number;
+    creditScore?: number;
     race?: string;
     ethnicity?: string;
     sex?: string;
@@ -173,6 +174,7 @@ const LoanApplicationSchema = new Schema<ILoanApplication>(
         required: true,
       },
       dependents: { type: Number, default: 0 },
+      creditScore: Number,
       race: String,
       ethnicity: String,
       sex: String,
