@@ -331,7 +331,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   type="text"
                   value={formData.firstName}
                   onChange={(e) => handleInputChange('firstName', e.target.value)}
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900"
                   required
                 />
               </div>
@@ -343,7 +343,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   type="text"
                   value={formData.middleName}
                   onChange={(e) => handleInputChange('middleName', e.target.value)}
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900"
                 />
               </div>
               <div>
@@ -354,7 +354,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   type="text"
                   value={formData.lastName}
                   onChange={(e) => handleInputChange('lastName', e.target.value)}
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900"
                   required
                 />
               </div>
@@ -365,7 +365,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                 <select
                   value={formData.suffix}
                   onChange={(e) => handleInputChange('suffix', e.target.value)}
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900"
                 >
                   <option value="">Select Suffix</option>
                   <option value="Jr.">Jr.</option>
@@ -387,7 +387,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                 value={formData.alternateNames}
                 onChange={(e) => handleInputChange('alternateNames', e.target.value)}
                 placeholder="e.g., maiden name, former name"
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition"
+                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900"
               />
             </div>
 
@@ -401,7 +401,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   value={formData.ssn}
                   onChange={(e) => handleInputChange('ssn', e.target.value)}
                   placeholder="XXX-XX-XXXX"
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900"
                   required
                 />
               </div>
@@ -413,7 +413,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   type="date"
                   value={formData.dateOfBirth}
                   onChange={(e) => handleInputChange('dateOfBirth', e.target.value)}
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900"
                   required
                 />
               </div>
@@ -436,7 +436,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                     value={formData.creditScore}
                     onChange={(e) => handleInputChange('creditScore', e.target.value)}
                     placeholder="e.g., 720"
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900"
                   />
                   <p className="text-xs text-gray-500 mt-1">Range: 300-850 (Optional, helps with rate estimation)</p>
                 </div>
@@ -463,7 +463,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   { value: 'permanent_resident', label: 'Permanent Resident Alien' },
                   { value: 'non_permanent_resident', label: 'Non-Permanent Resident Alien' }
                 ].map((option) => (
-                  <label key={option.value} className="flex items-center">
+                  <label key={option.value} className="flex items-center text-gray-900">
                     <input
                       type="radio"
                       name="citizenship"
@@ -492,7 +492,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                     { value: 'individual', label: 'Individual' },
                     { value: 'joint', label: 'Joint Credit' }
                   ].map((option) => (
-                    <label key={option.value} className="flex items-center">
+                    <label key={option.value} className="flex items-center text-gray-900">
                       <input
                         type="radio"
                         name="creditType"
@@ -522,7 +522,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                     value={formData.otherBorrowerNames}
                     onChange={(e) => handleInputChange('otherBorrowerNames', e.target.value)}
                     placeholder="Full names of other borrowers"
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900"
                   />
                 </div>
               </div>
@@ -535,7 +535,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
               <select
                 value={formData.maritalStatus}
                 onChange={(e) => handleInputChange('maritalStatus', e.target.value)}
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition"
+                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900"
               >
                 <option value="unmarried">Unmarried</option>
                 <option value="married">Married</option>
@@ -555,7 +555,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   min="0"
                   value={formData.dependents}
                   onChange={(e) => handleInputChange('dependents', parseInt(e.target.value) || 0)}
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900"
                 />
               </div>
               {formData.dependents > 0 && (
@@ -568,7 +568,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                     value={formData.dependentAges}
                     onChange={(e) => handleInputChange('dependentAges', e.target.value)}
                     placeholder="e.g., 5, 8, 12"
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900"
                   />
                 </div>
               )}
@@ -599,7 +599,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   value={formData.homePhone}
                   onChange={(e) => handleInputChange('homePhone', e.target.value)}
                   placeholder="(XXX) XXX-XXXX"
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900"
                 />
               </div>
               <div>
@@ -611,7 +611,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   value={formData.cellPhone}
                   onChange={(e) => handleInputChange('cellPhone', e.target.value)}
                   placeholder="(XXX) XXX-XXXX"
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900"
                   required
                 />
               </div>
@@ -624,7 +624,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   value={formData.workPhone}
                   onChange={(e) => handleInputChange('workPhone', e.target.value)}
                   placeholder="(XXX) XXX-XXXX"
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900"
                 />
               </div>
               <div>
@@ -636,7 +636,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   value={formData.email}
                   onChange={(e) => handleInputChange('email', e.target.value)}
                   placeholder="your.email@example.com"
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900"
                   required
                 />
               </div>
@@ -651,7 +651,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                 value={formData.alternateEmail}
                 onChange={(e) => handleInputChange('alternateEmail', e.target.value)}
                 placeholder="alternate.email@example.com"
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition"
+                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900"
               />
             </div>
 
@@ -665,7 +665,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   { value: 'email', label: 'Email' },
                   { value: 'text', label: 'Text Message' }
                 ].map((option) => (
-                  <label key={option.value} className="flex items-center">
+                  <label key={option.value} className="flex items-center text-gray-900">
                     <input
                       type="radio"
                       name="preferredContactMethod"
@@ -703,7 +703,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                 type="text"
                 value={formData.currentStreet}
                 onChange={(e) => handleInputChange('currentStreet', e.target.value)}
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition"
+                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900"
                 required
               />
             </div>
@@ -718,7 +718,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   value={formData.currentUnit}
                   onChange={(e) => handleInputChange('currentUnit', e.target.value)}
                   placeholder="Apt 1B, Unit 2, etc."
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900"
                 />
               </div>
               <div>
@@ -729,7 +729,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   type="text"
                   value={formData.currentCity}
                   onChange={(e) => handleInputChange('currentCity', e.target.value)}
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900"
                   required
                 />
               </div>
@@ -743,7 +743,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                 <select
                   value={formData.currentState}
                   onChange={(e) => handleInputChange('currentState', e.target.value)}
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900"
                   required
                 >
                   <option value="">Select State</option>
@@ -808,7 +808,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   value={formData.currentZipCode}
                   onChange={(e) => handleInputChange('currentZipCode', e.target.value)}
                   placeholder="12345"
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900"
                   required
                 />
               </div>
@@ -825,7 +825,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   { value: 'live_rent_free', label: 'Live Rent Free' },
                   { value: 'other', label: 'Other' }
                 ].map((option) => (
-                  <label key={option.value} className="flex items-center">
+                  <label key={option.value} className="flex items-center text-gray-900">
                     <input
                       type="radio"
                       name="currentHousing"
@@ -852,7 +852,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   value={formData.currentMonthlyPayment}
                   onChange={(e) => handleInputChange('currentMonthlyPayment', e.target.value)}
                   placeholder="0.00"
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900"
                 />
               </div>
               <div>
@@ -864,7 +864,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   min="0"
                   value={formData.yearsAtCurrentAddress}
                   onChange={(e) => handleInputChange('yearsAtCurrentAddress', e.target.value)}
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900"
                   required
                 />
               </div>
@@ -880,7 +880,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   Since you have lived at your current address for less than 2 years, 
                   you will need to provide your prior address information in the next step.
                 </p>
-                <label className="flex items-center">
+                <label className="flex items-center text-gray-900">
                   <input
                     type="checkbox"
                     checked={formData.hasPriorAddress}
@@ -910,24 +910,24 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
               <div className="space-y-6">
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">Prior Street Address</label>
-                  <input type="text" value={formData.priorStreet} onChange={(e) => handleInputChange('priorStreet', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" />
+                  <input type="text" value={formData.priorStreet} onChange={(e) => handleInputChange('priorStreet', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900" />
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">City</label>
-                    <input type="text" value={formData.priorCity} onChange={(e) => handleInputChange('priorCity', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" />
+                    <input type="text" value={formData.priorCity} onChange={(e) => handleInputChange('priorCity', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900" />
                   </div>
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">State</label>
-                    <input type="text" value={formData.priorState} onChange={(e) => handleInputChange('priorState', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" />
+                    <input type="text" value={formData.priorState} onChange={(e) => handleInputChange('priorState', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900" />
                   </div>
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">ZIP Code</label>
-                    <input type="text" value={formData.priorZipCode} onChange={(e) => handleInputChange('priorZipCode', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" />
+                    <input type="text" value={formData.priorZipCode} onChange={(e) => handleInputChange('priorZipCode', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900" />
                   </div>
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">Years at Prior Address</label>
-                    <input type="number" value={formData.yearsAtPriorAddress} onChange={(e) => handleInputChange('yearsAtPriorAddress', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" />
+                    <input type="number" value={formData.yearsAtPriorAddress} onChange={(e) => handleInputChange('yearsAtPriorAddress', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900" />
                   </div>
                 </div>
               </div>
@@ -945,19 +945,19 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Employer Name *</label>
-                <input type="text" value={formData.employerName} onChange={(e) => handleInputChange('employerName', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" required />
+                <input type="text" value={formData.employerName} onChange={(e) => handleInputChange('employerName', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900" required />
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Position/Title *</label>
-                <input type="text" value={formData.position} onChange={(e) => handleInputChange('position', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" required />
+                <input type="text" value={formData.position} onChange={(e) => handleInputChange('position', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900" required />
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Years in Line of Work *</label>
-                <input type="number" value={formData.yearsEmployed} onChange={(e) => handleInputChange('yearsEmployed', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" required />
+                <input type="number" value={formData.yearsEmployed} onChange={(e) => handleInputChange('yearsEmployed', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900" required />
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Work Phone</label>
-                <input type="tel" value={formData.workPhone} onChange={(e) => handleInputChange('workPhone', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" />
+                <input type="tel" value={formData.workPhone} onChange={(e) => handleInputChange('workPhone', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900" />
               </div>
             </div>
           </div>
@@ -979,15 +979,15 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">Previous Employer</label>
-                  <input type="text" value={formData.previousEmployerName} onChange={(e) => handleInputChange('previousEmployerName', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" />
+                  <input type="text" value={formData.previousEmployerName} onChange={(e) => handleInputChange('previousEmployerName', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900" />
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">Previous Position</label>
-                  <input type="text" value={formData.previousPosition} onChange={(e) => handleInputChange('previousPosition', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" />
+                  <input type="text" value={formData.previousPosition} onChange={(e) => handleInputChange('previousPosition', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900" />
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">Years at Previous Job</label>
-                  <input type="number" value={formData.previousYearsEmployed} onChange={(e) => handleInputChange('previousYearsEmployed', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" />
+                  <input type="number" value={formData.previousYearsEmployed} onChange={(e) => handleInputChange('previousYearsEmployed', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900" />
                 </div>
               </div>
             )}
@@ -1004,19 +1004,19 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Base Income *</label>
-                <input type="number" value={formData.baseIncome} onChange={(e) => handleInputChange('baseIncome', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" required />
+                <input type="number" value={formData.baseIncome} onChange={(e) => handleInputChange('baseIncome', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900" required />
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Overtime Income</label>
-                <input type="number" value={formData.overtimeIncome} onChange={(e) => handleInputChange('overtimeIncome', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" />
+                <input type="number" value={formData.overtimeIncome} onChange={(e) => handleInputChange('overtimeIncome', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900" />
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Bonus Income</label>
-                <input type="number" value={formData.bonusIncome} onChange={(e) => handleInputChange('bonusIncome', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" />
+                <input type="number" value={formData.bonusIncome} onChange={(e) => handleInputChange('bonusIncome', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900" />
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Commission Income</label>
-                <input type="number" value={formData.commissionIncome} onChange={(e) => handleInputChange('commissionIncome', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" />
+                <input type="number" value={formData.commissionIncome} onChange={(e) => handleInputChange('commissionIncome', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900" />
               </div>
             </div>
             <div className="bg-green-50 border-2 border-green-200 rounded-xl p-4">
@@ -1036,19 +1036,19 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Checking Account Balance</label>
-                <input type="number" value={formData.checkingAccountBalance} onChange={(e) => handleInputChange('checkingAccountBalance', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" />
+                <input type="number" value={formData.checkingAccountBalance} onChange={(e) => handleInputChange('checkingAccountBalance', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900" />
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Savings Account Balance</label>
-                <input type="number" value={formData.savingsAccountBalance} onChange={(e) => handleInputChange('savingsAccountBalance', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" />
+                <input type="number" value={formData.savingsAccountBalance} onChange={(e) => handleInputChange('savingsAccountBalance', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900" />
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Money Market Balance</label>
-                <input type="number" value={formData.moneyMarketBalance} onChange={(e) => handleInputChange('moneyMarketBalance', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" />
+                <input type="number" value={formData.moneyMarketBalance} onChange={(e) => handleInputChange('moneyMarketBalance', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900" />
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Retirement Account Value</label>
-                <input type="number" value={formData.retirementAccountValue} onChange={(e) => handleInputChange('retirementAccountValue', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" />
+                <input type="number" value={formData.retirementAccountValue} onChange={(e) => handleInputChange('retirementAccountValue', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900" />
               </div>
             </div>
             <div className="bg-green-50 border-2 border-green-200 rounded-xl p-4">
@@ -1068,15 +1068,15 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Credit Card Payments</label>
-                <input type="number" value={formData.creditCardPayments} onChange={(e) => handleInputChange('creditCardPayments', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" />
+                <input type="number" value={formData.creditCardPayments} onChange={(e) => handleInputChange('creditCardPayments', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900" />
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Installment Loan Payments (Auto, Student, etc.)</label>
-                <input type="number" value={formData.installmentLoanPayments} onChange={(e) => handleInputChange('installmentLoanPayments', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" />
+                <input type="number" value={formData.installmentLoanPayments} onChange={(e) => handleInputChange('installmentLoanPayments', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900" />
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Other Monthly Payments</label>
-                <input type="number" value={formData.otherMonthlyPayments} onChange={(e) => handleInputChange('otherMonthlyPayments', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" />
+                <input type="number" value={formData.otherMonthlyPayments} onChange={(e) => handleInputChange('otherMonthlyPayments', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900" />
               </div>
             </div>
             <div className="bg-orange-50 border-2 border-orange-200 rounded-xl p-4">
@@ -1095,25 +1095,25 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
             </div>
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">Property Address *</label>
-              <input type="text" value={formData.propertyAddress} onChange={(e) => handleInputChange('propertyAddress', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" required />
+              <input type="text" value={formData.propertyAddress} onChange={(e) => handleInputChange('propertyAddress', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900" required />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">City *</label>
-                <input type="text" value={formData.propertyCity} onChange={(e) => handleInputChange('propertyCity', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" required />
+                <input type="text" value={formData.propertyCity} onChange={(e) => handleInputChange('propertyCity', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900" required />
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">State *</label>
-                <input type="text" value={formData.propertyState} onChange={(e) => handleInputChange('propertyState', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" required />
+                <input type="text" value={formData.propertyState} onChange={(e) => handleInputChange('propertyState', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900" required />
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">ZIP Code *</label>
-                <input type="text" value={formData.propertyZipCode} onChange={(e) => handleInputChange('propertyZipCode', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" required />
+                <input type="text" value={formData.propertyZipCode} onChange={(e) => handleInputChange('propertyZipCode', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900" required />
               </div>
             </div>
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">Property Value *</label>
-              <input type="number" value={formData.propertyValue} onChange={(e) => handleInputChange('propertyValue', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" required />
+              <input type="number" value={formData.propertyValue} onChange={(e) => handleInputChange('propertyValue', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900" required />
             </div>
           </div>
         );
@@ -1128,11 +1128,11 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Loan Amount Requested *</label>
-                <input type="number" value={formData.loanAmount} onChange={(e) => handleInputChange('loanAmount', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" required />
+                <input type="number" value={formData.loanAmount} onChange={(e) => handleInputChange('loanAmount', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900" required />
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Loan Purpose *</label>
-                <select value={formData.loanPurpose} onChange={(e) => handleInputChange('loanPurpose', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" required>
+                <select value={formData.loanPurpose} onChange={(e) => handleInputChange('loanPurpose', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900" required>
                   <option value="">Select Purpose</option>
                   <option value="purchase">Purchase</option>
                   <option value="refinance">Refinance</option>
@@ -1188,7 +1188,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
             </div>
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">Military Service Status</label>
-              <select value={formData.militaryService} onChange={(e) => handleInputChange('militaryService', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition">
+              <select value={formData.militaryService} onChange={(e) => handleInputChange('militaryService', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900">
                 <option value="none">No Military Service</option>
                 <option value="active">Active Duty</option>
                 <option value="reserve">Reserves/National Guard</option>
@@ -1208,7 +1208,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
             </div>
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">Citizenship Status</label>
-              <select value={formData.citizenship} onChange={(e) => handleInputChange('citizenship', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition">
+              <select value={formData.citizenship} onChange={(e) => handleInputChange('citizenship', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900">
                 <option value="us_citizen">U.S. Citizen</option>
                 <option value="permanent_resident">Permanent Resident Alien</option>
                 <option value="non_permanent_resident">Non-Permanent Resident Alien</option>
@@ -1226,7 +1226,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
             </div>
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">Upload Documents</label>
-              <input type="file" multiple onChange={(e) => handleInputChange('uploadedDocuments', Array.from(e.target.files || []))} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition" />
+              <input type="file" multiple onChange={(e) => handleInputChange('uploadedDocuments', Array.from(e.target.files || []))} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900" />
               <p className="text-sm text-gray-500 mt-2">Accepted: PDF, JPG, PNG (Max 10MB each)</p>
             </div>
             {(formData.uploadedDocuments as File[])?.length > 0 && (
