@@ -572,12 +572,12 @@ export default function EmployeeManagementClient() {
             <div className="space-y-6">
               <div className="grid grid-cols-2 gap-6">
                 <div>
-                  <h3 className="font-semibold text-gray-700 mb-3">Personal Information</h3>
-                  <div className="space-y-2">
-                    <p><span className="font-medium">Name:</span> {selectedEmployee.name}</p>
-                    <p><span className="font-medium">Email:</span> {selectedEmployee.email}</p>
-                    <p><span className="font-medium">Role:</span> {selectedEmployee.role}</p>
-                    <p><span className="font-medium">Status:</span> 
+                  <h3 className="font-semibold text-gray-900 mb-3">Personal Information</h3>
+                  <div className="space-y-2 text-gray-900">
+                    <p><span className="font-medium text-gray-700">Name:</span> {selectedEmployee.name}</p>
+                    <p><span className="font-medium text-gray-700">Email:</span> {selectedEmployee.email}</p>
+                    <p><span className="font-medium text-gray-700">Role:</span> {selectedEmployee.role}</p>
+                    <p><span className="font-medium text-gray-700">Status:</span> 
                       <span className={`ml-2 px-2 py-1 rounded-full text-xs font-semibold ${
                         selectedEmployee.status === 'active' 
                           ? 'bg-green-100 text-green-800' 
@@ -590,22 +590,22 @@ export default function EmployeeManagementClient() {
                 </div>
                 
                 <div>
-                  <h3 className="font-semibold text-gray-700 mb-3">Performance Metrics</h3>
-                  <div className="space-y-2">
-                    <p><span className="font-medium">Total Applications:</span> {selectedEmployee.totalApplications}</p>
-                    <p><span className="font-medium">Approved:</span> <span className="text-green-600">{selectedEmployee.approvedApplications}</span></p>
-                    <p><span className="font-medium">Rejected:</span> <span className="text-red-600">{selectedEmployee.rejectedApplications}</span></p>
-                    <p><span className="font-medium">Pending:</span> <span className="text-yellow-600">{selectedEmployee.pendingApplications}</span></p>
-                    <p><span className="font-medium">Avg. Processing Time:</span> {selectedEmployee.averageProcessingTime.toFixed(1)} days</p>
+                  <h3 className="font-semibold text-gray-900 mb-3">Performance Metrics</h3>
+                  <div className="space-y-2 text-gray-900">
+                    <p><span className="font-medium text-gray-700">Total Applications:</span> {selectedEmployee.totalApplications}</p>
+                    <p><span className="font-medium text-gray-700">Approved:</span> <span className="text-green-600">{selectedEmployee.approvedApplications}</span></p>
+                    <p><span className="font-medium text-gray-700">Rejected:</span> <span className="text-red-600">{selectedEmployee.rejectedApplications}</span></p>
+                    <p><span className="font-medium text-gray-700">Pending:</span> <span className="text-yellow-600">{selectedEmployee.pendingApplications}</span></p>
+                    <p><span className="font-medium text-gray-700">Avg. Processing Time:</span> {selectedEmployee.averageProcessingTime.toFixed(1)} days</p>
                   </div>
                 </div>
               </div>
               
               <div>
-                <h3 className="font-semibold text-gray-700 mb-3">Account Information</h3>
-                <div className="space-y-2">
-                  <p><span className="font-medium">Created:</span> {new Date(selectedEmployee.createdAt).toLocaleDateString()}</p>
-                  <p><span className="font-medium">Last Login:</span> {selectedEmployee.lastLogin ? new Date(selectedEmployee.lastLogin).toLocaleDateString() : 'Never'}</p>
+                <h3 className="font-semibold text-gray-900 mb-3">Account Information</h3>
+                <div className="space-y-2 text-gray-900">
+                  <p><span className="font-medium text-gray-700">Created:</span> {new Date(selectedEmployee.createdAt).toLocaleDateString()}</p>
+                  <p><span className="font-medium text-gray-700">Last Login:</span> {selectedEmployee.lastLogin ? new Date(selectedEmployee.lastLogin).toLocaleDateString() : 'Never'}</p>
                 </div>
               </div>
             </div>
