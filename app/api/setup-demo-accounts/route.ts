@@ -94,6 +94,7 @@ export async function GET() {
     }
 
     // Get users for application creation
+    const sarah = await User.findOne({ email: 'sarah.customer@loanticks.com' });
     const michael = await User.findOne({ email: 'michael.customer@loanticks.com' });
     const emily = await User.findOne({ email: 'emily.customer@loanticks.com' });
     const david = await User.findOne({ email: 'david.customer@loanticks.com' });
@@ -357,6 +358,217 @@ export async function GET() {
             notes: 'Application rejected - DTI too high'
           }
         ]
+      },
+      // Additional diverse applications
+      {
+        userId: sarah?._id.toString(),
+        status: 'submitted' as const,
+        borrowerInfo: {
+          firstName: 'Sarah',
+          lastName: 'Johnson',
+          email: 'sarah.customer@loanticks.com',
+          phone: '(555) 456-7890',
+          dateOfBirth: new Date('1990-05-12'),
+          ssn: '456-78-9012',
+          maritalStatus: 'unmarried' as const,
+          dependents: 1,
+          creditScore: 710
+        },
+        currentAddress: {
+          street: '2345 Pine Street',
+          city: 'Seattle',
+          state: 'WA',
+          zipCode: '98101',
+          residencyType: 'rent' as const,
+          monthlyPayment: 2200,
+          yearsAtAddress: 2
+        },
+        employment: {
+          employmentStatus: 'employed' as const,
+          employerName: 'Amazon Web Services',
+          position: 'Software Engineer',
+          yearsEmployed: 4,
+          monthlyIncome: 12000,
+          employerPhone: '(555) 234-5678'
+        },
+        financialInfo: {
+          grossMonthlyIncome: 12000,
+          otherIncome: 0,
+          otherIncomeSource: '',
+          totalAssets: 95000,
+          totalLiabilities: 600,
+          checkingAccountBalance: 30000,
+          savingsAccountBalance: 65000
+        },
+        propertyInfo: {
+          propertyAddress: '567 Lake View Drive',
+          propertyCity: 'Seattle',
+          propertyState: 'WA',
+          propertyZipCode: '98102',
+          propertyType: 'townhouse' as const,
+          propertyValue: 550000,
+          loanAmount: 440000,
+          loanPurpose: 'purchase' as const,
+          downPaymentAmount: 110000,
+          downPaymentPercentage: 20
+        },
+        assets: { bankAccounts: [] },
+        liabilities: { creditCards: [], loans: [] },
+        declarations: {
+          outstandingJudgments: false,
+          declaredBankruptcy: false,
+          propertyForeclosed: false,
+          lawsuitParty: false,
+          loanOnProperty: false,
+          coMakerOnNote: false,
+          usCitizen: true,
+          permanentResident: false,
+          primaryResidence: true,
+          intendToOccupy: true
+        },
+        assignedTo: lisa?._id.toString(),
+        assignedAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000),
+        submittedAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000)
+      },
+      {
+        userId: michael?._id.toString(),
+        status: 'submitted' as const,
+        borrowerInfo: {
+          firstName: 'Robert',
+          lastName: 'Martinez',
+          email: 'robert.martinez@email.com',
+          phone: '(555) 567-8901',
+          dateOfBirth: new Date('1983-09-25'),
+          ssn: '567-89-0123',
+          maritalStatus: 'married' as const,
+          dependents: 3,
+          creditScore: 695
+        },
+        currentAddress: {
+          street: '8901 Main Street',
+          city: 'Austin',
+          state: 'TX',
+          zipCode: '78701',
+          residencyType: 'own' as const,
+          monthlyPayment: 1800,
+          yearsAtAddress: 6
+        },
+        employment: {
+          employmentStatus: 'employed' as const,
+          employerName: 'Dell Technologies',
+          position: 'Operations Manager',
+          yearsEmployed: 8,
+          monthlyIncome: 8500,
+          employerPhone: '(555) 345-6789'
+        },
+        financialInfo: {
+          grossMonthlyIncome: 8500,
+          otherIncome: 500,
+          otherIncomeSource: 'Rental property',
+          totalAssets: 110000,
+          totalLiabilities: 900,
+          checkingAccountBalance: 40000,
+          savingsAccountBalance: 70000
+        },
+        propertyInfo: {
+          propertyAddress: '234 Hill Country Blvd',
+          propertyCity: 'Austin',
+          propertyState: 'TX',
+          propertyZipCode: '78702',
+          propertyType: 'single_family' as const,
+          propertyValue: 475000,
+          loanAmount: 380000,
+          loanPurpose: 'purchase' as const,
+          downPaymentAmount: 95000,
+          downPaymentPercentage: 20
+        },
+        assets: { bankAccounts: [] },
+        liabilities: { creditCards: [], loans: [] },
+        declarations: {
+          outstandingJudgments: false,
+          declaredBankruptcy: false,
+          propertyForeclosed: false,
+          lawsuitParty: false,
+          loanOnProperty: false,
+          coMakerOnNote: false,
+          usCitizen: true,
+          permanentResident: false,
+          primaryResidence: true,
+          intendToOccupy: true
+        },
+        assignedTo: john?._id.toString(),
+        assignedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
+        submittedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000)
+      },
+      {
+        userId: emily?._id.toString(),
+        status: 'submitted' as const,
+        borrowerInfo: {
+          firstName: 'Jennifer',
+          lastName: 'Williams',
+          email: 'jennifer.williams@email.com',
+          phone: '(555) 678-9012',
+          dateOfBirth: new Date('1987-12-08'),
+          ssn: '678-90-1234',
+          maritalStatus: 'married' as const,
+          dependents: 2,
+          creditScore: 730
+        },
+        currentAddress: {
+          street: '456 Park Avenue',
+          city: 'Boston',
+          state: 'MA',
+          zipCode: '02101',
+          residencyType: 'rent' as const,
+          monthlyPayment: 2800,
+          yearsAtAddress: 3
+        },
+        employment: {
+          employmentStatus: 'employed' as const,
+          employerName: 'Massachusetts General Hospital',
+          position: 'Registered Nurse',
+          yearsEmployed: 9,
+          monthlyIncome: 9000,
+          employerPhone: '(555) 456-7890'
+        },
+        financialInfo: {
+          grossMonthlyIncome: 9000,
+          otherIncome: 800,
+          otherIncomeSource: 'Per diem shifts',
+          totalAssets: 105000,
+          totalLiabilities: 700,
+          checkingAccountBalance: 35000,
+          savingsAccountBalance: 70000
+        },
+        propertyInfo: {
+          propertyAddress: '789 Commonwealth Ave',
+          propertyCity: 'Boston',
+          propertyState: 'MA',
+          propertyZipCode: '02102',
+          propertyType: 'condo' as const,
+          propertyValue: 625000,
+          loanAmount: 500000,
+          loanPurpose: 'purchase' as const,
+          downPaymentAmount: 125000,
+          downPaymentPercentage: 20
+        },
+        assets: { bankAccounts: [] },
+        liabilities: { creditCards: [], loans: [] },
+        declarations: {
+          outstandingJudgments: false,
+          declaredBankruptcy: false,
+          propertyForeclosed: false,
+          lawsuitParty: false,
+          loanOnProperty: false,
+          coMakerOnNote: false,
+          usCitizen: true,
+          permanentResident: false,
+          primaryResidence: true,
+          intendToOccupy: true
+        },
+        assignedTo: lisa?._id.toString(),
+        assignedAt: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000),
+        submittedAt: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000)
       }
     ];
 
