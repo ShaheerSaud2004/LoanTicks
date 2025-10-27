@@ -169,6 +169,50 @@ export async function GET() {
           primaryResidence: true,
           intendToOccupy: true
         },
+        documents: [
+          {
+            name: 'Government Issued ID.pdf',
+            type: 'application/pdf',
+            size: 2457600,
+            uploadedAt: new Date(Date.now() - 5 * 60 * 60 * 1000), // 5 hours ago
+            category: 'identification'
+          },
+          {
+            name: 'Pay Stubs - Last 2 Months.pdf',
+            type: 'application/pdf',
+            size: 3145728,
+            uploadedAt: new Date(Date.now() - 4 * 60 * 60 * 1000),
+            category: 'income_verification'
+          },
+          {
+            name: 'Bank Statements - Checking.pdf',
+            type: 'application/pdf',
+            size: 1835008,
+            uploadedAt: new Date(Date.now() - 3 * 60 * 60 * 1000),
+            category: 'financial'
+          },
+          {
+            name: 'Bank Statements - Savings.pdf',
+            type: 'application/pdf',
+            size: 1572864,
+            uploadedAt: new Date(Date.now() - 2 * 60 * 60 * 1000),
+            category: 'financial'
+          },
+          {
+            name: 'W2 Form - 2024.pdf',
+            type: 'application/pdf',
+            size: 1048576,
+            uploadedAt: new Date(Date.now() - 1 * 60 * 60 * 1000),
+            category: 'income_verification'
+          },
+          {
+            name: 'Employment Verification Letter.pdf',
+            type: 'application/pdf',
+            size: 524288,
+            uploadedAt: new Date(Date.now() - 30 * 60 * 1000), // 30 min ago
+            category: 'income_verification'
+          }
+        ],
         submittedAt: new Date()
       },
       {
@@ -241,6 +285,64 @@ export async function GET() {
           primaryResidence: true,
           intendToOccupy: true
         },
+        documents: [
+          {
+            name: "Driver's License - Front and Back.pdf",
+            type: 'application/pdf',
+            size: 3670016,
+            uploadedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
+            category: 'identification'
+          },
+          {
+            name: 'Recent Pay Stubs (3 months).pdf',
+            type: 'application/pdf',
+            size: 4194304,
+            uploadedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
+            category: 'income_verification'
+          },
+          {
+            name: 'Bank Statements - All Accounts.pdf',
+            type: 'application/pdf',
+            size: 5242880,
+            uploadedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
+            category: 'financial'
+          },
+          {
+            name: 'Tax Returns - 2023 and 2024.pdf',
+            type: 'application/pdf',
+            size: 6291456,
+            uploadedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
+            category: 'income_verification'
+          },
+          {
+            name: 'Investment Account Statements.pdf',
+            type: 'application/pdf',
+            size: 2097152,
+            uploadedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
+            category: 'financial'
+          },
+          {
+            name: 'Employment Verification and Offer Letter.pdf',
+            type: 'application/pdf',
+            size: 786432,
+            uploadedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
+            category: 'income_verification'
+          },
+          {
+            name: 'Credit Report - Full.pdf',
+            type: 'application/pdf',
+            size: 1310720,
+            uploadedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
+            category: 'credit'
+          },
+          {
+            name: 'Homeowners Insurance Quote.pdf',
+            type: 'application/pdf',
+            size: 655360,
+            uploadedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
+            category: 'insurance'
+          }
+        ],
         assignedTo: lisa?._id.toString(),
         assignedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
         submittedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
@@ -335,6 +437,36 @@ export async function GET() {
           primaryResidence: true,
           intendToOccupy: true
         },
+        documents: [
+          {
+            name: 'State ID.pdf',
+            type: 'application/pdf',
+            size: 1572864,
+            uploadedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
+            category: 'identification'
+          },
+          {
+            name: 'Pay Stubs - Recent.pdf',
+            type: 'application/pdf',
+            size: 2097152,
+            uploadedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
+            category: 'income_verification'
+          },
+          {
+            name: 'Bank Statements.pdf',
+            type: 'application/pdf',
+            size: 1048576,
+            uploadedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
+            category: 'financial'
+          },
+          {
+            name: 'Credit Card Statements.pdf',
+            type: 'application/pdf',
+            size: 1835008,
+            uploadedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
+            category: 'financial'
+          }
+        ],
         assignedTo: john?._id.toString(),
         assignedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
         submittedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
@@ -426,6 +558,43 @@ export async function GET() {
           primaryResidence: true,
           intendToOccupy: true
         },
+        documents: [
+          {
+            name: 'Passport.pdf',
+            type: 'application/pdf',
+            size: 2621440,
+            uploadedAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000),
+            category: 'identification'
+          },
+          {
+            name: 'Employment Verification - AWS.pdf',
+            type: 'application/pdf',
+            size: 917504,
+            uploadedAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000),
+            category: 'income_verification'
+          },
+          {
+            name: 'Pay Statements - 3 months.pdf',
+            type: 'application/pdf',
+            size: 3407872,
+            uploadedAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000),
+            category: 'income_verification'
+          },
+          {
+            name: 'Bank Account Verification.pdf',
+            type: 'application/pdf',
+            size: 2359296,
+            uploadedAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000),
+            category: 'financial'
+          },
+          {
+            name: 'Stock Portfolio Summary.pdf',
+            type: 'application/pdf',
+            size: 1441792,
+            uploadedAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000),
+            category: 'financial'
+          }
+        ],
         assignedTo: lisa?._id.toString(),
         assignedAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000),
         submittedAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000)
