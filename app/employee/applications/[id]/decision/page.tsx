@@ -167,22 +167,22 @@ export default function ApplicationDecision({ params }: { params: { id: string }
               
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
-                  <h3 className="font-semibold text-gray-700 mb-3">Borrower Information</h3>
-                  <div className="space-y-2">
-                    <p><span className="font-medium">Name:</span> {application.borrowerInfo?.firstName as string} {application.borrowerInfo?.lastName as string}</p>
-                    <p><span className="font-medium">Email:</span> {application.borrowerInfo?.email as string}</p>
-                    <p><span className="font-medium">Phone:</span> {application.borrowerInfo?.phone as string}</p>
-                    <p><span className="font-medium">Marital Status:</span> {application.borrowerInfo?.maritalStatus as string}</p>
+                  <h3 className="font-semibold text-gray-900 mb-3">Borrower Information</h3>
+                  <div className="space-y-2 text-gray-900">
+                    <p><span className="font-semibold text-gray-700">Name:</span> {application.borrowerInfo?.firstName as string} {application.borrowerInfo?.lastName as string}</p>
+                    <p><span className="font-semibold text-gray-700">Email:</span> {application.borrowerInfo?.email as string}</p>
+                    <p><span className="font-semibold text-gray-700">Phone:</span> {application.borrowerInfo?.phone as string}</p>
+                    <p><span className="font-semibold text-gray-700">Marital Status:</span> {application.borrowerInfo?.maritalStatus as string}</p>
                   </div>
                 </div>
                 
                 <div>
-                  <h3 className="font-semibold text-gray-700 mb-3">Loan Details</h3>
-                  <div className="space-y-2">
-                    <p><span className="font-medium">Loan Amount:</span> ${(application.propertyInfo?.loanAmount as number)?.toLocaleString()}</p>
-                    <p><span className="font-medium">Property Value:</span> ${(application.propertyInfo?.propertyValue as number)?.toLocaleString()}</p>
-                    <p><span className="font-medium">Down Payment:</span> ${(application.propertyInfo?.downPaymentAmount as number)?.toLocaleString()}</p>
-                    <p><span className="font-medium">Down Payment %:</span> {(application.propertyInfo?.downPaymentPercentage as number)?.toFixed(2)}%</p>
+                  <h3 className="font-semibold text-gray-900 mb-3">Loan Details</h3>
+                  <div className="space-y-2 text-gray-900">
+                    <p><span className="font-semibold text-gray-700">Loan Amount:</span> ${(application.propertyInfo?.loanAmount as number)?.toLocaleString()}</p>
+                    <p><span className="font-semibold text-gray-700">Property Value:</span> ${(application.propertyInfo?.propertyValue as number)?.toLocaleString()}</p>
+                    <p><span className="font-semibold text-gray-700">Down Payment:</span> ${(application.propertyInfo?.downPaymentAmount as number)?.toLocaleString()}</p>
+                    <p><span className="font-semibold text-gray-700">Down Payment %:</span> {(application.propertyInfo?.downPaymentPercentage as number)?.toFixed(2)}%</p>
                   </div>
                 </div>
               </div>
@@ -217,53 +217,79 @@ export default function ApplicationDecision({ params }: { params: { id: string }
               
               <div className="space-y-6">
                 {/* Decision Options */}
-                <div className="space-y-4">
-                  <label className={`flex items-center gap-4 p-6 border-2 rounded-xl cursor-pointer transition ${
+                <div className="space-y-5">
+                  <label className={`block relative p-6 border-3 rounded-2xl cursor-pointer transition-all duration-200 ${
                     decision === 'approved' 
-                      ? 'border-green-500 bg-green-50' 
-                      : 'border-gray-200 hover:border-green-300'
+                      ? 'border-green-500 bg-gradient-to-br from-green-50 to-emerald-50 shadow-lg shadow-green-200/50 scale-[1.02]' 
+                      : 'border-gray-200 hover:border-green-400 hover:shadow-md bg-white'
                   }`}>
-                    <input
-                      type="radio"
-                      name="decision"
-                      value="approved"
-                      checked={decision === 'approved'}
-                      onChange={(e) => setDecision(e.target.value as 'approved')}
-                      className="w-6 h-6 text-green-600"
-                    />
-                    <div className="flex items-center gap-4">
-                      <div className="bg-green-100 p-3 rounded-lg">
-                        <CheckCircle className="w-7 h-7 text-green-600" />
-                      </div>
-                      <div>
-                        <p className="font-bold text-lg text-gray-900">Approve Application</p>
-                        <p className="text-sm text-gray-600 mt-1">Approve this mortgage loan application</p>
+                    <div className="flex items-start gap-4">
+                      <input
+                        type="radio"
+                        name="decision"
+                        value="approved"
+                        checked={decision === 'approved'}
+                        onChange={(e) => setDecision(e.target.value as 'approved')}
+                        className="mt-1 w-5 h-5 text-green-600 focus:ring-green-500"
+                      />
+                      <div className="flex items-center gap-4 flex-1">
+                        <div className={`p-4 rounded-xl transition-all ${
+                          decision === 'approved' 
+                            ? 'bg-green-500 shadow-lg' 
+                            : 'bg-green-100'
+                        }`}>
+                          <CheckCircle className={`w-8 h-8 ${
+                            decision === 'approved' ? 'text-white' : 'text-green-600'
+                          }`} />
+                        </div>
+                        <div className="flex-1">
+                          <p className="font-bold text-xl text-gray-900 mb-1">Approve Application</p>
+                          <p className="text-sm text-gray-600">Approve this mortgage loan application and proceed with funding</p>
+                        </div>
                       </div>
                     </div>
+                    {decision === 'approved' && (
+                      <div className="absolute -top-2 -right-2 bg-green-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+                        SELECTED
+                      </div>
+                    )}
                   </label>
                   
-                  <label className={`flex items-center gap-4 p-6 border-2 rounded-xl cursor-pointer transition ${
+                  <label className={`block relative p-6 border-3 rounded-2xl cursor-pointer transition-all duration-200 ${
                     decision === 'rejected' 
-                      ? 'border-red-500 bg-red-50' 
-                      : 'border-gray-200 hover:border-red-300'
+                      ? 'border-red-500 bg-gradient-to-br from-red-50 to-pink-50 shadow-lg shadow-red-200/50 scale-[1.02]' 
+                      : 'border-gray-200 hover:border-red-400 hover:shadow-md bg-white'
                   }`}>
-                    <input
-                      type="radio"
-                      name="decision"
-                      value="rejected"
-                      checked={decision === 'rejected'}
-                      onChange={(e) => setDecision(e.target.value as 'rejected')}
-                      className="w-6 h-6 text-red-600"
-                    />
-                    <div className="flex items-center gap-4">
-                      <div className="bg-red-100 p-3 rounded-lg">
-                        <XCircle className="w-7 h-7 text-red-600" />
-                      </div>
-                      <div>
-                        <p className="font-bold text-lg text-gray-900">Reject Application</p>
-                        <p className="text-sm text-gray-600 mt-1">Reject this mortgage loan application</p>
+                    <div className="flex items-start gap-4">
+                      <input
+                        type="radio"
+                        name="decision"
+                        value="rejected"
+                        checked={decision === 'rejected'}
+                        onChange={(e) => setDecision(e.target.value as 'rejected')}
+                        className="mt-1 w-5 h-5 text-red-600 focus:ring-red-500"
+                      />
+                      <div className="flex items-center gap-4 flex-1">
+                        <div className={`p-4 rounded-xl transition-all ${
+                          decision === 'rejected' 
+                            ? 'bg-red-500 shadow-lg' 
+                            : 'bg-red-100'
+                        }`}>
+                          <XCircle className={`w-8 h-8 ${
+                            decision === 'rejected' ? 'text-white' : 'text-red-600'
+                          }`} />
+                        </div>
+                        <div className="flex-1">
+                          <p className="font-bold text-xl text-gray-900 mb-1">Reject Application</p>
+                          <p className="text-sm text-gray-600">Reject this mortgage loan application with detailed reasoning</p>
+                        </div>
                       </div>
                     </div>
+                    {decision === 'rejected' && (
+                      <div className="absolute -top-2 -right-2 bg-red-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+                        SELECTED
+                      </div>
+                    )}
                   </label>
                 </div>
 
@@ -286,16 +312,16 @@ export default function ApplicationDecision({ params }: { params: { id: string }
                 <button
                   onClick={() => setShowConfirm(true)}
                   disabled={!decision || !notes.trim() || saving}
-                  className="w-full px-6 py-3 bg-green-600 text-white rounded-xl hover:bg-green-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="w-full px-6 py-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white text-lg font-bold rounded-xl hover:from-green-700 hover:to-emerald-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg hover:shadow-xl disabled:shadow-none"
                 >
                   {saving ? (
                     <>
-                      <Save className="w-5 h-5 animate-spin" />
-                      Submitting...
+                      <Save className="w-6 h-6 animate-spin" />
+                      Submitting Decision...
                     </>
                   ) : (
                     <>
-                      <FileText className="w-5 h-5" />
+                      <FileText className="w-6 h-6" />
                       Submit Decision
                     </>
                   )}
