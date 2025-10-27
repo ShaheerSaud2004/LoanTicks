@@ -108,36 +108,36 @@ export default function LoginPage() {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/logo.jpg" alt="LOANATicks" className="h-full w-full object-contain" />
             </div>
-            <div>
-              <h1 className="text-2xl sm:text-3xl font-bold">LOANATicks</h1>
-              <p className="text-white/80 text-xs sm:text-sm">Modern Financial Platform</p>
-            </div>
-          </div>
-
           <div>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-3 lg:mb-4">
-              Smart Lending,<br/>Simplified
-            </h2>
-            <p className="text-base sm:text-lg lg:text-xl text-white/90 leading-relaxed">
-              Experience next-generation loan management with cutting-edge technology and unparalleled security.
-            </p>
+            <h1 className="text-2xl sm:text-3xl font-bold">LOANATicks</h1>
+            <p className="text-white/80 text-xs sm:text-sm">Home Mortgage Solutions</p>
           </div>
+        </div>
+
+        <div>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-3 lg:mb-4">
+            Your Dream Home<br/>Starts Here 🏡
+          </h2>
+          <p className="text-base sm:text-lg lg:text-xl text-white/90 leading-relaxed">
+            Experience streamlined mortgage financing with competitive rates, fast approvals, and expert support every step of the way.
+          </p>
+        </div>
 
           <div className="grid grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
             <div className="text-center">
               <Shield className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8 mx-auto mb-1 sm:mb-2" />
-              <div className="text-xl sm:text-2xl font-bold">100%</div>
-              <div className="text-xs sm:text-sm text-white/80">Secure</div>
+              <div className="text-xl sm:text-2xl font-bold">A+</div>
+              <div className="text-xs sm:text-sm text-white/80">Rated</div>
             </div>
             <div className="text-center">
               <Users className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8 mx-auto mb-1 sm:mb-2" />
-              <div className="text-xl sm:text-2xl font-bold">50K+</div>
-              <div className="text-xs sm:text-sm text-white/80">Users</div>
+              <div className="text-xl sm:text-2xl font-bold">15K+</div>
+              <div className="text-xs sm:text-sm text-white/80">Homeowners</div>
             </div>
             <div className="text-center">
               <TrendingUp className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8 mx-auto mb-1 sm:mb-2" />
-              <div className="text-xl sm:text-2xl font-bold">$2.5B</div>
-              <div className="text-xs sm:text-sm text-white/80">Processed</div>
+              <div className="text-xl sm:text-2xl font-bold">$4.8B</div>
+              <div className="text-xs sm:text-sm text-white/80">Funded</div>
             </div>
           </div>
         </div>

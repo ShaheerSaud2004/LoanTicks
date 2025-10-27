@@ -7,6 +7,7 @@ export const runtime = 'nodejs';
 import { useState, useEffect, useCallback } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import DashboardLayout from '@/components/DashboardLayout';
 import { 
   ArrowLeft, 
   CheckCircle, 
@@ -99,7 +100,7 @@ export default function ApplicationDecision({ params }: { params: { id: string }
     }
   };
 
-  if (loading) {
+  if (loading || !session) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
@@ -112,22 +113,33 @@ export default function ApplicationDecision({ params }: { params: { id: string }
 
   if (!application) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Application Not Found</h2>
-          <button
-            onClick={() => router.push('/employee/dashboard')}
-            className="px-6 py-3 bg-green-600 text-white rounded-xl hover:bg-green-700 transition"
-          >
-            Back to Dashboard
-          </button>
+      <DashboardLayout
+        userName={session.user.name || 'Employee'}
+        userRole={session.user.role}
+        userEmail={session.user.email || ''}
+      >
+        <div className="flex items-center justify-center py-12">
+          <div className="text-center">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Application Not Found</h2>
+            <button
+              onClick={() => router.push('/employee/dashboard')}
+              className="px-6 py-3 bg-green-600 text-white rounded-xl hover:bg-green-700 transition"
+            >
+              Back to Dashboard
+            </button>
+          </div>
         </div>
-      </div>
+      </DashboardLayout>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4">
+    <DashboardLayout
+      userName={session.user.name || 'Employee'}
+      userRole={session.user.role}
+      userEmail={session.user.email || ''}
+    >
+      <div className="space-y-6">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="mb-8">
@@ -341,6 +353,7 @@ export default function ApplicationDecision({ params }: { params: { id: string }
           </div>
         )}
       </div>
-    </div>
+      </div>
+    </DashboardLayout>
   );
 }

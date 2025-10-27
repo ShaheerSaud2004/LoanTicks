@@ -45,20 +45,20 @@ export default async function CustomerDashboard() {
 
   const stats = [
     {
-      title: 'Active Loans',
+      title: 'Active Mortgages',
       value: '2',
       icon: FileText,
       color: 'bg-blue-500',
     },
     {
-      title: 'Total Borrowed',
-      value: '$45,000',
+      title: 'Total Financed',
+      value: '$685,000',
       icon: DollarSign,
       color: 'bg-green-500',
     },
     {
       title: 'Next Payment',
-      value: '$850',
+      value: '$3,247',
       icon: Calendar,
       color: 'bg-orange-500',
     },
@@ -72,22 +72,26 @@ export default async function CustomerDashboard() {
 
   const loans = [
     {
-      id: 'L-001',
-      type: 'Personal Loan',
-      amount: '$25,000',
-      outstanding: '$18,500',
-      nextPayment: '$850',
-      dueDate: 'Oct 15, 2025',
+      id: 'MTG-001',
+      type: '30-Year Fixed Mortgage',
+      amount: '$450,000',
+      outstanding: '$438,250',
+      nextPayment: '$2,347',
+      dueDate: 'Nov 1, 2025',
       status: 'active',
+      propertyAddress: '123 Main Street, Los Angeles, CA',
+      interestRate: '6.5%',
     },
     {
-      id: 'L-002',
-      type: 'Auto Loan',
-      amount: '$20,000',
-      outstanding: '$15,200',
-      nextPayment: '$650',
-      dueDate: 'Oct 20, 2025',
+      id: 'MTG-002',
+      type: '15-Year Fixed Mortgage',
+      amount: '$235,000',
+      outstanding: '$198,750',
+      nextPayment: '$900',
+      dueDate: 'Nov 1, 2025',
       status: 'active',
+      propertyAddress: '456 Oak Avenue, San Diego, CA',
+      interestRate: '5.75%',
     },
   ];
 
@@ -100,19 +104,19 @@ export default async function CustomerDashboard() {
     >
       <div className="space-y-6">
         {/* Welcome Section */}
-        <div className="bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl p-8 text-white shadow-lg">
-          <h1 className="text-3xl font-bold mb-2">
-            Welcome back, {session.user.name}! 🎉
+        <div className="bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl p-6 md:p-8 text-white shadow-lg">
+          <h1 className="text-2xl md:text-3xl font-bold mb-2">
+            Welcome back, {session.user.name}! 🏡
           </h1>
-          <p className="text-green-100 mb-4">
-            Your next payment of $850 is due on October 15, 2025.
+          <p className="text-green-100 mb-4 text-sm md:text-base">
+            Your next mortgage payment of $3,247 is due on November 1, 2025.
           </p>
           <Link 
             href="/customer/loan-application"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-white text-green-600 rounded-lg hover:bg-green-50 transition-colors font-medium shadow-md"
+            className="inline-flex items-center gap-2 px-4 md:px-6 py-2 md:py-3 bg-white text-green-600 rounded-lg hover:bg-green-50 transition-colors font-medium shadow-md text-sm md:text-base"
           >
-            <Plus className="h-5 w-5" />
-            Apply for New Loan
+            <Plus className="h-4 w-4 md:h-5 md:w-5" />
+            Apply for Home Mortgage
           </Link>
         </div>
 
@@ -136,61 +140,68 @@ export default async function CustomerDashboard() {
           ))}
         </div>
 
-        {/* Active Loans */}
+        {/* Active Mortgages */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200">
-          <div className="p-6 border-b border-gray-200">
-            <h2 className="text-xl font-bold text-gray-900">Your Active Loans</h2>
+          <div className="p-4 md:p-6 border-b border-gray-200">
+            <h2 className="text-lg md:text-xl font-bold text-gray-900">Your Active Mortgages</h2>
           </div>
-          <div className="p-6 space-y-4">
+          <div className="p-4 md:p-6 space-y-4">
             {loans.map((loan) => (
               <div
                 key={loan.id}
-                className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow"
+                className="border border-gray-200 rounded-lg p-4 md:p-6 hover:shadow-md transition-shadow"
               >
-                <div className="flex items-start justify-between mb-4">
-                  <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <h3 className="text-lg font-bold text-gray-900">
+                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-4 gap-3">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-1 flex-wrap">
+                      <h3 className="text-base md:text-lg font-bold text-gray-900">
                         {loan.type}
                       </h3>
                       <span className="px-2 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded-full">
                         Active
                       </span>
                     </div>
-                    <p className="text-sm text-gray-500">Loan ID: {loan.id}</p>
+                    <p className="text-xs md:text-sm text-gray-500">Mortgage ID: {loan.id}</p>
+                    <p className="text-xs md:text-sm text-gray-600 mt-1">📍 {loan.propertyAddress}</p>
                   </div>
-                  <button className="text-indigo-600 hover:text-indigo-700 font-medium text-sm">
+                  <button className="text-indigo-600 hover:text-indigo-700 font-medium text-sm self-start sm:self-auto">
                     View Details →
                   </button>
                 </div>
 
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 md:gap-4">
                   <div>
-                    <p className="text-xs text-gray-500 mb-1">Total Amount</p>
-                    <p className="text-lg font-bold text-gray-900">{loan.amount}</p>
+                    <p className="text-xs text-gray-500 mb-1">Loan Amount</p>
+                    <p className="text-sm md:text-lg font-bold text-gray-900">{loan.amount}</p>
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500 mb-1">Outstanding</p>
-                    <p className="text-lg font-bold text-gray-900">
+                    <p className="text-xs text-gray-500 mb-1">Balance</p>
+                    <p className="text-sm md:text-lg font-bold text-gray-900">
                       {loan.outstanding}
                     </p>
                   </div>
                   <div>
+                    <p className="text-xs text-gray-500 mb-1">Interest Rate</p>
+                    <p className="text-sm md:text-lg font-bold text-blue-600">
+                      {loan.interestRate}
+                    </p>
+                  </div>
+                  <div>
                     <p className="text-xs text-gray-500 mb-1">Next Payment</p>
-                    <p className="text-lg font-bold text-orange-600">
+                    <p className="text-sm md:text-lg font-bold text-orange-600">
                       {loan.nextPayment}
                     </p>
                   </div>
                   <div>
                     <p className="text-xs text-gray-500 mb-1">Due Date</p>
-                    <p className="text-sm font-semibold text-gray-900">
+                    <p className="text-xs md:text-sm font-semibold text-gray-900">
                       {loan.dueDate}
                     </p>
                   </div>
                 </div>
 
                 <div className="mt-4 pt-4 border-t border-gray-100">
-                  <button className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium text-sm">
+                  <button className="w-full sm:w-auto px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium text-sm">
                     Make Payment
                   </button>
                 </div>

@@ -27,13 +27,23 @@ export async function GET(request: NextRequest) {
       query.assignedTo = assignedTo;
     }
 
-    // Fetch applications with populated user data
+    // Fetch applications - no need to populate as userId is just a string
     const applications = await LoanApplication.find(query)
-      .populate('assignedTo', 'firstName lastName email')
-      .populate('reviewedBy', 'firstName lastName email')
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1 })
+      .lean();
 
-    return NextResponse.json({ applications });
+    // Format the applications for response
+    const formattedApplications = applications.map(app => ({
+      ...app,
+      _id: app._id.toString(),
+      createdAt: app.createdAt?.toISOString(),
+      updatedAt: app.updatedAt?.toISOString(),
+      submittedAt: app.submittedAt?.toISOString(),
+      reviewedAt: app.reviewedAt?.toISOString(),
+      assignedAt: app.assignedAt?.toISOString()
+    }));
+
+    return NextResponse.json({ applications: formattedApplications });
   } catch (error) {
     console.error('Error fetching employee applications:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
@@ -123,14 +133,20 @@ export async function PATCH(request: NextRequest) {
 
     await application.save();
 
-    // Populate the updated application
-    const updatedApplication = await LoanApplication.findById(applicationId)
-      .populate('assignedTo', 'firstName lastName email')
-      .populate('reviewedBy', 'firstName lastName email');
+    // Get the updated application
+    const updatedApplication = await LoanApplication.findById(applicationId).lean();
 
     return NextResponse.json({ 
       message: 'Application updated successfully',
-      application: updatedApplication 
+      application: {
+        ...updatedApplication,
+        _id: updatedApplication?._id.toString(),
+        createdAt: updatedApplication?.createdAt?.toISOString(),
+        updatedAt: updatedApplication?.updatedAt?.toISOString(),
+        submittedAt: updatedApplication?.submittedAt?.toISOString(),
+        reviewedAt: updatedApplication?.reviewedAt?.toISOString(),
+        assignedAt: updatedApplication?.assignedAt?.toISOString()
+      }
     });
   } catch (error) {
     console.error('Error updating application:', error);

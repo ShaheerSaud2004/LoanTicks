@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
+import DashboardLayout from '@/components/DashboardLayout';
 import { 
   FileText, 
   Search, 
@@ -14,15 +16,18 @@ import {
 
 interface Application {
   _id: string;
-  userId: {
+  userId: string;
+  borrowerInfo: {
     firstName: string;
     lastName: string;
     email: string;
   };
+  propertyInfo: {
+    loanAmount: number;
+    propertyValue: number;
+  };
   status: string;
   decision?: string;
-  loanAmount: number;
-  propertyValue: number;
   assignedTo?: string;
   assignedAt?: string;
   reviewedBy?: string;
@@ -32,6 +37,7 @@ interface Application {
 }
 
 export default function EmployeeDashboardClient() {
+  const { data: session } = useSession();
   const router = useRouter();
   const [applications, setApplications] = useState<Application[]>([]);
   const [loading, setLoading] = useState(true);
@@ -94,9 +100,9 @@ export default function EmployeeDashboardClient() {
 
   const filteredApplications = applications.filter(app => {
     const matchesSearch = 
-      (app.userId?.firstName || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (app.userId?.lastName || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (app.userId?.email || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (app.borrowerInfo?.firstName || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (app.borrowerInfo?.lastName || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (app.borrowerInfo?.email || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
       (app._id || '').toLowerCase().includes(searchTerm.toLowerCase());
     
     const matchesStatus = statusFilter === 'all' || app.status === statusFilter;
@@ -117,7 +123,7 @@ export default function EmployeeDashboardClient() {
     unassigned: applications.filter(app => !app.assignedTo).length
   };
 
-  if (loading) {
+  if (loading || !session) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
@@ -129,8 +135,12 @@ export default function EmployeeDashboardClient() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <DashboardLayout
+      userName={session.user.name || 'Employee'}
+      userRole={session.user.role}
+      userEmail={session.user.email || ''}
+    >
+      <div className="space-y-6">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Employee Dashboard</h1>
@@ -272,15 +282,15 @@ export default function EmployeeDashboardClient() {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div>
                           <div className="text-sm font-medium text-gray-900">
-                            {application.userId?.firstName || 'Unknown'} {application.userId?.lastName || 'User'}
+                            {application.borrowerInfo?.firstName || 'Unknown'} {application.borrowerInfo?.lastName || 'User'}
                           </div>
-                          <div className="text-sm text-gray-500">{application.userId?.email || 'No email'}</div>
+                          <div className="text-sm text-gray-500">{application.borrowerInfo?.email || 'No email'}</div>
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm text-gray-900">
-                          <div>Loan: ${(application.loanAmount || 0).toLocaleString()}</div>
-                          <div className="text-gray-500">Property: ${(application.propertyValue || 0).toLocaleString()}</div>
+                          <div>Loan: ${(application.propertyInfo?.loanAmount || 0).toLocaleString()}</div>
+                          <div className="text-gray-500">Property: ${(application.propertyInfo?.propertyValue || 0).toLocaleString()}</div>
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
@@ -318,6 +328,6 @@ export default function EmployeeDashboardClient() {
           )}
         </div>
       </div>
-    </div>
+    </DashboardLayout>
   );
 }

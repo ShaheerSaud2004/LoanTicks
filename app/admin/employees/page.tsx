@@ -1,5 +1,6 @@
 import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
+import DashboardLayout from '@/components/DashboardLayout';
 import EmployeeManagementClient from './EmployeeManagementClient';
 
 export default async function EmployeeManagementPage() {
@@ -9,5 +10,13 @@ export default async function EmployeeManagementPage() {
     redirect('/login');
   }
 
-  return <EmployeeManagementClient />;
+  return (
+    <DashboardLayout
+      userName={session.user.name || 'Admin'}
+      userRole={session.user.role}
+      userEmail={session.user.email || ''}
+    >
+      <EmployeeManagementClient />
+    </DashboardLayout>
+  );
 }

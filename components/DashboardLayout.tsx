@@ -67,17 +67,17 @@ export default function DashboardLayout({
 
       {/* Navigation Header */}
       <nav className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
+          <div className="flex justify-between items-center h-14 sm:h-16">
             {/* Logo and Navigation */}
-            <div className="flex items-center gap-8">
+            <div className="flex items-center gap-2 sm:gap-4 md:gap-8">
               <button
                 onClick={() => router.push(
                   userRole === 'admin' ? '/admin/dashboard' :
                   userRole === 'employee' ? '/employee/dashboard' :
                   '/customer/dashboard'
                 )}
-                className="h-12 w-auto rounded-lg overflow-hidden bg-white border border-gray-200 hover:border-gray-300 transition cursor-pointer"
+                className="h-10 sm:h-12 w-auto rounded-lg overflow-hidden bg-white border border-gray-200 hover:border-gray-300 transition cursor-pointer flex-shrink-0"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src="/logo.jpg" alt="LOANATICKS" className="h-full w-full object-contain" />
@@ -89,15 +89,15 @@ export default function DashboardLayout({
                   <>
                     <button
                       onClick={() => router.push('/customer/dashboard')}
-                      className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition"
+                      className="px-3 lg:px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition whitespace-nowrap"
                     >
                       Dashboard
                     </button>
                     <button
                       onClick={() => router.push('/customer/loan-application')}
-                      className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition"
+                      className="px-3 lg:px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition whitespace-nowrap"
                     >
-                      Apply for Loan
+                      Apply
                     </button>
                   </>
                 )}
@@ -105,7 +105,7 @@ export default function DashboardLayout({
                   <>
                     <button
                       onClick={() => router.push('/employee/dashboard')}
-                      className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition"
+                      className="px-3 lg:px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition"
                     >
                       Dashboard
                     </button>
@@ -115,13 +115,13 @@ export default function DashboardLayout({
                   <>
                     <button
                       onClick={() => router.push('/admin/dashboard')}
-                      className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition"
+                      className="px-3 lg:px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition"
                     >
                       Dashboard
                     </button>
                     <button
                       onClick={() => router.push('/admin/employees')}
-                      className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition"
+                      className="px-3 lg:px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition"
                     >
                       Employees
                     </button>
@@ -131,16 +131,16 @@ export default function DashboardLayout({
             </div>
 
             {/* User Info and Logout */}
-            <div className="flex items-center gap-4">
-              <div className="text-right hidden sm:block">
-                <div className="text-sm font-medium text-gray-900">
+            <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
+              <div className="text-right hidden lg:block">
+                <div className="text-sm font-medium text-gray-900 truncate max-w-[120px] xl:max-w-none">
                   {userName}
                 </div>
-                <div className="text-xs text-gray-500">{userEmail}</div>
+                <div className="text-xs text-gray-500 truncate max-w-[120px] xl:max-w-none">{userEmail}</div>
               </div>
               
               <span
-                className={`px-3 py-1 rounded-full text-xs font-semibold capitalize ${getRoleBadgeColor()}`}
+                className={`hidden sm:inline px-2 sm:px-3 py-1 rounded-full text-xs font-semibold capitalize ${getRoleBadgeColor()}`}
               >
                 {userRole}
               </span>
@@ -148,17 +148,17 @@ export default function DashboardLayout({
               <button
                 onClick={handleLogout}
                 disabled={isLoggingOut}
-                className="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors font-medium text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors font-medium text-xs sm:text-sm disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isLoggingOut ? (
                   <>
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                    <span className="hidden sm:inline">Logging out...</span>
+                    <Loader2 className="h-3 w-3 sm:h-4 sm:w-4 animate-spin" />
+                    <span className="hidden md:inline">Logging out...</span>
                   </>
                 ) : (
                   <>
-                    <LogOut className="h-4 w-4" />
-                    <span className="hidden sm:inline">Logout</span>
+                    <LogOut className="h-3 w-3 sm:h-4 sm:w-4" />
+                    <span className="hidden md:inline">Logout</span>
                   </>
                 )}
               </button>
@@ -168,7 +168,7 @@ export default function DashboardLayout({
       </nav>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8">
         {children}
       </main>
     </div>

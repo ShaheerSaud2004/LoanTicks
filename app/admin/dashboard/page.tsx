@@ -20,12 +20,12 @@ export default async function AdminDashboard() {
     >
       <div className="space-y-6">
         {/* Welcome Header */}
-        <div className="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-xl p-8 text-white shadow-lg">
-          <h1 className="text-3xl font-bold mb-2">
+        <div className="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-xl p-6 md:p-8 text-white shadow-lg">
+          <h1 className="text-2xl md:text-3xl font-bold mb-2">
             Admin Dashboard
           </h1>
-          <p className="text-purple-100">
-            Full system access - Manage employees, applications, and system settings
+          <p className="text-purple-100 text-sm md:text-base">
+            Full system access - Manage employees, mortgage applications, and system settings
           </p>
         </div>
 
@@ -37,7 +37,7 @@ export default async function AdminDashboard() {
                 <FileText className="h-6 w-6 text-blue-600" />
               </div>
             </div>
-            <h3 className="text-gray-600 text-sm font-medium mb-1">Total Applications</h3>
+            <h3 className="text-gray-600 text-sm font-medium mb-1">Mortgage Applications</h3>
             <p className="text-2xl font-bold text-gray-900">-</p>
           </div>
           
@@ -111,7 +111,7 @@ export default async function AdminDashboard() {
 
         {/* Applications Section */}
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">All Loan Applications</h2>
+          <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-4">All Mortgage Applications</h2>
           <LoanApplicationsManager employeeName={session.user.name || 'Admin'} />
         </div>
       </div>
