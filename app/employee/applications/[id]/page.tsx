@@ -21,8 +21,7 @@ import {
   Maximize2,
   X,
   ChevronLeft,
-  ChevronRight,
-  ExternalLink
+  ChevronRight
 } from 'lucide-react';
 
 interface Application {
