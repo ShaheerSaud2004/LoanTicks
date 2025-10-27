@@ -484,7 +484,7 @@ export default function ApplicationView({ params }: { params: { id: string } }) 
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <h3 className="font-semibold text-gray-700 mb-3">Personal Details</h3>
-                  <div className="space-y-2">
+                  <div className="space-y-2 text-gray-900">
                     <p><span className="font-medium">Name:</span> {String(application.borrowerInfo?.firstName || '')} {String(application.borrowerInfo?.lastName || '')}</p>
                     <p><span className="font-medium">Email:</span> {String(application.borrowerInfo?.email || '')}</p>
                     <p><span className="font-medium">Phone:</span> {String(application.borrowerInfo?.phone || '')}</p>
@@ -497,7 +497,7 @@ export default function ApplicationView({ params }: { params: { id: string } }) 
                 
                 <div>
                   <h3 className="font-semibold text-gray-700 mb-3">Contact Information</h3>
-                  <div className="space-y-2">
+                  <div className="space-y-2 text-gray-900">
                     <p><span className="font-medium">Email:</span> {String(application.borrowerInfo?.email || 'N/A')}</p>
                     <p><span className="font-medium">Phone:</span> {String(application.borrowerInfo?.phone || 'N/A')}</p>
                   </div>
@@ -512,7 +512,7 @@ export default function ApplicationView({ params }: { params: { id: string } }) 
                 <h2 className="text-xl font-semibold text-gray-900">Current Address</h2>
               </div>
               
-              <div className="space-y-2">
+              <div className="space-y-2 text-gray-900">
                 <p><span className="font-medium">Address:</span> {String(application.currentAddress?.street || 'N/A')}</p>
                 {application.currentAddress?.unit && <p><span className="font-medium">Unit:</span> {String(application.currentAddress.unit)}</p>}
                 <p><span className="font-medium">City:</span> {String(application.currentAddress?.city || 'N/A')}</p>
@@ -531,7 +531,7 @@ export default function ApplicationView({ params }: { params: { id: string } }) 
                 <h2 className="text-xl font-semibold text-gray-900">Employment Information</h2>
               </div>
               
-              <div className="space-y-2">
+              <div className="space-y-2 text-gray-900">
                 <p><span className="font-medium">Status:</span> {String(application.employment?.employmentStatus || 'N/A')}</p>
                 <p><span className="font-medium">Employer:</span> {String(application.employment?.employerName || 'N/A')}</p>
                 <p><span className="font-medium">Position:</span> {String(application.employment?.position || 'N/A')}</p>
@@ -551,7 +551,7 @@ export default function ApplicationView({ params }: { params: { id: string } }) 
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <h3 className="font-semibold text-gray-700 mb-3">Income</h3>
-                  <div className="space-y-2">
+                  <div className="space-y-2 text-gray-900">
                     <p><span className="font-medium">Gross Monthly Income:</span> ${Number(application.financialInfo?.grossMonthlyIncome || 0)}</p>
                     <p><span className="font-medium">Other Income:</span> ${Number(application.financialInfo?.otherIncome || 0)}</p>
                     <p><span className="font-medium">Other Income Source:</span> {String(application.financialInfo?.otherIncomeSource || 'N/A')}</p>
@@ -560,7 +560,7 @@ export default function ApplicationView({ params }: { params: { id: string } }) 
                 
                 <div>
                   <h3 className="font-semibold text-gray-700 mb-3">Assets</h3>
-                  <div className="space-y-2">
+                  <div className="space-y-2 text-gray-900">
                     <p><span className="font-medium">Checking Balance:</span> ${Number(application.financialInfo?.checkingAccountBalance || 0)}</p>
                     <p><span className="font-medium">Savings Balance:</span> ${Number(application.financialInfo?.savingsAccountBalance || 0)}</p>
                     <p><span className="font-medium">Total Assets:</span> ${Number(application.financialInfo?.totalAssets || 0)}</p>
@@ -580,7 +580,7 @@ export default function ApplicationView({ params }: { params: { id: string } }) 
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <h3 className="font-semibold text-gray-700 mb-3">Property Details</h3>
-                  <div className="space-y-2">
+                  <div className="space-y-2 text-gray-900">
                     <p><span className="font-medium">Address:</span> {String(application.propertyInfo?.propertyAddress || 'N/A')}</p>
                     <p><span className="font-medium">City:</span> {String(application.propertyInfo?.propertyCity || 'N/A')}</p>
                     <p><span className="font-medium">State:</span> {String(application.propertyInfo?.propertyState || 'N/A')}</p>
@@ -592,7 +592,7 @@ export default function ApplicationView({ params }: { params: { id: string } }) 
                 
                 <div>
                   <h3 className="font-semibold text-gray-700 mb-3">Loan Details</h3>
-                  <div className="space-y-2">
+                  <div className="space-y-2 text-gray-900">
                     <p><span className="font-medium">Loan Amount:</span> ${Number(application.propertyInfo?.loanAmount || 0)}</p>
                     <p><span className="font-medium">Loan Purpose:</span> {String(application.propertyInfo?.loanPurpose || 'N/A')}</p>
                     <p><span className="font-medium">Down Payment:</span> ${Number(application.propertyInfo?.downPaymentAmount || 0)}</p>
@@ -610,13 +610,13 @@ export default function ApplicationView({ params }: { params: { id: string } }) 
               </div>
               
               <div className="grid md:grid-cols-2 gap-6">
-                <div className="space-y-2">
+                <div className="space-y-2 text-gray-900">
                   <p><span className="font-medium">US Citizen:</span> {Boolean(application.declarations?.usCitizen) ? 'Yes' : 'No'}</p>
                   <p><span className="font-medium">Primary Residence:</span> {Boolean(application.declarations?.primaryResidence) ? 'Yes' : 'No'}</p>
                   <p><span className="font-medium">Outstanding Judgments:</span> {Boolean(application.declarations?.outstandingJudgments) ? 'Yes' : 'No'}</p>
                   <p><span className="font-medium">Bankruptcy (7 years):</span> {Boolean(application.declarations?.declaredBankruptcy) ? 'Yes' : 'No'}</p>
                 </div>
-                <div className="space-y-2">
+                <div className="space-y-2 text-gray-900">
                   <p><span className="font-medium">Property Foreclosed:</span> {Boolean(application.declarations?.propertyForeclosed) ? 'Yes' : 'No'}</p>
                   <p><span className="font-medium">Party to Lawsuit:</span> {Boolean(application.declarations?.lawsuitParty) ? 'Yes' : 'No'}</p>
                   <p><span className="font-medium">Loan on Property:</span> {Boolean(application.declarations?.loanOnProperty) ? 'Yes' : 'No'}</p>
