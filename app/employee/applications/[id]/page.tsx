@@ -21,7 +21,10 @@ import {
   Maximize2,
   X,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Mail,
+  MessageSquare,
+  Calculator
 } from 'lucide-react';
 
 interface Application {
@@ -490,6 +493,179 @@ export default function ApplicationView({ params }: { params: { id: string } }) 
                 </div>
               </div>
 
+            {/* Communication Actions */}
+            <div className="bg-white rounded-xl shadow-sm p-4 md:p-6">
+              <h3 className="text-base md:text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                <MessageSquare className="w-5 h-5 text-blue-600" />
+                Contact Borrower
+              </h3>
+              <div className="grid sm:grid-cols-2 gap-3">
+                <a
+                  href={`mailto:${application.borrowerInfo?.email}?subject=Additional Information Needed for Mortgage Application #${application._id.slice(-8)}&body=Dear ${application.borrowerInfo?.firstName},
+
+We are reviewing your mortgage application and need some additional information to proceed. Please provide the following:
+
+1. [Specify what you need]
+2. [Additional requirements]
+
+Please reply to this email with the requested information at your earliest convenience.
+
+Best regards,
+${session?.user?.name || 'Loan Officer'}
+LOANATicks - Home Mortgage Solutions`}
+                  className="flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium text-sm md:text-base touch-manipulation"
+                >
+                  <Mail className="w-4 h-4 md:w-5 md:h-5" />
+                  <span>Email Borrower</span>
+                </a>
+                <a
+                  href={`sms:${application.borrowerInfo?.phone || ''}?&body=Hello ${application.borrowerInfo?.firstName}, this is ${session?.user?.name || 'your loan officer'} from LOANATicks. We need additional information for your mortgage application #${application._id.slice(-8)}. Please check your email for details or call us back. Thanks!`}
+                  className="flex items-center justify-center gap-2 px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition font-medium text-sm md:text-base touch-manipulation"
+                >
+                  <MessageSquare className="w-4 h-4 md:w-5 md:h-5" />
+                  <span>Text Borrower</span>
+                </a>
+              </div>
+            </div>
+
+            {/* Financial Breakdown with Formulas */}
+            <div className="bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl shadow-lg p-4 md:p-6 text-white">
+              <h3 className="text-base md:text-lg lg:text-xl font-bold mb-4 flex items-center gap-2">
+                <Calculator className="w-5 h-5 md:w-6 md:h-6" />
+                Financial Analysis & Formulas
+              </h3>
+              
+              <div className="space-y-4">
+                {/* LTV Ratio */}
+                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3 md:p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-semibold text-sm md:text-base">Loan-to-Value (LTV) Ratio</span>
+                    <span className="text-lg md:text-xl font-bold">{((Number(application.propertyInfo?.loanAmount || 0) / Number(application.propertyInfo?.propertyValue || 1)) * 100).toFixed(2)}%</span>
+                  </div>
+                  <div className="text-xs md:text-sm opacity-90 space-y-1">
+                    <p className="font-mono bg-white/10 p-2 rounded">
+                      LTV = (Loan Amount ÷ Property Value) × 100
+                    </p>
+                    <p>= (${Number(application.propertyInfo?.loanAmount || 0).toLocaleString()} ÷ ${Number(application.propertyInfo?.propertyValue || 1).toLocaleString()}) × 100</p>
+                    <p className="text-yellow-300 mt-2">
+                      {Number(application.propertyInfo?.loanAmount || 0) / Number(application.propertyInfo?.propertyValue || 1) > 0.8 
+                        ? '⚠️ High LTV - May require PMI'
+                        : '✅ Good LTV - No PMI required'}
+                    </p>
+                  </div>
+                </div>
+
+                {/* DTI Ratio */}
+                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3 md:p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-semibold text-sm md:text-base">Debt-to-Income (DTI) Ratio</span>
+                    <span className="text-lg md:text-xl font-bold">
+                      {(() => {
+                        const monthlyIncome = Number(application.employment?.monthlyIncome || 0) + Number(application.financialInfo?.otherIncome || 0);
+                        const monthlyDebts = Number(application.currentAddress?.monthlyPayment || 0) + Number(application.financialInfo?.totalLiabilities || 0);
+                        const estimatedMortgage = Number(application.propertyInfo?.loanAmount || 0) * 0.005; // Rough estimate
+                        return monthlyIncome > 0 ? ((monthlyDebts + estimatedMortgage) / monthlyIncome * 100).toFixed(2) : '0.00';
+                      })()}%
+                    </span>
+                  </div>
+                  <div className="text-xs md:text-sm opacity-90 space-y-1">
+                    <p className="font-mono bg-white/10 p-2 rounded">
+                      DTI = (Total Monthly Debts + Est. Mortgage) ÷ Gross Monthly Income × 100
+                    </p>
+                    <p>Monthly Income: ${(Number(application.employment?.monthlyIncome || 0) + Number(application.financialInfo?.otherIncome || 0)).toLocaleString()}</p>
+                    <p>Current Housing: ${Number(application.currentAddress?.monthlyPayment || 0).toLocaleString()}</p>
+                    <p>Other Debts: ${Number(application.financialInfo?.totalLiabilities || 0).toLocaleString()}</p>
+                    <p>Est. New Mortgage: ${(Number(application.propertyInfo?.loanAmount || 0) * 0.005).toLocaleString()}/mo</p>
+                    <p className="text-yellow-300 mt-2">
+                      {(() => {
+                        const dti = (Number(application.currentAddress?.monthlyPayment || 0) + Number(application.financialInfo?.totalLiabilities || 0) + (Number(application.propertyInfo?.loanAmount || 0) * 0.005)) / (Number(application.employment?.monthlyIncome || 0) + Number(application.financialInfo?.otherIncome || 0));
+                        return dti > 0.43 ? '⚠️ DTI exceeds 43% - May not qualify' : dti > 0.36 ? '⚠️ DTI borderline - Review carefully' : '✅ Good DTI ratio';
+                      })()}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Down Payment */}
+                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3 md:p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-semibold text-sm md:text-base">Down Payment</span>
+                    <span className="text-lg md:text-xl font-bold">
+                      ${(Number(application.propertyInfo?.propertyValue || 0) - Number(application.propertyInfo?.loanAmount || 0)).toLocaleString()}
+                    </span>
+                  </div>
+                  <div className="text-xs md:text-sm opacity-90 space-y-1">
+                    <p className="font-mono bg-white/10 p-2 rounded">
+                      Down Payment = Property Value - Loan Amount
+                    </p>
+                    <p>= ${Number(application.propertyInfo?.propertyValue || 0).toLocaleString()} - ${Number(application.propertyInfo?.loanAmount || 0).toLocaleString()}</p>
+                    <p className="font-mono bg-white/10 p-2 rounded mt-2">
+                      Down Payment % = (Down Payment ÷ Property Value) × 100
+                    </p>
+                    <p>= {(((Number(application.propertyInfo?.propertyValue || 0) - Number(application.propertyInfo?.loanAmount || 0)) / Number(application.propertyInfo?.propertyValue || 1)) * 100).toFixed(2)}%</p>
+                  </div>
+                </div>
+
+                {/* Liquid Assets to Loan Amount */}
+                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3 md:p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-semibold text-sm md:text-base">Liquid Assets Coverage</span>
+                    <span className="text-lg md:text-xl font-bold">
+                      {(() => {
+                        const liquidAssets = Number(application.financialInfo?.checkingAccountBalance || 0) + Number(application.financialInfo?.savingsAccountBalance || 0);
+                        const loanAmount = Number(application.propertyInfo?.loanAmount || 0);
+                        return loanAmount > 0 ? ((liquidAssets / loanAmount) * 100).toFixed(2) : '0.00';
+                      })()}%
+                    </span>
+                  </div>
+                  <div className="text-xs md:text-sm opacity-90 space-y-1">
+                    <p className="font-mono bg-white/10 p-2 rounded">
+                      Coverage = (Checking + Savings) ÷ Loan Amount × 100
+                    </p>
+                    <p>Checking: ${Number(application.financialInfo?.checkingAccountBalance || 0).toLocaleString()}</p>
+                    <p>Savings: ${Number(application.financialInfo?.savingsAccountBalance || 0).toLocaleString()}</p>
+                    <p>Total Liquid: ${(Number(application.financialInfo?.checkingAccountBalance || 0) + Number(application.financialInfo?.savingsAccountBalance || 0)).toLocaleString()}</p>
+                    <p>Loan Amount: ${Number(application.propertyInfo?.loanAmount || 0).toLocaleString()}</p>
+                  </div>
+                </div>
+
+                {/* Estimated Monthly Payment */}
+                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3 md:p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-semibold text-sm md:text-base">Estimated Monthly Payment (PITI)</span>
+                    <span className="text-lg md:text-xl font-bold">
+                      ${(() => {
+                        const loanAmount = Number(application.propertyInfo?.loanAmount || 0);
+                        const rate = 0.065; // 6.5% assumed rate
+                        const monthlyRate = rate / 12;
+                        const numPayments = 30 * 12; // 30 years
+                        const principal = loanAmount * (monthlyRate * Math.pow(1 + monthlyRate, numPayments)) / (Math.pow(1 + monthlyRate, numPayments) - 1);
+                        const propertyTax = Number(application.propertyInfo?.propertyValue || 0) * 0.0125 / 12; // 1.25% annual
+                        const insurance = Number(application.propertyInfo?.propertyValue || 0) * 0.0035 / 12; // 0.35% annual
+                        const pmi = (Number(application.propertyInfo?.loanAmount || 0) / Number(application.propertyInfo?.propertyValue || 1)) > 0.8 ? loanAmount * 0.005 / 12 : 0;
+                        return (principal + propertyTax + insurance + pmi).toLocaleString(undefined, {maximumFractionDigits: 0});
+                      })()}
+                    </span>
+                  </div>
+                  <div className="text-xs md:text-sm opacity-90 space-y-1">
+                    <p className="font-bold mb-1">Formula: P + I + T + I (+ PMI if LTV {">"} 80%)</p>
+                    <p>• Principal & Interest: ${(() => {
+                        const loanAmount = Number(application.propertyInfo?.loanAmount || 0);
+                        const rate = 0.065;
+                        const monthlyRate = rate / 12;
+                        const numPayments = 30 * 12;
+                        const pi = loanAmount * (monthlyRate * Math.pow(1 + monthlyRate, numPayments)) / (Math.pow(1 + monthlyRate, numPayments) - 1);
+                        return pi.toLocaleString(undefined, {maximumFractionDigits: 0});
+                      })()}/mo @ 6.5% for 30yr</p>
+                    <p>• Property Tax: ${(Number(application.propertyInfo?.propertyValue || 0) * 0.0125 / 12).toLocaleString(undefined, {maximumFractionDigits: 0})}/mo (1.25% annual)</p>
+                    <p>• Homeowners Insurance: ${(Number(application.propertyInfo?.propertyValue || 0) * 0.0035 / 12).toLocaleString(undefined, {maximumFractionDigits: 0})}/mo (0.35% annual)</p>
+                    {(Number(application.propertyInfo?.loanAmount || 0) / Number(application.propertyInfo?.propertyValue || 1)) > 0.8 && (
+                      <p>• PMI: ${(Number(application.propertyInfo?.loanAmount || 0) * 0.005 / 12).toLocaleString(undefined, {maximumFractionDigits: 0})}/mo (0.5% annual)</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+
             {/* Borrower Information */}
               <div className="bg-white rounded-xl shadow-sm p-4 md:p-6">
               <div className="flex items-center gap-3 mb-6">
@@ -717,9 +893,9 @@ export default function ApplicationView({ params }: { params: { id: string } }) 
                     Borrower Info
                   </h4>
                   <div className="text-sm text-gray-600 space-y-1">
-                    <p><strong>Name:</strong> {application.borrowerInfo?.firstName} {application.borrowerInfo?.lastName}</p>
-                    <p><strong>Email:</strong> {application.borrowerInfo?.email}</p>
-                    <p><strong>Phone:</strong> {application.borrowerInfo?.phone || 'N/A'}</p>
+                    <p><strong>Name:</strong> {String(application.borrowerInfo?.firstName || '')} {String(application.borrowerInfo?.lastName || '')}</p>
+                    <p><strong>Email:</strong> {String(application.borrowerInfo?.email || '')}</p>
+                    <p><strong>Phone:</strong> {String(application.borrowerInfo?.phone || 'N/A')}</p>
                   </div>
                 </div>
                 
@@ -777,7 +953,6 @@ export default function ApplicationView({ params }: { params: { id: string } }) 
           </div>
         </div>
       </div>
-    </div>
     </DashboardLayout>
   );
 }

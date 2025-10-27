@@ -187,20 +187,23 @@ export default function ApplicationDecision({ params }: { params: { id: string }
                 </div>
               </div>
               
-              <div className="mt-6">
-                <h3 className="font-semibold text-gray-700 mb-3">Financial Summary</h3>
-                <div className="grid md:grid-cols-3 gap-4">
-                  <div className="bg-green-50 p-4 rounded-lg">
-                    <p className="text-sm text-green-600 font-medium">Monthly Income</p>
-                    <p className="text-2xl font-bold text-green-700">${(application.financialInfo?.grossMonthlyIncome as number)?.toLocaleString()}</p>
+              <div className="mt-8">
+                <h3 className="font-semibold text-gray-700 mb-6">Financial Summary</h3>
+                <div className="grid md:grid-cols-3 gap-6">
+                  <div className="bg-gradient-to-br from-green-600 to-emerald-600 p-6 rounded-xl shadow-lg">
+                    <p className="text-sm text-white font-semibold mb-2 opacity-90">Monthly Income</p>
+                    <p className="text-3xl font-bold text-white">${(application.financialInfo?.grossMonthlyIncome as number)?.toLocaleString()}</p>
+                    <p className="text-xs text-white mt-2 opacity-75">Gross monthly earnings</p>
                   </div>
-                  <div className="bg-blue-50 p-4 rounded-lg">
-                    <p className="text-sm text-blue-600 font-medium">Total Assets</p>
-                    <p className="text-2xl font-bold text-blue-700">${(application.financialInfo?.totalAssets as number)?.toLocaleString()}</p>
+                  <div className="bg-gradient-to-br from-blue-600 to-indigo-600 p-6 rounded-xl shadow-lg">
+                    <p className="text-sm text-white font-semibold mb-2 opacity-90">Total Assets</p>
+                    <p className="text-3xl font-bold text-white">${(application.financialInfo?.totalAssets as number)?.toLocaleString()}</p>
+                    <p className="text-xs text-white mt-2 opacity-75">Available liquid assets</p>
                   </div>
-                  <div className="bg-red-50 p-4 rounded-lg">
-                    <p className="text-sm text-red-600 font-medium">Total Liabilities</p>
-                    <p className="text-2xl font-bold text-red-700">${(application.financialInfo?.totalLiabilities as number)?.toLocaleString()}</p>
+                  <div className="bg-gradient-to-br from-red-600 to-pink-600 p-6 rounded-xl shadow-lg">
+                    <p className="text-sm text-white font-semibold mb-2 opacity-90">Total Liabilities</p>
+                    <p className="text-3xl font-bold text-white">${(application.financialInfo?.totalLiabilities as number)?.toLocaleString()}</p>
+                    <p className="text-xs text-white mt-2 opacity-75">Outstanding debts</p>
                   </div>
                 </div>
               </div>
@@ -212,41 +215,53 @@ export default function ApplicationDecision({ params }: { params: { id: string }
             <div className="bg-white rounded-2xl shadow-sm p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-6">Make Decision</h3>
               
-              <div className="space-y-4">
+              <div className="space-y-6">
                 {/* Decision Options */}
-                <div className="space-y-3">
-                  <label className="flex items-center gap-3 p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-green-500 transition">
+                <div className="space-y-4">
+                  <label className={`flex items-center gap-4 p-6 border-2 rounded-xl cursor-pointer transition ${
+                    decision === 'approved' 
+                      ? 'border-green-500 bg-green-50' 
+                      : 'border-gray-200 hover:border-green-300'
+                  }`}>
                     <input
                       type="radio"
                       name="decision"
                       value="approved"
                       checked={decision === 'approved'}
                       onChange={(e) => setDecision(e.target.value as 'approved')}
-                      className="w-5 h-5 text-green-600"
+                      className="w-6 h-6 text-green-600"
                     />
-                    <div className="flex items-center gap-3">
-                      <CheckCircle className="w-6 h-6 text-green-600" />
+                    <div className="flex items-center gap-4">
+                      <div className="bg-green-100 p-3 rounded-lg">
+                        <CheckCircle className="w-7 h-7 text-green-600" />
+                      </div>
                       <div>
-                        <p className="font-semibold text-gray-900">Approve</p>
-                        <p className="text-sm text-gray-600">Approve this loan application</p>
+                        <p className="font-bold text-lg text-gray-900">Approve Application</p>
+                        <p className="text-sm text-gray-600 mt-1">Approve this mortgage loan application</p>
                       </div>
                     </div>
                   </label>
                   
-                  <label className="flex items-center gap-3 p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-red-500 transition">
+                  <label className={`flex items-center gap-4 p-6 border-2 rounded-xl cursor-pointer transition ${
+                    decision === 'rejected' 
+                      ? 'border-red-500 bg-red-50' 
+                      : 'border-gray-200 hover:border-red-300'
+                  }`}>
                     <input
                       type="radio"
                       name="decision"
                       value="rejected"
                       checked={decision === 'rejected'}
                       onChange={(e) => setDecision(e.target.value as 'rejected')}
-                      className="w-5 h-5 text-red-600"
+                      className="w-6 h-6 text-red-600"
                     />
-                    <div className="flex items-center gap-3">
-                      <XCircle className="w-6 h-6 text-red-600" />
+                    <div className="flex items-center gap-4">
+                      <div className="bg-red-100 p-3 rounded-lg">
+                        <XCircle className="w-7 h-7 text-red-600" />
+                      </div>
                       <div>
-                        <p className="font-semibold text-gray-900">Reject</p>
-                        <p className="text-sm text-gray-600">Reject this loan application</p>
+                        <p className="font-bold text-lg text-gray-900">Reject Application</p>
+                        <p className="text-sm text-gray-600 mt-1">Reject this mortgage loan application</p>
                       </div>
                     </div>
                   </label>
