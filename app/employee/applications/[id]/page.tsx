@@ -49,6 +49,15 @@ interface Application {
   createdAt: string;
 }
 
+// Helper function to ensure URL has https:// prefix
+const ensureHttps = (url: string | undefined): string => {
+  if (!url) return 'https://app.arive.com/pos';
+  if (url.startsWith('http://') || url.startsWith('https://')) {
+    return url;
+  }
+  return `https://${url}`;
+};
+
 export default function ApplicationView({ params }: { params: { id: string } }) {
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -882,7 +891,7 @@ LOANATicks - Home Mortgage Solutions`}
                     <span className="font-semibold">ARIVE Borrower Portal</span>
                   </div>
                   <a
-                    href={process.env.NEXT_PUBLIC_ARIVE_POS_URL || 'https://app.arive.com/pos'}
+                    href={ensureHttps(process.env.NEXT_PUBLIC_ARIVE_POS_URL)}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-white text-sm hover:underline flex items-center gap-1"
@@ -895,7 +904,7 @@ LOANATicks - Home Mortgage Solutions`}
                 <div className="relative" style={{ paddingBottom: '75%', minHeight: '600px' }}>
                   {process.env.NEXT_PUBLIC_ARIVE_POS_URL ? (
                     <iframe
-                      src={process.env.NEXT_PUBLIC_ARIVE_POS_URL}
+                      src={ensureHttps(process.env.NEXT_PUBLIC_ARIVE_POS_URL)}
                       title="ARIVE Borrower Portal"
                       className="absolute top-0 left-0 w-full h-full border-0"
                       allow="camera *; microphone *; fullscreen *; payment *; geolocation *"
@@ -946,7 +955,7 @@ LOANATicks - Home Mortgage Solutions`}
               {process.env.NEXT_PUBLIC_ARIVE_POS_URL ? (
                 <div className="bg-green-50 border border-green-200 rounded-xl p-4">
                   <p className="text-sm text-green-800">
-                    <strong>✅ ARIVE POS Configured:</strong> <code className="bg-green-100 px-2 py-1 rounded text-xs">{process.env.NEXT_PUBLIC_ARIVE_POS_URL}</code>
+                    <strong>✅ ARIVE POS Configured:</strong> <code className="bg-green-100 px-2 py-1 rounded text-xs">{ensureHttps(process.env.NEXT_PUBLIC_ARIVE_POS_URL)}</code>
                   </p>
                 </div>
               ) : (
