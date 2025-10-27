@@ -48,7 +48,7 @@ export default function ApplicationView({ params }: { params: { id: string } }) 
   const router = useRouter();
   const [application, setApplication] = useState<Application | null>(null);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'split' | 'documents' | 'info'>('split');
+  const [activeTab, setActiveTab] = useState<'split' | 'documents' | 'info' | 'arive'>('split');
   const [selectedDocument, setSelectedDocument] = useState<number>(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
@@ -300,6 +300,20 @@ export default function ApplicationView({ params }: { params: { id: string } }) 
                 <User className="w-4 h-4" />
                 <span className="hidden sm:inline">Application Info</span>
                 <span className="sm:hidden">Info</span>
+              </div>
+            </button>
+            <button
+              onClick={() => setActiveTab('arive')}
+              className={`flex-1 px-4 py-3 rounded-lg font-medium transition ${
+                activeTab === 'arive'
+                  ? 'bg-green-600 text-white'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              <div className="flex items-center justify-center gap-2">
+                <CheckCircle className="w-4 h-4" />
+                <span className="hidden sm:inline">ARIVE POS</span>
+                <span className="sm:hidden">ARIVE</span>
               </div>
             </button>
           </div>
@@ -628,6 +642,109 @@ export default function ApplicationView({ params }: { params: { id: string } }) 
             </div>
           </div>
           )}
+
+          {/* ARIVE POS Integration */}
+          {activeTab === 'arive' && (
+            <div className="space-y-4">
+              {/* ARIVE Header */}
+              <div className="bg-gradient-to-r from-green-600 to-emerald-600 rounded-xl p-4 md:p-6 text-white shadow-lg">
+                <h3 className="text-base md:text-lg lg:text-xl font-bold mb-2">🏦 ARIVE Borrower Portal (POS)</h3>
+                <p className="text-sm md:text-base opacity-90">
+                  Submit borrower information directly to ARIVE for processing. The borrower can complete their 1003 loan application through this portal.
+                </p>
+              </div>
+
+              {/* Instructions */}
+              <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
+                <h4 className="font-semibold text-blue-900 mb-2 flex items-center gap-2">
+                  <FileText className="w-5 h-5" />
+                  How to Use ARIVE POS
+                </h4>
+                <ul className="space-y-2 text-sm text-blue-800">
+                  <li className="flex items-start gap-2">
+                    <span className="font-bold mt-0.5">1.</span>
+                    <span>The iframe below displays ARIVE&apos;s Borrower Portal where borrowers complete their loan application</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="font-bold mt-0.5">2.</span>
+                    <span>You can invite borrowers by copying your unique POS URL or sending direct invitations</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="font-bold mt-0.5">3.</span>
+                    <span>Borrowers can complete the full 1003 application or just upload documents</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="font-bold mt-0.5">4.</span>
+                    <span>All submissions sync automatically with ARIVE&apos;s system</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* ARIVE Iframe Container */}
+              <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+                <div className="bg-gradient-to-r from-green-600 to-emerald-600 px-4 py-3 flex items-center justify-between">
+                  <div className="flex items-center gap-2 text-white">
+                    <CheckCircle className="w-5 h-5" />
+                    <span className="font-semibold">ARIVE Borrower Portal</span>
+                  </div>
+                  <a
+                    href={process.env.NEXT_PUBLIC_ARIVE_POS_URL || 'https://app.arive.com/pos'}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white text-sm hover:underline flex items-center gap-1"
+                  >
+                    Open in New Tab
+                    <Maximize2 className="w-4 h-4" />
+                  </a>
+                </div>
+                
+                <div className="relative" style={{ paddingBottom: '75%', minHeight: '600px' }}>
+                  <iframe
+                    src={process.env.NEXT_PUBLIC_ARIVE_POS_URL || 'https://app.arive.com/pos'}
+                    title="ARIVE Borrower Portal"
+                    className="absolute top-0 left-0 w-full h-full border-0"
+                    allow="camera; microphone; fullscreen; payment"
+                    sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-modals allow-downloads"
+                  />
+                </div>
+              </div>
+
+              {/* Quick Actions for ARIVE */}
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div className="bg-white rounded-xl shadow-sm p-4 border border-gray-200">
+                  <h4 className="font-semibold text-gray-900 mb-2 flex items-center gap-2">
+                    <User className="w-5 h-5 text-green-600" />
+                    Borrower Info
+                  </h4>
+                  <div className="text-sm text-gray-600 space-y-1">
+                    <p><strong>Name:</strong> {application.borrowerInfo?.firstName} {application.borrowerInfo?.lastName}</p>
+                    <p><strong>Email:</strong> {application.borrowerInfo?.email}</p>
+                    <p><strong>Phone:</strong> {application.borrowerInfo?.phone || 'N/A'}</p>
+                  </div>
+                </div>
+                
+                <div className="bg-white rounded-xl shadow-sm p-4 border border-gray-200">
+                  <h4 className="font-semibold text-gray-900 mb-2 flex items-center gap-2">
+                    <DollarSign className="w-5 h-5 text-green-600" />
+                    Loan Details
+                  </h4>
+                  <div className="text-sm text-gray-600 space-y-1">
+                    <p><strong>Amount:</strong> ${Number(application.propertyInfo?.loanAmount || 0).toLocaleString()}</p>
+                    <p><strong>Property Value:</strong> ${Number(application.propertyInfo?.propertyValue || 0).toLocaleString()}</p>
+                    <p><strong>LTV:</strong> {((Number(application.propertyInfo?.loanAmount || 0) / Number(application.propertyInfo?.propertyValue || 1)) * 100).toFixed(2)}%</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Configuration Note */}
+              <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4">
+                <p className="text-sm text-yellow-800">
+                  <strong>⚙️ Configuration:</strong> Set your ARIVE POS URL in the environment variables as <code className="bg-yellow-100 px-2 py-1 rounded">NEXT_PUBLIC_ARIVE_POS_URL</code>
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
 
         {/* Action Buttons */}
         <div className="bg-white rounded-xl shadow-sm p-3 md:p-4">
