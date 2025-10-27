@@ -155,63 +155,65 @@ export default function ApplicationView({ params }: { params: { id: string } }) 
           <div className="fixed inset-0 z-50 bg-black">
             <div className="h-full flex flex-col">
               {/* Fullscreen Header */}
-              <div className="bg-gray-900 text-white p-4 flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <h3 className="font-semibold">{String(application.documents[selectedDocument]?.name || 'Document')}</h3>
-                  <span className="text-sm text-gray-400">
-                    {selectedDocument + 1} of {application.documents.length}
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => setSelectedDocument(Math.max(0, selectedDocument - 1))}
-                    disabled={selectedDocument === 0}
-                    className="p-2 hover:bg-gray-800 rounded-lg transition disabled:opacity-50"
-                  >
-                    <ChevronLeft className="w-5 h-5" />
-                  </button>
-                  <button
-                    onClick={() => setSelectedDocument(Math.min(application.documents.length - 1, selectedDocument + 1))}
-                    disabled={selectedDocument === application.documents.length - 1}
-                    className="p-2 hover:bg-gray-800 rounded-lg transition disabled:opacity-50"
-                  >
-                    <ChevronRight className="w-5 h-5" />
-                  </button>
-                  <button
-                    onClick={() => handleDownloadDocument(application.documents[selectedDocument])}
-                    className="p-2 hover:bg-gray-800 rounded-lg transition"
-                  >
-                    <Download className="w-5 h-5" />
-                  </button>
-                  <button
-                    onClick={() => setIsFullscreen(false)}
-                    className="p-2 hover:bg-gray-800 rounded-lg transition"
-                  >
-                    <X className="w-5 h-5" />
-                  </button>
+              <div className="bg-gray-900 text-white p-3 md:p-4">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                  <div className="flex items-center gap-2 md:gap-4 min-w-0 flex-1">
+                    <h3 className="font-semibold text-sm md:text-base truncate">{String(application.documents[selectedDocument]?.name || 'Document')}</h3>
+                    <span className="text-xs md:text-sm text-gray-400 whitespace-nowrap">
+                      {selectedDocument + 1} of {application.documents.length}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1 md:gap-2 w-full sm:w-auto">
+                    <button
+                      onClick={() => setSelectedDocument(Math.max(0, selectedDocument - 1))}
+                      disabled={selectedDocument === 0}
+                      className="p-2 md:p-2.5 hover:bg-gray-800 rounded-lg transition disabled:opacity-50 flex-1 sm:flex-none"
+                    >
+                      <ChevronLeft className="w-4 h-4 md:w-5 md:h-5" />
+                    </button>
+                    <button
+                      onClick={() => setSelectedDocument(Math.min(application.documents.length - 1, selectedDocument + 1))}
+                      disabled={selectedDocument === application.documents.length - 1}
+                      className="p-2 md:p-2.5 hover:bg-gray-800 rounded-lg transition disabled:opacity-50 flex-1 sm:flex-none"
+                    >
+                      <ChevronRight className="w-4 h-4 md:w-5 md:h-5" />
+                    </button>
+                    <button
+                      onClick={() => handleDownloadDocument(application.documents[selectedDocument])}
+                      className="p-2 md:p-2.5 hover:bg-gray-800 rounded-lg transition flex-1 sm:flex-none"
+                    >
+                      <Download className="w-4 h-4 md:w-5 md:h-5" />
+                    </button>
+                    <button
+                      onClick={() => setIsFullscreen(false)}
+                      className="p-2 md:p-2.5 hover:bg-gray-800 rounded-lg transition flex-1 sm:flex-none"
+                    >
+                      <X className="w-4 h-4 md:w-5 md:h-5" />
+                    </button>
+                  </div>
                 </div>
               </div>
               
               {/* Document Display Area */}
-              <div className="flex-1 bg-gray-100 flex items-center justify-center p-8">
-                <div className="bg-white rounded-lg shadow-2xl p-8 max-w-4xl w-full">
+              <div className="flex-1 bg-gray-100 flex items-center justify-center p-3 md:p-8">
+                <div className="bg-white rounded-lg shadow-2xl p-4 md:p-8 max-w-4xl w-full">
                   <div className="text-center">
-                    <FileText className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                    <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                    <FileText className="w-12 h-12 md:w-16 md:h-16 text-gray-400 mx-auto mb-3 md:mb-4" />
+                    <h3 className="text-base md:text-xl font-semibold text-gray-900 mb-2 break-words px-2">
                       {String(application.documents[selectedDocument]?.name || 'Document')}
                     </h3>
-                    <p className="text-gray-600 mb-4">
+                    <p className="text-sm md:text-base text-gray-600 mb-3 md:mb-4">
                       Size: {((Number(application.documents[selectedDocument]?.size) || 0) / 1024 / 1024).toFixed(2)} MB
                     </p>
-                    <p className="text-sm text-gray-500 mb-6">
+                    <p className="text-xs md:text-sm text-gray-500 mb-4 md:mb-6">
                       Document preview would be displayed here in production
                     </p>
                     <button
                       onClick={() => handleDownloadDocument(application.documents[selectedDocument])}
-                      className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center gap-2 mx-auto"
+                      className="px-4 py-2 md:px-6 md:py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center gap-2 mx-auto text-sm md:text-base"
                     >
-                      <Download className="w-5 h-5" />
-                      Download Document
+                      <Download className="w-4 h-4 md:w-5 md:h-5" />
+                      <span>Download Document</span>
                     </button>
                   </div>
                 </div>
@@ -328,54 +330,54 @@ export default function ApplicationView({ params }: { params: { id: string } }) 
 
                 {/* Documents List */}
                 {application.documents && application.documents.length > 0 ? (
-                  <div className="space-y-2">
+                  <div className="space-y-2 md:space-y-3">
                     {application.documents.map((doc, index) => (
                       <div
                         key={index}
-                        className={`p-4 border-2 rounded-lg transition cursor-pointer ${
+                        className={`p-3 md:p-4 border-2 rounded-lg transition cursor-pointer touch-manipulation ${
                           selectedDocument === index
                             ? 'border-blue-500 bg-blue-50'
-                            : 'border-gray-200 hover:border-gray-300 bg-white'
+                            : 'border-gray-200 hover:border-gray-300 bg-white active:bg-gray-50'
                         }`}
                         onClick={() => setSelectedDocument(index)}
                       >
-                        <div className="flex items-center justify-between gap-3">
-                          <div className="flex items-center gap-3 flex-1 min-w-0">
-                            <FileText className={`w-5 h-5 flex-shrink-0 ${
+                        <div className="flex items-center justify-between gap-2 md:gap-3">
+                          <div className="flex items-center gap-2 md:gap-3 flex-1 min-w-0">
+                            <FileText className={`w-5 h-5 md:w-6 md:h-6 flex-shrink-0 ${
                               selectedDocument === index ? 'text-blue-600' : 'text-gray-600'
                             }`} />
                             <div className="flex-1 min-w-0">
-                              <p className={`font-medium truncate ${
+                              <p className={`text-sm md:text-base font-medium truncate ${
                                 selectedDocument === index ? 'text-blue-900' : 'text-gray-900'
                               }`}>
                                 {String(doc.name || `Document ${index + 1}`)}
                               </p>
-                              <p className="text-xs text-gray-500">
+                              <p className="text-xs md:text-sm text-gray-500">
                                 {((Number(doc.size) || 0) / 1024 / 1024).toFixed(2)} MB
                               </p>
                             </div>
                           </div>
-                          <div className="flex items-center gap-2 flex-shrink-0">
+                          <div className="flex items-center gap-1 md:gap-2 flex-shrink-0">
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
                                 setSelectedDocument(index);
                                 setIsFullscreen(true);
                               }}
-                              className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition"
+                              className="p-2 md:p-2.5 text-gray-600 hover:text-blue-600 hover:bg-blue-50 active:bg-blue-100 rounded-lg transition touch-manipulation"
                               title="View Fullscreen"
                             >
-                              <Maximize2 className="w-4 h-4" />
+                              <Maximize2 className="w-4 h-4 md:w-5 md:h-5" />
                             </button>
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
                                 handleDownloadDocument(doc);
                               }}
-                              className="p-2 text-gray-600 hover:text-green-600 hover:bg-green-50 rounded-lg transition"
+                              className="p-2 md:p-2.5 text-gray-600 hover:text-green-600 hover:bg-green-50 active:bg-green-100 rounded-lg transition touch-manipulation"
                               title="Download"
                             >
-                              <Download className="w-4 h-4" />
+                              <Download className="w-4 h-4 md:w-5 md:h-5" />
                             </button>
                           </div>
                         </div>
@@ -453,23 +455,23 @@ export default function ApplicationView({ params }: { params: { id: string } }) 
             <div className="space-y-4">
               {/* Quick Verification Summary */}
               <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl p-4 md:p-6 text-white shadow-lg">
-                <h3 className="text-lg md:text-xl font-bold mb-3">📋 Verification Checklist</h3>
-                <div className="space-y-2 text-sm">
-                  <label className="flex items-center gap-2 cursor-pointer">
-                    <input type="checkbox" className="w-4 h-4 rounded" />
-                    <span>Identity documents match application</span>
+                <h3 className="text-base md:text-lg lg:text-xl font-bold mb-3">📋 Verification Checklist</h3>
+                <div className="space-y-2.5 md:space-y-2 text-xs md:text-sm">
+                  <label className="flex items-center gap-2 md:gap-3 cursor-pointer touch-manipulation p-1">
+                    <input type="checkbox" className="w-4 h-4 md:w-5 md:h-5 rounded flex-shrink-0" />
+                    <span className="leading-relaxed">Identity documents match application</span>
                   </label>
-                  <label className="flex items-center gap-2 cursor-pointer">
-                    <input type="checkbox" className="w-4 h-4 rounded" />
-                    <span>Income verification documents provided</span>
+                  <label className="flex items-center gap-2 md:gap-3 cursor-pointer touch-manipulation p-1">
+                    <input type="checkbox" className="w-4 h-4 md:w-5 md:h-5 rounded flex-shrink-0" />
+                    <span className="leading-relaxed">Income verification documents provided</span>
                   </label>
-                  <label className="flex items-center gap-2 cursor-pointer">
-                    <input type="checkbox" className="w-4 h-4 rounded" />
-                    <span>Property information is accurate</span>
+                  <label className="flex items-center gap-2 md:gap-3 cursor-pointer touch-manipulation p-1">
+                    <input type="checkbox" className="w-4 h-4 md:w-5 md:h-5 rounded flex-shrink-0" />
+                    <span className="leading-relaxed">Property information is accurate</span>
                   </label>
-                  <label className="flex items-center gap-2 cursor-pointer">
-                    <input type="checkbox" className="w-4 h-4 rounded" />
-                    <span>Financial details verified</span>
+                  <label className="flex items-center gap-2 md:gap-3 cursor-pointer touch-manipulation p-1">
+                    <input type="checkbox" className="w-4 h-4 md:w-5 md:h-5 rounded flex-shrink-0" />
+                    <span className="leading-relaxed">Financial details verified</span>
                   </label>
                 </div>
               </div>
@@ -628,32 +630,32 @@ export default function ApplicationView({ params }: { params: { id: string } }) 
           )}
 
         {/* Action Buttons */}
-        <div className="bg-white rounded-xl shadow-sm p-4">
-          <div className="flex flex-col sm:flex-row gap-3">
+        <div className="bg-white rounded-xl shadow-sm p-3 md:p-4">
+          <div className="flex flex-col sm:flex-row gap-2 md:gap-3">
                 <button
                   onClick={() => router.push(`/employee/applications/${application._id}/edit`)}
-              className="flex-1 px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition flex items-center justify-center gap-2 font-medium"
+              className="flex-1 px-4 py-3 md:py-3.5 bg-green-600 text-white rounded-lg hover:bg-green-700 active:bg-green-800 transition flex items-center justify-center gap-2 font-medium text-sm md:text-base touch-manipulation"
                 >
-                  <FileText className="w-5 h-5" />
-                  Edit Application
+                  <FileText className="w-4 h-4 md:w-5 md:h-5" />
+                  <span>Edit Application</span>
                 </button>
                 
                 {application.status === 'submitted' && (
                   <button
                     onClick={() => router.push(`/employee/applications/${application._id}/decision`)}
-                className="flex-1 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center justify-center gap-2 font-medium"
+                className="flex-1 px-4 py-3 md:py-3.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 active:bg-blue-800 transition flex items-center justify-center gap-2 font-medium text-sm md:text-base touch-manipulation"
                   >
-                    <CheckCircle className="w-5 h-5" />
-                    Make Decision
+                    <CheckCircle className="w-4 h-4 md:w-5 md:h-5" />
+                    <span>Make Decision</span>
                   </button>
                 )}
                 
                 <button
                   onClick={() => window.print()}
-              className="flex-1 px-4 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition flex items-center justify-center gap-2 font-medium"
+              className="flex-1 px-4 py-3 md:py-3.5 bg-gray-600 text-white rounded-lg hover:bg-gray-700 active:bg-gray-800 transition flex items-center justify-center gap-2 font-medium text-sm md:text-base touch-manipulation"
                 >
-                  <FileText className="w-5 h-5" />
-              Print
+                  <FileText className="w-4 h-4 md:w-5 md:h-5" />
+                  <span>Print</span>
                 </button>
           </div>
         </div>
