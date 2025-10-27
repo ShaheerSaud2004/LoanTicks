@@ -26,7 +26,8 @@ import {
   ChevronUp,
   Mail,
   MessageSquare,
-  Calculator
+  Calculator,
+  AlertTriangle
 } from 'lucide-react';
 
 interface Application {
@@ -845,7 +846,7 @@ LOANATicks - Home Mortgage Solutions`}
                 <p className="text-sm md:text-base opacity-90">
                   Submit borrower information directly to ARIVE for processing. The borrower can complete their 1003 loan application through this portal.
                 </p>
-              </div>
+          </div>
 
               {/* Instructions */}
               <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
@@ -871,7 +872,7 @@ LOANATicks - Home Mortgage Solutions`}
                     <span>All submissions sync automatically with ARIVE&apos;s system</span>
                   </li>
                 </ul>
-              </div>
+                    </div>
 
               {/* ARIVE Iframe Container */}
               <div className="bg-white rounded-xl shadow-lg overflow-hidden">
@@ -889,16 +890,28 @@ LOANATicks - Home Mortgage Solutions`}
                     Open in New Tab
                     <Maximize2 className="w-4 h-4" />
                   </a>
-                </div>
-                
+            </div>
+
                 <div className="relative" style={{ paddingBottom: '75%', minHeight: '600px' }}>
-                  <iframe
-                    src={process.env.NEXT_PUBLIC_ARIVE_POS_URL || 'https://app.arive.com/pos'}
-                    title="ARIVE Borrower Portal"
-                    className="absolute top-0 left-0 w-full h-full border-0"
-                    allow="camera; microphone; fullscreen; payment"
-                    sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-modals allow-downloads"
-                  />
+                  {process.env.NEXT_PUBLIC_ARIVE_POS_URL ? (
+                    <iframe
+                      src={process.env.NEXT_PUBLIC_ARIVE_POS_URL}
+                      title="ARIVE Borrower Portal"
+                      className="absolute top-0 left-0 w-full h-full border-0"
+                      allow="camera *; microphone *; fullscreen *; payment *; geolocation *"
+                      sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-modals allow-downloads allow-popups-to-escape-sandbox allow-top-navigation"
+                      referrerPolicy="no-referrer-when-downgrade"
+                    />
+                  ) : (
+                    <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center bg-gray-50">
+                      <div className="text-center p-8">
+                        <AlertTriangle className="w-16 h-16 text-yellow-500 mx-auto mb-4" />
+                        <h3 className="text-xl font-bold text-gray-900 mb-2">ARIVE POS URL Not Configured</h3>
+                        <p className="text-gray-600 mb-4">Please set up your ARIVE Borrower Portal URL in Vercel environment variables.</p>
+                        <code className="bg-gray-100 px-3 py-2 rounded text-sm">NEXT_PUBLIC_ARIVE_POS_URL</code>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -929,15 +942,24 @@ LOANATicks - Home Mortgage Solutions`}
                 </div>
               </div>
 
-              {/* Configuration Note */}
-              <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4">
-                <p className="text-sm text-yellow-800">
-                  <strong>⚙️ Configuration:</strong> Set your ARIVE POS URL in the environment variables as <code className="bg-yellow-100 px-2 py-1 rounded">NEXT_PUBLIC_ARIVE_POS_URL</code>
-                </p>
-              </div>
+              {/* Configuration Status */}
+              {process.env.NEXT_PUBLIC_ARIVE_POS_URL ? (
+                <div className="bg-green-50 border border-green-200 rounded-xl p-4">
+                  <p className="text-sm text-green-800">
+                    <strong>✅ ARIVE POS Configured:</strong> <code className="bg-green-100 px-2 py-1 rounded text-xs">{process.env.NEXT_PUBLIC_ARIVE_POS_URL}</code>
+                  </p>
+                </div>
+              ) : (
+                <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4">
+                  <p className="text-sm text-yellow-800">
+                    <strong>⚙️ Configuration Required:</strong> Set your ARIVE POS URL in Vercel environment variables as <code className="bg-yellow-100 px-2 py-1 rounded">NEXT_PUBLIC_ARIVE_POS_URL</code>
+                  </p>
+                  <p className="text-xs text-yellow-700 mt-2">Example: <code className="bg-yellow-100 px-2 py-1 rounded">https://loanaticks.my1003app.com/2600891/register</code></p>
+                </div>
+              )}
             </div>
-          )}
-        </div>
+              )}
+            </div>
 
         {/* Action Buttons */}
         <div className="bg-white rounded-xl shadow-sm p-3 md:p-4">
