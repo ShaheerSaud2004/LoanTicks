@@ -1,7 +1,7 @@
 import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
-import DashboardLayout from '@/components/DashboardLayout';
-import LoanApplicationsManager from '@/components/LoanApplicationsManager';
+import DashboardLayout from '@/components/layout/DashboardLayout';
+import LoanApplicationsManager from '@/components/admin/LoanApplicationsManager';
 import Link from 'next/link';
 import { Users, FileText, TrendingUp, Activity } from 'lucide-react';
 

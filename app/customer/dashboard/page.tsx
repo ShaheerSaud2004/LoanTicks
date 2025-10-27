@@ -1,7 +1,7 @@
 import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
-import DashboardLayout from '@/components/DashboardLayout';
+import DashboardLayout from '@/components/layout/DashboardLayout';
 import {
   Plus,
   FileText,
@@ -9,7 +9,7 @@ import {
   Calendar,
   CheckCircle,
 } from 'lucide-react';
-import CustomerApplicationTracker from '@/components/CustomerApplicationTracker';
+import CustomerApplicationTracker from '@/components/customer/CustomerApplicationTracker';
 
 export default async function CustomerDashboard() {
   const session = await auth();

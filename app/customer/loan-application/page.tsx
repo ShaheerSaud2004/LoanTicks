@@ -10,7 +10,7 @@ import {
   CheckCircle,
   ArrowRight
 } from 'lucide-react';
-import URLA2019ComprehensiveForm from '@/components/URLA2019ComprehensiveForm';
+import URLA2019ComprehensiveForm from '@/components/forms/URLA2019ComprehensiveForm';
 
 export default function LoanApplicationPage() {
   const { data: session, status } = useSession();
