@@ -625,8 +625,8 @@ export default function ApplicationView({ params }: { params: { id: string } }) 
                 </div>
               </div>
             </div>
-              )}
-            </div>
+          </div>
+          )}
 
         {/* Action Buttons */}
         <div className="bg-white rounded-xl shadow-sm p-4">
