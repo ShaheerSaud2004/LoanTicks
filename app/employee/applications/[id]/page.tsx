@@ -22,6 +22,8 @@ import {
   X,
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
+  ChevronUp,
   Mail,
   MessageSquare,
   Calculator
@@ -54,6 +56,7 @@ export default function ApplicationView({ params }: { params: { id: string } }) 
   const [activeTab, setActiveTab] = useState<'split' | 'documents' | 'info' | 'arive'>('split');
   const [selectedDocument, setSelectedDocument] = useState<number>(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isFinancialExpanded, setIsFinancialExpanded] = useState(false);
 
   const fetchApplication = useCallback(async () => {
     try {
@@ -530,12 +533,25 @@ LOANATicks - Home Mortgage Solutions`}
 
             {/* Financial Breakdown with Formulas */}
             <div className="bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl shadow-lg p-4 md:p-6 text-white">
-              <h3 className="text-base md:text-lg lg:text-xl font-bold mb-4 flex items-center gap-2">
-                <Calculator className="w-5 h-5 md:w-6 md:h-6" />
-                Financial Analysis & Formulas
-              </h3>
+              <button
+                onClick={() => setIsFinancialExpanded(!isFinancialExpanded)}
+                className="w-full flex items-center justify-between hover:bg-white/10 rounded-lg p-2 -mx-2 transition"
+              >
+                <div className="flex items-center gap-2">
+                  <Calculator className="w-5 h-5 md:w-6 md:h-6" />
+                  <h3 className="text-base md:text-lg lg:text-xl font-bold">
+                    Financial Analysis & Formulas
+                  </h3>
+                </div>
+                {isFinancialExpanded ? (
+                  <ChevronUp className="w-5 h-5 md:w-6 md:h-6" />
+                ) : (
+                  <ChevronDown className="w-5 h-5 md:w-6 md:h-6" />
+                )}
+              </button>
               
-              <div className="space-y-4">
+              {isFinancialExpanded && (
+                <div className="space-y-4 mt-4">
                 {/* LTV Ratio */}
                 <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3 md:p-4">
                   <div className="flex items-center justify-between mb-2">
@@ -664,6 +680,7 @@ LOANATicks - Home Mortgage Solutions`}
                   </div>
                 </div>
               </div>
+              )}
             </div>
 
             {/* Borrower Information */}

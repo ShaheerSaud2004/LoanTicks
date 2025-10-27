@@ -735,6 +735,57 @@ export async function GET() {
           primaryResidence: true,
           intendToOccupy: true
         },
+        documents: [
+          {
+            name: 'Massachusetts Drivers License.pdf',
+            type: 'application/pdf',
+            size: 2883584,
+            uploadedAt: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000),
+            category: 'identification'
+          },
+          {
+            name: 'Nursing License - Current.pdf',
+            type: 'application/pdf',
+            size: 1310720,
+            uploadedAt: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000),
+            category: 'identification'
+          },
+          {
+            name: 'Hospital Pay Stubs - 3 Months.pdf',
+            type: 'application/pdf',
+            size: 3932160,
+            uploadedAt: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000),
+            category: 'income_verification'
+          },
+          {
+            name: 'W2 Forms - Last 2 Years.pdf',
+            type: 'application/pdf',
+            size: 1572864,
+            uploadedAt: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000),
+            category: 'income_verification'
+          },
+          {
+            name: 'Bank Statements - Checking and Savings.pdf',
+            type: 'application/pdf',
+            size: 4194304,
+            uploadedAt: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000),
+            category: 'financial'
+          },
+          {
+            name: 'Employment Verification Letter - MGH.pdf',
+            type: 'application/pdf',
+            size: 655360,
+            uploadedAt: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000),
+            category: 'income_verification'
+          },
+          {
+            name: 'Credit Report.pdf',
+            type: 'application/pdf',
+            size: 1048576,
+            uploadedAt: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000),
+            category: 'credit'
+          }
+        ],
         assignedTo: lisa?._id.toString(),
         assignedAt: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000),
         submittedAt: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000)
