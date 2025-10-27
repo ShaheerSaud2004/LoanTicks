@@ -213,7 +213,7 @@ export default function EditApplication({ params }: { params: { id: string } }) 
                     type="text"
                     value={formData.borrowerInfo?.firstName || ''}
                     onChange={(e) => handleInputChange('borrowerInfo', 'firstName', e.target.value)}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900"
                   />
                 </div>
                 
@@ -225,7 +225,7 @@ export default function EditApplication({ params }: { params: { id: string } }) 
                     type="text"
                     value={formData.borrowerInfo?.lastName || ''}
                     onChange={(e) => handleInputChange('borrowerInfo', 'lastName', e.target.value)}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900"
                   />
                 </div>
                 
@@ -237,7 +237,7 @@ export default function EditApplication({ params }: { params: { id: string } }) 
                     type="email"
                     value={formData.borrowerInfo?.email || ''}
                     onChange={(e) => handleInputChange('borrowerInfo', 'email', e.target.value)}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900"
                   />
                 </div>
                 
@@ -249,7 +249,7 @@ export default function EditApplication({ params }: { params: { id: string } }) 
                     type="tel"
                     value={formData.borrowerInfo?.phone || ''}
                     onChange={(e) => handleInputChange('borrowerInfo', 'phone', e.target.value)}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900"
                   />
                 </div>
                 
@@ -260,7 +260,7 @@ export default function EditApplication({ params }: { params: { id: string } }) 
                   <select
                     value={formData.borrowerInfo?.maritalStatus || ''}
                     onChange={(e) => handleInputChange('borrowerInfo', 'maritalStatus', e.target.value)}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900"
                   >
                     <option value="">Select Status</option>
                     <option value="single">Single</option>
@@ -279,7 +279,7 @@ export default function EditApplication({ params }: { params: { id: string } }) 
                     min="0"
                     value={formData.borrowerInfo?.dependents || 0}
                     onChange={(e) => handleInputChange('borrowerInfo', 'dependents', parseInt(e.target.value) || 0)}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900"
                   />
                 </div>
               </div>
@@ -301,7 +301,7 @@ export default function EditApplication({ params }: { params: { id: string } }) 
                     type="text"
                     value={formData.currentAddress?.street || ''}
                     onChange={(e) => handleInputChange('currentAddress', 'street', e.target.value)}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900"
                   />
                 </div>
                 
@@ -313,7 +313,7 @@ export default function EditApplication({ params }: { params: { id: string } }) 
                     type="text"
                     value={formData.currentAddress?.city || ''}
                     onChange={(e) => handleInputChange('currentAddress', 'city', e.target.value)}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900"
                   />
                 </div>
                 
@@ -325,7 +325,7 @@ export default function EditApplication({ params }: { params: { id: string } }) 
                     type="text"
                     value={formData.currentAddress?.state || ''}
                     onChange={(e) => handleInputChange('currentAddress', 'state', e.target.value)}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900"
                   />
                 </div>
                 
@@ -337,7 +337,7 @@ export default function EditApplication({ params }: { params: { id: string } }) 
                     type="text"
                     value={formData.currentAddress?.zipCode || ''}
                     onChange={(e) => handleInputChange('currentAddress', 'zipCode', e.target.value)}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900"
                   />
                 </div>
                 
@@ -350,7 +350,7 @@ export default function EditApplication({ params }: { params: { id: string } }) 
                     min="0"
                     value={formData.currentAddress?.yearsAtAddress || 0}
                     onChange={(e) => handleInputChange('currentAddress', 'yearsAtAddress', parseInt(e.target.value) || 0)}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900"
                   />
                 </div>
               </div>
@@ -372,7 +372,7 @@ export default function EditApplication({ params }: { params: { id: string } }) 
                     type="text"
                     value={formData.employment?.employerName || ''}
                     onChange={(e) => handleInputChange('employment', 'employerName', e.target.value)}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900"
                   />
                 </div>
                 
@@ -384,7 +384,7 @@ export default function EditApplication({ params }: { params: { id: string } }) 
                     type="text"
                     value={formData.employment?.position || ''}
                     onChange={(e) => handleInputChange('employment', 'position', e.target.value)}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900"
                   />
                 </div>
                 
@@ -397,7 +397,7 @@ export default function EditApplication({ params }: { params: { id: string } }) 
                     min="0"
                     value={formData.employment?.yearsEmployed || 0}
                     onChange={(e) => handleInputChange('employment', 'yearsEmployed', parseInt(e.target.value) || 0)}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900"
                   />
                 </div>
                 
@@ -411,7 +411,7 @@ export default function EditApplication({ params }: { params: { id: string } }) 
                     step="0.01"
                     value={formData.employment?.monthlyIncome || 0}
                     onChange={(e) => handleInputChange('employment', 'monthlyIncome', parseFloat(e.target.value) || 0)}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900"
                   />
                 </div>
               </div>
@@ -435,7 +435,7 @@ export default function EditApplication({ params }: { params: { id: string } }) 
                     step="0.01"
                     value={formData.financialInfo?.grossMonthlyIncome || 0}
                     onChange={(e) => handleInputChange('financialInfo', 'grossMonthlyIncome', parseFloat(e.target.value) || 0)}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900"
                   />
                 </div>
                 
@@ -449,7 +449,7 @@ export default function EditApplication({ params }: { params: { id: string } }) 
                     step="0.01"
                     value={formData.financialInfo?.totalAssets || 0}
                     onChange={(e) => handleInputChange('financialInfo', 'totalAssets', parseFloat(e.target.value) || 0)}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900"
                   />
                 </div>
                 
@@ -463,7 +463,7 @@ export default function EditApplication({ params }: { params: { id: string } }) 
                     step="0.01"
                     value={formData.financialInfo?.totalLiabilities || 0}
                     onChange={(e) => handleInputChange('financialInfo', 'totalLiabilities', parseFloat(e.target.value) || 0)}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900"
                   />
                 </div>
                 
@@ -477,7 +477,7 @@ export default function EditApplication({ params }: { params: { id: string } }) 
                     step="0.01"
                     value={formData.financialInfo?.checkingAccountBalance || 0}
                     onChange={(e) => handleInputChange('financialInfo', 'checkingAccountBalance', parseFloat(e.target.value) || 0)}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900"
                   />
                 </div>
               </div>
@@ -499,7 +499,7 @@ export default function EditApplication({ params }: { params: { id: string } }) 
                     type="text"
                     value={formData.propertyInfo?.propertyAddress || ''}
                     onChange={(e) => handleInputChange('propertyInfo', 'propertyAddress', e.target.value)}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900"
                   />
                 </div>
                 
@@ -513,7 +513,7 @@ export default function EditApplication({ params }: { params: { id: string } }) 
                     step="0.01"
                     value={formData.propertyInfo?.propertyValue || 0}
                     onChange={(e) => handleInputChange('propertyInfo', 'propertyValue', parseFloat(e.target.value) || 0)}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900"
                   />
                 </div>
                 
@@ -527,7 +527,7 @@ export default function EditApplication({ params }: { params: { id: string } }) 
                     step="0.01"
                     value={formData.propertyInfo?.loanAmount || 0}
                     onChange={(e) => handleInputChange('propertyInfo', 'loanAmount', parseFloat(e.target.value) || 0)}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900"
                   />
                 </div>
                 
@@ -538,7 +538,7 @@ export default function EditApplication({ params }: { params: { id: string } }) 
                   <select
                     value={formData.propertyInfo?.loanPurpose || ''}
                     onChange={(e) => handleInputChange('propertyInfo', 'loanPurpose', e.target.value)}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900"
                   >
                     <option value="">Select Purpose</option>
                     <option value="purchase">Purchase</option>
@@ -557,7 +557,7 @@ export default function EditApplication({ params }: { params: { id: string } }) 
                     step="0.01"
                     value={formData.propertyInfo?.downPaymentAmount || 0}
                     onChange={(e) => handleInputChange('propertyInfo', 'downPaymentAmount', parseFloat(e.target.value) || 0)}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900"
                   />
                 </div>
               </div>
@@ -574,7 +574,7 @@ export default function EditApplication({ params }: { params: { id: string } }) 
                 onChange={(e) => setNotes(e.target.value)}
                 placeholder="Add notes about the changes made..."
                 rows={4}
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition resize-none"
+                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition resize-none text-gray-900"
               />
             </div>
 
