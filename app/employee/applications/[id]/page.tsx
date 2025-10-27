@@ -406,7 +406,7 @@ export default function ApplicationView({ params }: { params: { id: string } }) 
                       </button>
                       <span className="text-sm text-gray-600">
                         {selectedDocument + 1} / {application.documents.length}
-                      </button>
+                      </span>
                       <button
                         onClick={() => setSelectedDocument(Math.min(application.documents.length - 1, selectedDocument + 1))}
                         disabled={selectedDocument === application.documents.length - 1}
@@ -625,37 +625,37 @@ export default function ApplicationView({ params }: { params: { id: string } }) 
                 </div>
               </div>
             </div>
-          )}
-        </div>
+              )}
+            </div>
 
         {/* Action Buttons */}
         <div className="bg-white rounded-xl shadow-sm p-4">
           <div className="flex flex-col sm:flex-row gap-3">
-            <button
-              onClick={() => router.push(`/employee/applications/${application._id}/edit`)}
+                <button
+                  onClick={() => router.push(`/employee/applications/${application._id}/edit`)}
               className="flex-1 px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition flex items-center justify-center gap-2 font-medium"
-            >
-              <FileText className="w-5 h-5" />
-              Edit Application
-            </button>
-            
-            {application.status === 'submitted' && (
-              <button
-                onClick={() => router.push(`/employee/applications/${application._id}/decision`)}
+                >
+                  <FileText className="w-5 h-5" />
+                  Edit Application
+                </button>
+                
+                {application.status === 'submitted' && (
+                  <button
+                    onClick={() => router.push(`/employee/applications/${application._id}/decision`)}
                 className="flex-1 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center justify-center gap-2 font-medium"
-              >
-                <CheckCircle className="w-5 h-5" />
-                Make Decision
-              </button>
-            )}
-            
-            <button
-              onClick={() => window.print()}
+                  >
+                    <CheckCircle className="w-5 h-5" />
+                    Make Decision
+                  </button>
+                )}
+                
+                <button
+                  onClick={() => window.print()}
               className="flex-1 px-4 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition flex items-center justify-center gap-2 font-medium"
-            >
-              <FileText className="w-5 h-5" />
+                >
+                  <FileText className="w-5 h-5" />
               Print
-            </button>
+                </button>
           </div>
         </div>
       </div>
