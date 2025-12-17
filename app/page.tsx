@@ -163,7 +163,7 @@ export default function WaitlistPage() {
 
         {/* Footer */}
         <div className="text-center mt-6 text-gray-600 text-sm">
-          <p>© {new Date().getFullYear()} LoanTicks. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} LoanAticks. All rights reserved.</p>
         </div>
       </div>
 
