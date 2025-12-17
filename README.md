@@ -1,4 +1,4 @@
-# 🏦 LOANATicks - Loan Management System
+# 🏦 LoanTicks - Loan Management System
 
 A modern, full-stack loan management platform built with Next.js 15, TypeScript, MongoDB, and NextAuth.js. Features role-based authentication with instant quick-login for Admins, Employees, and Customers.
 

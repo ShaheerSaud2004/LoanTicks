@@ -2,7 +2,7 @@
 
 ## Summary
 
-The LOANATicks codebase has been completely cleaned, organized, and optimized!
+The LoanTicks codebase has been completely cleaned, organized, and optimized!
 
 ## 🎯 What Was Done
 

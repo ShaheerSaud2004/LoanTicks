@@ -151,9 +151,9 @@ Form Data:
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/logo.jpg" alt="LOANATICKS" className="h-10 w-10 rounded-lg bg-white p-1.5" />
+              <img src="/logo.jpg" alt="LoanTicks" className="h-10 w-10 rounded-lg bg-white p-1.5" />
               <div>
-                <h1 className="text-lg sm:text-2xl font-bold">LOANATICKS API</h1>
+                <h1 className="text-lg sm:text-2xl font-bold">LoanTicks API</h1>
                 <p className="text-blue-100 text-xs sm:text-sm">Developer Docs</p>
               </div>
             </div>
@@ -462,7 +462,7 @@ Form Data:
               📞 Need Help?
             </p>
             <p className="text-sm text-gray-600 mb-4">
-              Contact your LOANATICKS representative for integration support
+              Contact your LoanTicks representative for integration support
             </p>
             <div className="text-xs text-gray-500 space-y-1">
               <p>Last Updated: October 23, 2025</p>

@@ -2,7 +2,7 @@
 
 ## Overview
 
-LOANATicks follows a clean, organized folder structure following Next.js 15 best practices with App Router.
+LoanTicks follows a clean, organized folder structure following Next.js 15 best practices with App Router.
 
 ## Directory Structure
 

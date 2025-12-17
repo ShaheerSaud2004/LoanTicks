@@ -283,7 +283,7 @@ You can now return to your dashboard to track progress.
                   className="h-12 w-auto rounded-lg overflow-hidden bg-white border border-gray-200 hover:border-gray-300 transition cursor-pointer"
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/logo.jpg" alt="LOANATICKS" className="h-full w-full object-contain" />
+                  <img src="/logo.jpg" alt="LoanTicks" className="h-full w-full object-contain" />
                 </button>
                 
                 {/* Navigation Menu */}
@@ -448,7 +448,7 @@ You can now return to your dashboard to track progress.
                 className="h-12 w-auto rounded-lg overflow-hidden bg-white border border-gray-200 hover:border-gray-300 transition cursor-pointer"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/logo.jpg" alt="LOANATICKS" className="h-full w-full object-contain" />
+                <img src="/logo.jpg" alt="LoanTicks" className="h-full w-full object-contain" />
               </button>
               
               {/* Navigation Menu */}

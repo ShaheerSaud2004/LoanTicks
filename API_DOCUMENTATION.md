@@ -1,4 +1,4 @@
-# LOANATICKS API Documentation
+# LoanTicks API Documentation
 
 ## 🔗 Base URL
 ```
@@ -326,7 +326,7 @@ Admin: admin.demo@loanticks.com / demo123
 ## 📞 Support & Integration
 
 ### For API Access:
-Contact your LOANATICKS representative for:
+Contact your LoanTicks representative for:
 - API key generation
 - Custom endpoint requirements
 - Webhook configuration
@@ -403,5 +403,5 @@ curl -X POST https://loanticks.vercel.app/api/get-rates \
 
 **Last Updated:** October 23, 2025  
 **API Version:** 1.0.0  
-**Support:** Contact your LOANATICKS representative
+**Support:** Contact your LoanTicks representative
 

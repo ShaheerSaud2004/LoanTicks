@@ -5,7 +5,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "LOANATicks - Home Mortgage Solutions",
+  title: "LoanTicks - Home Mortgage Solutions",
   description: "Professional mortgage lending platform with competitive rates, fast approvals, and expert guidance for your home financing needs",
 };
 

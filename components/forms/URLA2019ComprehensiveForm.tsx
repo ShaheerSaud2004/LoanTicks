@@ -1260,7 +1260,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
           <div className="flex justify-center mb-6">
             <div className="bg-white rounded-2xl shadow-lg p-4">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/logo.jpg" alt="LOANATICKS" className="h-16 w-16 object-contain" />
+              <img src="/logo.jpg" alt="LoanTicks" className="h-16 w-16 object-contain" />
             </div>
           </div>
         

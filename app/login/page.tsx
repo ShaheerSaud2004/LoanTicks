@@ -106,10 +106,10 @@ export default function LoginPage() {
           <div className="flex items-center gap-3 sm:gap-4">
             <div className="h-12 w-12 sm:h-14 sm:w-14 lg:h-16 lg:w-16 bg-white rounded-xl lg:rounded-2xl flex items-center justify-center shadow-2xl overflow-hidden flex-shrink-0">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/logo.jpg" alt="LOANATicks" className="h-full w-full object-contain" />
+              <img src="/logo.jpg" alt="LoanTicks" className="h-full w-full object-contain" />
             </div>
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold">LOANATicks</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold">LoanTicks</h1>
             <p className="text-white/80 text-xs sm:text-sm">Home Mortgage Solutions</p>
           </div>
         </div>
