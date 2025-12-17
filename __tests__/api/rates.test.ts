@@ -1,14 +1,34 @@
-import { describe, it, expect, jest } from '@jest/globals';
+import { describe, it, expect, jest, beforeEach } from '@jest/globals';
+
+// Define types for rate calculation parameters
+interface RateCalculationParams {
+  loanAmount?: number;
+  propertyValue?: number;
+  creditScore?: number;
+  loanTerm?: number;
+  propertyType?: string;
+  [key: string]: any;
+}
+
+interface RateResult {
+  rate: number;
+  apr: number;
+  ltv?: number;
+  monthlyPayment?: number;
+  loanAmount?: number;
+  isJumbo?: boolean;
+  [key: string]: any;
+}
 
 // Mock rate engine
 const mockRateEngine = {
-  calculateRate: jest.fn(),
-  getRates: jest.fn(),
+  calculateRate: jest.fn<(params: RateCalculationParams) => RateResult>(),
+  getRates: jest.fn<(params: RateCalculationParams) => Promise<Array<{ term: number; rate: number; apr?: number; monthlyPayment?: number }>>>(),
 };
 
 jest.mock('@/lib/rateEngines', () => ({
-  calculateRate: (...args: any[]) => mockRateEngine.calculateRate(...args),
-  getRates: (...args: any[]) => mockRateEngine.getRates(...args),
+  calculateRate: (params: RateCalculationParams) => mockRateEngine.calculateRate(params),
+  getRates: (params: RateCalculationParams) => mockRateEngine.getRates(params),
 }));
 
 describe('Rate Calculation', () => {
@@ -20,8 +40,8 @@ describe('Rate Calculation', () => {
     it('should validate loan amount is positive', () => {
       const { calculateRate } = require('@/lib/rateEngines');
       
-      mockRateEngine.calculateRate.mockImplementation((params) => {
-        if (params.loanAmount <= 0) throw new Error('Invalid loan amount');
+      mockRateEngine.calculateRate.mockImplementation((params: RateCalculationParams) => {
+        if ((params.loanAmount ?? 0) <= 0) throw new Error('Invalid loan amount');
         return { rate: 6.5, apr: 6.75 };
       });
 
@@ -32,8 +52,8 @@ describe('Rate Calculation', () => {
     it('should validate property value is positive', () => {
       const { calculateRate } = require('@/lib/rateEngines');
       
-      mockRateEngine.calculateRate.mockImplementation((params) => {
-        if (params.propertyValue <= 0) throw new Error('Invalid property value');
+      mockRateEngine.calculateRate.mockImplementation((params: RateCalculationParams) => {
+        if ((params.propertyValue ?? 0) <= 0) throw new Error('Invalid property value');
         return { rate: 6.5, apr: 6.75 };
       });
 
@@ -43,8 +63,9 @@ describe('Rate Calculation', () => {
     it('should validate credit score range', () => {
       const { calculateRate } = require('@/lib/rateEngines');
       
-      mockRateEngine.calculateRate.mockImplementation((params) => {
-        if (params.creditScore < 300 || params.creditScore > 850) {
+      mockRateEngine.calculateRate.mockImplementation((params: RateCalculationParams) => {
+        const creditScore = params.creditScore ?? 0;
+        if (creditScore < 300 || creditScore > 850) {
           throw new Error('Invalid credit score');
         }
         return { rate: 6.5, apr: 6.75 };
@@ -66,8 +87,9 @@ describe('Rate Calculation', () => {
     it('should accept valid credit score range', () => {
       const { calculateRate } = require('@/lib/rateEngines');
       
-      mockRateEngine.calculateRate.mockImplementation((params) => {
-        if (params.creditScore < 300 || params.creditScore > 850) {
+      mockRateEngine.calculateRate.mockImplementation((params: RateCalculationParams) => {
+        const creditScore = params.creditScore ?? 0;
+        if (creditScore < 300 || creditScore > 850) {
           throw new Error('Invalid credit score');
         }
         return { rate: 6.5, apr: 6.75 };
@@ -83,8 +105,8 @@ describe('Rate Calculation', () => {
     it('should validate loan term is positive', () => {
       const { calculateRate } = require('@/lib/rateEngines');
       
-      mockRateEngine.calculateRate.mockImplementation((params) => {
-        if (params.loanTerm <= 0) throw new Error('Invalid loan term');
+      mockRateEngine.calculateRate.mockImplementation((params: RateCalculationParams) => {
+        if ((params.loanTerm ?? 0) <= 0) throw new Error('Invalid loan term');
         return { rate: 6.5, apr: 6.75 };
       });
 
@@ -99,8 +121,10 @@ describe('Rate Calculation', () => {
     it('should calculate LTV correctly', () => {
       const { calculateRate } = require('@/lib/rateEngines');
       
-      mockRateEngine.calculateRate.mockImplementation((params) => {
-        const ltv = (params.loanAmount / params.propertyValue) * 100;
+      mockRateEngine.calculateRate.mockImplementation((params: RateCalculationParams) => {
+        const loanAmount = params.loanAmount ?? 0;
+        const propertyValue = params.propertyValue ?? 1;
+        const ltv = (loanAmount / propertyValue) * 100;
         return { rate: 6.5, apr: 6.75, ltv };
       });
 
@@ -115,8 +139,10 @@ describe('Rate Calculation', () => {
     it('should handle 100% LTV', () => {
       const { calculateRate } = require('@/lib/rateEngines');
       
-      mockRateEngine.calculateRate.mockImplementation((params) => {
-        const ltv = (params.loanAmount / params.propertyValue) * 100;
+      mockRateEngine.calculateRate.mockImplementation((params: RateCalculationParams) => {
+        const loanAmount = params.loanAmount ?? 0;
+        const propertyValue = params.propertyValue ?? 1;
+        const ltv = (loanAmount / propertyValue) * 100;
         return { rate: 7.5, apr: 7.75, ltv };
       });
 
@@ -131,8 +157,10 @@ describe('Rate Calculation', () => {
     it('should handle low LTV (high down payment)', () => {
       const { calculateRate } = require('@/lib/rateEngines');
       
-      mockRateEngine.calculateRate.mockImplementation((params) => {
-        const ltv = (params.loanAmount / params.propertyValue) * 100;
+      mockRateEngine.calculateRate.mockImplementation((params: RateCalculationParams) => {
+        const loanAmount = params.loanAmount ?? 0;
+        const propertyValue = params.propertyValue ?? 1;
+        const ltv = (loanAmount / propertyValue) * 100;
         return { rate: 5.5, apr: 5.75, ltv };
       });
 
@@ -149,10 +177,11 @@ describe('Rate Calculation', () => {
     it('should give better rates for higher credit scores', () => {
       const { calculateRate } = require('@/lib/rateEngines');
       
-      mockRateEngine.calculateRate.mockImplementation((params) => {
+      mockRateEngine.calculateRate.mockImplementation((params: RateCalculationParams) => {
         let rate = 7.0;
-        if (params.creditScore >= 760) rate = 5.5;
-        else if (params.creditScore >= 700) rate = 6.0;
+        const creditScore = params.creditScore ?? 0;
+        if (creditScore >= 760) rate = 5.5;
+        else if (creditScore >= 700) rate = 6.0;
         return { rate, apr: rate + 0.25 };
       });
 
@@ -174,8 +203,10 @@ describe('Rate Calculation', () => {
     it('should adjust rates based on LTV', () => {
       const { calculateRate } = require('@/lib/rateEngines');
       
-      mockRateEngine.calculateRate.mockImplementation((params) => {
-        const ltv = (params.loanAmount / params.propertyValue) * 100;
+      mockRateEngine.calculateRate.mockImplementation((params: RateCalculationParams) => {
+        const loanAmount = params.loanAmount ?? 0;
+        const propertyValue = params.propertyValue ?? 1;
+        const ltv = (loanAmount / propertyValue) * 100;
         let rate = 6.0;
         if (ltv > 80) rate = 6.5;
         return { rate, apr: rate + 0.25 };
@@ -197,10 +228,11 @@ describe('Rate Calculation', () => {
     it('should adjust rates based on loan term', () => {
       const { calculateRate } = require('@/lib/rateEngines');
       
-      mockRateEngine.calculateRate.mockImplementation((params) => {
+      mockRateEngine.calculateRate.mockImplementation((params: RateCalculationParams) => {
         let rate = 6.0;
-        if (params.loanTerm === 15) rate = 5.5;
-        else if (params.loanTerm === 30) rate = 6.5;
+        const loanTerm = params.loanTerm ?? 30;
+        if (loanTerm === 15) rate = 5.5;
+        else if (loanTerm === 30) rate = 6.5;
         return { rate, apr: rate + 0.25 };
       });
 
@@ -222,10 +254,11 @@ describe('Rate Calculation', () => {
     it('should adjust rates based on property type', () => {
       const { calculateRate } = require('@/lib/rateEngines');
       
-      mockRateEngine.calculateRate.mockImplementation((params) => {
+      mockRateEngine.calculateRate.mockImplementation((params: RateCalculationParams) => {
         let rate = 6.0;
-        if (params.propertyType === 'investment') rate = 7.0;
-        else if (params.propertyType === 'secondHome') rate = 6.5;
+        const propertyType = params.propertyType ?? 'primary';
+        if (propertyType === 'investment') rate = 7.0;
+        else if (propertyType === 'secondHome') rate = 6.5;
         return { rate, apr: rate + 0.25 };
       });
 
@@ -247,15 +280,17 @@ describe('Rate Calculation', () => {
     it('should calculate monthly payment correctly', () => {
       const { calculateRate } = require('@/lib/rateEngines');
       
-      mockRateEngine.calculateRate.mockImplementation((params) => {
+      mockRateEngine.calculateRate.mockImplementation((params: RateCalculationParams) => {
         const rate = 6.0;
         const monthlyRate = rate / 100 / 12;
-        const numPayments = params.loanTerm * 12;
-        const monthlyPayment = params.loanAmount * 
+        const loanTerm = params.loanTerm ?? 30;
+        const loanAmount = params.loanAmount ?? 0;
+        const numPayments = loanTerm * 12;
+        const monthlyPayment = loanAmount * 
           (monthlyRate * Math.pow(1 + monthlyRate, numPayments)) / 
           (Math.pow(1 + monthlyRate, numPayments) - 1);
         
-        return { rate, apr: rate + 0.25, monthlyPayment, loanAmount: params.loanAmount };
+        return { rate, apr: rate + 0.25, monthlyPayment, loanAmount };
       });
 
       const result = calculateRate({ 
@@ -270,11 +305,13 @@ describe('Rate Calculation', () => {
     it('should have higher monthly payments for shorter terms', () => {
       const { calculateRate } = require('@/lib/rateEngines');
       
-      mockRateEngine.calculateRate.mockImplementation((params) => {
+      mockRateEngine.calculateRate.mockImplementation((params: RateCalculationParams) => {
         const rate = 6.0;
         const monthlyRate = rate / 100 / 12;
-        const numPayments = params.loanTerm * 12;
-        const monthlyPayment = params.loanAmount * 
+        const loanTerm = params.loanTerm ?? 30;
+        const loanAmount = params.loanAmount ?? 0;
+        const numPayments = loanTerm * 12;
+        const monthlyPayment = loanAmount * 
           (monthlyRate * Math.pow(1 + monthlyRate, numPayments)) / 
           (Math.pow(1 + monthlyRate, numPayments) - 1);
         
@@ -305,7 +342,7 @@ describe('Rate Calculation', () => {
         { term: 30, rate: 6.5, apr: 6.75, monthlyPayment: 1896 },
       ]);
 
-      return getRates({ loanAmount: 300000 }).then((rates: any) => {
+      return getRates({ loanAmount: 300000 }).then((rates: Array<{ term: number; rate: number; apr?: number; monthlyPayment?: number }>) => {
         expect(Array.isArray(rates)).toBe(true);
         expect(rates.length).toBeGreaterThan(1);
       });
@@ -320,7 +357,7 @@ describe('Rate Calculation', () => {
         { term: 30, rate: 6.5 },
       ]);
 
-      return getRates({ loanAmount: 300000 }).then((rates: any) => {
+      return getRates({ loanAmount: 300000 }).then((rates: Array<{ term: number; rate: number }>) => {
         for (let i = 0; i < rates.length - 1; i++) {
           expect(rates[i].term).toBeLessThanOrEqual(rates[i + 1].term);
         }
@@ -332,8 +369,9 @@ describe('Rate Calculation', () => {
     it('should handle jumbo loans', () => {
       const { calculateRate } = require('@/lib/rateEngines');
       
-      mockRateEngine.calculateRate.mockImplementation((params) => {
-        const isJumbo = params.loanAmount > 726200;
+      mockRateEngine.calculateRate.mockImplementation((params: RateCalculationParams) => {
+        const loanAmount = params.loanAmount ?? 0;
+        const isJumbo = loanAmount > 726200;
         const rate = isJumbo ? 7.0 : 6.5;
         return { rate, apr: rate + 0.25, isJumbo };
       });
@@ -350,8 +388,9 @@ describe('Rate Calculation', () => {
     it('should handle very high credit scores', () => {
       const { calculateRate } = require('@/lib/rateEngines');
       
-      mockRateEngine.calculateRate.mockImplementation((params) => {
-        const rate = params.creditScore >= 800 ? 5.0 : 6.0;
+      mockRateEngine.calculateRate.mockImplementation((params: RateCalculationParams) => {
+        const creditScore = params.creditScore ?? 0;
+        const rate = creditScore >= 800 ? 5.0 : 6.0;
         return { rate, apr: rate + 0.25 };
       });
 
@@ -367,8 +406,9 @@ describe('Rate Calculation', () => {
     it('should handle minimum loan amounts', () => {
       const { calculateRate } = require('@/lib/rateEngines');
       
-      mockRateEngine.calculateRate.mockImplementation((params) => {
-        if (params.loanAmount < 50000) throw new Error('Loan too small');
+      mockRateEngine.calculateRate.mockImplementation((params: RateCalculationParams) => {
+        const loanAmount = params.loanAmount ?? 0;
+        if (loanAmount < 50000) throw new Error('Loan too small');
         return { rate: 6.5, apr: 6.75 };
       });
 

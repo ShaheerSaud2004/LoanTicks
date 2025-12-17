@@ -33,7 +33,7 @@ export default function WaitlistPage() {
       } else {
         setError(data.error || 'Something went wrong. Please try again.');
       }
-    } catch (err) {
+    } catch {
       setError('Network error. Please check your connection and try again.');
     } finally {
       setLoading(false);
@@ -50,15 +50,15 @@ export default function WaitlistPage() {
       </div>
 
       <div className="w-full max-w-2xl relative z-10">
-        {/* Logo and Branding */}
+        {/* Logo */}
         <div className="text-center mb-8">
-          <div className="flex items-center justify-center gap-3 mb-6">
-            <div className="h-16 w-16 sm:h-20 sm:w-20 bg-white rounded-2xl flex items-center justify-center shadow-xl overflow-hidden">
-              <img src="/logo.jpg" alt="LoanTicks" className="h-full w-full object-contain" />
-            </div>
-            <div className="text-left">
-              <h1 className="text-3xl sm:text-4xl font-bold text-teal-900">LoanTicks</h1>
-              <p className="text-teal-700 text-sm sm:text-base">Home Mortgage Solutions</p>
+          <div className="flex items-center justify-center mb-6">
+            <div className="h-24 w-64 sm:h-32 sm:w-80 md:h-40 md:w-96 bg-white rounded-3xl flex items-center justify-center shadow-2xl overflow-hidden p-4">
+              <img 
+                src="/logo.jpg" 
+                alt="LoanTicks" 
+                className="w-full h-full object-contain" 
+              />
             </div>
           </div>
         </div>
@@ -73,12 +73,12 @@ export default function WaitlistPage() {
           </div>
 
           {/* Main Heading */}
-          <h2 className="text-4xl sm:text-5xl font-bold text-center mb-4 bg-gradient-to-r from-teal-600 to-cyan-600 bg-clip-text text-transparent">
+          <h2 className="text-4xl sm:text-5xl font-bold text-center mb-4 pt-2 pb-2 leading-tight bg-gradient-to-r from-teal-600 to-cyan-600 bg-clip-text text-transparent overflow-visible">
             Something Big is Coming
           </h2>
           
           <p className="text-gray-600 text-center text-lg sm:text-xl mb-8 leading-relaxed">
-            We're building something amazing for your mortgage needs. Join our waitlist to be the first to know when we launch!
+            We&apos;re building something amazing for your mortgage needs. Join our waitlist to be the first to know when we launch!
           </p>
 
           {/* Success Message */}
@@ -86,8 +86,8 @@ export default function WaitlistPage() {
             <div className="mb-6 bg-teal-50 border-2 border-teal-300 rounded-xl p-4 flex items-center gap-3 animate-slideIn">
               <CheckCircle2 className="h-6 w-6 text-teal-600 flex-shrink-0" />
               <div>
-                <p className="font-semibold text-teal-900">You're on the list!</p>
-                <p className="text-sm text-teal-700">We'll notify you as soon as we launch.</p>
+                <p className="font-semibold text-teal-900">You&apos;re on the list!</p>
+                <p className="text-sm text-teal-700">We&apos;ll notify you as soon as we launch.</p>
               </div>
             </div>
           )}
@@ -112,7 +112,7 @@ export default function WaitlistPage() {
                   placeholder="Enter your email address"
                   required
                   disabled={loading}
-                  className="w-full pl-12 pr-4 py-4 text-lg border-2 border-teal-200 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full pl-12 pr-4 py-4 text-lg border-2 border-teal-200 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition disabled:opacity-50 disabled:cursor-not-allowed text-gray-900 placeholder:text-gray-900"
                 />
               </div>
               

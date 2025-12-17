@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { 
@@ -192,8 +193,9 @@ export default function DemoShowcasePage() {
         <div className="max-w-7xl mx-auto px-4 py-8">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/logo.jpg" alt="LoanTicks" className="h-16 w-16 rounded-xl shadow-lg" />
+              <div className="h-16 w-16 rounded-xl shadow-lg relative overflow-hidden bg-white">
+                <Image src="/logo.jpg" alt="LoanTicks" fill className="object-contain" priority />
+              </div>
               <div>
                 <h1 className="text-3xl font-bold text-white">LoanTicks Demo Showcase</h1>
                 <p className="text-white/80 mt-1">Explore all features with pre-configured demo accounts</p>

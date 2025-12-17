@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { LogOut, Loader2 } from 'lucide-react';
@@ -77,10 +78,9 @@ export default function DashboardLayout({
                   userRole === 'employee' ? '/employee/dashboard' :
                   '/customer/dashboard'
                 )}
-                className="h-10 sm:h-12 w-auto rounded-lg overflow-hidden bg-white border border-gray-200 hover:border-gray-300 transition cursor-pointer flex-shrink-0"
+                className="h-10 sm:h-12 w-10 sm:w-12 rounded-lg overflow-hidden bg-white border border-gray-200 hover:border-gray-300 transition cursor-pointer flex-shrink-0 relative"
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/logo.jpg" alt="LoanTicks" className="h-full w-full object-contain" />
+                <Image src="/logo.jpg" alt="LoanTicks" fill className="object-contain" />
               </button>
               
               {/* Navigation Menu */}

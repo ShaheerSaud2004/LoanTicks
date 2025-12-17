@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
+import Image from 'next/image';
 import { 
   FileText, 
   User, 
@@ -1258,9 +1259,8 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
       <div className="max-w-4xl mx-auto px-4 py-8">
           {/* Logo Header */}
           <div className="flex justify-center mb-6">
-            <div className="bg-white rounded-2xl shadow-lg p-4">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/logo.jpg" alt="LoanTicks" className="h-16 w-16 object-contain" />
+            <div className="bg-white rounded-2xl shadow-lg p-4 h-24 w-24 relative">
+              <Image src="/logo.jpg" alt="LoanTicks" fill className="object-contain" priority />
             </div>
           </div>
         

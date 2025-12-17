@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { 
   Code, 
   Book, 
@@ -150,8 +151,9 @@ Form Data:
         <div className="max-w-6xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/logo.jpg" alt="LoanTicks" className="h-10 w-10 rounded-lg bg-white p-1.5" />
+              <div className="h-10 w-10 rounded-lg bg-white p-1.5 relative overflow-hidden">
+                <Image src="/logo.jpg" alt="LoanTicks" fill className="object-contain" priority />
+              </div>
               <div>
                 <h1 className="text-lg sm:text-2xl font-bold">LoanTicks API</h1>
                 <p className="text-blue-100 text-xs sm:text-sm">Developer Docs</p>

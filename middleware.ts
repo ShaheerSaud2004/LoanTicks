@@ -18,14 +18,20 @@ export default async function middleware(request: NextRequest) {
     'camera=(), microphone=(), geolocation=()'
   );
 
-  // Public routes
+  // Public routes - always allow root and login
   if (pathname === '/login' || pathname === '/') {
     return response;
   }
 
-  // Redirect to login if not authenticated
+  // For all other routes, require authentication
+  // But don't redirect to login - let them access the waitlist page
   if (!session) {
-    return NextResponse.redirect(new URL('/login', request.url));
+    // Only redirect protected routes to login, not public pages
+    if (pathname.startsWith('/admin') || pathname.startsWith('/employee') || pathname.startsWith('/customer')) {
+      return NextResponse.redirect(new URL('/login', request.url));
+    }
+    // For other routes without session, allow access (they'll be handled by page-level auth)
+    return response;
   }
 
   // Role-based access control

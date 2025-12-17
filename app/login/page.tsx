@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { LogIn, Loader2, Shield, TrendingUp, Users } from 'lucide-react';
@@ -104,9 +105,8 @@ export default function LoginPage() {
         {/* Left Side - Hero Content */}
         <div className="text-white space-y-6 lg:space-y-8 p-6 lg:p-8">
           <div className="flex items-center gap-3 sm:gap-4">
-            <div className="h-12 w-12 sm:h-14 sm:w-14 lg:h-16 lg:w-16 bg-white rounded-xl lg:rounded-2xl flex items-center justify-center shadow-2xl overflow-hidden flex-shrink-0">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/logo.jpg" alt="LoanTicks" className="h-full w-full object-contain" />
+            <div className="h-12 w-12 sm:h-14 sm:w-14 lg:h-16 lg:w-16 bg-white rounded-xl lg:rounded-2xl flex items-center justify-center shadow-2xl overflow-hidden flex-shrink-0 relative">
+              <Image src="/logo.jpg" alt="LoanTicks" fill className="object-contain" priority />
             </div>
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold">LoanTicks</h1>
