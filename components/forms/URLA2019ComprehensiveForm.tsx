@@ -458,12 +458,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
               <div>
                   <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
                   First Name *
-                    <span className="group relative">
-                      <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
-                      <span className="absolute left-0 bottom-full mb-2 w-64 p-2 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
-                        Your legal first name as it appears on your government-issued ID (driver's license, passport, etc.)
-                      </span>
-                    </span>
+                    <FormTooltip content="Your legal first name as it appears on your government-issued ID (driver's license, passport, etc.)" />
                 </label>
                   <p className="text-sm text-gray-600 mb-2">Enter your legal first name exactly as shown on your identification documents.</p>
                 <input
@@ -477,9 +472,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
               <div>
                   <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
                   Middle Name
-                    <span className="group relative">
+                    <span className="group relative inline-block">
                       <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
-                      <span className="absolute left-0 bottom-full mb-2 w-64 p-2 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                      <span className="absolute left-0 bottom-full mb-2 w-64 p-2 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 invisible group-hover:visible">
                         Your middle name or middle initial (optional). Include if it appears on your ID.
                       </span>
                     </span>
@@ -495,9 +490,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
               <div>
                   <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
                   Last Name *
-                    <span className="group relative">
+                    <span className="group relative inline-block">
                       <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
-                      <span className="absolute left-0 bottom-full mb-2 w-64 p-2 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                      <span className="absolute left-0 bottom-full mb-2 w-64 p-2 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 invisible group-hover:visible">
                         Your legal last name (surname) as it appears on your government-issued ID.
                       </span>
                     </span>
@@ -514,9 +509,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
               <div>
                   <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
                   Suffix
-                    <span className="group relative">
+                    <span className="group relative inline-block">
                       <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
-                      <span className="absolute left-0 bottom-full mb-2 w-64 p-2 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                      <span className="absolute left-0 bottom-full mb-2 w-64 p-2 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 invisible group-hover:visible">
                         Name suffix (Jr., Sr., II, III, etc.) if applicable and appears on your ID.
                       </span>
                     </span>
@@ -541,9 +536,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
                 Alternate Names (if any)
-                <span className="group relative">
+                <span className="group relative inline-block">
                   <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
-                  <span className="absolute left-0 bottom-full mb-2 w-64 p-2 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                  <span className="absolute left-0 bottom-full mb-2 w-64 p-2 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 invisible group-hover:visible">
                     Any other names you've used (maiden name, former married name, etc.) that might appear on credit reports or other documents.
                   </span>
                 </span>
@@ -562,9 +557,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
                   Social Security Number *
-                  <span className="group relative">
+                  <span className="group relative inline-block">
                     <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
-                    <span className="absolute left-0 bottom-full mb-2 w-64 p-2 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                    <span className="absolute left-0 bottom-full mb-2 w-64 p-2 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 invisible group-hover:visible">
                       Your 9-digit Social Security Number (SSN) in format XXX-XX-XXXX. Required for credit verification and identity verification.
                     </span>
                   </span>
@@ -582,9 +577,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
                   Date of Birth *
-                  <span className="group relative">
+                  <span className="group relative inline-block">
                     <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
-                    <span className="absolute left-0 bottom-full mb-2 w-64 p-2 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                    <span className="absolute left-0 bottom-full mb-2 w-64 p-2 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 invisible group-hover:visible">
                       Your date of birth as it appears on your government-issued ID. Required for age verification and identity confirmation.
                     </span>
                   </span>
@@ -609,9 +604,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
                     Estimated Credit Score
-                    <span className="group relative">
+                    <span className="group relative inline-block">
                       <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
-                      <span className="absolute left-0 bottom-full mb-2 w-64 p-2 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                      <span className="absolute left-0 bottom-full mb-2 w-64 p-2 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 invisible group-hover:visible">
                         Your estimated FICO credit score (300-850). This helps us provide initial rate estimates. We will verify your actual credit score during processing.
                       </span>
                     </span>
@@ -811,9 +806,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
               <div>
                   <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
                   Cell Phone *
-                    <span className="group relative">
+                    <span className="group relative inline-block">
                       <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
-                      <span className="absolute left-0 bottom-full mb-2 w-64 p-2 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                      <span className="absolute left-0 bottom-full mb-2 w-64 p-2 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 invisible group-hover:visible">
                         Your primary mobile phone number. We'll use this to contact you about your application and send important updates.
                       </span>
                     </span>
@@ -843,9 +838,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
               <div>
                   <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
                   Email Address *
-                    <span className="group relative">
+                    <span className="group relative inline-block">
                       <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
-                      <span className="absolute left-0 bottom-full mb-2 w-64 p-2 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                      <span className="absolute left-0 bottom-full mb-2 w-64 p-2 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 invisible group-hover:visible">
                         Your primary email address. We'll send application updates, documents, and important notifications to this email.
                       </span>
                     </span>
@@ -928,9 +923,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
             <div>
                   <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
                 Street Address *
-                  <span className="group relative">
+                  <span className="group relative inline-block">
                     <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
-                    <span className="absolute left-0 bottom-full mb-2 w-64 p-2 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                    <span className="absolute left-0 bottom-full mb-2 w-64 p-2 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 invisible group-hover:visible">
                       Your current residential street address. This must match the address on your identification and utility bills.
                     </span>
                   </span>
@@ -949,9 +944,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
               <div>
                   <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
                   Unit/Apt Number
-                  <span className="group relative">
+                  <span className="group relative inline-block">
                     <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
-                    <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg">
+                    <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 invisible group-hover:visible shadow-lg">
                       If you live in an apartment, condo, or unit, enter your unit number here (e.g., Apt 1B, Unit 2, Suite 300). Leave blank if you live in a single-family home.
                     </span>
                   </span>
@@ -968,9 +963,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
               <div>
                   <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
                   City *
-                  <span className="group relative">
+                  <span className="group relative inline-block">
                     <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
-                    <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg">
+                    <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 invisible group-hover:visible shadow-lg">
                       Enter the city where your current residence is located. This must match the city on your identification documents and utility bills.
                     </span>
                   </span>
@@ -990,9 +985,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
               <div>
                 <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
                   State *
-                  <span className="group relative">
+                  <span className="group relative inline-block">
                     <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
-                    <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg">
+                    <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 invisible group-hover:visible shadow-lg">
                       Select the state where your current residence is located. This must match the state on your identification documents and utility bills.
                     </span>
                   </span>
@@ -1060,9 +1055,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
               <div>
                 <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
                   ZIP Code *
-                  <span className="group relative">
+                  <span className="group relative inline-block">
                     <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
-                    <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg">
+                    <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 invisible group-hover:visible shadow-lg">
                       Enter your 5-digit ZIP code. If you have a ZIP+4 code, you can enter just the 5-digit portion. This must match the ZIP code on your identification and utility bills.
                     </span>
                   </span>
@@ -1082,9 +1077,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
             <div>
               <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
                 Housing Status *
-                <span className="group relative">
+                <span className="group relative inline-block">
                   <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
-                  <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg">
+                  <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 invisible group-hover:visible shadow-lg">
                     Select how you currently occupy this residence: Own (you own the property), Rent (you pay rent), Live Rent Free (no rent payment), or Other (explain in comments if needed).
                   </span>
                 </span>
@@ -1123,9 +1118,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
               <div>
                 <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
                   Monthly Payment
-                  <span className="group relative">
+                  <span className="group relative inline-block">
                     <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
-                    <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg">
+                    <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 invisible group-hover:visible shadow-lg">
                       Enter your total monthly housing payment. If you own, include principal, interest, taxes, and insurance (PITI). If you rent, enter your monthly rent amount. If you live rent-free, enter 0.
                     </span>
                   </span>
@@ -1144,9 +1139,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
               <div>
                 <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
                   Years at Current Address *
-                  <span className="group relative">
+                  <span className="group relative inline-block">
                     <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
-                    <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg">
+                    <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 invisible group-hover:visible shadow-lg">
                       Enter the number of years you have lived at your current address. If less than 2 years, you will need to provide your prior address in the next section. Count partial years as full years (e.g., 1 year and 6 months = 1 year).
                     </span>
                   </span>
@@ -1205,9 +1200,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                 <div>
                   <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
                     Prior Street Address *
-                    <span className="group relative">
+                    <span className="group relative inline-block">
                       <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
-                      <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg">
+                      <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 invisible group-hover:visible shadow-lg">
                         Enter the complete street address where you lived before your current address. This is required if you have lived at your current address for less than 2 years. Include the street number and name.
                       </span>
                     </span>
@@ -1219,9 +1214,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   <div>
                     <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
                       City *
-                      <span className="group relative">
+                      <span className="group relative inline-block">
                         <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
-                        <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg">
+                        <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 invisible group-hover:visible shadow-lg">
                           Enter the city where your prior residence was located. This helps verify your residential history.
                         </span>
                       </span>
@@ -1232,9 +1227,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   <div>
                     <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
                       State *
-                      <span className="group relative">
+                      <span className="group relative inline-block">
                         <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
-                        <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg">
+                        <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 invisible group-hover:visible shadow-lg">
                           Enter the state abbreviation (e.g., CA, NY, TX) where your prior residence was located. Use the 2-letter state code.
                         </span>
                       </span>
@@ -1245,9 +1240,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   <div>
                     <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
                       ZIP Code *
-                      <span className="group relative">
+                      <span className="group relative inline-block">
                         <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
-                        <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg">
+                        <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 invisible group-hover:visible shadow-lg">
                           Enter the 5-digit ZIP code for your prior address. This helps verify your residential history and credit reporting.
                         </span>
                       </span>
@@ -1258,9 +1253,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   <div>
                     <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
                       Years at Prior Address *
-                      <span className="group relative">
+                      <span className="group relative inline-block">
                         <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
-                        <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg">
+                        <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 invisible group-hover:visible shadow-lg">
                           Enter how many years you lived at this prior address. This helps establish your residential stability. Count partial years as full years (e.g., 1 year and 6 months = 1 year).
                         </span>
                       </span>
@@ -1291,9 +1286,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
               <div>
                 <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
                   Employer Name *
-                  <span className="group relative">
+                  <span className="group relative inline-block">
                     <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
-                    <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg">
+                    <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 invisible group-hover:visible shadow-lg">
                       Enter the full legal name of your current employer as it appears on your pay stubs and W-2 forms. If self-employed, enter your business name or "Self-Employed".
                     </span>
                   </span>
@@ -1304,9 +1299,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
               <div>
                 <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
                   Position/Title *
-                  <span className="group relative">
+                  <span className="group relative inline-block">
                     <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
-                    <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg">
+                    <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 invisible group-hover:visible shadow-lg">
                       Enter your current job title or position (e.g., Software Engineer, Sales Manager, Teacher). This should match what appears on your pay stubs and employment verification.
                     </span>
                   </span>
@@ -1317,9 +1312,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
               <div>
                 <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
                   Years in Line of Work *
-                  <span className="group relative">
+                  <span className="group relative inline-block">
                     <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
-                    <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg">
+                    <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 invisible group-hover:visible shadow-lg">
                       Enter the total number of years you have worked in your current profession or line of work (not just at your current employer). This demonstrates career stability. If less than 2 years, you'll need to provide previous employment details.
                     </span>
                   </span>
@@ -1330,9 +1325,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
               <div>
                 <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
                   Work Phone
-                  <span className="group relative">
+                  <span className="group relative inline-block">
                     <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
-                    <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg">
+                    <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 invisible group-hover:visible shadow-lg">
                       Enter your work phone number including area code (e.g., 555-123-4567). This is used for employment verification. If you don't have a work phone, you can leave this blank.
                     </span>
                   </span>
@@ -1363,9 +1358,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   <div>
                     <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
                       Previous Employer *
-                      <span className="group relative">
+                      <span className="group relative inline-block">
                         <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
-                        <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg">
+                        <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 invisible group-hover:visible shadow-lg">
                           Enter the full legal name of your previous employer. This is required if you have been at your current job for less than 2 years. This helps establish your employment history and income stability.
                         </span>
                       </span>
@@ -1376,9 +1371,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   <div>
                     <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
                       Previous Position *
-                      <span className="group relative">
+                      <span className="group relative inline-block">
                         <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
-                        <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg">
+                        <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 invisible group-hover:visible shadow-lg">
                           Enter your job title or position at your previous employer. This should match what appears on your previous employment records or W-2 forms.
                         </span>
                       </span>
@@ -1391,9 +1386,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   <div>
                     <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
                       Years at Previous Job *
-                      <span className="group relative">
+                      <span className="group relative inline-block">
                         <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
-                        <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg">
+                        <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 invisible group-hover:visible shadow-lg">
                           Enter how many years you worked at your previous employer. This helps demonstrate employment stability. Count partial years as full years (e.g., 1 year and 6 months = 1 year).
                         </span>
                       </span>
@@ -1404,9 +1399,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   <div>
                     <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
                       Monthly Income at Previous Job *
-                      <span className="group relative">
+                      <span className="group relative inline-block">
                         <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
-                        <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg">
+                        <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 invisible group-hover:visible shadow-lg">
                           Enter your gross monthly income (before taxes) from your previous job. This should match the income shown on your previous pay stubs or W-2 forms. This helps verify your income history.
                         </span>
                       </span>
@@ -1446,9 +1441,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
               <div>
                 <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
                   Base Income *
-                  <span className="group relative">
+                  <span className="group relative inline-block">
                     <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
-                    <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg">
+                    <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 invisible group-hover:visible shadow-lg">
                       Enter your base monthly salary or hourly wage converted to monthly (hourly rate × hours per week × 52 ÷ 12). This is your regular, guaranteed income before overtime, bonuses, or commissions. Do not include overtime, bonuses, or commissions here.
                     </span>
                   </span>
@@ -1459,9 +1454,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
               <div>
                 <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
                   Overtime Income
-                  <span className="group relative">
+                  <span className="group relative inline-block">
                     <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
-                    <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg">
+                    <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 invisible group-hover:visible shadow-lg">
                       Enter your average monthly overtime income. If overtime is consistent, use your average. If it varies, use a conservative 12-month average. Overtime income must be documented with pay stubs showing at least 2 years of consistent overtime.
                     </span>
                   </span>
@@ -1472,9 +1467,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
               <div>
                 <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
                   Bonus Income
-                  <span className="group relative">
+                  <span className="group relative inline-block">
                     <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
-                    <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg">
+                    <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 invisible group-hover:visible shadow-lg">
                       Enter your average monthly bonus income. If you receive annual bonuses, divide the annual amount by 12. If bonuses are quarterly, divide by 3. Bonuses must be documented with pay stubs or tax returns showing at least 2 years of history.
                     </span>
                   </span>
@@ -1485,9 +1480,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
               <div>
                 <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
                   Commission Income
-                  <span className="group relative">
+                  <span className="group relative inline-block">
                     <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
-                    <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg">
+                    <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 invisible group-hover:visible shadow-lg">
                       Enter your average monthly commission income. Use a 12-month average if commissions vary. Commission income must be documented with pay stubs or tax returns showing at least 2 years of consistent commission earnings.
                     </span>
                   </span>
@@ -1522,9 +1517,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
               <div>
                 <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
                   Checking Account Balance
-                  <span className="group relative">
+                  <span className="group relative inline-block">
                     <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
-                    <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg">
+                    <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 invisible group-hover:visible shadow-lg">
                       Enter the current balance in all your checking accounts combined. This should match your most recent bank statement. Include all checking accounts you own (individually or jointly).
                     </span>
                   </span>
@@ -1535,9 +1530,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
               <div>
                 <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
                   Savings Account Balance
-                  <span className="group relative">
+                  <span className="group relative inline-block">
                     <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
-                    <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg">
+                    <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 invisible group-hover:visible shadow-lg">
                       Enter the current balance in all your savings accounts combined. This should match your most recent bank statement. Include all savings accounts you own (individually or jointly).
                     </span>
                   </span>
@@ -1548,9 +1543,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
               <div>
                 <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
                   Money Market Balance
-                  <span className="group relative">
+                  <span className="group relative inline-block">
                     <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
-                    <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg">
+                    <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 invisible group-hover:visible shadow-lg">
                       Enter the current balance in all your money market accounts combined. Money market accounts are interest-bearing accounts that typically offer higher interest rates than savings accounts. Include all money market accounts you own.
                     </span>
                   </span>
@@ -1561,9 +1556,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
               <div>
                 <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
                   Retirement Account Value
-                  <span className="group relative">
+                  <span className="group relative inline-block">
                     <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
-                    <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg">
+                    <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 invisible group-hover:visible shadow-lg">
                       Enter the current value of all your retirement accounts combined (401(k), IRA, Roth IRA, 403(b), pension accounts, etc.). Use the most recent statement value. Note: Only a portion of retirement assets may be counted toward reserves depending on loan program.
                     </span>
                   </span>
@@ -1598,9 +1593,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
               <div>
                 <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
                   Credit Card Payments
-                  <span className="group relative">
+                  <span className="group relative inline-block">
                     <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
-                    <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg">
+                    <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 invisible group-hover:visible shadow-lg">
                       Enter the total minimum monthly payment for all your credit cards combined. This is the minimum amount you must pay each month, not the total balance. If you pay off your credit cards in full each month, enter the average monthly payment amount.
                     </span>
                   </span>
@@ -1651,9 +1646,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
             <div>
                 <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
                   Subject Property Address *
-                  <span className="group relative">
+                  <span className="group relative inline-block">
                     <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
-                    <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg">
+                    <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 invisible group-hover:visible shadow-lg">
                       The complete street address of the property you are purchasing or refinancing. This is the property that will secure your loan. Include the house number, street name, and unit/apartment number if applicable. This must match the address on your purchase agreement or property deed.
                     </span>
                   </span>
@@ -1673,9 +1668,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
               <div>
                   <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
                     City *
-                    <span className="group relative">
+                    <span className="group relative inline-block">
                       <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
-                      <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg">
+                      <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 invisible group-hover:visible shadow-lg">
                         Enter the city where the property is located. This must match the city on the property deed and purchase agreement.
                       </span>
                     </span>
@@ -1692,9 +1687,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
               <div>
                   <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
                     State *
-                    <span className="group relative">
+                    <span className="group relative inline-block">
                       <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
-                      <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg">
+                      <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 invisible group-hover:visible shadow-lg">
                         Enter the 2-letter state abbreviation where the property is located (e.g., CA for California, NY for New York, TX for Texas). This must match the state on the property deed.
                       </span>
                     </span>
@@ -1713,9 +1708,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
               <div>
                   <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
                     ZIP Code *
-                    <span className="group relative">
+                    <span className="group relative inline-block">
                       <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
-                      <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg">
+                      <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 invisible group-hover:visible shadow-lg">
                         Enter the 5-digit ZIP code where the property is located. This must match the ZIP code on the property deed and purchase agreement.
                       </span>
                     </span>
@@ -1743,9 +1738,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
             <div>
                     <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
                       Purchase Price / Property Value *
-                      <span className="group relative">
+                      <span className="group relative inline-block">
                         <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
-                        <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg">
+                        <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 invisible group-hover:visible shadow-lg">
                           The total purchase price you agreed to pay for the property. This is the contract price from your purchase agreement. For refinancing, enter the current market value or the appraised value. This amount is used to calculate your down payment and loan-to-value (LTV) ratio.
                         </span>
                       </span>
@@ -1767,9 +1762,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   <div>
                     <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
                       Appraised Value *
-                      <span className="group relative">
+                      <span className="group relative inline-block">
                         <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
-                        <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg">
+                        <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 invisible group-hover:visible shadow-lg">
                           The professional appraisal value determined by a licensed appraiser. If you don't have an appraisal yet, enter your best estimate based on comparable properties or a recent appraisal. We will order an official appraisal during loan processing. The appraised value helps determine the maximum loan amount.
                         </span>
                       </span>
@@ -1790,9 +1785,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   <div>
                     <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
                       Loan Amount Requested *
-                      <span className="group relative">
+                      <span className="group relative inline-block">
                         <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
-                        <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg">
+                        <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 invisible group-hover:visible shadow-lg">
                           The total amount you want to borrow. This should be less than or equal to the purchase price minus your down payment. The down payment will be calculated automatically as the difference between purchase price and loan amount. Your loan amount cannot exceed the appraised value.
                         </span>
                       </span>
