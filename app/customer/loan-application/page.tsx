@@ -170,6 +170,7 @@ export default function LoanApplicationPage() {
           ethnicity: formData.ethnicity || '',
           sex: formData.sex || '',
           preferredContactMethod: formData.preferredContactMethod || 'phone',
+          creditType: formData.creditType || 'individual',
           },
           currentAddress: {
           street: formData.currentStreet || '123 Main St',
@@ -177,12 +178,12 @@ export default function LoanApplicationPage() {
           city: formData.currentCity || 'Los Angeles',
           state: formData.currentState || 'CA',
           zipCode: formData.currentZipCode || '90001',
-          residencyType: formData.currentHousing || 'rent',
+          residencyType: formData.currentHousing || 'own',
           monthlyPayment: Number(formData.currentMonthlyPayment) || 0,
           yearsAtAddress: Number(formData.yearsAtCurrentAddress) || 1,
           },
           employment: {
-          employmentStatus: formData.selfEmployed ? 'self_employed' : 'employed',
+          employmentStatus: formData.employmentStatus || 'employed',
             employerName: formData.employerName || 'Sample Employer',
             position: formData.position || 'Employee',
           yearsEmployed: Number(formData.yearsEmployed) || Number(formData.yearsInLineOfWork) || 2,

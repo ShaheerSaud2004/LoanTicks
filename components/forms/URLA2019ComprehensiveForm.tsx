@@ -421,7 +421,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                 <select
                   value={formData.suffix}
                   onChange={(e) => handleInputChange('suffix', e.target.value)}
-                    className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900"
+                  className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900 cursor-pointer touch-manipulation min-h-[60px] bg-white"
                 >
                   <option value="">Select Suffix</option>
                   <option value="Jr.">Jr.</option>
@@ -541,22 +541,22 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
               <label className="block text-sm font-semibold text-gray-700 mb-2">
                 Citizenship Status *
               </label>
-              <div className="space-y-2">
+              <div className="space-y-3">
                 {[
                   { value: 'us_citizen', label: 'US Citizen' },
                   { value: 'permanent_resident', label: 'Permanent Resident Alien' },
                   { value: 'non_permanent_resident', label: 'Non-Permanent Resident Alien' }
                 ].map((option) => (
-                  <label key={option.value} className="flex items-center text-gray-900">
+                  <label key={option.value} className="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-xl hover:border-yellow-500 transition cursor-pointer touch-manipulation min-h-[60px]">
                     <input
                       type="radio"
                       name="citizenship"
                       value={option.value}
                       checked={formData.citizenship === option.value}
                       onChange={(e) => handleInputChange('citizenship', e.target.value)}
-                      className="mr-2"
+                      className="w-6 h-6 sm:w-7 sm:h-7 text-yellow-600 focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 cursor-pointer flex-shrink-0 accent-yellow-600"
                     />
-                    {option.label}
+                    <span className="text-base sm:text-lg text-gray-900 font-medium">{option.label}</span>
                   </label>
                 ))}
               </div>
@@ -568,24 +568,25 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                 Section 1b: Credit Type
               </h3>
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                <label className="block text-base sm:text-lg font-bold text-gray-800 mb-3">
                   Credit Type *
                 </label>
-                <div className="space-y-2">
+                <p className="text-sm text-gray-600 mb-3">Select whether this is an individual or joint credit application.</p>
+                <div className="space-y-3">
                   {[
                     { value: 'individual', label: 'Individual' },
                     { value: 'joint', label: 'Joint Credit' }
                   ].map((option) => (
-                    <label key={option.value} className="flex items-center text-gray-900">
+                    <label key={option.value} className="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-xl hover:border-yellow-500 transition cursor-pointer touch-manipulation min-h-[60px]">
                       <input
                         type="radio"
                         name="creditType"
                         value={option.value}
                         checked={formData.creditType === option.value}
                         onChange={(e) => handleInputChange('creditType', e.target.value)}
-                        className="mr-2"
+                        className="w-6 h-6 sm:w-7 sm:h-7 text-yellow-600 focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 cursor-pointer flex-shrink-0 accent-yellow-600"
                       />
-                      {option.label}
+                      <span className="text-base sm:text-lg text-gray-900 font-medium">{option.label}</span>
                     </label>
                   ))}
                 </div>
@@ -613,13 +614,14 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
             )}
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
+              <label className="block text-base sm:text-lg font-bold text-gray-800 mb-3">
                 Marital Status *
               </label>
+              <p className="text-sm text-gray-600 mb-3">Select your current marital status.</p>
               <select
                 value={formData.maritalStatus}
                 onChange={(e) => handleInputChange('maritalStatus', e.target.value)}
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-yellow-500 focus:outline-none transition text-gray-900"
+                className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900 cursor-pointer touch-manipulation min-h-[60px] bg-white"
               >
                 <option value="unmarried">Unmarried</option>
                 <option value="married">Married</option>
@@ -874,7 +876,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                 <select
                   value={formData.currentState}
                   onChange={(e) => handleInputChange('currentState', e.target.value)}
-                  className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900"
+                  className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900 cursor-pointer touch-manipulation min-h-[60px] bg-white"
                   required
                 >
                   <option value="">Select State</option>
@@ -962,24 +964,24 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   </span>
                 </span>
               </label>
-              <p className="text-sm text-gray-600 mb-2">Select your current housing situation.</p>
-              <div className="space-y-2">
+              <p className="text-sm text-gray-600 mb-3">Select your current housing situation.</p>
+              <div className="space-y-3">
                 {[
                   { value: 'own', label: 'Own' },
                   { value: 'rent', label: 'Rent' },
                   { value: 'live_rent_free', label: 'Live Rent Free' },
                   { value: 'other', label: 'Other' }
                 ].map((option) => (
-                  <label key={option.value} className="flex items-center text-gray-900">
+                  <label key={option.value} className="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-xl hover:border-yellow-500 transition cursor-pointer touch-manipulation min-h-[60px]">
                     <input
                       type="radio"
                       name="currentHousing"
                       value={option.value}
                       checked={formData.currentHousing === option.value}
                       onChange={(e) => handleInputChange('currentHousing', e.target.value)}
-                      className="mr-2"
+                      className="w-6 h-6 sm:w-7 sm:h-7 text-yellow-600 focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 cursor-pointer flex-shrink-0 accent-yellow-600"
                     />
-                    {option.label}
+                    <span className="text-base sm:text-lg text-gray-900 font-medium">{option.label}</span>
                   </label>
                 ))}
               </div>
@@ -1691,7 +1693,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Loan Purpose *</label>
-                <select value={formData.loanPurpose} onChange={(e) => handleInputChange('loanPurpose', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-yellow-500 focus:outline-none transition text-gray-900" required>
+                <select value={formData.loanPurpose} onChange={(e) => handleInputChange('loanPurpose', e.target.value)} className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900 cursor-pointer touch-manipulation min-h-[60px] bg-white" required>
                   <option value="">Select Purpose</option>
                   <option value="purchase">Purchase</option>
                   <option value="refinance">Refinance</option>
@@ -1787,7 +1789,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
             </div>
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">Citizenship Status</label>
-              <select value={formData.citizenship} onChange={(e) => handleInputChange('citizenship', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-yellow-500 focus:outline-none transition text-gray-900">
+              <select value={formData.citizenship} onChange={(e) => handleInputChange('citizenship', e.target.value)} className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900 cursor-pointer touch-manipulation min-h-[60px] bg-white">
                 <option value="us_citizen">U.S. Citizen</option>
                 <option value="permanent_resident">Permanent Resident Alien</option>
                 <option value="non_permanent_resident">Non-Permanent Resident Alien</option>
