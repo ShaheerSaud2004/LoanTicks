@@ -327,13 +327,13 @@ input, textarea, select {
   transform: translateX(clamp(calc(-144px + 16px), -50%, calc(144px - 100vw + 304px))) !important;
 }
 
-/* Custom Radio Button Styling - Black checkmark when selected */
+/* Custom Radio Button Styling - Subtle black checkmark when selected */
 input[type="radio"] {
   appearance: none;
   -webkit-appearance: none;
   width: 1.5rem;
   height: 1.5rem;
-  border: 2px solid #9ca3af;
+  border: 1.5px solid #d1d5db;
   border-radius: 50%;
   background-color: white;
   cursor: pointer;
@@ -342,8 +342,8 @@ input[type="radio"] {
 }
 
 input[type="radio"]:checked {
-  border-color: #111827;
-  background-color: #111827;
+  border-color: #4b5563;
+  background-color: #4b5563;
 }
 
 input[type="radio"]:checked::after {
@@ -352,8 +352,8 @@ input[type="radio"]:checked::after {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 0.5rem;
-  height: 0.5rem;
+  width: 0.4rem;
+  height: 0.4rem;
   border-radius: 50%;
   background-color: white;
   display: block;

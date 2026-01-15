@@ -653,10 +653,10 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                 ].map((option) => (
                   <label 
                     key={option.value} 
-                    className={`flex items-center gap-4 p-4 border-2 rounded-xl cursor-pointer touch-manipulation min-h-[60px] ${
+                    className={`flex items-center gap-4 p-4 border rounded-xl cursor-pointer touch-manipulation min-h-[60px] ${
                       formData.citizenship === option.value
-                        ? 'border-gray-400 bg-gray-100'
-                        : 'border-gray-300 bg-white'
+                        ? 'border-gray-400 bg-gray-50'
+                        : 'border-gray-200 bg-white'
                     }`}
                   >
                     <input
@@ -690,10 +690,10 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   ].map((option) => (
                     <label 
                       key={option.value} 
-                      className={`flex items-center gap-4 p-4 border-2 rounded-xl cursor-pointer touch-manipulation min-h-[60px] ${
+                      className={`flex items-center gap-4 p-4 border rounded-xl cursor-pointer touch-manipulation min-h-[60px] ${
                         formData.creditType === option.value
-                          ? 'border-gray-400 bg-gray-100'
-                          : 'border-gray-300 bg-white'
+                          ? 'border-gray-400 bg-gray-50'
+                          : 'border-gray-200 bg-white'
                       }`}
                     >
                       <input
@@ -888,10 +888,10 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                 ].map((option) => (
                     <label 
                       key={option.value} 
-                      className={`flex items-center gap-4 p-4 border-2 rounded-xl cursor-pointer touch-manipulation min-h-[60px] ${
+                      className={`flex items-center gap-4 p-4 border rounded-xl cursor-pointer touch-manipulation min-h-[60px] ${
                         formData.preferredContactMethod === option.value
-                          ? 'border-gray-400 bg-gray-100'
-                          : 'border-gray-300 bg-white'
+                          ? 'border-gray-400 bg-gray-50'
+                          : 'border-gray-200 bg-white'
                       }`}
                     >
                     <input
@@ -1099,10 +1099,10 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                 ].map((option) => (
                   <label 
                     key={option.value} 
-                    className={`flex items-center gap-4 p-4 border-2 rounded-xl cursor-pointer touch-manipulation min-h-[60px] ${
+                    className={`flex items-center gap-4 p-4 border rounded-xl cursor-pointer touch-manipulation min-h-[60px] ${
                       formData.currentHousing === option.value
-                        ? 'border-gray-400 bg-gray-100'
-                        : 'border-gray-300 bg-white'
+                        ? 'border-gray-400 bg-gray-50'
+                        : 'border-gray-200 bg-white'
                     }`}
                   >
                     <input
