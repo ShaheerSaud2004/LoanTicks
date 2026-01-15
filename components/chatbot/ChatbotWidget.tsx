@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
+import Image from 'next/image';
 import { X, Send, Minimize2 } from 'lucide-react';
 
 interface Message {
@@ -138,27 +139,13 @@ export default function ChatbotWidget({ currentStep }: ChatbotWidgetProps) {
           className="fixed bottom-6 left-6 z-50 bg-yellow-500 hover:bg-yellow-600 text-white rounded-full p-3 shadow-lg transition-all duration-300 hover:scale-110 flex items-center justify-center w-16 h-16 touch-manipulation animate-pulse"
           aria-label="Open chatbot"
         >
-          <svg
-            className="w-8 h-8"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20Z"
-              fill="currentColor"
-            />
-            <path
-              d="M9 9C9 8.45 9.45 8 10 8H14C14.55 8 15 8.45 15 9C15 9.55 14.55 10 14 10H10C9.45 10 9 9.55 9 9ZM9 13C9 12.45 9.45 12 10 12H14C14.55 12 15 12.45 15 13C15 13.55 14.55 14 14 14H10C9.45 14 9 13.55 9 13Z"
-              fill="currentColor"
-            />
-            <circle cx="8" cy="8" r="1.5" fill="currentColor" />
-            <circle cx="16" cy="8" r="1.5" fill="currentColor" />
-            <path
-              d="M12 16C10.9 16 10 15.1 10 14C10 12.9 10.9 12 12 12C13.1 12 14 12.9 14 14C14 15.1 13.1 16 12 16Z"
-              fill="currentColor"
-            />
-          </svg>
+          <Image
+            src="/logo.jpg"
+            alt="LoanTicks Logo"
+            width={32}
+            height={32}
+            className="rounded-full"
+          />
         </button>
       )}
 
@@ -172,28 +159,14 @@ export default function ChatbotWidget({ currentStep }: ChatbotWidgetProps) {
           {/* Header */}
           <div className="bg-yellow-500 rounded-t-2xl p-4 flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <svg
-                className="w-5 h-5 text-white"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20Z"
-                  fill="currentColor"
-                />
-                <path
-                  d="M9 9C9 8.45 9.45 8 10 8H14C14.55 8 15 8.45 15 9C15 9.55 14.55 10 14 10H10C9.45 10 9 9.55 9 9ZM9 13C9 12.45 9.45 12 10 12H14C14.55 12 15 12.45 15 13C15 13.55 14.55 14 14 14H10C9.45 14 9 13.55 9 13Z"
-                  fill="currentColor"
-                />
-                <circle cx="8" cy="8" r="1.5" fill="currentColor" />
-                <circle cx="16" cy="8" r="1.5" fill="currentColor" />
-                <path
-                  d="M12 16C10.9 16 10 15.1 10 14C10 12.9 10.9 12 12 12C13.1 12 14 12.9 14 14C14 15.1 13.1 16 12 16Z"
-                  fill="currentColor"
-                />
-              </svg>
-              <h3 className="text-white font-bold text-lg">AI Assistant</h3>
+              <Image
+                src="/logo.jpg"
+                alt="LoanTicks Logo"
+                width={24}
+                height={24}
+                className="rounded-full"
+              />
+              <h3 className="text-white font-bold text-lg">LoanTicks AI</h3>
             </div>
             <div className="flex items-center gap-2">
               <button

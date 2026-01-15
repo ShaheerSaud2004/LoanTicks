@@ -2,8 +2,8 @@ import { NextResponse } from 'next/server';
 
 export async function GET() {
   const manifest = {
-    name: "LoanTicks - Home Mortgage Solutions",
-    short_name: "LoanTicks",
+    name: "LoanAticks - Home Mortgage Solutions",
+    short_name: "LoanAticks",
     description: "Professional mortgage lending platform with competitive rates, fast approvals, and expert guidance",
     start_url: "/",
     display: "standalone",

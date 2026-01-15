@@ -6,13 +6,13 @@ import PWAWrapper from "@/components/PWAWrapper";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "LoanTicks - Home Mortgage Solutions",
+  title: "LoanAticks - Home Mortgage Solutions",
   description: "Professional mortgage lending platform with competitive rates, fast approvals, and expert guidance for your home financing needs",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "LoanTicks",
+    title: "LoanAticks",
   },
   icons: {
     icon: "/logo.jpg",
@@ -40,7 +40,7 @@ export default function RootLayout({
         <meta name="theme-color" content="#EAB308" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="LoanTicks" />
+        <meta name="apple-mobile-web-app-title" content="LoanAticks" />
       </head>
       <body className={inter.className} suppressHydrationWarning>
         <PWAWrapper>{children}</PWAWrapper>
