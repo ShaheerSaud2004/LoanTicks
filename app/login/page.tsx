@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { signIn } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { LogIn, Loader2, Shield, TrendingUp, Users } from 'lucide-react';
 
@@ -55,10 +55,31 @@ export default function LoginPage() {
         setLoginStatus('✓ Login successful!');
         setShowSuccessAnimation(true);
         
-        // Quick animation then redirect
-        setTimeout(() => {
-          router.push('/');
-          router.refresh();
+        // Get session to determine role and redirect accordingly
+        setTimeout(async () => {
+          try {
+            // Fetch session to get user role
+            const response = await fetch('/api/auth/session');
+            const session = await response.json();
+            
+            // Redirect based on role
+            if (session?.user?.role === 'admin') {
+              router.push('/admin/dashboard');
+            } else if (session?.user?.role === 'employee') {
+              router.push('/employee/dashboard');
+            } else if (session?.user?.role === 'customer') {
+              router.push('/customer/dashboard');
+            } else {
+              // Fallback to home page which will redirect
+              router.push('/');
+            }
+            router.refresh();
+          } catch (err) {
+            console.error('Error getting session:', err);
+            // Fallback to home page
+            router.push('/');
+            router.refresh();
+          }
         }, 800);
       }
     } catch (error) {
@@ -119,10 +140,31 @@ export default function LoginPage() {
         setLoginStatus('✓ Login successful!');
         setShowSuccessAnimation(true);
         
-        // Quick animation then redirect
-        setTimeout(() => {
-          router.push('/');
-          router.refresh();
+        // Get session to determine role and redirect accordingly
+        setTimeout(async () => {
+          try {
+            // Fetch session to get user role
+            const response = await fetch('/api/auth/session');
+            const session = await response.json();
+            
+            // Redirect based on role
+            if (session?.user?.role === 'admin') {
+              router.push('/admin/dashboard');
+            } else if (session?.user?.role === 'employee') {
+              router.push('/employee/dashboard');
+            } else if (session?.user?.role === 'customer') {
+              router.push('/customer/dashboard');
+            } else {
+              // Fallback to home page which will redirect
+              router.push('/');
+            }
+            router.refresh();
+          } catch (err) {
+            console.error('Error getting session:', err);
+            // Fallback to home page
+            router.push('/');
+            router.refresh();
+          }
         }, 800);
       }
     } catch (error) {
