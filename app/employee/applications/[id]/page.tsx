@@ -88,6 +88,7 @@ export default function ApplicationView({ params }: { params: Promise<{ id: stri
     extractedText: string;
     matches: Array<{ field: string; match: boolean; confidence: string }>;
   }[]>([]);
+  const [isSendingEmail, setIsSendingEmail] = useState(false);
 
   const fetchApplication = useCallback(async () => {
     try {
@@ -1339,6 +1340,65 @@ LoanTicks - Home Mortgage Solutions`}
                   </div>
                 </div>
               </div>
+
+              {/* Send Email Button */}
+              {application && application.borrowerInfo?.email && process.env.NEXT_PUBLIC_ARIVE_POS_URL && (
+                <div className="bg-gradient-to-r from-yellow-500 to-yellow-600 rounded-xl p-6 shadow-lg">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div className="flex-1">
+                      <h4 className="font-bold text-gray-900 mb-2 flex items-center gap-2 text-lg">
+                        <Mail className="w-6 h-6" />
+                        Send Preliminary Approval Email
+                      </h4>
+                      <p className="text-sm text-gray-800">
+                        Send an email to <strong>{String(application.borrowerInfo.email)}</strong> with preliminary approval notification and ARIVE portal link to complete their application.
+                      </p>
+                    </div>
+                    <button
+                      onClick={async () => {
+                        if (isSendingEmail) return;
+                        setIsSendingEmail(true);
+                        try {
+                          const response = await fetch('/api/send-arive-email', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                              applicationId: application._id,
+                              borrowerEmail: application.borrowerInfo.email,
+                              borrowerName: `${application.borrowerInfo.firstName} ${application.borrowerInfo.lastName}`,
+                              ariveUrl: ensureHttps(process.env.NEXT_PUBLIC_ARIVE_POS_URL),
+                            }),
+                          });
+                          const data = await response.json();
+                          if (response.ok) {
+                            alert('✅ Email sent successfully!');
+                          } else {
+                            alert(`❌ Failed to send email: ${data.error || 'Unknown error'}`);
+                          }
+                        } catch (error) {
+                          alert(`❌ Error sending email: ${error instanceof Error ? error.message : 'Unknown error'}`);
+                        } finally {
+                          setIsSendingEmail(false);
+                        }
+                      }}
+                      disabled={isSendingEmail}
+                      className="px-6 py-3 bg-white text-yellow-600 font-bold rounded-lg hover:bg-gray-50 active:bg-gray-100 transition shadow-md flex items-center gap-2 whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {isSendingEmail ? (
+                        <>
+                          <Loader className="w-5 h-5 animate-spin" />
+                          Sending...
+                        </>
+                      ) : (
+                        <>
+                          <Mail className="w-5 h-5" />
+                          Send Email
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </div>
+              )}
 
               {/* Configuration Status */}
               {process.env.NEXT_PUBLIC_ARIVE_POS_URL ? (
