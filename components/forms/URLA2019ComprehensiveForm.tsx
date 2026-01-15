@@ -547,7 +547,14 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   { value: 'permanent_resident', label: 'Permanent Resident Alien' },
                   { value: 'non_permanent_resident', label: 'Non-Permanent Resident Alien' }
                 ].map((option) => (
-                  <label key={option.value} className="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-xl hover:border-yellow-500 transition cursor-pointer touch-manipulation min-h-[60px]">
+                  <label 
+                    key={option.value} 
+                    className={`flex items-center gap-4 p-4 border-2 rounded-xl transition cursor-pointer touch-manipulation min-h-[60px] ${
+                      formData.citizenship === option.value
+                        ? 'border-yellow-500 bg-yellow-50 shadow-md'
+                        : 'border-gray-200 hover:border-yellow-400 bg-white'
+                    }`}
+                  >
                     <input
                       type="radio"
                       name="citizenship"
@@ -556,7 +563,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                       onChange={(e) => handleInputChange('citizenship', e.target.value)}
                       className="w-6 h-6 sm:w-7 sm:h-7 text-yellow-600 focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 cursor-pointer flex-shrink-0 accent-yellow-600"
                     />
-                    <span className="text-base sm:text-lg text-gray-900 font-medium">{option.label}</span>
+                    <span className={`text-base sm:text-lg font-medium ${
+                      formData.citizenship === option.value ? 'text-yellow-900' : 'text-gray-900'
+                    }`}>{option.label}</span>
                   </label>
                 ))}
               </div>
@@ -577,7 +586,14 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                     { value: 'individual', label: 'Individual' },
                     { value: 'joint', label: 'Joint Credit' }
                   ].map((option) => (
-                    <label key={option.value} className="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-xl hover:border-yellow-500 transition cursor-pointer touch-manipulation min-h-[60px]">
+                    <label 
+                      key={option.value} 
+                      className={`flex items-center gap-4 p-4 border-2 rounded-xl transition cursor-pointer touch-manipulation min-h-[60px] ${
+                        formData.creditType === option.value
+                          ? 'border-yellow-500 bg-yellow-50 shadow-md'
+                          : 'border-gray-200 hover:border-yellow-400 bg-white'
+                      }`}
+                    >
                       <input
                         type="radio"
                         name="creditType"
@@ -586,7 +602,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                         onChange={(e) => handleInputChange('creditType', e.target.value)}
                         className="w-6 h-6 sm:w-7 sm:h-7 text-yellow-600 focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 cursor-pointer flex-shrink-0 accent-yellow-600"
                       />
-                      <span className="text-base sm:text-lg text-gray-900 font-medium">{option.label}</span>
+                      <span className={`text-base sm:text-lg font-medium ${
+                        formData.creditType === option.value ? 'text-yellow-900' : 'text-gray-900'
+                      }`}>{option.label}</span>
                     </label>
                   ))}
                 </div>
@@ -768,7 +786,14 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   { value: 'email', label: 'Email' },
                   { value: 'text', label: 'Text Message' }
                 ].map((option) => (
-                    <label key={option.value} className="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-xl hover:border-yellow-500 transition cursor-pointer touch-manipulation min-h-[60px]">
+                    <label 
+                      key={option.value} 
+                      className={`flex items-center gap-4 p-4 border-2 rounded-xl transition cursor-pointer touch-manipulation min-h-[60px] ${
+                        formData.preferredContactMethod === option.value
+                          ? 'border-yellow-500 bg-yellow-50 shadow-md'
+                          : 'border-gray-200 hover:border-yellow-400 bg-white'
+                      }`}
+                    >
                     <input
                       type="radio"
                       name="preferredContactMethod"
@@ -777,7 +802,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                       onChange={(e) => handleInputChange('preferredContactMethod', e.target.value)}
                       className="w-6 h-6 sm:w-7 sm:h-7 text-yellow-600 focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 cursor-pointer flex-shrink-0 accent-yellow-600"
                     />
-                    <span className="text-base sm:text-lg text-gray-900 font-medium">{option.label}</span>
+                    <span className={`text-base sm:text-lg font-medium ${
+                      formData.preferredContactMethod === option.value ? 'text-yellow-900' : 'text-gray-900'
+                    }`}>{option.label}</span>
                   </label>
                 ))}
                 </div>
@@ -972,7 +999,14 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   { value: 'live_rent_free', label: 'Live Rent Free' },
                   { value: 'other', label: 'Other' }
                 ].map((option) => (
-                  <label key={option.value} className="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-xl hover:border-yellow-500 transition cursor-pointer touch-manipulation min-h-[60px]">
+                  <label 
+                    key={option.value} 
+                    className={`flex items-center gap-4 p-4 border-2 rounded-xl transition cursor-pointer touch-manipulation min-h-[60px] ${
+                      formData.currentHousing === option.value
+                        ? 'border-yellow-500 bg-yellow-50 shadow-md'
+                        : 'border-gray-200 hover:border-yellow-400 bg-white'
+                    }`}
+                  >
                     <input
                       type="radio"
                       name="currentHousing"
@@ -981,7 +1015,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                       onChange={(e) => handleInputChange('currentHousing', e.target.value)}
                       className="w-6 h-6 sm:w-7 sm:h-7 text-yellow-600 focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 cursor-pointer flex-shrink-0 accent-yellow-600"
                     />
-                    <span className="text-base sm:text-lg text-gray-900 font-medium">{option.label}</span>
+                    <span className={`text-base sm:text-lg font-medium ${
+                      formData.currentHousing === option.value ? 'text-yellow-900' : 'text-gray-900'
+                    }`}>{option.label}</span>
                   </label>
                 ))}
               </div>
@@ -1254,6 +1290,8 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                     <p className="text-sm text-gray-600 mb-2">Enter your previous job title or position.</p>
                     <input type="text" value={formData.previousPosition} onChange={(e) => handleInputChange('previousPosition', e.target.value)} className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900" required />
                   </div>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
                       Years at Previous Job *
