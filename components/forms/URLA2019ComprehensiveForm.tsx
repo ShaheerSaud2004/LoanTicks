@@ -1590,7 +1590,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
             </div>
             <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
+              <div className="flex flex-col">
                 <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
                   Credit Card Payments
                   <span className="group relative inline-block">
@@ -1600,24 +1600,24 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                     </span>
                   </span>
                 </label>
-                <p className="text-sm text-gray-600 mb-2">Enter the total minimum monthly payment for all credit cards.</p>
-                <input type="number" value={formData.creditCardPayments} onChange={(e) => handleInputChange('creditCardPayments', e.target.value)} min="0" step="0.01" placeholder="0" className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900" />
+                <p className="text-sm text-gray-600 mb-3">Enter the total minimum monthly payment for all credit cards.</p>
+                <input type="number" value={formData.creditCardPayments} onChange={(e) => handleInputChange('creditCardPayments', e.target.value)} min="0" step="0.01" placeholder="0" className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900 min-h-[56px]" />
               </div>
-              <div>
+              <div className="flex flex-col">
                 <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
                   Installment Loan Payments (Auto, Student, etc.)
                   <FormTooltip content="Enter the total monthly payment for all installment loans (auto loans, student loans, personal loans, etc.). Include the monthly payment amount, not the total balance. If you have multiple loans, add all monthly payments together." />
                 </label>
-                <p className="text-sm text-gray-600 mb-2">Enter the total monthly payment for all installment loans.</p>
-                <input type="number" value={formData.installmentLoanPayments} onChange={(e) => handleInputChange('installmentLoanPayments', e.target.value)} min="0" step="0.01" placeholder="0" className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900" />
+                <p className="text-sm text-gray-600 mb-3">Enter the total monthly payment for all installment loans.</p>
+                <input type="number" value={formData.installmentLoanPayments} onChange={(e) => handleInputChange('installmentLoanPayments', e.target.value)} min="0" step="0.01" placeholder="0" className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900 min-h-[56px]" />
               </div>
-              <div>
+              <div className="flex flex-col md:col-span-2">
                 <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
                   Other Monthly Payments
                   <FormTooltip content="Enter the total monthly payment for any other debts not listed above (e.g., child support, alimony, other loans, etc.). Do not include your current housing payment, utilities, or insurance premiums here." />
                 </label>
-                <p className="text-sm text-gray-600 mb-2">Enter the total monthly payment for other debts (child support, alimony, etc.).</p>
-                <input type="number" value={formData.otherMonthlyPayments} onChange={(e) => handleInputChange('otherMonthlyPayments', e.target.value)} min="0" step="0.01" placeholder="0" className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900" />
+                <p className="text-sm text-gray-600 mb-3">Enter the total monthly payment for other debts (child support, alimony, etc.).</p>
+                <input type="number" value={formData.otherMonthlyPayments} onChange={(e) => handleInputChange('otherMonthlyPayments', e.target.value)} min="0" step="0.01" placeholder="0" className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900 min-h-[56px]" />
               </div>
             </div>
             <div className="bg-orange-50 border-2 border-orange-200 rounded-xl p-5">
