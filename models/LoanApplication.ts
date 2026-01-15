@@ -295,6 +295,9 @@ export interface ILoanApplication extends Document {
     type: string;
     uploadedAt: Date;
     url: string;
+    gridFSFileId?: string; // MongoDB GridFS file ID for production storage
+    originalName?: string;
+    storedName?: string; // Legacy: for backward compatibility
   }>;
 
   // Employee Assignment & Workflow
@@ -550,6 +553,9 @@ const LoanApplicationSchema = new Schema<ILoanApplication>(
         type: String,
         uploadedAt: { type: Date, default: Date.now },
         url: String,
+        gridFSFileId: String, // MongoDB GridFS file ID
+        originalName: String,
+        storedName: String, // Legacy: for backward compatibility
       },
     ],
 

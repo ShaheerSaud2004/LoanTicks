@@ -2,10 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import connectDB from '@/lib/mongodb';
 import LoanApplication from '@/models/LoanApplication';
-import { writeFile, mkdir } from 'fs/promises';
-import { join } from 'path';
 import { logDataAccess } from '@/lib/auditLogger';
 import { apiRateLimiter } from '@/lib/rateLimiter';
+import { uploadFileToGridFS } from '@/lib/gridfs';
 
 export async function POST(request: NextRequest) {
   // Apply rate limiting
@@ -47,17 +46,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Create upload directory for this application (PRIVATE - outside public folder)
-    // Using 'private' folder which is not accessible via web URL
-    const uploadDir = join(process.cwd(), 'private', 'uploads', applicationId);
-    try {
-      await mkdir(uploadDir, { recursive: true });
-    } catch (error) {
-      // Directory might already exist, that's okay
-      console.error('Error creating upload directory:', error);
-    }
-
-    // Process uploaded files
+    // Process uploaded files and store in MongoDB GridFS
     const uploadedFiles = [];
     
     for (const file of files) {
@@ -82,26 +71,32 @@ export async function POST(request: NextRequest) {
         );
       }
 
+      // Convert File to Buffer
+      const bytes = await file.arrayBuffer();
+      const buffer = Buffer.from(bytes);
+
       // Generate unique filename to avoid conflicts
       const timestamp = Date.now();
       const sanitizedName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
       const uniqueFileName = `${timestamp}_${sanitizedName}`;
-      const filePath = join(uploadDir, uniqueFileName);
 
-      // Convert File to Buffer and save
-      const bytes = await file.arrayBuffer();
-      const buffer = Buffer.from(bytes);
-      await writeFile(filePath, buffer);
+      // Upload to MongoDB GridFS
+      const gridFSFileId = await uploadFileToGridFS(buffer, uniqueFileName, {
+        applicationId,
+        originalName: file.name,
+        uploadedBy: session.user.id,
+        uploadedAt: new Date().toISOString(),
+      });
 
       const fileData = {
         name: file.name,
         originalName: file.name,
         storedName: uniqueFileName,
+        gridFSFileId, // Store GridFS file ID for retrieval
         size: file.size,
         type: file.type,
         uploadedAt: new Date(),
-        url: `/api/secure-document?applicationId=${applicationId}&fileName=${uniqueFileName}`,
-        path: filePath,
+        url: `/api/secure-document?applicationId=${applicationId}&fileId=${gridFSFileId}`,
       };
       
       uploadedFiles.push(fileData);
@@ -132,11 +127,13 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      message: `Successfully uploaded ${uploadedFiles.length} document(s)`,
+      message: `Successfully uploaded ${uploadedFiles.length} document(s) to MongoDB`,
       documents: uploadedFiles.map(f => ({
-        ...f,
-        // Don't expose full file path in response
-        path: undefined,
+        name: f.name,
+        size: f.size,
+        type: f.type,
+        uploadedAt: f.uploadedAt,
+        url: f.url,
       })),
       totalDocuments: allDocuments.length,
     });

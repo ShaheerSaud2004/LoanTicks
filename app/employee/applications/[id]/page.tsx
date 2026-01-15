@@ -295,22 +295,31 @@ export default function ApplicationView({ params }: { params: Promise<{ id: stri
 
   const handleDownloadDocument = async (doc: Record<string, unknown>) => {
     try {
-      // Extract fileName from doc.url or use doc.name
+      const applicationId = application?._id;
+      if (!applicationId) {
+        alert(`Error: Missing application ID`);
+        return;
+      }
+
+      // Prefer GridFS file ID (new method), fallback to fileName (legacy)
+      const gridFSFileId = doc.gridFSFileId as string;
       const docUrl = doc.url as string;
       const fileName = docUrl?.includes('fileName=') 
         ? docUrl.split('fileName=')[1].split('&')[0] 
         : doc.name as string;
       
-      const applicationId = application?._id;
-      if (!applicationId || !fileName) {
+      if (!gridFSFileId && !fileName) {
         alert(`Error: Missing document information`);
         return;
       }
 
+      // Build URL with fileId (preferred) or fileName (legacy)
+      const url = gridFSFileId
+        ? `/api/secure-document?applicationId=${applicationId}&fileId=${encodeURIComponent(gridFSFileId)}`
+        : `/api/secure-document?applicationId=${applicationId}&fileName=${encodeURIComponent(fileName)}`;
+
       // Fetch document from secure API
-      const response = await fetch(
-        `/api/secure-document?applicationId=${applicationId}&fileName=${encodeURIComponent(fileName)}`
-      );
+      const response = await fetch(url);
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
@@ -324,13 +333,13 @@ export default function ApplicationView({ params }: { params: Promise<{ id: stri
 
       // Create blob and download
       const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
+      const downloadUrl = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
-      a.href = url;
+      a.href = downloadUrl;
       a.download = doc.name as string;
       document.body.appendChild(a);
       a.click();
-      window.URL.revokeObjectURL(url);
+      window.URL.revokeObjectURL(downloadUrl);
       document.body.removeChild(a);
     } catch (error) {
       console.error('Error downloading document:', error);

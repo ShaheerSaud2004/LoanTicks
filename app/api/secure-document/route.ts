@@ -2,10 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import connectDB from '@/lib/mongodb';
 import LoanApplication from '@/models/LoanApplication';
-import { readFile } from 'fs/promises';
-import { join } from 'path';
 import { logDataAccess } from '@/lib/auditLogger';
 import { apiRateLimiter } from '@/lib/rateLimiter';
+import { downloadFileFromGridFS, getFileMetadata } from '@/lib/gridfs';
 
 /**
  * Secure document serving endpoint
@@ -29,11 +28,12 @@ export async function GET(request: NextRequest) {
 
     const { searchParams } = new URL(request.url);
     const applicationId = searchParams.get('applicationId');
-    const fileName = searchParams.get('fileName');
+    const fileId = searchParams.get('fileId'); // GridFS file ID (preferred)
+    const fileName = searchParams.get('fileName'); // Fallback for legacy support
 
-    if (!applicationId || !fileName) {
+    if (!applicationId || (!fileId && !fileName)) {
       return NextResponse.json(
-        { error: 'Application ID and file name are required' },
+        { error: 'Application ID and file ID (or file name) are required' },
         { status: 400 }
       );
     }
@@ -55,45 +55,87 @@ export async function GET(request: NextRequest) {
     }
 
     // Find the document in the application
-    // The fileName parameter should match the storedName (timestamp_originalname format)
-    // or we can match by checking if the URL contains the fileName
-    const document = application.documents?.find(
-      (doc: any) => {
-        // Match by storedName if it exists
-        if (doc.storedName && doc.storedName === fileName) {
-          return true;
-        }
-        // Match by checking if URL contains the fileName
-        if (doc.url && doc.url.includes(fileName)) {
-          return true;
-        }
-        // Match by name (original filename)
-        if (doc.name === fileName) {
-          return true;
-        }
-        // Extract filename from URL and match
-        if (doc.url) {
-          try {
-            // Use the request URL as base if doc.url is relative
-            const baseUrl = request.nextUrl.origin || process.env.NEXTAUTH_URL || 'https://loanticks.vercel.app';
-            const urlParams = new URL(doc.url, baseUrl);
-            const urlFileName = urlParams.searchParams.get('fileName');
-            if (urlFileName === fileName) {
-              return true;
-            }
-          } catch (e) {
-            // If URL parsing fails, try direct string match
-            if (doc.url.includes(fileName)) {
-              return true;
+    let document: any = null;
+    
+    if (fileId) {
+      // New method: Find by GridFS file ID
+      document = application.documents?.find(
+        (doc: any) => doc.gridFSFileId === fileId
+      );
+    } else if (fileName) {
+      // Legacy method: Find by fileName (for backward compatibility)
+      document = application.documents?.find(
+        (doc: any) => {
+          // Match by storedName if it exists
+          if (doc.storedName && doc.storedName === fileName) {
+            return true;
+          }
+          // Match by checking if URL contains the fileName
+          if (doc.url && doc.url.includes(fileName)) {
+            return true;
+          }
+          // Match by name (original filename)
+          if (doc.name === fileName) {
+            return true;
+          }
+          // Extract filename from URL and match
+          if (doc.url) {
+            try {
+              const baseUrl = request.nextUrl.origin || process.env.NEXTAUTH_URL || 'https://loanticks.vercel.app';
+              const urlParams = new URL(doc.url, baseUrl);
+              const urlFileName = urlParams.searchParams.get('fileName');
+              if (urlFileName === fileName) {
+                return true;
+              }
+            } catch (e) {
+              if (doc.url.includes(fileName)) {
+                return true;
+              }
             }
           }
+          return false;
         }
-        return false;
-      }
-    );
+      );
+    }
 
     if (!document) {
       return NextResponse.json({ error: 'Document not found' }, { status: 404 });
+    }
+
+    // Get the GridFS file ID (prefer new method, fallback to legacy)
+    const gridFSFileId = document.gridFSFileId;
+    
+    if (!gridFSFileId) {
+      // Legacy: Try to read from filesystem (for backward compatibility)
+      // This will fail in production but allows existing documents to work locally
+      const filePath = require('path').join(process.cwd(), 'private', 'uploads', applicationId, fileName || document.storedName || '');
+      try {
+        const { readFile } = require('fs/promises');
+        const fileBuffer = await readFile(filePath);
+        const fileExtension = (fileName || document.name || '').split('.').pop()?.toLowerCase();
+        
+        let contentType = 'application/octet-stream';
+        if (fileExtension === 'pdf') contentType = 'application/pdf';
+        else if (fileExtension === 'jpg' || fileExtension === 'jpeg') contentType = 'image/jpeg';
+        else if (fileExtension === 'png') contentType = 'image/png';
+
+        return new NextResponse(new Uint8Array(fileBuffer), {
+          headers: {
+            'Content-Type': contentType,
+            'Content-Disposition': `inline; filename="${document.name}"`,
+            'Cache-Control': 'private, no-cache, no-store, must-revalidate',
+            'X-Content-Type-Options': 'nosniff',
+          },
+        });
+      } catch (legacyError) {
+        return NextResponse.json(
+          { 
+            error: 'Document not found in storage. This document may need to be re-uploaded.',
+            details: 'Legacy filesystem storage is not available. Please re-upload the document.',
+          },
+          { status: 404 }
+        );
+      }
     }
 
     // Log document access
@@ -111,20 +153,20 @@ export async function GET(request: NextRequest) {
       },
     });
 
-    // Read file from PRIVATE storage location (not accessible via web URL)
-    // NOTE: In production (Vercel/serverless), filesystem is ephemeral.
-    // For production, use cloud storage (Vercel Blob, S3, Cloudinary, etc.)
-    const filePath = join(process.cwd(), 'private', 'uploads', applicationId, fileName);
-
+    // Read file from MongoDB GridFS
     try {
-      const fileBuffer = await readFile(filePath);
-      const fileExtension = fileName.split('.').pop()?.toLowerCase();
+      const fileBuffer = await downloadFileFromGridFS(gridFSFileId);
+      const fileMetadata = await getFileMetadata(gridFSFileId);
       
-      // Determine content type
-      let contentType = 'application/octet-stream';
-      if (fileExtension === 'pdf') contentType = 'application/pdf';
-      else if (fileExtension === 'jpg' || fileExtension === 'jpeg') contentType = 'image/jpeg';
-      else if (fileExtension === 'png') contentType = 'image/png';
+      // Determine content type from metadata or file extension
+      let contentType = fileMetadata.contentType || 'application/octet-stream';
+      const fileExtension = (document.name || fileMetadata.filename || '').split('.').pop()?.toLowerCase();
+      
+      if (!contentType || contentType === 'application/octet-stream') {
+        if (fileExtension === 'pdf') contentType = 'application/pdf';
+        else if (fileExtension === 'jpg' || fileExtension === 'jpeg') contentType = 'image/jpeg';
+        else if (fileExtension === 'png') contentType = 'image/png';
+      }
 
       // Return file with appropriate headers
       return new NextResponse(new Uint8Array(fileBuffer), {
@@ -136,29 +178,14 @@ export async function GET(request: NextRequest) {
         },
       });
     } catch (fileError) {
-      console.error('Error reading file:', fileError);
-      
-      // Check if this is a production environment issue
-      const isProduction = process.env.NODE_ENV === 'production' || process.env.VERCEL;
-      
-      if (isProduction) {
-        return NextResponse.json(
-          { 
-            error: 'Document storage not configured for production. Please configure cloud storage (Vercel Blob, S3, or Cloudinary).',
-            details: 'The filesystem is ephemeral in serverless environments. Documents must be stored in cloud storage.',
-            fileName: document.name,
-            applicationId
-          },
-          { status: 503 }
-        );
-      }
+      console.error('Error reading file from GridFS:', fileError);
       
       return NextResponse.json(
         { 
-          error: 'File not found or cannot be accessed',
+          error: 'File not found or cannot be accessed from MongoDB',
           details: fileError instanceof Error ? fileError.message : 'Unknown error',
           fileName: document.name,
-          filePath
+          gridFSFileId
         },
         { status: 404 }
       );
