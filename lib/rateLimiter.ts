@@ -29,48 +29,56 @@ export function rateLimit(options: RateLimitOptions) {
   const { windowMs, max, message = 'Too many requests. Please try again later.' } = options;
 
   return async (request: NextRequest): Promise<NextResponse | null> => {
-    // Get client identifier (IP address)
-    const forwarded = request.headers.get('x-forwarded-for');
-    const ip = forwarded ? forwarded.split(',')[0] : request.headers.get('x-real-ip') || 'unknown';
-    
-    const key = `${ip}-${request.nextUrl.pathname}`;
-    const now = Date.now();
-
-    // Initialize or get existing rate limit data
-    if (!store[key] || store[key].resetTime < now) {
-      store[key] = {
-        count: 1,
-        resetTime: now + windowMs
-      };
-      return null; // Allow request
-    }
-
-    // Increment count
-    store[key].count++;
-
-    // Check if limit exceeded
-    if (store[key].count > max) {
-      const retryAfter = Math.ceil((store[key].resetTime - now) / 1000);
+    try {
+      // Get client identifier (IP address)
+      const forwarded = request.headers.get('x-forwarded-for');
+      const ip = forwarded ? forwarded.split(',')[0] : request.headers.get('x-real-ip') || 'unknown';
       
-      return NextResponse.json(
-        {
-          error: message,
-          retryAfter: `${retryAfter} seconds`
-        },
-        {
-          status: 429,
-          headers: {
-            'Retry-After': retryAfter.toString(),
-            'X-RateLimit-Limit': max.toString(),
-            'X-RateLimit-Remaining': '0',
-            'X-RateLimit-Reset': store[key].resetTime.toString()
-          }
-        }
-      );
-    }
+      // Safely get pathname
+      const pathname = request.nextUrl?.pathname || request.url || '/api/auth';
+      const key = `${ip}-${pathname}`;
+      const now = Date.now();
 
-    // Request allowed
-    return null;
+      // Initialize or get existing rate limit data
+      if (!store[key] || store[key].resetTime < now) {
+        store[key] = {
+          count: 1,
+          resetTime: now + windowMs
+        };
+        return null; // Allow request
+      }
+
+      // Increment count
+      store[key].count++;
+
+      // Check if limit exceeded
+      if (store[key].count > max) {
+        const retryAfter = Math.ceil((store[key].resetTime - now) / 1000);
+        
+        return NextResponse.json(
+          {
+            error: message,
+            retryAfter: `${retryAfter} seconds`
+          },
+          {
+            status: 429,
+            headers: {
+              'Retry-After': retryAfter.toString(),
+              'X-RateLimit-Limit': max.toString(),
+              'X-RateLimit-Remaining': '0',
+              'X-RateLimit-Reset': store[key].resetTime.toString()
+            }
+          }
+        );
+      }
+
+      // Request allowed
+      return null;
+    } catch (error) {
+      console.error('Rate limiter error:', error);
+      // On error, allow the request through
+      return null;
+    }
   };
 }
 

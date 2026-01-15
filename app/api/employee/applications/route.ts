@@ -36,11 +36,19 @@ export async function GET(request: NextRequest) {
     const formattedApplications = applications.map(app => ({
       ...app,
       _id: app._id.toString(),
+      userId: app.userId?.toString() || app.userId,
       createdAt: app.createdAt?.toISOString(),
       updatedAt: app.updatedAt?.toISOString(),
       submittedAt: app.submittedAt?.toISOString(),
       reviewedAt: app.reviewedAt?.toISOString(),
-      assignedAt: app.assignedAt?.toISOString()
+      assignedAt: app.assignedAt?.toISOString(),
+      // Serialize statusHistory properly
+      statusHistory: app.statusHistory?.map((entry: any) => ({
+        status: entry.status,
+        changedBy: entry.changedBy?.toString() || entry.changedBy,
+        changedAt: entry.changedAt instanceof Date ? entry.changedAt.toISOString() : entry.changedAt,
+        notes: entry.notes,
+      })) || [],
     }));
 
     return NextResponse.json({ applications: formattedApplications });

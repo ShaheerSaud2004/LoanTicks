@@ -5,20 +5,39 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { signOut } from 'next-auth/react';
-import { LogOut, Loader2 } from 'lucide-react';
+import { LogOut, Loader2, Mail, CheckCircle2, Home, ArrowRight, Info, X, Sparkles } from 'lucide-react';
 import { 
   FileText, 
   CheckCircle,
-  ArrowRight
+  ArrowRight as ArrowRightIcon
 } from 'lucide-react';
 import URLA2019ComprehensiveForm from '@/components/forms/URLA2019ComprehensiveForm';
+import TooltipFixer from '@/components/forms/TooltipFixer';
+import Footer from '@/components/layout/Footer';
 
 export default function LoanApplicationPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [showWelcome, setShowWelcome] = useState(true);
+  const [showIntroModal, setShowIntroModal] = useState(false);
   const [saving, setSaving] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [logoutStage, setLogoutStage] = useState<'signing-out' | 'clearing' | 'success' | null>(null);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [successData, setSuccessData] = useState<{
+    applicationId: string;
+    purchasePrice: number;
+    appraisedValue: number;
+    loanAmount: number;
+    downPayment: number;
+    downPaymentPercent: number;
+    ltv: number;
+    email: string;
+    propertyAddress: string;
+    propertyCity: string;
+    propertyState: string;
+    propertyZipCode: string;
+  } | null>(null);
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -26,17 +45,76 @@ export default function LoanApplicationPage() {
     }
   }, [status, router]);
 
-  const handleLogout = async () => {
-    setIsLoggingOut(true);
-    await signOut({ redirect: false });
-    router.push('/login');
-    router.refresh();
+  // Check if user has seen the intro modal before
+  useEffect(() => {
+    if (status === 'authenticated' && session) {
+      const hasSeenIntro = localStorage.getItem('loan-app-intro-seen');
+      if (!hasSeenIntro) {
+        setShowIntroModal(true);
+      }
+    }
+  }, [status, session]);
+
+  const handleCloseIntroModal = () => {
+    setShowIntroModal(false);
+    localStorage.setItem('loan-app-intro-seen', 'true');
+  };
+
+  const handleLogout = async (e?: React.MouseEvent) => {
+    e?.preventDefault();
+    e?.stopPropagation();
+    
+    if (isLoggingOut) return; // Prevent double-clicks
+    
+    try {
+      setIsLoggingOut(true);
+      setLogoutStage('signing-out');
+      
+      // Stage 1: Signing out (1.5 seconds)
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      // Sign out from NextAuth
+      await signOut({ 
+        redirect: false,
+        callbackUrl: '/login'
+      });
+      
+      // Stage 2: Clearing session (1 second)
+      setLogoutStage('clearing');
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Stage 3: Success (1 second)
+      setLogoutStage('success');
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Final redirect
+      router.push('/login');
+      setTimeout(() => {
+        window.location.href = '/login';
+      }, 500);
+      
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Even if there's an error, show animation and redirect
+      setLogoutStage('success');
+      setTimeout(() => {
+        router.push('/login');
+        setTimeout(() => {
+          window.location.href = '/login';
+        }, 500);
+      }, 1000);
+    }
   };
 
   const handleFormSubmit = async (formData: Record<string, unknown>) => {
     setSaving(true);
     try {
-      console.log('Submitting loan application...', formData);
+      const documents = formData.uploadedDocuments as File[];
+      console.log('Submitting loan application...', {
+        ...formData,
+        documentCount: documents ? documents.length : 0,
+        documentNames: documents ? documents.map((f: File) => f.name) : []
+      });
       
       // Auto-fill with random data if form is mostly empty
       const isEmptyForm = !formData.firstName || !formData.lastName || !formData.email;
@@ -127,11 +205,13 @@ export default function LoanApplicationPage() {
           propertyState: formData.propertyState || 'CA',
           propertyZipCode: formData.propertyZipCode || '90001',
           propertyType: 'single_family',
-            propertyValue: Number(formData.propertyValue) || 500000,
+            propertyValue: Number(formData.purchasePrice || formData.propertyValue) || 500000,
+            purchasePrice: Number(formData.purchasePrice || formData.propertyValue) || 500000,
+            appraisedValue: Number(formData.appraisedValue || formData.purchasePrice || formData.propertyValue) || 500000,
             loanAmount: Number(formData.loanAmount) || 400000,
             loanPurpose: formData.loanPurpose || 'purchase',
-          downPaymentAmount: Number(formData.propertyValue || 500000) - Number(formData.loanAmount || 400000),
-          downPaymentPercentage: ((Number(formData.propertyValue || 500000) - Number(formData.loanAmount || 400000)) / Number(formData.propertyValue || 500000)) * 100,
+          downPaymentAmount: Number(formData.purchasePrice || formData.propertyValue || 500000) - Number(formData.loanAmount || 400000),
+          downPaymentPercentage: ((Number(formData.purchasePrice || formData.propertyValue || 500000) - Number(formData.loanAmount || 400000)) / Number(formData.purchasePrice || formData.propertyValue || 500000)) * 100,
           },
           assets: {
             bankAccounts: [],
@@ -142,15 +222,15 @@ export default function LoanApplicationPage() {
           },
           declarations: {
             outstandingJudgments: formData.outstandingJudgments || false,
-          declaredBankruptcy: formData.bankruptcyWithin7Years || false,
-          propertyForeclosed: formData.propertyForeclosed || false,
+            declaredBankruptcy: formData.bankruptcyWithin7Years || false,
+            propertyForeclosed: formData.propertyForeclosed || false,
             lawsuitParty: formData.lawsuitParty || false,
             loanOnProperty: formData.loanOnProperty || false,
-          coMakerOnNote: formData.cosignerOnAnotherLoan || false,
-          usCitizen: formData.citizenship === 'us_citizen' || !formData.citizenship,
-          permanentResident: formData.citizenship === 'permanent_resident',
-          primaryResidence: formData.intendToOccupy !== false,
-          intendToOccupy: formData.intendToOccupy !== false,
+            coMakerOnNote: formData.cosignerOnAnotherLoan || false,
+            usCitizen: formData.citizenship === 'us_citizen' || !formData.citizenship,
+            permanentResident: formData.citizenship === 'permanent_resident',
+            primaryResidence: formData.intendToOccupy !== false,
+            intendToOccupy: formData.intendToOccupy !== false,
           },
           submittedAt: new Date(),
       };
@@ -166,22 +246,40 @@ export default function LoanApplicationPage() {
         const applicationId = data.applicationId;
 
         // Upload documents if any
-        if ((formData.uploadedDocuments as File[]).length > 0) {
+        const documents = formData.uploadedDocuments as File[];
+        if (documents && documents.length > 0) {
+          console.log(`Uploading ${documents.length} document(s)...`);
           const uploadFormData = new FormData();
           uploadFormData.append('applicationId', applicationId);
           
-                  (formData.uploadedDocuments as File[]).forEach((file: File) => {
+          documents.forEach((file: File, index: number) => {
+            console.log(`Adding file ${index + 1}: ${file.name} (${(file.size / 1024).toFixed(2)} KB, ${file.type})`);
             uploadFormData.append('files', file);
           });
 
           try {
-            await fetch('/api/upload-documents', {
+            const uploadResponse = await fetch('/api/upload-documents', {
               method: 'POST',
               body: uploadFormData,
             });
+
+            if (uploadResponse.ok) {
+              const uploadData = await uploadResponse.json();
+              console.log('✅ Documents uploaded successfully:', uploadData);
+              console.log(`   Total documents: ${uploadData.totalDocuments}`);
+            } else {
+              const errorData = await uploadResponse.json();
+              console.error('❌ Document upload failed:', errorData);
+              // Don't show alert for upload failures - application was already submitted
+              // The user can upload documents later if needed
+            }
           } catch (uploadError) {
-            console.error('Error uploading documents:', uploadError);
+            console.error('❌ Error uploading documents:', uploadError);
+            // Don't show alert - application was submitted successfully
+            // Documents can be uploaded separately if needed
           }
+        } else {
+          console.log('No documents to upload');
         }
 
         // Automatically fetch rates for the application
@@ -207,30 +305,38 @@ export default function LoanApplicationPage() {
           // Don't fail the submission if rates fail - they can be fetched later
         }
 
-        // Show success message
-        const successMessage = `
-🎉 Application Submitted Successfully!
+        // Show success screen with detailed information
+        const purchasePrice = Number(formData.purchasePrice || formData.propertyValue) || 0;
+        const appraisedValue = Number(formData.appraisedValue) || 0;
+        const loanAmount = Number(formData.loanAmount) || 0;
+        const downPayment = purchasePrice - loanAmount;
+        const downPaymentPercent = purchasePrice > 0 ? (downPayment / purchasePrice) * 100 : 0;
+        const ltv = purchasePrice > 0 ? (loanAmount / purchasePrice) * 100 : 0;
 
-Your comprehensive home loan application has been received and is now under review.
-
-Application ID: ${applicationId?.slice(-8) || 'Pending'}
-Submitted: ${new Date().toLocaleDateString()}
-
-What's Next?
-• Our team will review your application within 24-48 hours
-• You'll receive an email update at ${formData.email || 'your email'}
-• Check your dashboard for application status
-
-You can now return to your dashboard to track progress.
-        `;
-        alert(successMessage);
-        router.push('/customer/dashboard');
+        setSuccessData({
+          applicationId: applicationId || '',
+          purchasePrice,
+          appraisedValue,
+          loanAmount,
+          downPayment,
+          downPaymentPercent,
+          ltv,
+          email: (formData.email as string) || '',
+          propertyAddress: (formData.propertyAddress as string) || '',
+          propertyCity: (formData.propertyCity as string) || '',
+          propertyState: (formData.propertyState as string) || '',
+          propertyZipCode: (formData.propertyZipCode as string) || '',
+        });
+        setShowSuccess(true);
       } else {
-        alert('❌ Failed to submit application. Please try again or contact support.');
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+        console.error('Failed to submit application:', errorData);
+        alert(`❌ Failed to submit application: ${errorData.error || 'Please try again or contact support.'}`);
       }
     } catch (error) {
       console.error('Error submitting application:', error);
-      alert('Error submitting application');
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      alert(`❌ Error submitting application: ${errorMessage}. Please check your connection and try again.`);
     } finally {
       setSaving(false);
     }
@@ -240,7 +346,7 @@ You can now return to your dashboard to track progress.
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-600 mx-auto mb-4"></div>
           <p className="text-gray-600">Loading...</p>
         </div>
       </div>
@@ -253,20 +359,179 @@ You can now return to your dashboard to track progress.
 
   if (showWelcome) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-green-600 via-emerald-600 to-teal-500">
-        {/* Logout Loading Overlay */}
+      <div className="min-h-screen bg-gradient-to-br from-gray-700 via-gray-600 to-gray-800">
+        {/* Enhanced Logout Animation */}
         {isLoggingOut && (
-          <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center">
-            <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-sm w-full mx-4 animate-slideIn">
-              <div className="text-center">
-                <div className="mx-auto w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-                  <Loader2 className="h-8 w-8 text-blue-600 animate-spin" />
+          <div className="fixed inset-0 z-[9999] flex items-center justify-center pointer-events-none">
+            <div className="absolute inset-0 bg-black/30 backdrop-blur-sm animate-fadeIn"></div>
+            <div className="relative bg-white rounded-2xl shadow-2xl p-8 md:p-12 border-2 border-gray-200 max-w-md w-full mx-4 animate-scaleIn">
+              <div className="flex flex-col items-center gap-4">
+                {logoutStage === 'signing-out' && (
+                  <>
+                    <div className="relative">
+                      <Loader2 className="h-12 w-12 md:h-16 md:w-16 text-yellow-600 animate-spin" />
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="h-8 w-8 md:h-10 md:w-10 border-4 border-yellow-200 border-t-yellow-600 rounded-full animate-spin"></div>
+                      </div>
+                    </div>
+                    <div className="text-center">
+                      <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-2">Signing out...</h3>
+                      <p className="text-sm md:text-base text-gray-600">Please wait while we securely log you out</p>
+                    </div>
+                  </>
+                )}
+                
+                {logoutStage === 'clearing' && (
+                  <>
+                    <div className="relative">
+                      <Loader2 className="h-12 w-12 md:h-16 md:w-16 text-blue-600 animate-spin" />
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="h-8 w-8 md:h-10 md:w-10 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+                      </div>
+                    </div>
+                    <div className="text-center">
+                      <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-2">Clearing session...</h3>
+                      <p className="text-sm md:text-base text-gray-600">Removing your session data</p>
+                    </div>
+                  </>
+                )}
+                
+                {logoutStage === 'success' && (
+                  <>
+                    <div className="relative">
+                      <div className="h-16 w-16 md:h-20 md:w-20 bg-green-100 rounded-full flex items-center justify-center animate-scaleIn">
+                        <CheckCircle2 className="h-10 w-10 md:h-12 md:w-12 text-green-600 animate-checkmark" />
+                      </div>
+                    </div>
+                    <div className="text-center">
+                      <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-2">Logged out successfully!</h3>
+                      <p className="text-sm md:text-base text-gray-600">Redirecting to login page...</p>
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Introduction Modal - Why You're Filling This Out */}
+        {showIntroModal && (
+          <div className="fixed inset-0 z-[10000] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fadeIn">
+            <div className="bg-white rounded-3xl shadow-2xl max-w-2xl w-full mx-4 overflow-hidden animate-scaleIn relative">
+              {/* Close Button */}
+              <button
+                onClick={handleCloseIntroModal}
+                className="absolute top-4 right-4 z-10 p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-all"
+                aria-label="Close"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              {/* Header with Gradient */}
+              <div className="bg-gradient-to-r from-yellow-500 via-yellow-500 to-yellow-600 p-8 md:p-10 text-center relative overflow-hidden">
+                {/* Animated Background Elements */}
+                <div className="absolute inset-0 opacity-10">
+                  <div className="absolute top-0 left-0 w-64 h-64 bg-white rounded-full -translate-x-1/2 -translate-y-1/2 animate-pulse"></div>
+                  <div className="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full translate-x-1/2 translate-y-1/2 animate-pulse" style={{animationDelay: '0.5s'}}></div>
                 </div>
-                <h3 className="text-xl font-bold text-slate-900 mb-2">
-                  Logging Out
-                </h3>
-                <p className="text-slate-600">
-                  Securely ending your session...
+                
+                <div className="relative z-10">
+                  <div className="w-20 h-20 md:w-24 md:h-24 bg-white rounded-full mx-auto mb-6 flex items-center justify-center shadow-lg">
+                    <Sparkles className="w-10 h-10 md:w-12 md:h-12 text-yellow-600" />
+                  </div>
+                  <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">
+                    Welcome to Your Mortgage Application
+                  </h2>
+                  <p className="text-lg md:text-xl text-white/90">
+                    Let's get you started on your path to homeownership
+                  </p>
+                </div>
+              </div>
+
+              {/* Content */}
+              <div className="p-6 md:p-8 space-y-6 max-h-[60vh] overflow-y-auto">
+                {/* Why Section */}
+                <div className="bg-gradient-to-r from-yellow-50 to-amber-50 border-2 border-yellow-200 rounded-xl p-6">
+                  <div className="flex items-start gap-4">
+                    <div className="bg-yellow-500 p-3 rounded-lg flex-shrink-0">
+                      <Info className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold text-gray-900 mb-3">
+                        Why You're Filling This Out
+                      </h3>
+                      <p className="text-gray-700 leading-relaxed mb-4">
+                        This comprehensive mortgage application is the first step toward securing financing for your dream home. 
+                        By providing detailed information about your financial situation, employment history, and the property you're interested in, 
+                        we can:
+                      </p>
+                      <ul className="space-y-3 text-gray-700">
+                        <li className="flex items-start gap-3">
+                          <CheckCircle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
+                          <span><strong>Assess Your Eligibility:</strong> Determine the loan amount you qualify for based on your income, credit, and financial profile</span>
+                        </li>
+                        <li className="flex items-start gap-3">
+                          <CheckCircle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
+                          <span><strong>Get Competitive Rates:</strong> Match you with the best mortgage rates available for your situation</span>
+                        </li>
+                        <li className="flex items-start gap-3">
+                          <CheckCircle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
+                          <span><strong>Streamline the Process:</strong> Pre-approve your application so you can shop for homes with confidence</span>
+                        </li>
+                        <li className="flex items-start gap-3">
+                          <CheckCircle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
+                          <span><strong>Ensure Compliance:</strong> Meet all regulatory requirements for mortgage lending (URLA 2019 standard)</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                {/* What Happens Next */}
+                <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-6">
+                  <h3 className="text-lg font-bold text-blue-900 mb-3 flex items-center gap-2">
+                    <ArrowRight className="w-5 h-5" />
+                    What Happens After You Submit
+                  </h3>
+                  <ul className="space-y-2 text-blue-800 text-sm">
+                    <li className="flex items-start gap-2">
+                      <span className="text-blue-600 mt-1">•</span>
+                      <span>Our team reviews your application within <strong>24-48 hours</strong></span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-blue-600 mt-1">•</span>
+                      <span>You'll receive email updates and may be contacted for additional documentation</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-blue-600 mt-1">•</span>
+                      <span>Once approved, you'll receive a pre-approval letter to use when making offers</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-blue-600 mt-1">•</span>
+                      <span>Track your application status in real-time from your dashboard</span>
+                    </li>
+                  </ul>
+                </div>
+
+                {/* Security Note */}
+                <div className="bg-gray-50 border border-gray-200 rounded-xl p-4">
+                  <p className="text-sm text-gray-600 text-center">
+                    <strong className="text-gray-900">🔒 Your information is secure.</strong> All data is encrypted and protected according to industry standards.
+                  </p>
+                </div>
+              </div>
+
+              {/* Footer Actions */}
+              <div className="bg-gray-50 p-6 md:p-8 border-t border-gray-200">
+                <button
+                  onClick={handleCloseIntroModal}
+                  className="w-full bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white font-bold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 text-lg"
+                >
+                  Got It, Let's Get Started!
+                  <ArrowRight className="w-5 h-5" />
+                </button>
+                <p className="text-center text-sm text-gray-500 mt-3">
+                  This will only show once. You can always access help by clicking the info icons throughout the form.
                 </p>
               </div>
             </div>
@@ -312,14 +577,16 @@ You can now return to your dashboard to track progress.
                   <div className="text-xs text-gray-500">{session.user.email}</div>
                 </div>
                 
-                <span className="px-3 py-1 rounded-full text-xs font-semibold capitalize bg-green-100 text-green-800">
+                <span className="px-3 py-1 rounded-full text-xs font-semibold capitalize bg-yellow-100 text-yellow-800">
                   {session.user.role}
                 </span>
 
                 <button
                   onClick={handleLogout}
                   disabled={isLoggingOut}
-                  className="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors font-medium text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                  type="button"
+                  className="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 active:bg-red-200 transition-colors font-medium text-sm disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation min-h-[44px]"
+                  aria-label="Logout"
                 >
                   {isLoggingOut ? (
                     <>
@@ -342,9 +609,9 @@ You can now return to your dashboard to track progress.
         <div className="max-w-4xl w-full">
           
           <div className="bg-white rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden">
-            <div className="bg-gradient-to-r from-green-600 to-emerald-600 p-6 sm:p-8 md:p-12 text-white text-center">
+            <div className="bg-gradient-to-r from-yellow-600 to-yellow-600 p-6 sm:p-8 md:p-12 text-white text-center">
               <div className="w-16 h-16 sm:w-20 sm:h-20 bg-white rounded-full mx-auto mb-4 sm:mb-6 flex items-center justify-center">
-                <FileText className="w-8 h-8 sm:w-10 sm:h-10 text-green-600" />
+                <FileText className="w-8 h-8 sm:w-10 sm:h-10 text-yellow-600" />
               </div>
               <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">
                 Home Mortgage Application
@@ -365,34 +632,34 @@ You can now return to your dashboard to track progress.
                 </p>
               </div>
 
-              <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-4 sm:p-6 mb-6 sm:mb-8">
-                <h3 className="font-bold text-blue-900 mb-3 flex items-center gap-2 text-sm sm:text-base">
+              <div className="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-4 sm:p-6 mb-6 sm:mb-8">
+                <h3 className="font-bold text-yellow-900 mb-3 flex items-center gap-2 text-sm sm:text-base">
                   <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
                   What you&apos;ll need for your mortgage:
                 </h3>
-                <ul className="space-y-2 text-blue-800 text-xs sm:text-sm">
+                <ul className="space-y-2 text-yellow-800 text-xs sm:text-sm">
                   <li className="flex items-start gap-2">
-                    <span className="text-blue-600 mt-1 flex-shrink-0">•</span>
+                    <span className="text-yellow-600 mt-1 flex-shrink-0">•</span>
                     <span>Personal identification and contact information</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-blue-600 mt-1 flex-shrink-0">•</span>
+                    <span className="text-yellow-600 mt-1 flex-shrink-0">•</span>
                     <span>Current and previous employment details with income verification</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-blue-600 mt-1 flex-shrink-0">•</span>
+                    <span className="text-yellow-600 mt-1 flex-shrink-0">•</span>
                     <span>Financial information (bank accounts, assets, monthly obligations)</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-blue-600 mt-1 flex-shrink-0">•</span>
+                    <span className="text-yellow-600 mt-1 flex-shrink-0">•</span>
                     <span>Property details and desired loan amount</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-blue-600 mt-1 flex-shrink-0">•</span>
+                    <span className="text-yellow-600 mt-1 flex-shrink-0">•</span>
                     <span>Financial declarations and credit history</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-blue-600 mt-1 flex-shrink-0">•</span>
+                    <span className="text-yellow-600 mt-1 flex-shrink-0">•</span>
                     <span>Supporting documents (W-2s, pay stubs, bank statements)</span>
                   </li>
                 </ul>
@@ -400,22 +667,22 @@ You can now return to your dashboard to track progress.
 
               <div className="grid grid-cols-3 gap-3 sm:gap-4 mb-6 sm:mb-8">
                 <div className="text-center p-3 sm:p-4 bg-gray-50 rounded-xl">
-                  <div className="text-2xl sm:text-3xl font-bold text-green-600 mb-1">13</div>
+                  <div className="text-2xl sm:text-3xl font-bold text-yellow-600 mb-1">13</div>
                   <div className="text-xs sm:text-sm text-gray-600">Steps</div>
                 </div>
                 <div className="text-center p-3 sm:p-4 bg-gray-50 rounded-xl">
-                  <div className="text-2xl sm:text-3xl font-bold text-green-600 mb-1">30-45</div>
+                  <div className="text-2xl sm:text-3xl font-bold text-yellow-600 mb-1">30-45</div>
                   <div className="text-xs sm:text-sm text-gray-600">Minutes</div>
                 </div>
                 <div className="text-center p-3 sm:p-4 bg-gray-50 rounded-xl">
-                  <div className="text-2xl sm:text-3xl font-bold text-green-600 mb-1">100%</div>
+                  <div className="text-2xl sm:text-3xl font-bold text-yellow-600 mb-1">100%</div>
                   <div className="text-xs sm:text-sm text-gray-600">Complete</div>
                 </div>
               </div>
 
               <button
                 onClick={() => setShowWelcome(false)}
-                className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-bold py-3 sm:py-4 px-4 sm:px-6 rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 text-sm sm:text-base"
+                className="w-full bg-gradient-to-r from-yellow-600 to-yellow-600 hover:from-yellow-700 hover:to-yellow-700 text-white font-bold py-3 sm:py-4 px-4 sm:px-6 rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 text-sm sm:text-base"
               >
                 Start Mortgage Application
                 <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -437,6 +704,185 @@ You can now return to your dashboard to track progress.
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Enhanced Logout Animation */}
+      {isLoggingOut && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center pointer-events-none">
+          <div className="absolute inset-0 bg-black/30 backdrop-blur-sm animate-fadeIn"></div>
+          <div className="relative bg-white rounded-2xl shadow-2xl p-8 md:p-12 border-2 border-gray-200 max-w-md w-full mx-4 animate-scaleIn">
+            <div className="flex flex-col items-center gap-4">
+              {logoutStage === 'signing-out' && (
+                <>
+                  <div className="relative">
+                    <Loader2 className="h-12 w-12 md:h-16 md:w-16 text-yellow-600 animate-spin" />
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="h-8 w-8 md:h-10 md:w-10 border-4 border-yellow-200 border-t-yellow-600 rounded-full animate-spin"></div>
+                    </div>
+                  </div>
+                  <div className="text-center">
+                    <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-2">Signing out...</h3>
+                    <p className="text-sm md:text-base text-gray-600">Please wait while we securely log you out</p>
+                  </div>
+                </>
+              )}
+              
+              {logoutStage === 'clearing' && (
+                <>
+                  <div className="relative">
+                    <Loader2 className="h-12 w-12 md:h-16 md:w-16 text-blue-600 animate-spin" />
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="h-8 w-8 md:h-10 md:w-10 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+                    </div>
+                  </div>
+                  <div className="text-center">
+                    <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-2">Clearing session...</h3>
+                    <p className="text-sm md:text-base text-gray-600">Removing your session data</p>
+                  </div>
+                </>
+              )}
+              
+              {logoutStage === 'success' && (
+                <>
+                  <div className="relative">
+                    <div className="h-16 w-16 md:h-20 md:w-20 bg-green-100 rounded-full flex items-center justify-center animate-scaleIn">
+                      <CheckCircle2 className="h-10 w-10 md:h-12 md:w-12 text-green-600 animate-checkmark" />
+                    </div>
+                  </div>
+                  <div className="text-center">
+                    <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-2">Logged out successfully!</h3>
+                    <p className="text-sm md:text-base text-gray-600">Redirecting to login page...</p>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Introduction Modal - Why You're Filling This Out */}
+      {showIntroModal && (
+        <div className="fixed inset-0 z-[10000] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fadeIn">
+          <div className="bg-white rounded-3xl shadow-2xl max-w-2xl w-full mx-4 overflow-hidden animate-scaleIn relative">
+            {/* Close Button */}
+            <button
+              onClick={handleCloseIntroModal}
+              className="absolute top-4 right-4 z-10 p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-all"
+              aria-label="Close"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            {/* Header with Gradient */}
+            <div className="bg-gradient-to-r from-yellow-500 via-yellow-500 to-yellow-600 p-8 md:p-10 text-center relative overflow-hidden">
+              {/* Animated Background Elements */}
+              <div className="absolute inset-0 opacity-10">
+                <div className="absolute top-0 left-0 w-64 h-64 bg-white rounded-full -translate-x-1/2 -translate-y-1/2 animate-pulse"></div>
+                <div className="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full translate-x-1/2 translate-y-1/2 animate-pulse" style={{animationDelay: '0.5s'}}></div>
+              </div>
+              
+              <div className="relative z-10">
+                <div className="w-20 h-20 md:w-24 md:h-24 bg-white rounded-full mx-auto mb-6 flex items-center justify-center shadow-lg">
+                  <Sparkles className="w-10 h-10 md:w-12 md:h-12 text-yellow-600" />
+                </div>
+                <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">
+                  Welcome to Your Mortgage Application
+                </h2>
+                <p className="text-lg md:text-xl text-white/90">
+                  Let's get you started on your path to homeownership
+                </p>
+              </div>
+            </div>
+
+            {/* Content */}
+            <div className="p-6 md:p-8 space-y-6 max-h-[60vh] overflow-y-auto">
+              {/* Why Section */}
+              <div className="bg-gradient-to-r from-yellow-50 to-amber-50 border-2 border-yellow-200 rounded-xl p-6">
+                <div className="flex items-start gap-4">
+                  <div className="bg-yellow-500 p-3 rounded-lg flex-shrink-0">
+                    <Info className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-gray-900 mb-3">
+                      Why You're Filling This Out
+                    </h3>
+                    <p className="text-gray-700 leading-relaxed mb-4">
+                      This comprehensive mortgage application is the first step toward securing financing for your dream home. 
+                      By providing detailed information about your financial situation, employment history, and the property you're interested in, 
+                      we can:
+                    </p>
+                    <ul className="space-y-3 text-gray-700">
+                      <li className="flex items-start gap-3">
+                        <CheckCircle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
+                        <span><strong>Assess Your Eligibility:</strong> Determine the loan amount you qualify for based on your income, credit, and financial profile</span>
+                      </li>
+                      <li className="flex items-start gap-3">
+                        <CheckCircle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
+                        <span><strong>Get Competitive Rates:</strong> Match you with the best mortgage rates available for your situation</span>
+                      </li>
+                      <li className="flex items-start gap-3">
+                        <CheckCircle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
+                        <span><strong>Streamline the Process:</strong> Pre-approve your application so you can shop for homes with confidence</span>
+                      </li>
+                      <li className="flex items-start gap-3">
+                        <CheckCircle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
+                        <span><strong>Ensure Compliance:</strong> Meet all regulatory requirements for mortgage lending (URLA 2019 standard)</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              {/* What Happens Next */}
+              <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-6">
+                <h3 className="text-lg font-bold text-blue-900 mb-3 flex items-center gap-2">
+                  <ArrowRight className="w-5 h-5" />
+                  What Happens After You Submit
+                </h3>
+                <ul className="space-y-2 text-blue-800 text-sm">
+                  <li className="flex items-start gap-2">
+                    <span className="text-blue-600 mt-1">•</span>
+                    <span>Our team reviews your application within <strong>24-48 hours</strong></span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-blue-600 mt-1">•</span>
+                    <span>You'll receive email updates and may be contacted for additional documentation</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-blue-600 mt-1">•</span>
+                    <span>Once approved, you'll receive a pre-approval letter to use when making offers</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-blue-600 mt-1">•</span>
+                    <span>Track your application status in real-time from your dashboard</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Security Note */}
+              <div className="bg-gray-50 border border-gray-200 rounded-xl p-4">
+                <p className="text-sm text-gray-600 text-center">
+                  <strong className="text-gray-900">🔒 Your information is secure.</strong> All data is encrypted and protected according to industry standards.
+                </p>
+              </div>
+            </div>
+
+            {/* Footer Actions */}
+            <div className="bg-gray-50 p-6 md:p-8 border-t border-gray-200">
+              <button
+                onClick={handleCloseIntroModal}
+                className="w-full bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white font-bold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 text-lg"
+              >
+                Got It, Let's Get Started!
+                <ArrowRight className="w-5 h-5" />
+              </button>
+              <p className="text-center text-sm text-gray-500 mt-3">
+                This will only show once. You can always access help by clicking the info icons throughout the form.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+
       {/* Navigation Header */}
       <nav className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -482,9 +928,14 @@ You can now return to your dashboard to track progress.
               </span>
 
               <button
-                onClick={handleLogout}
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  handleLogout(e);
+                }}
                 disabled={isLoggingOut}
-                className="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors font-medium text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors font-medium text-sm disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation min-h-[44px]"
               >
                 {isLoggingOut ? (
                   <>
@@ -503,7 +954,186 @@ You can now return to your dashboard to track progress.
         </div>
       </nav>
 
+      <TooltipFixer />
       <URLA2019ComprehensiveForm onSubmit={handleFormSubmit} saving={saving} />
+      
+      {/* Footer */}
+      <Footer />
+
+      {/* Modern Success Screen */}
+      {showSuccess && successData && (
+        <div className="fixed inset-0 z-[100] bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center p-4 animate-fadeIn">
+          <div className="bg-white rounded-3xl shadow-2xl max-w-2xl w-full mx-4 overflow-hidden animate-scaleIn">
+            {/* Success Header with Animation */}
+            <div className="bg-gradient-to-r from-yellow-500 via-yellow-500 to-yellow-600 p-8 md:p-12 text-center relative overflow-hidden">
+              {/* Animated Background Elements */}
+              <div className="absolute inset-0 opacity-10">
+                <div className="absolute top-0 left-0 w-64 h-64 bg-white rounded-full -translate-x-1/2 -translate-y-1/2 animate-pulse"></div>
+                <div className="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full translate-x-1/2 translate-y-1/2 animate-pulse" style={{animationDelay: '0.5s'}}></div>
+              </div>
+              
+              {/* Animated Checkmark Circle */}
+              <div className="relative z-10">
+                <div className="w-24 h-24 md:w-32 md:h-32 mx-auto mb-6 relative">
+                  <div className="absolute inset-0 bg-white rounded-full animate-scaleIn opacity-20"></div>
+                  <div className="absolute inset-0 bg-white rounded-full animate-scaleIn" style={{animationDelay: '0.2s'}}></div>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <CheckCircle2 className="w-16 h-16 md:w-20 md:h-20 text-yellow-600 animate-scaleIn" strokeWidth={3} style={{animationDelay: '0.3s'}} />
+                  </div>
+                </div>
+                
+                <h2 className="text-3xl md:text-4xl font-bold text-white mb-3 animate-slideUp">
+                  ✨ Successful Application!
+                </h2>
+                <p className="text-lg md:text-xl text-white/90 animate-slideUp" style={{animationDelay: '0.1s'}}>
+                  Your loan application has been submitted
+                </p>
+              </div>
+            </div>
+
+            {/* Content */}
+            <div className="p-6 md:p-8 space-y-6 max-h-[70vh] overflow-y-auto">
+              {/* Email Notification */}
+              <div className="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-5 animate-slideUp" style={{animationDelay: '0.2s'}}>
+                <div className="flex items-start gap-3">
+                  <Mail className="w-6 h-6 text-yellow-600 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <h3 className="font-bold text-yellow-900 mb-1">Check Your Email</h3>
+                    <p className="text-sm text-yellow-800">
+                      We've sent a confirmation email to <strong>{successData.email}</strong>. 
+                      Please check your inbox (and spam folder) for updates and next steps.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Application Details */}
+              <div className="space-y-4 animate-slideUp" style={{animationDelay: '0.3s'}}>
+                <div className="border-b border-gray-200 pb-3">
+                  <h3 className="text-lg font-bold text-gray-900 mb-1">Application ID</h3>
+                  <p className="text-2xl font-mono font-bold text-yellow-600">
+                    {successData.applicationId.slice(-8) || 'Pending'}
+                  </p>
+                  <p className="text-sm text-gray-500 mt-1">
+                    Submitted on {new Date().toLocaleDateString('en-US', { 
+                      weekday: 'long', 
+                      year: 'numeric', 
+                      month: 'long', 
+                      day: 'numeric' 
+                    })} at {new Date().toLocaleTimeString('en-US', { 
+                      hour: '2-digit', 
+                      minute: '2-digit' 
+                    })}
+                  </p>
+                </div>
+
+                {/* Property Information */}
+                <div className="bg-gray-50 rounded-xl p-5">
+                  <h3 className="text-lg font-bold text-gray-900 mb-4">Property Information</h3>
+                  <div className="space-y-3">
+                    <div>
+                      <p className="text-sm text-gray-600 mb-1">Property Address</p>
+                      <p className="font-semibold text-gray-900">
+                        {successData.propertyAddress || 'N/A'}
+                        {successData.propertyCity && `, ${successData.propertyCity}`}
+                        {successData.propertyState && `, ${successData.propertyState}`}
+                        {successData.propertyZipCode && ` ${successData.propertyZipCode}`}
+                      </p>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4 pt-3 border-t border-gray-200">
+                      <div>
+                        <p className="text-xs text-gray-500 mb-1">Purchase Price</p>
+                        <p className="text-lg font-bold text-gray-900">
+                          ${successData.purchasePrice.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500 mb-1">Appraised Value</p>
+                        <p className="text-lg font-bold text-gray-900">
+                          ${successData.appraisedValue.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500 mb-1">Loan Amount</p>
+                        <p className="text-lg font-bold text-yellow-600">
+                          ${successData.loanAmount.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500 mb-1">Down Payment</p>
+                        <p className="text-lg font-bold text-gray-900">
+                          ${successData.downPayment.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+                          <span className="text-sm text-gray-600 ml-1">
+                            ({successData.downPaymentPercent.toFixed(1)}%)
+                          </span>
+                        </p>
+                      </div>
+                    </div>
+                    <div className="pt-3 border-t border-gray-200">
+                      <p className="text-xs text-gray-500 mb-1">Loan-to-Value (LTV) Ratio</p>
+                      <p className="text-xl font-bold text-gray-900">
+                        {successData.ltv.toFixed(1)}%
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* What's Next */}
+                <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-5">
+                  <h3 className="font-bold text-blue-900 mb-3 flex items-center gap-2">
+                    <ArrowRight className="w-5 h-5" />
+                    What's Next?
+                  </h3>
+                  <ul className="space-y-2 text-sm text-blue-800">
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" />
+                      <span>Our team will review your application within <strong>24-48 hours</strong></span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" />
+                      <span>You'll receive email updates at <strong>{successData.email}</strong></span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" />
+                      <span>Check your dashboard for real-time application status</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" />
+                      <span>We may contact you if additional information is needed</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            {/* Footer Actions */}
+            <div className="bg-gray-50 p-6 md:p-8 border-t border-gray-200 flex flex-col sm:flex-row gap-3 animate-slideUp" style={{animationDelay: '0.4s'}}>
+              <button
+                onClick={() => {
+                  setShowSuccess(false);
+                  router.push('/customer/dashboard');
+                }}
+                className="flex-1 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2"
+              >
+                <Home className="w-5 h-5" />
+                Go to Dashboard
+              </button>
+              <button
+                onClick={() => {
+                  setShowSuccess(false);
+                  setShowWelcome(true);
+                }}
+                className="flex-1 bg-white border-2 border-gray-300 hover:border-gray-400 text-gray-700 font-semibold py-3 px-6 rounded-xl transition-all flex items-center justify-center gap-2"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* Footer */}
+      <Footer />
     </div>
   );
 }

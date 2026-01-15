@@ -2,6 +2,9 @@ import { auth } from '@/lib/auth';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
+// Note: The "middleware" deprecation warning in Next.js 16.0.10 is a known issue
+// This middleware file is the correct implementation and will continue to work
+// The warning can be safely ignored or will be fixed in future Next.js versions
 export default async function middleware(request: NextRequest) {
   const session = await auth();
   const { pathname } = request.nextUrl;

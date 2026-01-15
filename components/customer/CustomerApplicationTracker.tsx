@@ -135,8 +135,13 @@ export default function CustomerApplicationTracker({
                       {app.status}
                     </span>
                     <button
-                      onClick={() => handleTrack(app)}
-                      className="text-indigo-600 hover:text-indigo-700 font-medium text-sm flex items-center gap-1 hover:gap-2 transition-all"
+                      type="button"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        handleTrack(app);
+                      }}
+                      className="text-indigo-600 hover:text-indigo-700 active:text-indigo-800 font-medium text-sm flex items-center gap-1 hover:gap-2 transition-all px-3 py-2 rounded-lg hover:bg-indigo-50 active:bg-indigo-100 touch-manipulation min-h-[44px] min-w-[80px] justify-center"
                     >
                       Track <span>→</span>
                     </button>
@@ -150,63 +155,69 @@ export default function CustomerApplicationTracker({
 
       {/* Tracking Modal */}
       {isModalOpen && selectedApp && (
-        <div className="fixed inset-0 z-50 overflow-y-auto">
-          <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+        <div className="fixed inset-0 z-50 overflow-y-auto overscroll-contain">
+          <div className="flex items-end sm:items-center justify-center min-h-screen px-0 sm:px-4 pt-0 pb-0 text-center sm:block sm:p-0">
             {/* Background overlay */}
             <div
-              className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"
+              className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75 touch-none"
               onClick={handleCloseModal}
             ></div>
 
-            {/* Modal panel */}
-            <div className="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-3xl sm:w-full">
+            {/* Modal panel - Full screen on mobile, centered on desktop */}
+            <div className="inline-block align-bottom bg-white rounded-t-3xl sm:rounded-2xl text-left overflow-hidden shadow-xl transform transition-all w-full h-[95vh] sm:h-auto sm:my-8 sm:align-middle sm:max-w-3xl sm:w-full sm:max-h-[90vh] flex flex-col">
               {/* Header */}
-              <div className="bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-6">
+              <div className="bg-gradient-to-r from-indigo-600 to-purple-600 px-4 sm:px-6 py-4 sm:py-6 flex-shrink-0">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="bg-white/20 p-3 rounded-lg">
-                      <FileText className="h-6 w-6 text-white" />
+                  <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
+                    <div className="bg-white/20 p-2 sm:p-3 rounded-lg flex-shrink-0">
+                      <FileText className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
                     </div>
-                    <div>
-                      <h3 className="text-2xl font-bold text-white">
+                    <div className="min-w-0 flex-1">
+                      <h3 className="text-lg sm:text-2xl font-bold text-white truncate">
                         Application Tracking
                       </h3>
-                      <p className="text-indigo-100 text-sm">
+                      <p className="text-indigo-100 text-xs sm:text-sm truncate">
                         ID: {selectedApp._id.slice(-8).toUpperCase()}
                       </p>
                     </div>
                   </div>
                   <button
-                    onClick={handleCloseModal}
-                    className="text-white hover:bg-white/20 rounded-lg p-2 transition-colors"
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      handleCloseModal();
+                    }}
+                    className="text-white hover:bg-white/20 rounded-lg p-2.5 sm:p-2 transition-colors flex-shrink-0 touch-manipulation min-w-[44px] min-h-[44px] flex items-center justify-center"
+                    aria-label="Close modal"
                   >
                     <X className="w-6 h-6" />
                   </button>
                 </div>
               </div>
 
-              {/* Content */}
-              <div className="p-6 space-y-6">
+              {/* Content - Scrollable */}
+              <div className="flex-1 overflow-y-auto overscroll-contain px-4 sm:px-6 py-4 sm:py-6 space-y-4 sm:space-y-6">
                 {/* Status Timeline */}
-                <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6">
-                  <h4 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
-                    <Calendar className="w-5 h-5 text-indigo-600" />
+                <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-4 sm:p-6">
+                  <h4 className="font-bold text-gray-900 mb-3 sm:mb-4 flex items-center gap-2 text-sm sm:text-base">
+                    <Calendar className="w-4 h-4 sm:w-5 sm:h-5 text-indigo-600 flex-shrink-0" />
                     Application Status
                   </h4>
-                  <div className="flex items-center gap-4">
-                    <div className="flex-1">
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
+                    <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between mb-2">
-                        <span className="text-sm font-medium text-gray-700">Submitted</span>
-                        <span className="text-sm text-gray-500">
+                        <span className="text-xs sm:text-sm font-medium text-gray-700">Submitted</span>
+                        <span className="text-xs sm:text-sm text-gray-500 ml-2">
                           {formatDate(selectedApp.submissionDate)}
                         </span>
                       </div>
                       <div className="h-2 bg-green-500 rounded-full"></div>
                     </div>
-                    <div className="flex-1">
+                    <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between mb-2">
-                        <span className="text-sm font-medium text-gray-700">Under Review</span>
-                        <span className="text-sm text-gray-500">
+                        <span className="text-xs sm:text-sm font-medium text-gray-700">Under Review</span>
+                        <span className="text-xs sm:text-sm text-gray-500 ml-2">
                           {selectedApp.status === 'pending' ? 'In Progress' : 'Complete'}
                         </span>
                       </div>
@@ -218,10 +229,10 @@ export default function CustomerApplicationTracker({
                         }`}
                       ></div>
                     </div>
-                    <div className="flex-1">
+                    <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between mb-2">
-                        <span className="text-sm font-medium text-gray-700">Decision</span>
-                        <span className="text-sm text-gray-500">
+                        <span className="text-xs sm:text-sm font-medium text-gray-700">Decision</span>
+                        <span className="text-xs sm:text-sm text-gray-500 ml-2">
                           {selectedApp.status === 'approved'
                             ? 'Approved ✅'
                             : selectedApp.status === 'rejected'
@@ -243,10 +254,10 @@ export default function CustomerApplicationTracker({
                 </div>
 
                 {/* Application Details */}
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="bg-gray-50 rounded-xl p-6">
-                    <h4 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
-                      <DollarSign className="w-5 h-5 text-green-600" />
+                <div className="grid md:grid-cols-2 gap-4 sm:gap-6">
+                  <div className="bg-gray-50 rounded-xl p-4 sm:p-6">
+                    <h4 className="font-bold text-gray-900 mb-3 sm:mb-4 flex items-center gap-2 text-sm sm:text-base">
+                      <DollarSign className="w-4 h-4 sm:w-5 sm:h-5 text-green-600 flex-shrink-0" />
                       Loan Details
                     </h4>
                     <div className="space-y-3">
@@ -270,12 +281,33 @@ export default function CustomerApplicationTracker({
                           {selectedApp.propertyInfo?.propertyType?.replace('_', ' ') || 'N/A'}
                         </p>
                       </div>
+                      {selectedApp.propertyInfo?.propertyValue && (
+                        <div>
+                          <p className="text-sm text-gray-600">Property Value</p>
+                          <p className="font-semibold text-gray-900">
+                            {formatCurrency(selectedApp.propertyInfo.propertyValue)}
+                          </p>
+                        </div>
+                      )}
+                      {selectedApp.propertyInfo?.downPaymentAmount && (
+                        <div>
+                          <p className="text-sm text-gray-600">Down Payment</p>
+                          <p className="font-semibold text-gray-900">
+                            {formatCurrency(selectedApp.propertyInfo.downPaymentAmount)}
+                            {selectedApp.propertyInfo.downPaymentPercentage && (
+                              <span className="text-gray-600 ml-2">
+                                ({selectedApp.propertyInfo.downPaymentPercentage.toFixed(1)}%)
+                              </span>
+                            )}
+                          </p>
+                        </div>
+                      )}
                     </div>
                   </div>
 
-                  <div className="bg-gray-50 rounded-xl p-6">
-                    <h4 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
-                      <User className="w-5 h-5 text-blue-600" />
+                  <div className="bg-gray-50 rounded-xl p-4 sm:p-6">
+                    <h4 className="font-bold text-gray-900 mb-3 sm:mb-4 flex items-center gap-2 text-sm sm:text-base">
+                      <User className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 flex-shrink-0" />
                       Applicant Info
                     </h4>
                     <div className="space-y-3">
@@ -295,9 +327,27 @@ export default function CustomerApplicationTracker({
                       <div>
                         <p className="text-sm text-gray-600">Application Date</p>
                         <p className="font-semibold text-gray-900">
-                          {formatDate(selectedApp.submissionDate)}
+                          {formatDate(selectedApp.submissionDate || selectedApp.createdAt)}
                         </p>
                       </div>
+                      {selectedApp.propertyInfo?.propertyAddress && (
+                        <div>
+                          <p className="text-sm text-gray-600">Property Address</p>
+                          <p className="font-semibold text-gray-900">
+                            {selectedApp.propertyInfo.propertyAddress}
+                            {selectedApp.propertyInfo.propertyCity && `, ${selectedApp.propertyInfo.propertyCity}`}
+                            {selectedApp.propertyInfo.propertyState && `, ${selectedApp.propertyInfo.propertyState}`}
+                          </p>
+                        </div>
+                      )}
+                      {selectedApp.reviewedAt && (
+                        <div>
+                          <p className="text-sm text-gray-600">Last Reviewed</p>
+                          <p className="font-semibold text-gray-900">
+                            {formatDate(selectedApp.reviewedAt)}
+                          </p>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -353,16 +403,22 @@ export default function CustomerApplicationTracker({
                 </div>
               </div>
 
-              {/* Footer */}
-              <div className="bg-gray-50 px-6 py-4 flex justify-end gap-3">
+              {/* Footer - Fixed at bottom */}
+              <div className="bg-gray-50 px-4 sm:px-6 py-3 sm:py-4 flex flex-col sm:flex-row justify-end gap-2 sm:gap-3 flex-shrink-0 border-t border-gray-200">
                 <button
                   onClick={handleCloseModal}
-                  className="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors font-medium"
+                  className="px-6 py-3 sm:py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 active:bg-gray-400 transition-colors font-medium text-sm sm:text-base touch-manipulation min-h-[44px] sm:min-h-0"
                 >
                   Close
                 </button>
                 {selectedApp.status === 'approved' && (
-                  <button className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium">
+                  <button
+                    onClick={() => {
+                      // Show loan details or navigate to loan details page
+                      alert(`Loan Details for Application ${selectedApp._id.slice(-8).toUpperCase()}\n\nLoan Amount: ${selectedApp.propertyInfo?.loanAmount ? formatCurrency(selectedApp.propertyInfo.loanAmount) : 'N/A'}\nStatus: Approved\n\nYour loan has been approved! Our team will contact you with next steps.`);
+                    }}
+                    className="px-6 py-3 sm:py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 active:bg-indigo-800 transition-colors font-medium text-sm sm:text-base touch-manipulation min-h-[44px] sm:min-h-0"
+                  >
                     View Loan Details
                   </button>
                 )}

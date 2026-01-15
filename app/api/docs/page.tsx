@@ -145,9 +145,9 @@ Form Data:
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 pb-20">
+    <div className="min-h-screen bg-gradient-to-br from-yellow-600 via-white to-purple-50 pb-20">
       {/* Sticky Header */}
-      <div className="sticky top-0 z-50 bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg">
+      <div className="sticky top-0 z-50 bg-gradient-to-r from-yellow-600 to-purple-600 text-white shadow-lg">
         <div className="max-w-6xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -156,7 +156,7 @@ Form Data:
               </div>
               <div>
                 <h1 className="text-lg sm:text-2xl font-bold">LoanTicks API</h1>
-                <p className="text-blue-100 text-xs sm:text-sm">Developer Docs</p>
+                <p className="text-yellow-600 text-xs sm:text-sm">Developer Docs</p>
               </div>
             </div>
             <button
@@ -190,7 +190,7 @@ Form Data:
                 >
                   <div className="flex items-center gap-3">
                     <span className={`px-2 py-1 rounded text-xs font-bold ${
-                      endpoint.method === 'POST' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'
+                      endpoint.method === 'POST' ? 'bg-green-100 text-green-700' : 'bg-yellow-500 text-yellow-600'
                     }`}>
                       {endpoint.method}
                     </span>
@@ -206,7 +206,7 @@ Form Data:
 
       {/* Base URL Card */}
       <div className="max-w-6xl mx-auto px-4 py-6">
-        <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-5 shadow-lg">
+        <div className="bg-gradient-to-r from-yellow-600 to-purple-600 rounded-2xl p-5 shadow-lg">
           <div className="flex items-center gap-2 mb-3">
             <LinkIcon className="w-5 h-5 text-white" />
             <span className="text-white font-bold text-sm">BASE URL</span>
@@ -241,16 +241,16 @@ Form Data:
           </div>
           
           <div className="bg-white rounded-2xl shadow-md p-4 text-center">
-            <div className="bg-blue-100 p-3 rounded-xl mx-auto mb-2 w-fit">
-              <Code className="w-6 h-6 text-blue-600" />
+            <div className="bg-yellow-500 p-3 rounded-xl mx-auto mb-2 w-fit">
+              <Code className="w-6 h-6 text-yellow-600" />
             </div>
             <div className="text-xs text-gray-600 mb-1">Format</div>
             <div className="font-bold text-gray-900 text-lg">JSON</div>
           </div>
           
           <div className="bg-white rounded-2xl shadow-md p-4 text-center">
-            <div className="bg-purple-100 p-3 rounded-xl mx-auto mb-2 w-fit">
-              <Book className="w-6 h-6 text-purple-600" />
+            <div className="bg-gray-600 p-3 rounded-xl mx-auto mb-2 w-fit">
+              <Book className="w-6 h-6 text-gray-700" />
             </div>
             <div className="text-xs text-gray-600 mb-1">Endpoints</div>
             <div className="font-bold text-gray-900 text-lg">{endpoints.length}</div>
@@ -277,7 +277,7 @@ Form Data:
 
         {/* Endpoints Header */}
         <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-          <span className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-3 py-1 rounded-lg text-base">
+          <span className="bg-gradient-to-r from-yellow-600 to-purple-600 text-white px-3 py-1 rounded-lg text-base">
             {endpoints.length}
           </span>
           API Endpoints
@@ -298,8 +298,8 @@ Form Data:
                 <div className="flex items-center gap-3 flex-1 min-w-0">
                   <span className={`px-3 py-2 rounded-xl text-sm font-bold flex-shrink-0 ${
                     endpoint.method === 'POST' ? 'bg-green-500 text-white' :
-                    endpoint.method === 'GET' ? 'bg-blue-500 text-white' :
-                    'bg-purple-500 text-white'
+                    endpoint.method === 'GET' ? 'bg-yellow-500 text-white' :
+                    'bg-gray-600 text-white'
                   }`}>
                     {endpoint.method}
                   </span>
@@ -312,9 +312,9 @@ Form Data:
                     </code>
                   </div>
                 </div>
-                <div className={`p-2 rounded-xl ${expandedSection === endpoint.id ? 'bg-blue-100' : 'bg-gray-100'}`}>
+                <div className={`p-2 rounded-xl ${expandedSection === endpoint.id ? 'bg-yellow-500' : 'bg-gray-100'}`}>
                   {expandedSection === endpoint.id ? (
-                    <ChevronUp className="w-6 h-6 text-blue-600" />
+                    <ChevronUp className="w-6 h-6 text-yellow-600" />
                   ) : (
                     <ChevronDown className="w-6 h-6 text-gray-600" />
                   )}
@@ -338,7 +338,7 @@ Form Data:
                       </code>
                       <button
                         onClick={() => copyToClipboard(`https://loanticks.vercel.app${endpoint.path}`, `path-${endpoint.id}`)}
-                        className="p-3 bg-blue-500 hover:bg-blue-600 active:scale-95 rounded-xl transition flex-shrink-0 shadow-md"
+                        className="p-3 bg-yellow-500 hover:bg-yellow-500 active:scale-95 rounded-xl transition flex-shrink-0 shadow-md"
                       >
                         {copiedText === `path-${endpoint.id}` ? (
                           <CheckCircle className="w-5 h-5 text-white" />
@@ -416,17 +416,17 @@ Form Data:
             📊 Rate Limiting
           </h3>
           <div className="space-y-3">
-            <div className="flex justify-between items-center p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl">
+            <div className="flex justify-between items-center p-4 bg-gradient-to-r from-yellow-600 to-yellow-600 rounded-xl">
               <span className="text-sm font-medium text-gray-900">Loan Applications</span>
-              <span className="font-bold text-blue-600 text-lg">10/min</span>
+              <span className="font-bold text-yellow-600 text-lg">10/min</span>
             </div>
             <div className="flex justify-between items-center p-4 bg-gradient-to-r from-green-50 to-green-100 rounded-xl">
               <span className="text-sm font-medium text-gray-900">Rate Requests</span>
               <span className="font-bold text-green-600 text-lg">20/min</span>
             </div>
-            <div className="flex justify-between items-center p-4 bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl">
+            <div className="flex justify-between items-center p-4 bg-gradient-to-r from-gray-700 to-purple-100 rounded-xl">
               <span className="text-sm font-medium text-gray-900">General API</span>
-              <span className="font-bold text-purple-600 text-lg">100/min</span>
+              <span className="font-bold text-gray-700 text-lg">100/min</span>
             </div>
           </div>
         </div>
@@ -434,7 +434,7 @@ Form Data:
         {/* Status Codes - Mobile Optimized */}
         <div className="mt-6 bg-white rounded-2xl shadow-lg border-2 border-gray-200 p-5">
           <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-            <AlertCircle className="w-5 h-5 text-blue-500" />
+            <AlertCircle className="w-5 h-5 text-yellow-600" />
             📋 HTTP Status Codes
           </h3>
           <div className="grid grid-cols-2 gap-3">
@@ -468,7 +468,7 @@ Form Data:
             </p>
             <div className="text-xs text-gray-500 space-y-1">
               <p>Last Updated: October 23, 2025</p>
-              <p className="font-semibold text-blue-600">API Version 1.0.0</p>
+              <p className="font-semibold text-yellow-600">API Version 1.0.0</p>
             </div>
           </div>
         </div>
@@ -479,7 +479,7 @@ Form Data:
         <div className="max-w-6xl mx-auto flex items-center justify-between gap-3">
           <button
             onClick={() => copyToClipboard('https://loanticks.vercel.app', 'bottom-base-url')}
-            className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-bold shadow-lg hover:shadow-xl active:scale-95 transition"
+            className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-yellow-600 to-purple-600 text-white rounded-xl font-bold shadow-lg hover:shadow-xl active:scale-95 transition"
           >
             {copiedText === 'bottom-base-url' ? (
               <>

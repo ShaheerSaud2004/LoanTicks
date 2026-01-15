@@ -4,7 +4,7 @@
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, use } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import DashboardLayout from '@/components/layout/DashboardLayout';
@@ -27,7 +27,11 @@ import {
   Mail,
   MessageSquare,
   Calculator,
-  AlertTriangle
+  AlertTriangle,
+  ThumbsUp,
+  ThumbsDown,
+  Scan,
+  Loader
 } from 'lucide-react';
 
 interface Application {
@@ -58,19 +62,36 @@ const ensureHttps = (url: string | undefined): string => {
   return `https://${url}`;
 };
 
-export default function ApplicationView({ params }: { params: { id: string } }) {
+export default function ApplicationView({ params }: { params: Promise<{ id: string }> }) {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const resolvedParams = use(params);
   const [application, setApplication] = useState<Application | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<'split' | 'documents' | 'info' | 'arive'>('split');
   const [selectedDocument, setSelectedDocument] = useState<number>(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isFinancialExpanded, setIsFinancialExpanded] = useState(false);
+  const [isBorrowerInfoExpanded, setIsBorrowerInfoExpanded] = useState(true);
+  const [isCurrentAddressExpanded, setIsCurrentAddressExpanded] = useState(true);
+  const [isEmploymentExpanded, setIsEmploymentExpanded] = useState(true);
+  const [verificationChecklist, setVerificationChecklist] = useState({
+    identityDocuments: false,
+    incomeVerification: false,
+    propertyInformation: false,
+    financialDetails: false,
+  });
+  const [approvalStatus, setApprovalStatus] = useState<'pending' | 'approved' | 'rejected'>('pending');
+  const [isRunningOCR, setIsRunningOCR] = useState(false);
+  const [ocrResults, setOcrResults] = useState<{
+    documentName: string;
+    extractedText: string;
+    matches: Array<{ field: string; match: boolean; confidence: string }>;
+  }[]>([]);
 
   const fetchApplication = useCallback(async () => {
     try {
-      const response = await fetch(`/api/loan-application?id=${params.id}`);
+      const response = await fetch(`/api/loan-application?id=${resolvedParams.id}`);
       const data = await response.json();
       
       if (response.ok && data.application) {
@@ -88,7 +109,7 @@ export default function ApplicationView({ params }: { params: { id: string } }) 
     } finally {
       setLoading(false);
     }
-  }, [params.id, router]);
+  }, [resolvedParams.id, router]);
 
   useEffect(() => {
     if (status === 'loading') return;
@@ -99,7 +120,129 @@ export default function ApplicationView({ params }: { params: { id: string } }) 
     }
 
     fetchApplication();
-  }, [session, status, router, params.id, fetchApplication]);
+  }, [session, status, router, resolvedParams.id, fetchApplication]);
+
+  // OCR function to extract text from documents
+  const runOCR = async () => {
+    if (!application?.documents || application.documents.length === 0) {
+      alert('No documents available for OCR scanning');
+      return;
+    }
+
+    setIsRunningOCR(true);
+    setOcrResults([]);
+
+    try {
+      // Dynamically import Tesseract to avoid SSR issues
+      const Tesseract = (await import('tesseract.js')).default;
+
+      const results = [];
+
+      for (const doc of application.documents) {
+        try {
+          const docUrl = typeof doc.url === 'string' ? doc.url : '';
+          const fullUrl = docUrl.startsWith('http') ? docUrl : `${window.location.origin}${docUrl}`;
+          
+          // Run OCR on the document
+          const { data: { text } } = await Tesseract.recognize(fullUrl, 'eng', {
+            logger: (m) => {
+              if (m.status === 'recognizing text') {
+                console.log(`OCR Progress: ${Math.round(m.progress * 100)}%`);
+              }
+            }
+          });
+
+          // Extract key information from OCR text
+          const extractedText = text.toLowerCase();
+          const matches = [];
+
+          // Compare with form data
+          const firstName = String(application.borrowerInfo?.firstName || '').toLowerCase();
+          const lastName = String(application.borrowerInfo?.lastName || '').toLowerCase();
+          const email = String(application.borrowerInfo?.email || '').toLowerCase();
+          const phone = String(application.borrowerInfo?.phone || '').replace(/\D/g, '');
+          const ssn = String(application.borrowerInfo?.ssn || '').replace(/\D/g, '');
+          const dob = application.borrowerInfo?.dateOfBirth 
+            ? new Date(String(application.borrowerInfo.dateOfBirth)).toLocaleDateString()
+            : '';
+
+          // Check for name matches
+          if (firstName && lastName) {
+            const nameMatch = extractedText.includes(firstName) && extractedText.includes(lastName);
+            matches.push({
+              field: 'Name',
+              match: nameMatch,
+              confidence: nameMatch ? 'High' : 'Low'
+            });
+          }
+
+          // Check for email matches
+          if (email) {
+            const emailMatch = extractedText.includes(email);
+            matches.push({
+              field: 'Email',
+              match: emailMatch,
+              confidence: emailMatch ? 'High' : 'Low'
+            });
+          }
+
+          // Check for phone matches (extract digits from OCR text)
+          if (phone) {
+            const ocrPhone = extractedText.replace(/\D/g, '');
+            const phoneMatch = ocrPhone.includes(phone) || phone.includes(ocrPhone.substring(0, 10));
+            matches.push({
+              field: 'Phone',
+              match: phoneMatch,
+              confidence: phoneMatch ? 'Medium' : 'Low'
+            });
+          }
+
+          // Check for SSN matches (last 4 digits)
+          if (ssn && ssn.length >= 4) {
+            const last4SSN = ssn.slice(-4);
+            const ocrSSN = extractedText.replace(/\D/g, '');
+            const ssnMatch = ocrSSN.includes(last4SSN);
+            matches.push({
+              field: 'SSN (Last 4)',
+              match: ssnMatch,
+              confidence: ssnMatch ? 'High' : 'Low'
+            });
+          }
+
+          // Check for date of birth
+          if (dob) {
+            const dobParts = dob.split('/');
+            const dobMatch = dobParts.some(part => extractedText.includes(part));
+            matches.push({
+              field: 'Date of Birth',
+              match: dobMatch,
+              confidence: dobMatch ? 'Medium' : 'Low'
+            });
+          }
+
+          results.push({
+            documentName: String(doc.name || 'Unknown'),
+            extractedText: text.substring(0, 500), // First 500 chars for preview
+            matches
+          });
+        } catch (error) {
+          console.error(`Error processing document ${doc.name}:`, error);
+          results.push({
+            documentName: String(doc.name || 'Unknown'),
+            extractedText: 'Error processing document',
+            matches: []
+          });
+        }
+      }
+
+      setOcrResults(results);
+    } catch (error) {
+      console.error('OCR Error:', error);
+      alert('Error running OCR. Please try again.');
+    } finally {
+      setIsRunningOCR(false);
+    }
+  };
 
   const getStatusBadge = (status: string) => {
     const statusClasses = {
@@ -483,26 +626,176 @@ export default function ApplicationView({ params }: { params: { id: string } }) 
           {/* Application Info Panel */}
           {(activeTab === 'split' || activeTab === 'info') && (
             <div className="space-y-4">
-              {/* Quick Verification Summary */}
-              <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl p-4 md:p-6 text-white shadow-lg">
-                <h3 className="text-base md:text-lg lg:text-xl font-bold mb-3">📋 Verification Checklist</h3>
-                <div className="space-y-2.5 md:space-y-2 text-xs md:text-sm">
-                  <label className="flex items-center gap-2 md:gap-3 cursor-pointer touch-manipulation p-1">
-                    <input type="checkbox" className="w-4 h-4 md:w-5 md:h-5 rounded flex-shrink-0" />
-                    <span className="leading-relaxed">Identity documents match application</span>
-                  </label>
-                  <label className="flex items-center gap-2 md:gap-3 cursor-pointer touch-manipulation p-1">
-                    <input type="checkbox" className="w-4 h-4 md:w-5 md:h-5 rounded flex-shrink-0" />
-                    <span className="leading-relaxed">Income verification documents provided</span>
-                  </label>
-                  <label className="flex items-center gap-2 md:gap-3 cursor-pointer touch-manipulation p-1">
-                    <input type="checkbox" className="w-4 h-4 md:w-5 md:h-5 rounded flex-shrink-0" />
-                    <span className="leading-relaxed">Property information is accurate</span>
-                  </label>
-                  <label className="flex items-center gap-2 md:gap-3 cursor-pointer touch-manipulation p-1">
-                    <input type="checkbox" className="w-4 h-4 md:w-5 md:h-5 rounded flex-shrink-0" />
-                    <span className="leading-relaxed">Financial details verified</span>
-                  </label>
+              {/* Quick Verification Summary - Enhanced Visibility */}
+              <div className="bg-gradient-to-r from-yellow-500 via-yellow-600 to-yellow-500 rounded-2xl p-6 md:p-8 text-white shadow-2xl border-4 border-yellow-400 relative overflow-hidden">
+                {/* Decorative background pattern */}
+                <div className="absolute inset-0 opacity-10">
+                  <div className="absolute top-0 left-0 w-32 h-32 bg-white rounded-full -translate-x-16 -translate-y-16"></div>
+                  <div className="absolute bottom-0 right-0 w-40 h-40 bg-white rounded-full translate-x-20 translate-y-20"></div>
+                </div>
+                
+                <div className="relative z-10">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="bg-white/20 p-3 rounded-xl backdrop-blur-sm">
+                      <CheckCircle className="w-8 h-8 md:w-10 md:h-10 text-white" />
+                    </div>
+                    <h3 className="text-2xl md:text-3xl lg:text-4xl font-extrabold drop-shadow-lg">
+                      📋 Verification Checklist
+                    </h3>
+                  </div>
+                  
+                  <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 md:p-6 border-2 border-white/20">
+                    <div className="space-y-3 md:space-y-4">
+                      <label className="flex items-center gap-3 md:gap-4 cursor-pointer touch-manipulation p-2 md:p-3 hover:bg-white/10 rounded-lg transition active:bg-white/20">
+                        <input 
+                          type="checkbox" 
+                          checked={verificationChecklist.identityDocuments}
+                          onChange={(e) => setVerificationChecklist(prev => ({ ...prev, identityDocuments: e.target.checked }))}
+                          className="w-5 h-5 md:w-6 md:h-6 rounded flex-shrink-0 border-2 border-white/50 accent-yellow-400 cursor-pointer focus:ring-2 focus:ring-white/50 focus:outline-none" 
+                        />
+                        <span className="text-base md:text-lg lg:text-xl font-semibold leading-relaxed drop-shadow select-none">
+                          Identity documents match application
+                        </span>
+                      </label>
+                      <label className="flex items-center gap-3 md:gap-4 cursor-pointer touch-manipulation p-2 md:p-3 hover:bg-white/10 rounded-lg transition active:bg-white/20">
+                        <input 
+                          type="checkbox" 
+                          checked={verificationChecklist.incomeVerification}
+                          onChange={(e) => setVerificationChecklist(prev => ({ ...prev, incomeVerification: e.target.checked }))}
+                          className="w-5 h-5 md:w-6 md:h-6 rounded flex-shrink-0 border-2 border-white/50 accent-yellow-400 cursor-pointer focus:ring-2 focus:ring-white/50 focus:outline-none" 
+                        />
+                        <span className="text-base md:text-lg lg:text-xl font-semibold leading-relaxed drop-shadow select-none">
+                          Income verification documents provided
+                        </span>
+                      </label>
+                      <label className="flex items-center gap-3 md:gap-4 cursor-pointer touch-manipulation p-2 md:p-3 hover:bg-white/10 rounded-lg transition active:bg-white/20">
+                        <input 
+                          type="checkbox" 
+                          checked={verificationChecklist.propertyInformation}
+                          onChange={(e) => setVerificationChecklist(prev => ({ ...prev, propertyInformation: e.target.checked }))}
+                          className="w-5 h-5 md:w-6 md:h-6 rounded flex-shrink-0 border-2 border-white/50 accent-yellow-400 cursor-pointer focus:ring-2 focus:ring-white/50 focus:outline-none" 
+                        />
+                        <span className="text-base md:text-lg lg:text-xl font-semibold leading-relaxed drop-shadow select-none">
+                          Property information is accurate
+                        </span>
+                      </label>
+                      <label className="flex items-center gap-3 md:gap-4 cursor-pointer touch-manipulation p-2 md:p-3 hover:bg-white/10 rounded-lg transition active:bg-white/20">
+                        <input 
+                          type="checkbox" 
+                          checked={verificationChecklist.financialDetails}
+                          onChange={(e) => setVerificationChecklist(prev => ({ ...prev, financialDetails: e.target.checked }))}
+                          className="w-5 h-5 md:w-6 md:h-6 rounded flex-shrink-0 border-2 border-white/50 accent-yellow-400 cursor-pointer focus:ring-2 focus:ring-white/50 focus:outline-none" 
+                        />
+                        <span className="text-base md:text-lg lg:text-xl font-semibold leading-relaxed drop-shadow select-none">
+                          Financial details verified
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+
+                  {/* Approval/Rejection Section */}
+                  <div className="mt-6 pt-6 border-t-2 border-white/20">
+                    <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-4">
+                      <h4 className="text-lg md:text-xl font-bold text-white">Application Decision</h4>
+                      <div className="flex gap-3">
+                        <button
+                          onClick={() => setApprovalStatus('approved')}
+                          className={`px-6 py-3 rounded-xl font-semibold transition-all flex items-center gap-2 ${
+                            approvalStatus === 'approved'
+                              ? 'bg-green-500 text-white shadow-lg scale-105'
+                              : 'bg-white/20 text-white hover:bg-white/30'
+                          }`}
+                        >
+                          <ThumbsUp className="w-5 h-5" />
+                          Approve
+                        </button>
+                        <button
+                          onClick={() => setApprovalStatus('rejected')}
+                          className={`px-6 py-3 rounded-xl font-semibold transition-all flex items-center gap-2 ${
+                            approvalStatus === 'rejected'
+                              ? 'bg-red-500 text-white shadow-lg scale-105'
+                              : 'bg-white/20 text-white hover:bg-white/30'
+                          }`}
+                        >
+                          <ThumbsDown className="w-5 h-5" />
+                          Reject
+                        </button>
+                      </div>
+                    </div>
+                    
+                    {approvalStatus !== 'pending' && (
+                      <div className={`p-4 rounded-lg ${approvalStatus === 'approved' ? 'bg-green-500/20 border-2 border-green-400' : 'bg-red-500/20 border-2 border-red-400'}`}>
+                        <p className="text-white font-semibold">
+                          Status: <span className="uppercase">{approvalStatus}</span>
+                        </p>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* OCR Section */}
+                  <div className="mt-6 pt-6 border-t-2 border-white/20">
+                    <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-4">
+                      <div>
+                        <h4 className="text-lg md:text-xl font-bold text-white mb-2">Document Verification (OCR)</h4>
+                        <p className="text-sm text-white/80">Scan documents to verify they match application data</p>
+                      </div>
+                      <button
+                        onClick={runOCR}
+                        disabled={isRunningOCR || !application?.documents || application.documents.length === 0}
+                        className="px-6 py-3 bg-white/20 hover:bg-white/30 text-white rounded-xl font-semibold transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {isRunningOCR ? (
+                          <>
+                            <Loader className="w-5 h-5 animate-spin" />
+                            Scanning...
+                          </>
+                        ) : (
+                          <>
+                            <Scan className="w-5 h-5" />
+                            Run OCR Scan
+                          </>
+                        )}
+                      </button>
+                    </div>
+
+                    {/* OCR Results */}
+                    {ocrResults.length > 0 && (
+                      <div className="space-y-4 mt-4">
+                        {ocrResults.map((result, index) => (
+                          <div key={index} className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border-2 border-white/20">
+                            <h5 className="font-bold text-white mb-2">{result.documentName}</h5>
+                            
+                            {result.matches.length > 0 && (
+                              <div className="space-y-2 mb-3">
+                                {result.matches.map((match, matchIndex) => (
+                                  <div key={matchIndex} className="flex items-center gap-2">
+                                    {match.match ? (
+                                      <CheckCircle className="w-4 h-4 text-green-300" />
+                                    ) : (
+                                      <AlertTriangle className="w-4 h-4 text-yellow-300" />
+                                    )}
+                                    <span className="text-sm text-white">
+                                      <strong>{match.field}:</strong> {match.match ? '✓ Match' : '✗ No Match'} 
+                                      <span className="text-white/70 ml-2">({match.confidence} confidence)</span>
+                                    </span>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+
+                            <details className="mt-2">
+                              <summary className="text-sm text-white/80 cursor-pointer hover:text-white">
+                                View extracted text
+                              </summary>
+                              <div className="mt-2 p-2 bg-white/5 rounded text-xs text-white/90 font-mono max-h-32 overflow-y-auto">
+                                {result.extractedText}
+                              </div>
+                            </details>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
 
@@ -695,11 +988,22 @@ LoanTicks - Home Mortgage Solutions`}
 
             {/* Borrower Information */}
               <div className="bg-white rounded-xl shadow-sm p-4 md:p-6">
-              <div className="flex items-center gap-3 mb-6">
-                <User className="w-6 h-6 text-green-600" />
-                <h2 className="text-xl font-semibold text-gray-900">Borrower Information</h2>
-              </div>
+              <button
+                onClick={() => setIsBorrowerInfoExpanded(!isBorrowerInfoExpanded)}
+                className="flex items-center justify-between w-full gap-3 mb-6 hover:opacity-80 transition cursor-pointer"
+              >
+                <div className="flex items-center gap-3">
+                  <User className="w-6 h-6 text-green-600" />
+                  <h2 className="text-xl font-semibold text-gray-900">Borrower Information</h2>
+                </div>
+                {isBorrowerInfoExpanded ? (
+                  <ChevronUp className="w-5 h-5 text-gray-500" />
+                ) : (
+                  <ChevronDown className="w-5 h-5 text-gray-500" />
+                )}
+              </button>
               
+              {isBorrowerInfoExpanded && (
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <h3 className="font-semibold text-gray-700 mb-3">Personal Details</h3>
@@ -722,15 +1026,27 @@ LoanTicks - Home Mortgage Solutions`}
                   </div>
                 </div>
               </div>
+              )}
             </div>
 
             {/* Current Address */}
             <div className="bg-white rounded-xl shadow-sm p-4 md:p-6">
-              <div className="flex items-center gap-3 mb-6">
-                <Home className="w-6 h-6 text-green-600" />
-                <h2 className="text-xl font-semibold text-gray-900">Current Address</h2>
-              </div>
+              <button
+                onClick={() => setIsCurrentAddressExpanded(!isCurrentAddressExpanded)}
+                className="flex items-center justify-between w-full gap-3 mb-6 hover:opacity-80 transition cursor-pointer"
+              >
+                <div className="flex items-center gap-3">
+                  <Home className="w-6 h-6 text-green-600" />
+                  <h2 className="text-xl font-semibold text-gray-900">Current Address</h2>
+                </div>
+                {isCurrentAddressExpanded ? (
+                  <ChevronUp className="w-5 h-5 text-gray-500" />
+                ) : (
+                  <ChevronDown className="w-5 h-5 text-gray-500" />
+                )}
+              </button>
               
+              {isCurrentAddressExpanded && (
               <div className="space-y-2 text-gray-900">
                 <p><span className="font-medium">Address:</span> {String(application.currentAddress?.street || 'N/A')}</p>
                 {application.currentAddress?.unit && <p><span className="font-medium">Unit:</span> {String(application.currentAddress.unit)}</p>}
@@ -741,15 +1057,27 @@ LoanTicks - Home Mortgage Solutions`}
                 <p><span className="font-medium">Monthly Payment:</span> ${Number(application.currentAddress?.monthlyPayment || 0)}</p>
                 <p><span className="font-medium">Years at Address:</span> {String(application.currentAddress?.yearsAtAddress || 'N/A')}</p>
               </div>
+              )}
             </div>
 
             {/* Employment */}
             <div className="bg-white rounded-xl shadow-sm p-4 md:p-6">
-              <div className="flex items-center gap-3 mb-6">
-                <Briefcase className="w-6 h-6 text-green-600" />
-                <h2 className="text-xl font-semibold text-gray-900">Employment Information</h2>
-              </div>
+              <button
+                onClick={() => setIsEmploymentExpanded(!isEmploymentExpanded)}
+                className="flex items-center justify-between w-full gap-3 mb-6 hover:opacity-80 transition cursor-pointer"
+              >
+                <div className="flex items-center gap-3">
+                  <Briefcase className="w-6 h-6 text-green-600" />
+                  <h2 className="text-xl font-semibold text-gray-900">Employment Information</h2>
+                </div>
+                {isEmploymentExpanded ? (
+                  <ChevronUp className="w-5 h-5 text-gray-500" />
+                ) : (
+                  <ChevronDown className="w-5 h-5 text-gray-500" />
+                )}
+              </button>
               
+              {isEmploymentExpanded && (
               <div className="space-y-2 text-gray-900">
                 <p><span className="font-medium">Status:</span> {String(application.employment?.employmentStatus || 'N/A')}</p>
                 <p><span className="font-medium">Employer:</span> {String(application.employment?.employerName || 'N/A')}</p>
@@ -758,6 +1086,7 @@ LoanTicks - Home Mortgage Solutions`}
                 <p><span className="font-medium">Monthly Income:</span> ${Number(application.employment?.monthlyIncome || 0)}</p>
                 <p><span className="font-medium">Employer Phone:</span> {String(application.employment?.employerPhone || 'N/A')}</p>
               </div>
+              )}
             </div>
 
             {/* Financial Information */}

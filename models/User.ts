@@ -33,7 +33,8 @@ const UserSchema = new Schema<IUser>(
     password: {
       type: String,
       required: [true, 'Password is required'],
-      minlength: [6, 'Password must be at least 6 characters'],
+      minlength: [12, 'Password must be at least 12 characters'],
+      // Password complexity validation is done in pre-save hook
     },
     role: {
       type: String,
@@ -51,18 +52,51 @@ const UserSchema = new Schema<IUser>(
   }
 );
 
-// Hash password before saving
+// Validate password complexity before saving
 UserSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) {
-    return next();
+  // Only validate on new documents or when password is modified
+  if (this.isModified('password')) {
+    const password = this.password;
+    
+    // Password complexity requirements
+    const minLength = 12;
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasLowerCase = /[a-z]/.test(password);
+    const hasNumber = /\d/.test(password);
+    const hasSpecialChar = /[@$!%*?&]/.test(password);
+    
+    if (password.length < minLength) {
+      return next(new Error(`Password must be at least ${minLength} characters long`));
+    }
+    
+    if (!hasUpperCase) {
+      return next(new Error('Password must contain at least one uppercase letter'));
+    }
+    
+    if (!hasLowerCase) {
+      return next(new Error('Password must contain at least one lowercase letter'));
+    }
+    
+    if (!hasNumber) {
+      return next(new Error('Password must contain at least one number'));
+    }
+    
+    if (!hasSpecialChar) {
+      return next(new Error('Password must contain at least one special character (@$!%*?&)'));
+    }
   }
   
-  try {
-    const salt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password, salt);
+  // Hash password before saving
+  if (this.isModified('password')) {
+    try {
+      const salt = await bcrypt.genSalt(10);
+      this.password = await bcrypt.hash(this.password, salt);
+      next();
+    } catch (error) {
+      next(error as Error);
+    }
+  } else {
     next();
-  } catch (error) {
-    next(error as Error);
   }
 });
 

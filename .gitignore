@@ -43,3 +43,10 @@ next-env.d.ts
 # OS
 .DS_Store
 Thumbs.db
+
+# Uploaded documents
+/public/uploads
+/private/uploads
+
+# System settings
+/data

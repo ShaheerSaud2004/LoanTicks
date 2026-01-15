@@ -49,6 +49,21 @@ A modern, full-stack loan management platform built with Next.js 15, TypeScript,
 npm install
 ```
 
+### 2. Clean Database (Optional)
+If you want to start with a clean database (removes all test/demo data):
+```bash
+# Using the API endpoint (server must be running)
+curl -X POST http://localhost:3000/api/cleanup-database
+
+# Or use the script
+node scripts/cleanup-db.js
+```
+
+This will remove:
+- All test/demo users
+- All loan applications
+- Keeps waitlist entries (optional)
+
 ### 2. Configure Environment
 Create a `.env.local` file:
 

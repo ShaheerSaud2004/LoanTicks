@@ -186,7 +186,19 @@ export async function PATCH(request: NextRequest) {
         break;
       case 'update_info':
         if (name) employee.name = name;
-        if (email) employee.email = email;
+        if (email) {
+          // Check if email is already taken by another user
+          const existingUser = await User.findOne({ 
+            email: email.toLowerCase(),
+            _id: { $ne: employeeId }
+          });
+          if (existingUser) {
+            return NextResponse.json({ 
+              error: 'Email address is already in use' 
+            }, { status: 400 });
+          }
+          employee.email = email.toLowerCase();
+        }
         if (role) employee.role = role;
         break;
       default:

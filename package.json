@@ -9,6 +9,11 @@
     "start": "next start",
     "lint": "eslint",
     "seed": "tsx scripts/seed.ts",
+    "seed:test": "tsx scripts/seed-test-data.ts",
+    "add:test-doc": "tsx scripts/add-test-document.ts",
+    "encrypt-data": "tsx scripts/encrypt-existing-data.ts",
+    "generate-pdf": "node scripts/generate-pdf-report.js",
+    "pdf-from-html": "node scripts/pdf-from-html.js",
     "test": "jest --coverage",
     "test:watch": "jest --watch",
     "test:ci": "jest --ci --coverage --maxWorkers=2"
@@ -25,6 +30,7 @@
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "react-hook-form": "^7.65.0",
+    "tesseract.js": "^7.0.0",
     "zod": "^4.1.12"
   },
   "devDependencies": {
@@ -42,6 +48,7 @@
     "eslint-config-next": "^16.0.10",
     "jest": "^30.2.0",
     "jest-environment-jsdom": "^30.2.0",
+    "puppeteer": "^24.35.0",
     "tailwindcss": "^4",
     "tsx": "^4.20.6",
     "typescript": "^5"

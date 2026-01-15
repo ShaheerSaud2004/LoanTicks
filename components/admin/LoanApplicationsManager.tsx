@@ -102,13 +102,30 @@ export default function LoanApplicationsManager({ employeeName }: { employeeName
 
   const fetchApplications = async () => {
     try {
-      const response = await fetch('/api/loan-application');
-      if (response.ok) {
-        const data = await response.json();
-        setApplications(data.applications || []);
+      setLoading(true);
+      const response = await fetch('/api/loan-application', {
+        method: 'GET',
+        credentials: 'include', // Include cookies for authentication
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+        console.error('Failed to fetch applications:', response.status, errorData);
+        alert(`Failed to load applications: ${errorData.error || 'Unknown error'}`);
+        setApplications([]);
+        return;
       }
+      
+      const data = await response.json();
+      console.log('Fetched applications:', data.applications?.length || 0);
+      setApplications(data.applications || []);
     } catch (error) {
       console.error('Error fetching applications:', error);
+      alert(`Network error: ${error instanceof Error ? error.message : 'Failed to fetch applications'}`);
+      setApplications([]);
     } finally {
       setLoading(false);
     }
@@ -211,9 +228,25 @@ export default function LoanApplicationsManager({ employeeName }: { employeeName
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-600 mx-auto mb-4"></div>
           <p className="text-gray-600">Loading applications...</p>
         </div>
+      </div>
+    );
+  }
+
+  if (applications.length === 0) {
+    return (
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center">
+        <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">No Applications Found</h3>
+        <p className="text-gray-600">There are no loan applications in the system yet.</p>
+        <button
+          onClick={fetchApplications}
+          className="mt-4 px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition"
+        >
+          Refresh
+        </button>
       </div>
     );
   }

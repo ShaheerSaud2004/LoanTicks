@@ -1,0 +1,42 @@
+{
+  "name": "LoanTicks - Home Mortgage Solutions",
+  "short_name": "LoanTicks",
+  "description": "Professional mortgage lending platform with competitive rates, fast approvals, and expert guidance",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#374151",
+  "theme_color": "#EAB308",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/logo.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "any"
+    },
+    {
+      "src": "/logo.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any"
+    }
+  ],
+  "categories": ["finance", "business"],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Dashboard",
+      "short_name": "Dashboard",
+      "description": "Go to your dashboard",
+      "url": "/customer/dashboard",
+      "icons": [{ "src": "/logo.jpg", "sizes": "96x96" }]
+    },
+    {
+      "name": "Apply for Loan",
+      "short_name": "Apply",
+      "description": "Start a new loan application",
+      "url": "/customer/loan-application",
+      "icons": [{ "src": "/logo.jpg", "sizes": "96x96" }]
+    }
+  ]
+}

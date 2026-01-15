@@ -88,8 +88,146 @@ body {
   20%, 40%, 60%, 80% { transform: translateX(5px); }
 }
 
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes slideOut {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+}
+
+@keyframes logoutPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.9;
+  }
+}
+
+@keyframes logoutProgress {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+@keyframes logoutSuccess {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes buttonPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 10px 15px -3px rgba(234, 179, 8, 0.3), 0 4px 6px -2px rgba(234, 179, 8, 0.2);
+  }
+}
+
+@keyframes buttonClick {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes buttonBounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
 .animate-fadeIn {
   animation: fadeIn 0.3s ease-out;
+}
+
+.animate-fadeOut {
+  animation: fadeOut 0.5s ease-out forwards;
+}
+
+.animate-slideOut {
+  animation: slideOut 0.5s ease-out forwards;
+}
+
+.animate-logoutPulse {
+  animation: logoutPulse 2s ease-in-out infinite;
+}
+
+.animate-logoutProgress {
+  animation: logoutProgress 1.5s ease-out forwards;
+}
+
+.animate-logoutSuccess {
+  animation: logoutSuccess 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.animate-buttonPulse {
+  animation: buttonPulse 2s ease-in-out infinite;
+}
+
+.animate-buttonClick {
+  animation: buttonClick 0.3s ease-out;
+}
+
+.animate-buttonBounce {
+  animation: buttonBounce 0.6s ease-in-out;
+}
+
+.animate-shimmer {
+  animation: shimmer 2s linear infinite;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  background-size: 1000px 100%;
 }
 
 .animate-scaleIn {
@@ -111,4 +249,80 @@ body {
 
 .animate-shake {
   animation: shake 0.5s ease-in-out;
+}
+
+/* Mobile Optimizations */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Touch-friendly buttons */
+button, a, [role="button"] {
+  touch-action: manipulation;
+  -webkit-touch-callout: none;
+}
+
+/* Prevent text selection on buttons */
+button {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Prevent horizontal scroll on mobile */
+body {
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Better form inputs on mobile */
+input, textarea, select {
+  font-size: 16px; /* Prevents zoom on iOS */
+  -webkit-appearance: none;
+  border-radius: 0;
+}
+
+/* Fix iOS input zoom */
+@media screen and (max-width: 768px) {
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="number"],
+  input[type="tel"],
+  input[type="date"],
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+}
+
+/* Better modal scrolling on mobile */
+.modal-content {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+/* Smart Tooltip Positioning - Keeps tooltips within viewport */
+.group.relative .absolute {
+  max-width: min(288px, calc(100vw - 32px));
+  word-wrap: break-word;
+}
+
+/* Ensure tooltips don't overflow viewport horizontally */
+.group:hover .absolute.bottom-full.left-0,
+.group:hover .absolute.top-full.left-0 {
+  left: clamp(16px, 0px, calc(100vw - 304px)) !important;
+  right: auto !important;
+}
+
+/* For centered tooltips, ensure they stay within bounds */
+.group:hover .absolute.bottom-full.left-1\/2,
+.group:hover .absolute.top-full.left-1\/2 {
+  left: clamp(16px, 50%, calc(100vw - 304px)) !important;
+  transform: translateX(clamp(calc(-144px + 16px), -50%, calc(144px - 100vw + 304px))) !important;
 }

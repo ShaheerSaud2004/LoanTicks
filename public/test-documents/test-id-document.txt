@@ -1,0 +1,20 @@
+
+TEST DOCUMENT FOR LOAN APPLICATION
+==================================
+
+This is a test document created for testing the document upload functionality.
+
+Document Type: Government-Issued ID (Test)
+Date: 2026-01-14T19:54:22.723Z
+Purpose: Testing document upload system
+
+This document simulates a government-issued ID for testing purposes.
+In a real scenario, this would be a PDF or image file of an actual ID.
+
+Test Information:
+- Name: Test User
+- ID Number: TEST-12345
+- Issue Date: 2020-01-01
+- Expiry Date: 2030-01-01
+
+This is a placeholder document for testing the upload functionality.

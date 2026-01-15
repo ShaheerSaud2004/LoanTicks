@@ -4,7 +4,7 @@
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, use } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import DashboardLayout from '@/components/layout/DashboardLayout';
@@ -25,9 +25,10 @@ interface Application {
   status: string;
 }
 
-export default function ApplicationDecision({ params }: { params: { id: string } }) {
+export default function ApplicationDecision({ params }: { params: Promise<{ id: string }> }) {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const resolvedParams = use(params);
   const [application, setApplication] = useState<Application | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -37,7 +38,7 @@ export default function ApplicationDecision({ params }: { params: { id: string }
 
   const fetchApplication = useCallback(async () => {
     try {
-      const response = await fetch(`/api/loan-application?id=${params.id}`);
+      const response = await fetch(`/api/loan-application?id=${resolvedParams.id}`);
       const data = await response.json();
       
       if (response.ok) {
@@ -52,7 +53,7 @@ export default function ApplicationDecision({ params }: { params: { id: string }
     } finally {
       setLoading(false);
     }
-  }, [params.id, router]);
+  }, [resolvedParams.id, router]);
 
   useEffect(() => {
     if (status === 'loading') return;
@@ -77,7 +78,7 @@ export default function ApplicationDecision({ params }: { params: { id: string }
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          applicationId: params.id,
+          applicationId: resolvedParams.id,
           action: 'decision',
           decision: decision,
           decisionNotes: notes,
@@ -87,7 +88,7 @@ export default function ApplicationDecision({ params }: { params: { id: string }
 
       if (response.ok) {
         alert(`Application ${decision} successfully!`);
-        router.push(`/employee/applications/${params.id}`);
+        router.push(`/employee/applications/${resolvedParams.id}`);
       } else {
         alert('Failed to submit decision');
       }
@@ -144,7 +145,7 @@ export default function ApplicationDecision({ params }: { params: { id: string }
         {/* Header */}
         <div className="mb-8">
           <button
-            onClick={() => router.push(`/employee/applications/${params.id}`)}
+            onClick={() => router.push(`/employee/applications/${resolvedParams.id}`)}
             className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-4 transition"
           >
             <ArrowLeft className="w-5 h-5" />

@@ -3,8 +3,10 @@
 import Image from 'next/image';
 import { signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { LogOut, Loader2 } from 'lucide-react';
-import { ReactNode, useState } from 'react';
+import { LogOut, Loader2, CheckCircle2 } from 'lucide-react';
+import { ReactNode, useState, useEffect } from 'react';
+import Footer from './Footer';
+import TutorialButton from '@/components/walkthrough/TutorialButton';
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -21,20 +23,60 @@ export default function DashboardLayout({
 }: DashboardLayoutProps) {
   const router = useRouter();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [logoutStage, setLogoutStage] = useState<'signing-out' | 'clearing' | 'success' | null>(null);
 
-  const handleLogout = async () => {
-    setIsLoggingOut(true);
-    await signOut({ redirect: false });
-    router.push('/login');
-    router.refresh();
+  const handleLogout = async (e?: React.MouseEvent) => {
+    e?.preventDefault();
+    e?.stopPropagation();
+    
+    if (isLoggingOut) return; // Prevent double-clicks
+    
+    try {
+      setIsLoggingOut(true);
+      setLogoutStage('signing-out');
+      
+      // Stage 1: Signing out (1.5 seconds)
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      // Sign out from NextAuth
+      await signOut({ 
+        redirect: false,
+        callbackUrl: '/login'
+      });
+      
+      // Stage 2: Clearing session (1 second)
+      setLogoutStage('clearing');
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Stage 3: Success (1 second)
+      setLogoutStage('success');
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Final redirect
+      router.push('/login');
+      setTimeout(() => {
+        window.location.href = '/login';
+      }, 500);
+      
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Even if there's an error, show animation and redirect
+      setLogoutStage('success');
+      setTimeout(() => {
+        router.push('/login');
+        setTimeout(() => {
+          window.location.href = '/login';
+        }, 500);
+      }, 1000);
+    }
   };
 
   const getRoleBadgeColor = () => {
     switch (userRole) {
       case 'admin':
-        return 'bg-purple-100 text-purple-800';
+        return 'bg-gray-600 text-gray-700';
       case 'employee':
-        return 'bg-blue-100 text-blue-800';
+        return 'bg-yellow-500 text-yellow-600';
       case 'customer':
         return 'bg-green-100 text-green-800';
       default:
@@ -44,23 +86,55 @@ export default function DashboardLayout({
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Logout Loading Overlay */}
+      {/* Enhanced Logout Animation */}
       {isLoggingOut && (
-        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center">
-          <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-sm w-full mx-4 animate-slideIn">
-            <div className="text-center">
-              <div className="mx-auto w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-                <Loader2 className="h-8 w-8 text-blue-600 animate-spin" />
-              </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-2">
-                Logging Out
-              </h3>
-              <p className="text-slate-600">
-                Securely ending your session...
-              </p>
-              <div className="mt-4 w-full bg-slate-200 h-1.5 rounded-full overflow-hidden">
-                <div className="h-full bg-blue-600 animate-pulse" style={{width: '100%'}}></div>
-              </div>
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center pointer-events-none">
+          <div className="absolute inset-0 bg-black/30 backdrop-blur-sm animate-fadeIn"></div>
+          <div className="relative bg-white rounded-2xl shadow-2xl p-8 md:p-12 border-2 border-gray-200 max-w-md w-full mx-4 animate-scaleIn">
+            <div className="flex flex-col items-center gap-4">
+              {logoutStage === 'signing-out' && (
+                <>
+                  <div className="relative">
+                    <Loader2 className="h-12 w-12 md:h-16 md:w-16 text-yellow-600 animate-spin" />
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="h-8 w-8 md:h-10 md:w-10 border-4 border-yellow-200 border-t-yellow-600 rounded-full animate-spin"></div>
+                    </div>
+                  </div>
+                  <div className="text-center">
+                    <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-2">Signing out...</h3>
+                    <p className="text-sm md:text-base text-gray-600">Please wait while we securely log you out</p>
+                  </div>
+                </>
+              )}
+              
+              {logoutStage === 'clearing' && (
+                <>
+                  <div className="relative">
+                    <Loader2 className="h-12 w-12 md:h-16 md:w-16 text-blue-600 animate-spin" />
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="h-8 w-8 md:h-10 md:w-10 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+                    </div>
+                  </div>
+                  <div className="text-center">
+                    <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-2">Clearing session...</h3>
+                    <p className="text-sm md:text-base text-gray-600">Removing your session data</p>
+                  </div>
+                </>
+              )}
+              
+              {logoutStage === 'success' && (
+                <>
+                  <div className="relative">
+                    <div className="h-16 w-16 md:h-20 md:w-20 bg-green-100 rounded-full flex items-center justify-center animate-scaleIn">
+                      <CheckCircle2 className="h-10 w-10 md:h-12 md:w-12 text-green-600 animate-checkmark" />
+                    </div>
+                  </div>
+                  <div className="text-center">
+                    <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-2">Logged out successfully!</h3>
+                    <p className="text-sm md:text-base text-gray-600">Redirecting to login page...</p>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -148,7 +222,9 @@ export default function DashboardLayout({
               <button
                 onClick={handleLogout}
                 disabled={isLoggingOut}
-                className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors font-medium text-xs sm:text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                type="button"
+                className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 active:bg-red-200 transition-colors font-medium text-xs sm:text-sm disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation min-h-[44px] sm:min-h-0"
+                aria-label="Logout"
               >
                 {isLoggingOut ? (
                   <>
@@ -171,6 +247,12 @@ export default function DashboardLayout({
       <main className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8">
         {children}
       </main>
+
+      {/* Tutorial Button - Fixed position */}
+      <TutorialButton role={userRole as 'admin' | 'employee' | 'customer'} />
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 }

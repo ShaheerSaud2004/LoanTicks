@@ -27,3 +27,4 @@ const Waitlist: Model<IWaitlist> = mongoose.models.Waitlist || mongoose.model<IW
 
 export default Waitlist;
 
+

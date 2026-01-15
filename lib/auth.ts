@@ -25,6 +25,14 @@ declare module 'next-auth' {
   }
 }
 
+// Get NEXTAUTH_SECRET with fallback
+const nextAuthSecret = process.env.NEXTAUTH_SECRET;
+
+if (!nextAuthSecret) {
+  console.warn('⚠️  WARNING: NEXTAUTH_SECRET is not set in environment variables');
+  console.warn('   Authentication may not work correctly. Please set NEXTAUTH_SECRET in .env.local');
+}
+
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     CredentialsProvider({
@@ -38,32 +46,66 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           throw new Error('Please enter your email and password');
         }
 
-        // Dynamic imports to avoid loading in Edge Runtime
-        const connectDB = (await import('@/lib/mongodb')).default;
-        const User = (await import('@/models/User')).default;
+        try {
+          // Dynamic imports to avoid loading in Edge Runtime
+          const connectDB = (await import('@/lib/mongodb')).default;
+          const User = (await import('@/models/User')).default;
 
-        await connectDB();
+          await connectDB();
+          // Removed sensitive logging - only log in development
+          if (process.env.NODE_ENV === 'development') {
+            console.log('Database connected, searching for user...');
+          }
 
-        const user = await User.findOne({ email: credentials.email });
+          // Normalize email to lowercase for lookup (User model stores emails in lowercase)
+          const normalizedEmail = (credentials.email as string).toLowerCase().trim();
+          
+          const user = await User.findOne({ email: normalizedEmail });
+          
+          // Only log in development, never log user details in production
+          if (process.env.NODE_ENV === 'development') {
+            console.log('User lookup result:', user ? 'Found' : 'NOT FOUND');
+          }
 
-        if (!user) {
-          throw new Error('Invalid email or password');
+          if (!user) {
+            // Never log user emails or expose user data in logs
+            if (process.env.NODE_ENV === 'development') {
+              console.error('User not found');
+            }
+            throw new Error('Invalid email or password');
+          }
+
+          const isPasswordValid = await user.comparePassword(
+            credentials.password as string
+          );
+
+          if (!isPasswordValid) {
+            // Never log authentication failures with user details
+            if (process.env.NODE_ENV === 'development') {
+              console.error('Invalid password');
+            }
+            throw new Error('Invalid email or password');
+          }
+
+          // Only log success in development, never in production
+          if (process.env.NODE_ENV === 'development') {
+            console.log('✓ Login successful');
+          }
+
+          return {
+            id: user._id.toString(),
+            email: user.email,
+            name: user.name,
+            role: user.role,
+          };
+        } catch (error) {
+          console.error('Authorization error:', error);
+          // Re-throw the original error if it's already a user-friendly message
+          if (error instanceof Error && error.message.includes('Invalid email or password')) {
+            throw error;
+          }
+          throw new Error('Authentication failed. Please try again.');
         }
-
-        const isPasswordValid = await user.comparePassword(
-          credentials.password as string
-        );
-
-        if (!isPasswordValid) {
-          throw new Error('Invalid email or password');
-        }
-
-        return {
-          id: user._id.toString(),
-          email: user.email,
-          name: user.name,
-          role: user.role,
-        };
       },
     }),
   ],
@@ -89,8 +131,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   session: {
     strategy: 'jwt',
   },
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: nextAuthSecret || 'fallback-secret-change-in-production',
   trustHost: true,
+  debug: process.env.NODE_ENV === 'development',
 });
 
 

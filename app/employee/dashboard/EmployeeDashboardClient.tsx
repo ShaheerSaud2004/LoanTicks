@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import DashboardLayout from '@/components/layout/DashboardLayout';
+import DashboardWalkthrough from '@/components/walkthrough/DashboardWalkthrough';
 import { 
   FileText, 
   Search, 
@@ -44,6 +45,7 @@ export default function EmployeeDashboardClient() {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [assignedFilter, setAssignedFilter] = useState('all');
+  const [walkthroughComplete, setWalkthroughComplete] = useState(false);
 
   const fetchApplications = useCallback(async () => {
     try {
@@ -69,7 +71,7 @@ export default function EmployeeDashboardClient() {
   const getStatusBadge = (status: string) => {
     const statusClasses = {
       'draft': 'bg-gray-100 text-gray-800',
-      'submitted': 'bg-blue-100 text-blue-800',
+      'submitted': 'bg-yellow-500 text-yellow-600',
       'under_review': 'bg-yellow-100 text-yellow-800',
       'approved': 'bg-green-100 text-green-800',
       'rejected': 'bg-red-100 text-red-800'
@@ -135,24 +137,31 @@ export default function EmployeeDashboardClient() {
   }
 
   return (
-    <DashboardLayout
-      userName={session.user.name || 'Employee'}
-      userRole={session.user.role}
-      userEmail={session.user.email || ''}
-    >
-      <div className="space-y-6">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Employee Dashboard</h1>
-          <p className="text-gray-600 mt-2">Manage and review loan applications</p>
-        </div>
+    <>
+      {!walkthroughComplete && session?.user?.role && (
+        <DashboardWalkthrough
+          role={session.user.role as 'employee'}
+          onComplete={() => setWalkthroughComplete(true)}
+        />
+      )}
+      <DashboardLayout
+        userName={session.user.name || 'Employee'}
+        userRole={session.user.role}
+        userEmail={session.user.email || ''}
+      >
+        <div className="space-y-6">
+          {/* Header */}
+          <div data-tour="dashboard-header" className="mb-8">
+            <h1 className="text-3xl font-bold text-gray-900">Employee Dashboard</h1>
+            <p className="text-gray-600 mt-2">Manage and review loan applications</p>
+          </div>
 
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          {/* Stats Cards */}
+          <div data-tour="stats-cards" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <div className="bg-white rounded-xl shadow-sm p-6">
             <div className="flex items-center">
-              <div className="p-2 bg-blue-100 rounded-lg">
-                <FileText className="w-6 h-6 text-blue-600" />
+              <div className="p-2 bg-yellow-500 rounded-lg">
+                <FileText className="w-6 h-6 text-yellow-600" />
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">Total Applications</p>
@@ -187,8 +196,8 @@ export default function EmployeeDashboardClient() {
 
           <div className="bg-white rounded-xl shadow-sm p-6">
             <div className="flex items-center">
-              <div className="p-2 bg-purple-100 rounded-lg">
-                <User className="w-6 h-6 text-purple-600" />
+              <div className="p-2 bg-gray-600 rounded-lg">
+                <User className="w-6 h-6 text-white" />
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">Assigned to Me</p>
@@ -199,7 +208,7 @@ export default function EmployeeDashboardClient() {
         </div>
 
         {/* Filters */}
-        <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
+        <div data-tour="filters" className="bg-white rounded-xl shadow-sm p-6 mb-8">
           <div className="flex flex-col lg:flex-row gap-4">
             <div className="flex-1">
               <div className="relative">
@@ -241,7 +250,7 @@ export default function EmployeeDashboardClient() {
         </div>
 
         {/* Applications Table */}
-        <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+        <div data-tour="applications-list" className="bg-white rounded-xl shadow-sm overflow-hidden">
           <div className="px-6 py-4 border-b border-gray-200">
             <h2 className="text-lg font-semibold text-gray-900">Applications ({filteredApplications.length})</h2>
           </div>
@@ -306,13 +315,18 @@ export default function EmployeeDashboardClient() {
                         <div className="flex space-x-2">
                           <button
                             onClick={() => router.push(`/employee/applications/${application._id}`)}
-                            className="text-blue-600 hover:text-blue-900 flex items-center gap-1"
+                            className="text-yellow-600 hover:text-yellow-600 flex items-center gap-1"
                           >
                             <Eye className="w-4 h-4" />
                             View
                           </button>
                           <button
-                            onClick={() => router.push(`/employee/applications/${application._id}/edit`)}
+                            type="button"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              router.push(`/employee/applications/${application._id}/edit`);
+                            }}
                             className="text-green-600 hover:text-green-900 flex items-center gap-1"
                           >
                             <Edit className="w-4 h-4" />
@@ -329,5 +343,6 @@ export default function EmployeeDashboardClient() {
         </div>
       </div>
     </DashboardLayout>
+    </>
   );
 }

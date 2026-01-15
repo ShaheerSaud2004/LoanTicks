@@ -3,13 +3,15 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import {
-  Plus,
   FileText,
   DollarSign,
   Calendar,
   CheckCircle,
 } from 'lucide-react';
 import CustomerApplicationTracker from '@/components/customer/CustomerApplicationTracker';
+import CustomerDashboardClient from '@/components/customer/CustomerDashboardClient';
+import LoanCard from '@/components/customer/LoanCard';
+import AnimatedApplyButton from '@/components/customer/AnimatedApplyButton';
 
 export default async function CustomerDashboard() {
   const session = await auth();
@@ -32,13 +34,40 @@ export default async function CustomerDashboard() {
       .limit(3)
       .lean();
     
-    recentApplications = apps.map(app => ({
-      ...app,
-      _id: app._id.toString(),
-      createdAt: app.createdAt.toISOString(),
-      updatedAt: app.updatedAt.toISOString(),
-      submittedAt: app.submittedAt ? app.submittedAt.toISOString() : null,
-    }));
+    // Convert MongoDB documents to plain objects using JSON serialization
+    // This handles ObjectIds, Dates, Buffers, and all nested objects
+    recentApplications = apps.map(app => {
+      const serialized = JSON.parse(JSON.stringify(app, (key, value) => {
+        // Convert ObjectId to string
+        if (value && typeof value === 'object' && value.constructor) {
+          const constructorName = value.constructor.name;
+          if (constructorName === 'ObjectId' || constructorName === 'Types.ObjectId') {
+            return value.toString();
+          }
+        }
+        // Convert Date to ISO string
+        if (value instanceof Date) {
+          return value.toISOString();
+        }
+        // Convert Buffer to base64 string
+        if (value && typeof value === 'object' && value.type === 'Buffer' && Array.isArray(value.data)) {
+          return Buffer.from(value.data).toString('base64');
+        }
+        return value;
+      }));
+      
+      // Ensure statusHistory is properly serialized
+      if (serialized.statusHistory && Array.isArray(serialized.statusHistory)) {
+        serialized.statusHistory = serialized.statusHistory.map((entry: any) => ({
+          status: entry.status,
+          changedBy: entry.changedBy?.toString() || entry.changedBy,
+          changedAt: entry.changedAt instanceof Date ? entry.changedAt.toISOString() : entry.changedAt,
+          notes: entry.notes,
+        }));
+      }
+      
+      return serialized;
+    });
   } catch (error) {
     console.error('Error fetching applications:', error);
   }
@@ -46,27 +75,27 @@ export default async function CustomerDashboard() {
   const stats = [
     {
       title: 'Active Mortgages',
-      value: '2',
+      value: '3',
       icon: FileText,
-      color: 'bg-blue-500',
+      color: 'bg-gray-500',
     },
     {
       title: 'Total Financed',
-      value: '$685,000',
+      value: '$1,010,000',
       icon: DollarSign,
-      color: 'bg-green-500',
+      color: 'bg-yellow-500',
     },
     {
       title: 'Next Payment',
-      value: '$3,247',
+      value: '$5,097',
       icon: Calendar,
       color: 'bg-orange-500',
     },
     {
       title: 'Applications',
-      value: '3',
+      value: String(recentApplications.length || 0),
       icon: CheckCircle,
-      color: 'bg-purple-500',
+      color: 'bg-gray-600',
     },
   ];
 
@@ -78,8 +107,8 @@ export default async function CustomerDashboard() {
       outstanding: '$438,250',
       nextPayment: '$2,347',
       dueDate: 'Nov 1, 2025',
-      status: 'active',
-      propertyAddress: '123 Main Street, Los Angeles, CA',
+      status: 'Active',
+      propertyAddress: '123 Main Street, Los Angeles, CA 90001',
       interestRate: '6.5%',
     },
     {
@@ -89,39 +118,45 @@ export default async function CustomerDashboard() {
       outstanding: '$198,750',
       nextPayment: '$900',
       dueDate: 'Nov 1, 2025',
-      status: 'active',
-      propertyAddress: '456 Oak Avenue, San Diego, CA',
+      status: 'Active',
+      propertyAddress: '456 Oak Avenue, San Diego, CA 92101',
       interestRate: '5.75%',
+    },
+    {
+      id: 'MTG-003',
+      type: '20-Year Fixed Mortgage',
+      amount: '$325,000',
+      outstanding: '$312,500',
+      nextPayment: '$1,850',
+      dueDate: 'Nov 15, 2025',
+      status: 'Active',
+      propertyAddress: '789 Pine Road, San Francisco, CA 94102',
+      interestRate: '6.25%',
     },
   ];
 
 
   return (
-    <DashboardLayout
-      userName={session.user.name || 'Customer'}
-      userRole={session.user.role}
-      userEmail={session.user.email || ''}
-    >
-      <div className="space-y-6">
+    <CustomerDashboardClient userRole={session.user.role}>
+      <DashboardLayout
+        userName={session.user.name || 'Customer'}
+        userRole={session.user.role}
+        userEmail={session.user.email || ''}
+      >
+        <div className="space-y-6">
         {/* Welcome Section */}
-        <div className="bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl p-6 md:p-8 text-white shadow-lg">
+        <div data-tour="welcome-banner" className="bg-gradient-to-r from-yellow-500 to-yellow-600 rounded-xl p-6 md:p-8 text-white shadow-lg">
           <h1 className="text-2xl md:text-3xl font-bold mb-2">
             Welcome back, {session.user.name}! 🏡
           </h1>
-          <p className="text-green-100 mb-4 text-sm md:text-base">
-            Your next mortgage payment of $3,247 is due on November 1, 2025.
+          <p className="text-yellow-100 mb-4 text-sm md:text-base">
+            Your next mortgage payment of $5,097 is due on November 1, 2025.
           </p>
-          <Link 
-            href="/customer/loan-application"
-            className="inline-flex items-center gap-2 px-4 md:px-6 py-2 md:py-3 bg-white text-green-600 rounded-lg hover:bg-green-50 transition-colors font-medium shadow-md text-sm md:text-base"
-          >
-            <Plus className="h-4 w-4 md:h-5 md:w-5" />
-            Apply for Home Mortgage
-          </Link>
+          <AnimatedApplyButton />
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div data-tour="stats-cards" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {stats.map((stat) => (
             <div
               key={stat.title}
@@ -141,79 +176,24 @@ export default async function CustomerDashboard() {
         </div>
 
         {/* Active Mortgages */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+        <div data-tour="active-loans" className="bg-white rounded-xl shadow-sm border border-gray-200">
           <div className="p-4 md:p-6 border-b border-gray-200">
             <h2 className="text-lg md:text-xl font-bold text-gray-900">Your Active Mortgages</h2>
           </div>
           <div className="p-4 md:p-6 space-y-4">
             {loans.map((loan) => (
-              <div
-                key={loan.id}
-                className="border border-gray-200 rounded-lg p-4 md:p-6 hover:shadow-md transition-shadow"
-              >
-                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-4 gap-3">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1 flex-wrap">
-                      <h3 className="text-base md:text-lg font-bold text-gray-900">
-                        {loan.type}
-                      </h3>
-                      <span className="px-2 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded-full">
-                        Active
-                      </span>
-                    </div>
-                    <p className="text-xs md:text-sm text-gray-500">Mortgage ID: {loan.id}</p>
-                    <p className="text-xs md:text-sm text-gray-600 mt-1">📍 {loan.propertyAddress}</p>
-                  </div>
-                  <button className="text-indigo-600 hover:text-indigo-700 font-medium text-sm self-start sm:self-auto">
-                    View Details →
-                  </button>
-                </div>
-
-                <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 md:gap-4">
-                  <div>
-                    <p className="text-xs text-gray-500 mb-1">Loan Amount</p>
-                    <p className="text-sm md:text-lg font-bold text-gray-900">{loan.amount}</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-500 mb-1">Balance</p>
-                    <p className="text-sm md:text-lg font-bold text-gray-900">
-                      {loan.outstanding}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-500 mb-1">Interest Rate</p>
-                    <p className="text-sm md:text-lg font-bold text-blue-600">
-                      {loan.interestRate}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-500 mb-1">Next Payment</p>
-                    <p className="text-sm md:text-lg font-bold text-orange-600">
-                      {loan.nextPayment}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-500 mb-1">Due Date</p>
-                    <p className="text-xs md:text-sm font-semibold text-gray-900">
-                      {loan.dueDate}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="mt-4 pt-4 border-t border-gray-100">
-                  <button className="w-full sm:w-auto px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium text-sm">
-                    Make Payment
-                  </button>
-                </div>
-              </div>
+              <LoanCard key={loan.id} loan={loan} />
             ))}
           </div>
         </div>
 
         {/* Recent Applications */}
-        <CustomerApplicationTracker applications={recentApplications} />
+        <div data-tour="applications-tracker">
+          <CustomerApplicationTracker applications={recentApplications} />
+        </div>
       </div>
     </DashboardLayout>
+    </CustomerDashboardClient>
   );
 }
 

@@ -4,7 +4,7 @@
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, use } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import DashboardLayout from '@/components/layout/DashboardLayout';
@@ -36,9 +36,10 @@ interface Application {
   createdAt: string;
 }
 
-export default function EditApplication({ params }: { params: { id: string } }) {
+export default function EditApplication({ params }: { params: Promise<{ id: string }> }) {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const resolvedParams = use(params);
   const [application, setApplication] = useState<Application | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -47,23 +48,27 @@ export default function EditApplication({ params }: { params: { id: string } }) 
 
   const fetchApplication = useCallback(async () => {
     try {
-      const response = await fetch(`/api/loan-application?id=${params.id}`);
+      setLoading(true);
+      const response = await fetch(`/api/loan-application?id=${resolvedParams.id}`);
       const data = await response.json();
       
-      if (response.ok) {
+      if (response.ok && data.application) {
+        console.log('Application fetched:', data.application);
         setApplication(data.application);
         setFormData(data.application);
       } else {
         console.error('Failed to fetch application:', data.error);
+        alert(`Failed to load application: ${data.error || 'Application not found'}`);
         router.push('/employee/dashboard');
       }
     } catch (error) {
       console.error('Error fetching application:', error);
+      alert('Error loading application. Please try again.');
       router.push('/employee/dashboard');
     } finally {
       setLoading(false);
     }
-  }, [params.id, router]);
+  }, [resolvedParams.id, router]);
 
   useEffect(() => {
     if (status === 'loading') return;
@@ -93,22 +98,40 @@ export default function EditApplication({ params }: { params: { id: string } }) 
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          applicationId: params.id,
-          ...formData,
+          applicationId: resolvedParams.id,
+          borrowerInfo: formData.borrowerInfo,
+          currentAddress: formData.currentAddress,
+          employment: formData.employment,
+          financialInfo: formData.financialInfo,
+          propertyInfo: formData.propertyInfo,
+          declarations: formData.declarations,
           notes: notes || 'Application updated by employee',
           updatedBy: session?.user?.id
         })
       });
 
       if (response.ok) {
-        alert('Application updated successfully!');
-        router.push(`/employee/applications/${params.id}`);
+        const data = await response.json();
+        console.log('Application updated successfully:', data);
+        
+        // Show success message
+        alert('Application updated successfully! Changes have been saved to the database.');
+        
+        // Refresh the application data to show updated values
+        await fetchApplication();
+        
+        // Optionally navigate back to view page after a short delay
+        setTimeout(() => {
+          router.push(`/employee/applications/${resolvedParams.id}`);
+        }, 1000);
       } else {
-        alert('Failed to update application');
+        const errorData = await response.json();
+        console.error('Failed to update application:', errorData);
+        alert(`Failed to update application: ${errorData.error || errorData.message || 'Unknown error'}`);
       }
     } catch (error) {
       console.error('Error updating application:', error);
-      alert('Error updating application');
+      alert(`Error updating application: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setSaving(false);
     }
@@ -158,7 +181,7 @@ export default function EditApplication({ params }: { params: { id: string } }) 
         {/* Header */}
         <div className="mb-8">
           <button
-            onClick={() => router.push(`/employee/applications/${params.id}`)}
+            onClick={() => router.push(`/employee/applications/${resolvedParams.id}`)}
             className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-4 transition"
           >
             <ArrowLeft className="w-5 h-5" />

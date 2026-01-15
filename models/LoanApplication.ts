@@ -347,7 +347,13 @@ const LoanApplicationSchema = new Schema<ILoanApplication>(
       cellPhone: String,
       alternatePhone: String,
       dateOfBirth: { type: Date, required: true },
-      ssn: { type: String, required: true },
+      ssn: { 
+        type: String, 
+        required: true,
+        // Note: In production, this should be encrypted at rest
+        // Consider using MongoDB field-level encryption or application-level encryption
+        select: false, // Don't return SSN by default in queries
+      },
       maritalStatus: {
         type: String,
         enum: ['married', 'unmarried', 'separated'],
