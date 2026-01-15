@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { LogIn, Loader2, Shield, TrendingUp, Users, MessageCircle, CheckCircle } from 'lucide-react';
+import { LogIn, Loader2, Shield, Lock, KeyRound, MessageCircle, CheckCircle, Users, TrendingUp } from 'lucide-react';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -182,143 +182,154 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-700 via-gray-600 to-gray-800 flex flex-col items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4 md:p-8 relative overflow-hidden">
       {/* Success Animation Overlay */}
       {showSuccessAnimation && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-gray-700 via-gray-600 to-gray-800 animate-fadeIn">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 backdrop-blur-sm">
           <div className="text-center">
-            <div className="relative">
-              {/* Animated Checkmark Circle */}
-              <div className="w-32 h-32 mx-auto mb-6 relative">
-                <div className="absolute inset-0 bg-white rounded-full animate-scaleIn"></div>
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <svg className="w-20 h-20 text-yellow-500 animate-checkmark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                  </svg>
-                </div>
-              </div>
-              
-              {/* Success Text */}
-              <h2 className="text-3xl font-bold text-white mb-2 animate-slideUp">
-                Welcome Back!
-              </h2>
-              <p className="text-white/90 text-lg animate-slideUp" style={{animationDelay: '0.2s'}}>
-                Redirecting to your dashboard...
-              </p>
-              
-              {/* Loading Dots */}
-              <div className="flex justify-center gap-2 mt-6 animate-slideUp" style={{animationDelay: '0.3s'}}>
-                <div className="w-2 h-2 bg-white rounded-full animate-bounce"></div>
-                <div className="w-2 h-2 bg-white rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
-                <div className="w-2 h-2 bg-white rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+            <div className="w-24 h-24 mx-auto mb-6 relative">
+              <div className="absolute inset-0 bg-white rounded-full scale-0 animate-[scale_0.3s_ease-out_forwards]"></div>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <svg className="w-14 h-14 text-yellow-500 opacity-0 animate-[checkmark_0.4s_0.2s_ease-out_forwards]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                </svg>
               </div>
             </div>
+            <h2 className="text-2xl font-semibold text-white mb-2 opacity-0 animate-[fadeIn_0.4s_0.3s_ease-out_forwards]">
+              Welcome Back!
+            </h2>
+            <p className="text-slate-300 text-base opacity-0 animate-[fadeIn_0.4s_0.4s_ease-out_forwards]">
+              Redirecting to your dashboard...
+            </p>
           </div>
         </div>
       )}
 
-      {/* Animated Background Elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-white/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-white/10 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
+      {/* Subtle Background Pattern */}
+      <div className="absolute inset-0 opacity-5">
+        <div className="absolute top-20 left-20 w-72 h-72 bg-yellow-400 rounded-full blur-[120px]"></div>
+        <div className="absolute bottom-20 right-20 w-96 h-96 bg-yellow-500 rounded-full blur-[140px]"></div>
       </div>
 
-      <div className="w-full max-w-6xl grid md:grid-cols-2 gap-6 lg:gap-8 items-center relative z-10 mb-8">
+      {/* Grid Pattern Overlay */}
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:4rem_4rem]"></div>
+
+      <div className="w-full max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-16 items-center relative z-10">
         {/* Left Side - Hero Content */}
-        <div className="text-white space-y-6 lg:space-y-8 p-6 lg:p-8">
-          <div className="flex items-center gap-4 sm:gap-6">
-            <div className="h-20 w-20 sm:h-24 sm:w-24 lg:h-32 lg:w-32 bg-white rounded-xl lg:rounded-2xl flex items-center justify-center shadow-2xl overflow-hidden flex-shrink-0 relative p-2">
-              <Image src="/logo.jpg" alt="LoanAticks" fill className="object-contain" priority />
+        <div className="text-white space-y-8 lg:space-y-10">
+          {/* Logo and Branding */}
+          <div className="flex items-start gap-5">
+            <div className="h-16 w-16 lg:h-20 lg:w-20 bg-white rounded-2xl flex items-center justify-center shadow-[0_8px_32px_rgba(0,0,0,0.3)] overflow-hidden flex-shrink-0 relative p-2.5 ring-2 ring-white/10">
+              <Image src="/logo.jpg" alt="loanaticks" fill className="object-contain" priority />
             </div>
-          <div>
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold">LoanAticks</h1>
-              <p className="text-white/80 text-sm sm:text-base lg:text-lg">Home Mortgage Solutions</p>
+            <div className="pt-1.5">
+              <h1 className="text-3xl lg:text-4xl font-semibold tracking-tight mb-1">loanaticks</h1>
+              <p className="text-slate-300 text-sm lg:text-base font-medium">Home Mortgage Solutions</p>
+            </div>
           </div>
-        </div>
 
-        <div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-3 lg:mb-4">
-            Your Dream Home<br/>Starts Here 🏡
-          </h2>
-          <p className="text-base sm:text-lg lg:text-xl text-white/90 leading-relaxed mb-4">
-            Experience streamlined mortgage financing with competitive rates, fast approvals, and expert support every step of the way.
-          </p>
+          {/* Main Headline */}
+          <div className="space-y-4">
+            <h2 className="text-4xl lg:text-5xl xl:text-6xl font-semibold leading-[1.1] tracking-tight">
+              Your Dream Home<br/>
+              <span className="text-yellow-400">Starts Here</span>
+            </h2>
+            <p className="text-lg lg:text-xl text-slate-300 leading-relaxed max-w-xl font-light">
+              Experience streamlined mortgage financing with competitive rates, fast approvals, and expert support every step of the way.
+            </p>
+          </div>
           
-          {/* Expert Loan Advisor Badge */}
-          <div className="flex items-center gap-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-4 mb-6">
-            <div className="bg-yellow-500 p-2 rounded-lg">
-              <MessageCircle className="h-5 w-5 text-gray-900" />
+          {/* Expert Loan Advisor Feature */}
+          <div className="flex items-center gap-4 bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-5 shadow-[0_8px_32px_rgba(0,0,0,0.2)] hover:bg-white/8 transition-colors">
+            <div className="bg-yellow-400 p-2.5 rounded-xl shadow-lg">
+              <MessageCircle className="h-5 w-5 text-slate-900" />
             </div>
-            <div>
-              <p className="font-semibold text-white text-base">Expert Loan Advisor Available</p>
-              <p className="text-white/80 text-sm">Get personalized guidance from our AI-powered assistant</p>
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <p className="font-semibold text-white text-base">Expert Loan Advisor</p>
+                <span className="px-2 py-0.5 bg-yellow-400/20 border border-yellow-400/30 rounded text-xs text-yellow-300 font-medium">Registered</span>
+              </div>
+              <p className="text-slate-300 text-sm">Get personalized guidance from our AI-powered assistant available 24/7</p>
             </div>
           </div>
-        </div>
 
-          <div className="grid grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
-            <div className="text-center">
-              <Shield className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8 mx-auto mb-1 sm:mb-2" />
-              <div className="text-xl sm:text-2xl font-bold">A+</div>
-              <div className="text-xs sm:text-sm text-white/80">Rated</div>
+          {/* Security Stats */}
+          <div className="grid grid-cols-3 gap-6 pt-4">
+            <div className="text-center group">
+              <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-white/5 border border-white/10 mb-3 group-hover:bg-white/10 transition-colors">
+                <Shield className="h-6 w-6 text-yellow-400" />
+              </div>
+              <div className="text-2xl font-semibold mb-1">256-bit</div>
+              <div className="text-xs text-slate-400 font-medium uppercase tracking-wide">Encryption</div>
             </div>
-            <div className="text-center">
-              <Users className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8 mx-auto mb-1 sm:mb-2" />
-              <div className="text-xl sm:text-2xl font-bold">15K+</div>
-              <div className="text-xs sm:text-sm text-white/80">Homeowners</div>
+            <div className="text-center group">
+              <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-white/5 border border-white/10 mb-3 group-hover:bg-white/10 transition-colors">
+                <Lock className="h-6 w-6 text-yellow-400" />
+              </div>
+              <div className="text-2xl font-semibold mb-1">SSL</div>
+              <div className="text-xs text-slate-400 font-medium uppercase tracking-wide">Protected</div>
             </div>
-            <div className="text-center">
-              <TrendingUp className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8 mx-auto mb-1 sm:mb-2" />
-              <div className="text-xl sm:text-2xl font-bold">$4.8B</div>
-              <div className="text-xs sm:text-sm text-white/80">Funded</div>
+            <div className="text-center group">
+              <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-white/5 border border-white/10 mb-3 group-hover:bg-white/10 transition-colors">
+                <KeyRound className="h-6 w-6 text-yellow-400" />
+              </div>
+              <div className="text-2xl font-semibold mb-1">SOC 2</div>
+              <div className="text-xs text-slate-400 font-medium uppercase tracking-wide">Compliant</div>
             </div>
           </div>
         </div>
 
         {/* Right Side - Login Card */}
-        <div className="bg-white rounded-2xl sm:rounded-3xl shadow-2xl p-6 sm:p-8 lg:p-10 border border-gray-100">
-          <div className="mb-6 sm:mb-8">
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Welcome Back</h2>
-            <p className="text-gray-600 text-sm sm:text-base">Sign in to continue to your account</p>
+        <div className="bg-white rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.3)] p-8 lg:p-10 border border-white/20 backdrop-blur-sm">
+          {/* Header */}
+          <div className="mb-8">
+            <h2 className="text-2xl lg:text-3xl font-semibold text-slate-900 mb-2 tracking-tight">Welcome Back</h2>
+            <p className="text-slate-600 text-base">Sign in to continue to your account</p>
           </div>
           
           {/* Trust Indicators */}
-          <div className="flex items-center gap-4 mb-6 pb-6 border-b border-gray-100">
-            <div className="flex items-center gap-2 text-gray-600">
-              <CheckCircle className="h-4 w-4 text-green-500" />
-              <span className="text-xs sm:text-sm font-medium">Secure Login</span>
+          <div className="space-y-3 mb-8 pb-6 border-b border-slate-200">
+            <div className="flex items-center gap-6">
+              <div className="flex items-center gap-2">
+                <CheckCircle className="h-4 w-4 text-emerald-500 flex-shrink-0" />
+                <span className="text-sm text-slate-600 font-medium">Secure Login</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle className="h-4 w-4 text-emerald-500 flex-shrink-0" />
+                <span className="text-sm text-slate-600 font-medium">24/7 Support</span>
+              </div>
             </div>
-            <div className="flex items-center gap-2 text-gray-600">
-              <CheckCircle className="h-4 w-4 text-green-500" />
-              <span className="text-xs sm:text-sm font-medium">24/7 Support</span>
+            <div className="flex items-center gap-2 pt-1">
+              <div className="h-px bg-slate-200 flex-1"></div>
+              <span className="text-xs text-slate-500 font-medium uppercase tracking-wide px-2">Registered as</span>
+              <div className="h-px bg-slate-200 flex-1"></div>
+            </div>
+            <div className="flex items-center justify-center gap-2 bg-yellow-50 border border-yellow-200 rounded-lg py-2 px-3">
+              <Shield className="h-3.5 w-3.5 text-yellow-600" />
+              <span className="text-sm font-semibold text-slate-900">Expert Loan Advisor</span>
             </div>
           </div>
 
           <form className="space-y-4 sm:space-y-6" onSubmit={handleSubmit}>
             {loading && (
-              <div className="bg-gradient-to-r from-yellow-500 to-yellow-600 border-2 border-yellow-400 text-gray-900 px-5 py-4 rounded-xl shadow-lg flex items-center gap-4 animate-slideIn">
-                <Loader2 className="h-6 w-6 animate-spin flex-shrink-0" />
-                <div className="flex-1">
-                  <strong className="font-bold text-base">{loginStatus}</strong>
-                  <div className="w-full bg-yellow-400/30 h-2 mt-2.5 rounded-full overflow-hidden">
-                    <div className="h-full bg-gray-900 shadow-lg rounded-full animate-pulse" style={{width: '100%'}}></div>
-                  </div>
-                </div>
+              <div className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-slate-900 px-5 py-4 rounded-xl shadow-md flex items-center gap-3 border border-yellow-300">
+                <Loader2 className="h-5 w-5 animate-spin flex-shrink-0" />
+                <span className="font-medium text-sm">{loginStatus}</span>
               </div>
             )}
 
             {error && !loading && (
-              <div className="bg-red-500 border-2 border-red-600 text-white px-5 py-4 rounded-xl shadow-lg flex items-start gap-3 animate-shake">
-                <div className="text-2xl">❌</div>
+              <div className="bg-red-50 border border-red-200 text-red-900 px-5 py-4 rounded-xl flex items-start gap-3">
+                <div className="text-red-500 text-xl flex-shrink-0 mt-0.5">⚠️</div>
                 <div className="flex-1">
-                  <strong className="font-bold text-base block mb-1">Login Failed</strong>
-                  <p className="text-sm text-red-50">{error}</p>
+                  <strong className="font-semibold text-sm block mb-1">Login Failed</strong>
+                  <p className="text-sm text-red-700">{error}</p>
                 </div>
               </div>
             )}
 
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
+            <div className="space-y-1.5">
+              <label className="block text-sm font-semibold text-slate-700 mb-2">
                 Email Address
               </label>
               <input
@@ -326,13 +337,13 @@ export default function LoginPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-base hover:border-gray-300"
+                className="w-full px-4 py-3.5 border border-slate-200 rounded-xl focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400/20 focus:outline-none transition-all text-base text-slate-900 bg-white hover:border-slate-300 placeholder:text-slate-400"
                 placeholder="your.email@company.com"
               />
             </div>
 
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
+            <div className="space-y-1.5">
+              <label className="block text-sm font-semibold text-slate-700 mb-2">
                 Password
               </label>
               <input
@@ -340,7 +351,7 @@ export default function LoginPage() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-base hover:border-gray-300"
+                className="w-full px-4 py-3.5 border border-slate-200 rounded-xl focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400/20 focus:outline-none transition-all text-base text-slate-900 bg-white hover:border-slate-300 placeholder:text-slate-400"
                 placeholder="Enter your password"
               />
             </div>
@@ -348,26 +359,26 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-4 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 active:from-yellow-700 active:to-yellow-800 text-gray-900 font-bold rounded-xl shadow-lg hover:shadow-xl transition-all disabled:opacity-70 flex items-center justify-center gap-2 touch-manipulation min-h-[44px] text-base"
+              className="w-full py-3.5 bg-slate-900 hover:bg-slate-800 active:bg-slate-900 text-white font-semibold rounded-xl shadow-sm hover:shadow-md transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 touch-manipulation min-h-[48px] text-base group"
             >
               {loading ? (
                 <>
                   <Loader2 className="animate-spin h-5 w-5" />
-                  Please Wait...
+                  <span>Signing in...</span>
                 </>
               ) : (
                 <>
-                  <LogIn className="h-5 w-5" />
-                  Sign In
+                  <span>Sign In</span>
+                  <LogIn className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
                 </>
               )}
             </button>
           </form>
 
           {/* Quick Login Options */}
-          <div className="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t border-gray-200">
-            <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4 sm:mb-5">Quick Login</p>
-            <div className="space-y-2 text-xs sm:text-sm">
+          <div className="mt-8 pt-8 border-t border-slate-200">
+            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-5">Quick Login</p>
+            <div className="space-y-3">
               <button
                 type="button"
                 onClick={(e) => {
@@ -375,13 +386,13 @@ export default function LoginPage() {
                   handleQuickLogin('admin@loanaticks.com', 'admin123');
                 }}
                 disabled={loading}
-                className="w-full flex items-center justify-between p-3 sm:p-4 bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 active:from-gray-800 active:to-gray-900 text-white rounded-lg transition-all shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation min-h-[44px] text-sm sm:text-base"
+                className="w-full flex items-center justify-between p-3.5 bg-slate-100 hover:bg-slate-200 active:bg-slate-100 text-slate-700 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation group border border-slate-200 hover:border-slate-300"
               >
-                <span className="font-semibold flex items-center gap-2">
-                  <Shield className="h-4 w-4" />
+                <span className="font-medium flex items-center gap-2.5 text-sm">
+                  <Shield className="h-4 w-4 text-slate-600" />
                   Admin Login
                 </span>
-                <span className="text-xs opacity-90">Click to login →</span>
+                <span className="text-xs text-slate-500 group-hover:text-slate-600 transition-colors">→</span>
               </button>
               <button
                 type="button"
@@ -390,13 +401,13 @@ export default function LoginPage() {
                   handleQuickLogin('employee@loanaticks.com', 'employee123');
                 }}
                 disabled={loading}
-                className="w-full flex items-center justify-between p-3 sm:p-4 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-gray-900 rounded-lg transition-all shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation min-h-[44px] text-sm sm:text-base font-semibold"
+                className="w-full flex items-center justify-between p-3.5 bg-yellow-50 hover:bg-yellow-100 active:bg-yellow-50 text-slate-700 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation group border border-yellow-200 hover:border-yellow-300"
               >
-                <span className="font-semibold flex items-center gap-2">
-                  <Users className="h-4 w-4" />
+                <span className="font-medium flex items-center gap-2.5 text-sm">
+                  <Users className="h-4 w-4 text-slate-600" />
                   Employee Login
                 </span>
-                <span className="text-xs opacity-90">Click to login →</span>
+                <span className="text-xs text-slate-500 group-hover:text-slate-600 transition-colors">→</span>
               </button>
               <button
                 type="button"
@@ -405,23 +416,23 @@ export default function LoginPage() {
                   handleQuickLogin('customer@loanaticks.com', 'customer123');
                 }}
                 disabled={loading}
-                className="w-full flex items-center justify-between p-3 sm:p-4 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-gray-900 rounded-lg transition-all shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation min-h-[44px] text-sm sm:text-base font-semibold"
+                className="w-full flex items-center justify-between p-3.5 bg-yellow-50 hover:bg-yellow-100 active:bg-yellow-50 text-slate-700 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation group border border-yellow-200 hover:border-yellow-300"
               >
-                <span className="font-semibold flex items-center gap-2">
-                  <TrendingUp className="h-4 w-4" />
+                <span className="font-medium flex items-center gap-2.5 text-sm">
+                  <TrendingUp className="h-4 w-4 text-slate-600" />
                   Customer Login
                 </span>
-                <span className="text-xs opacity-90">Click to login →</span>
+                <span className="text-xs text-slate-500 group-hover:text-slate-600 transition-colors">→</span>
               </button>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Simple Footer at Bottom */}
-      <div className="w-full max-w-6xl mt-8 pt-6 border-t border-gray-600/30 relative z-10">
-        <p className="text-center text-sm text-gray-400">
-          © 2025 LoanAticks. All rights reserved.
+      {/* Footer */}
+      <div className="absolute bottom-6 left-0 right-0 z-10">
+        <p className="text-center text-sm text-slate-500">
+          © 2025 loanaticks. All rights reserved.
         </p>
       </div>
     </div>
