@@ -1768,8 +1768,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
               <p className="text-yellow-800 text-sm">Military service information</p>
             </div>
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Military Service Status</label>
-              <select value={formData.militaryService} onChange={(e) => handleInputChange('militaryService', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-yellow-500 focus:outline-none transition text-gray-900">
+              <label className="block text-base sm:text-lg font-bold text-gray-800 mb-3">Military Service Status</label>
+              <p className="text-sm text-gray-600 mb-3">Select your military service status if applicable.</p>
+              <select value={formData.militaryService} onChange={(e) => handleInputChange('militaryService', e.target.value)} className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900 cursor-pointer touch-manipulation min-h-[60px] bg-white">
                 <option value="none">No Military Service</option>
                 <option value="active">Active Duty</option>
                 <option value="reserve">Reserves/National Guard</option>
