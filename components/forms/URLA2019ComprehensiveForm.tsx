@@ -14,7 +14,8 @@ import {
   Save,
   AlertTriangle,
   Info,
-  HelpCircle
+  HelpCircle,
+  X
 } from 'lucide-react';
 import FormTooltip from './FormTooltip';
 
@@ -411,9 +412,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
     
     if (!validation.isValid) {
       const missingFieldsList = validation.missingFields.join(', ');
-      setValidationError(`You didn't fill out everything (everything it needs to).\n\nMissing required fields:\n${missingFieldsList}\n\nPlease complete all required fields before submitting.`);
-      // Scroll to top to show error
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setValidationError(`Hold up! Please make sure you fill out the stuff!\n\nMissing required fields:\n${missingFieldsList}`);
       return;
     }
 
