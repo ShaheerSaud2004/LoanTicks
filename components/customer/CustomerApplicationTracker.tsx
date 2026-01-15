@@ -7,6 +7,8 @@ interface Application {
   _id: string;
   status: string;
   submissionDate?: string;
+  createdAt?: string | Date;
+  reviewedAt?: string | Date;
   borrowerInfo?: {
     firstName: string;
     lastName: string;
@@ -16,6 +18,13 @@ interface Application {
     loanAmount: number;
     propertyType: string;
     loanPurpose: string;
+    propertyValue?: number;
+    downPaymentAmount?: number;
+    downPaymentPercentage?: number;
+    propertyAddress?: string;
+    propertyCity?: string;
+    propertyState?: string;
+    propertyZipCode?: string;
   };
   employeeNotes?: string;
 }
@@ -327,7 +336,7 @@ export default function CustomerApplicationTracker({
                       <div>
                         <p className="text-sm text-gray-600">Application Date</p>
                         <p className="font-semibold text-gray-900">
-                          {formatDate(selectedApp.submissionDate || selectedApp.createdAt)}
+                          {formatDate(selectedApp.submissionDate || (selectedApp.createdAt instanceof Date ? selectedApp.createdAt.toISOString() : selectedApp.createdAt) || '')}
                         </p>
                       </div>
                       {selectedApp.propertyInfo?.propertyAddress && (
@@ -344,7 +353,7 @@ export default function CustomerApplicationTracker({
                         <div>
                           <p className="text-sm text-gray-600">Last Reviewed</p>
                           <p className="font-semibold text-gray-900">
-                            {formatDate(selectedApp.reviewedAt)}
+                            {formatDate(selectedApp.reviewedAt instanceof Date ? selectedApp.reviewedAt.toISOString() : selectedApp.reviewedAt)}
                           </p>
                         </div>
                       )}

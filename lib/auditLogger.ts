@@ -73,9 +73,10 @@ export async function logDataAccess(params: {
   userRole: string;
   resource: string;
   resourceId: string;
-  action: 'view' | 'edit' | 'delete' | 'export';
+  action: 'view' | 'edit' | 'delete' | 'export' | 'create' | 'update';
   ipAddress?: string;
   userAgent?: string;
+  details?: any;
 }) {
   return logAuditEvent({
     ...params,

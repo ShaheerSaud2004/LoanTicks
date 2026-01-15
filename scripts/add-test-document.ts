@@ -128,8 +128,8 @@ async function addTestDocument() {
     try {
       const ObjectId = mongoose.Types.ObjectId;
       await LoanApplication.collection.updateOne(
-        { _id: new ObjectId(appId) },
-        { $push: { documents: documentMetadata } }
+        { _id: new mongoose.Types.ObjectId(appId) },
+        { $push: { documents: documentMetadata } } as any
       );
       console.log(`✓ Added document to application in database\n`);
     } catch (err) {

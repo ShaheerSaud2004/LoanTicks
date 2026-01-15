@@ -706,7 +706,7 @@ async function seedTestData() {
               const ObjectId = mongoose.Types.ObjectId;
               await LoanApplication.collection.updateOne(
                 { _id: new ObjectId(appId) },
-                { $push: { documents: { $each: documentMetadata } } }
+                { $push: { documents: { $each: documentMetadata } } } as any
               );
               console.log(`  ✓ Added ${createdFiles.length} document(s) to application`);
             } catch (err) {

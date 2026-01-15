@@ -125,7 +125,7 @@ export async function GET(request: NextRequest) {
       else if (fileExtension === 'png') contentType = 'image/png';
 
       // Return file with appropriate headers
-      return new NextResponse(fileBuffer, {
+      return new NextResponse(new Uint8Array(fileBuffer), {
         headers: {
           'Content-Type': contentType,
           'Content-Disposition': `inline; filename="${document.name}"`,
