@@ -293,9 +293,49 @@ export default function ApplicationView({ params }: { params: Promise<{ id: stri
     );
   }
 
-  const handleDownloadDocument = (doc: Record<string, unknown>) => {
-    // In a real implementation, this would download the file
-    alert(`Downloading: ${doc.name}\n\nIn production, this would download the actual file.`);
+  const handleDownloadDocument = async (doc: Record<string, unknown>) => {
+    try {
+      // Extract fileName from doc.url or use doc.name
+      const docUrl = doc.url as string;
+      const fileName = docUrl?.includes('fileName=') 
+        ? docUrl.split('fileName=')[1].split('&')[0] 
+        : doc.name as string;
+      
+      const applicationId = application?._id;
+      if (!applicationId || !fileName) {
+        alert(`Error: Missing document information`);
+        return;
+      }
+
+      // Fetch document from secure API
+      const response = await fetch(
+        `/api/secure-document?applicationId=${applicationId}&fileName=${encodeURIComponent(fileName)}`
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+        if (response.status === 503) {
+          alert(`⚠️ Document Storage Not Configured\n\n${errorData.error}\n\n${errorData.details || ''}\n\nPlease configure cloud storage (Vercel Blob, S3, or Cloudinary) for production use.`);
+        } else {
+          alert(`Error downloading document: ${errorData.error || 'File not found'}`);
+        }
+        return;
+      }
+
+      // Create blob and download
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = doc.name as string;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    } catch (error) {
+      console.error('Error downloading document:', error);
+      alert(`Error downloading document: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
   };
 
   const handleDownloadAll = () => {
@@ -602,11 +642,22 @@ export default function ApplicationView({ params }: { params: Promise<{ id: stri
                       </p>
                       <div className="flex gap-3 justify-center">
                         <button
-                          onClick={() => setIsFullscreen(true)}
+                          onClick={async () => {
+                            const doc = application.documents[selectedDocument];
+                            const docUrl = doc.url as string;
+                            const fileName = docUrl?.includes('fileName=') 
+                              ? docUrl.split('fileName=')[1].split('&')[0] 
+                              : doc.name as string;
+                            
+                            if (application._id && fileName) {
+                              const viewUrl = `/api/secure-document?applicationId=${application._id}&fileName=${encodeURIComponent(fileName)}`;
+                              window.open(viewUrl, '_blank');
+                            }
+                          }}
                           className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center gap-2"
                         >
                           <Maximize2 className="w-4 h-4" />
-                          View Fullscreen
+                          View Document
                         </button>
                         <button
                           onClick={() => handleDownloadDocument(application.documents[selectedDocument])}

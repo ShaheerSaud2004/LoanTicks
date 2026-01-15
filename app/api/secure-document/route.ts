@@ -112,6 +112,8 @@ export async function GET(request: NextRequest) {
     });
 
     // Read file from PRIVATE storage location (not accessible via web URL)
+    // NOTE: In production (Vercel/serverless), filesystem is ephemeral.
+    // For production, use cloud storage (Vercel Blob, S3, Cloudinary, etc.)
     const filePath = join(process.cwd(), 'private', 'uploads', applicationId, fileName);
 
     try {
@@ -135,8 +137,29 @@ export async function GET(request: NextRequest) {
       });
     } catch (fileError) {
       console.error('Error reading file:', fileError);
+      
+      // Check if this is a production environment issue
+      const isProduction = process.env.NODE_ENV === 'production' || process.env.VERCEL;
+      
+      if (isProduction) {
+        return NextResponse.json(
+          { 
+            error: 'Document storage not configured for production. Please configure cloud storage (Vercel Blob, S3, or Cloudinary).',
+            details: 'The filesystem is ephemeral in serverless environments. Documents must be stored in cloud storage.',
+            fileName: document.name,
+            applicationId
+          },
+          { status: 503 }
+        );
+      }
+      
       return NextResponse.json(
-        { error: 'File not found or cannot be accessed' },
+        { 
+          error: 'File not found or cannot be accessed',
+          details: fileError instanceof Error ? fileError.message : 'Unknown error',
+          fileName: document.name,
+          filePath
+        },
         { status: 404 }
       );
     }
