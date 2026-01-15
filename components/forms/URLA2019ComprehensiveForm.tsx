@@ -653,10 +653,10 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                 ].map((option) => (
                   <label 
                     key={option.value} 
-                    className={`flex items-center gap-4 p-4 border-2 rounded-xl transition-all duration-200 cursor-pointer touch-manipulation min-h-[60px] ${
+                    className={`flex items-center gap-4 p-4 border-2 rounded-xl cursor-pointer touch-manipulation min-h-[60px] ${
                       formData.citizenship === option.value
-                        ? 'border-yellow-500 bg-yellow-200 shadow-xl ring-4 ring-yellow-400 ring-offset-2 scale-[1.02]'
-                        : 'border-gray-300 hover:border-yellow-400 bg-white hover:bg-gray-50'
+                        ? 'border-gray-400 bg-gray-100'
+                        : 'border-gray-300 bg-white'
                     }`}
                   >
                     <input
@@ -665,11 +665,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                       value={option.value}
                       checked={formData.citizenship === option.value}
                       onChange={(e) => handleInputChange('citizenship', e.target.value)}
-                      className="w-6 h-6 sm:w-7 sm:h-7 text-yellow-600 focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 cursor-pointer flex-shrink-0 accent-yellow-600"
+                      className="w-6 h-6 sm:w-7 sm:h-7 text-gray-900 cursor-pointer flex-shrink-0 accent-gray-900"
                     />
-                    <span className={`text-base sm:text-lg font-bold ${
-                      formData.citizenship === option.value ? 'text-gray-900' : 'text-gray-700'
-                    }`}>{option.label}</span>
+                    <span className="text-base sm:text-lg font-medium text-gray-900">{option.label}</span>
                   </label>
                 ))}
               </div>
@@ -692,10 +690,10 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   ].map((option) => (
                     <label 
                       key={option.value} 
-                      className={`flex items-center gap-4 p-4 border-2 rounded-xl transition-all duration-200 cursor-pointer touch-manipulation min-h-[60px] ${
+                      className={`flex items-center gap-4 p-4 border-2 rounded-xl cursor-pointer touch-manipulation min-h-[60px] ${
                         formData.creditType === option.value
-                          ? 'border-yellow-500 bg-yellow-200 shadow-xl ring-4 ring-yellow-400 ring-offset-2 scale-[1.02]'
-                          : 'border-gray-300 hover:border-yellow-400 bg-white hover:bg-gray-50'
+                          ? 'border-gray-400 bg-gray-100'
+                          : 'border-gray-300 bg-white'
                       }`}
                     >
                       <input
@@ -704,11 +702,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                         value={option.value}
                         checked={formData.creditType === option.value}
                         onChange={(e) => handleInputChange('creditType', e.target.value)}
-                        className="w-6 h-6 sm:w-7 sm:h-7 text-yellow-600 focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 cursor-pointer flex-shrink-0 accent-yellow-600"
+                        className="w-6 h-6 sm:w-7 sm:h-7 text-gray-900 cursor-pointer flex-shrink-0 accent-gray-900"
                       />
-                      <span className={`text-base sm:text-lg font-bold ${
-                        formData.creditType === option.value ? 'text-gray-900' : 'text-gray-700'
-                      }`}>{option.label}</span>
+                      <span className="text-base sm:text-lg font-medium text-gray-900">{option.label}</span>
                     </label>
                   ))}
                 </div>
@@ -892,10 +888,10 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                 ].map((option) => (
                     <label 
                       key={option.value} 
-                      className={`flex items-center gap-4 p-4 border-2 rounded-xl transition-all duration-200 cursor-pointer touch-manipulation min-h-[60px] ${
+                      className={`flex items-center gap-4 p-4 border-2 rounded-xl cursor-pointer touch-manipulation min-h-[60px] ${
                         formData.preferredContactMethod === option.value
-                          ? 'border-yellow-500 bg-yellow-200 shadow-xl ring-4 ring-yellow-400 ring-offset-2 scale-[1.02]'
-                          : 'border-gray-300 hover:border-yellow-400 bg-white hover:bg-gray-50'
+                          ? 'border-gray-400 bg-gray-100'
+                          : 'border-gray-300 bg-white'
                       }`}
                     >
                     <input
@@ -904,11 +900,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                       value={option.value}
                       checked={formData.preferredContactMethod === option.value}
                       onChange={(e) => handleInputChange('preferredContactMethod', e.target.value)}
-                      className="w-6 h-6 sm:w-7 sm:h-7 text-yellow-600 focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 cursor-pointer flex-shrink-0 accent-yellow-600"
+                      className="w-6 h-6 sm:w-7 sm:h-7 text-gray-900 cursor-pointer flex-shrink-0 accent-gray-900"
                     />
-                    <span className={`text-base sm:text-lg font-bold ${
-                      formData.preferredContactMethod === option.value ? 'text-gray-900' : 'text-gray-700'
-                    }`}>{option.label}</span>
+                    <span className="text-base sm:text-lg font-medium text-gray-900">{option.label}</span>
                   </label>
                 ))}
                 </div>
@@ -1105,10 +1099,10 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                 ].map((option) => (
                   <label 
                     key={option.value} 
-                    className={`flex items-center gap-4 p-4 border-2 rounded-xl transition-all duration-200 cursor-pointer touch-manipulation min-h-[60px] ${
+                    className={`flex items-center gap-4 p-4 border-2 rounded-xl cursor-pointer touch-manipulation min-h-[60px] ${
                       formData.currentHousing === option.value
-                        ? 'border-yellow-500 bg-yellow-200 shadow-xl ring-4 ring-yellow-400 ring-offset-2 scale-[1.02]'
-                        : 'border-gray-300 hover:border-yellow-400 bg-white hover:bg-gray-50'
+                        ? 'border-gray-400 bg-gray-100'
+                        : 'border-gray-300 bg-white'
                     }`}
                   >
                     <input
@@ -1117,11 +1111,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                       value={option.value}
                       checked={formData.currentHousing === option.value}
                       onChange={(e) => handleInputChange('currentHousing', e.target.value)}
-                      className="w-6 h-6 sm:w-7 sm:h-7 text-yellow-600 focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 cursor-pointer flex-shrink-0 accent-yellow-600"
+                      className="w-6 h-6 sm:w-7 sm:h-7 text-gray-900 cursor-pointer flex-shrink-0 accent-gray-900"
                     />
-                    <span className={`text-base sm:text-lg font-bold ${
-                      formData.currentHousing === option.value ? 'text-gray-900' : 'text-gray-700'
-                    }`}>{option.label}</span>
+                    <span className="text-base sm:text-lg font-medium text-gray-900">{option.label}</span>
                   </label>
                 ))}
               </div>
