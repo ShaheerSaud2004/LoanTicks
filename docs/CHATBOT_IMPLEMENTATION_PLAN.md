@@ -77,7 +77,7 @@ These services can crawl your website/docs and create a chatbot that understands
 - Provides API key for integration
 - Understands your site's full context
 - Built-in chat widget (or use API)
-- Affordable pricing
+- **FREE TIER AVAILABLE!** (20 messages/month)
 
 **Setup:**
 - Sign up at https://chatbase.co
@@ -86,11 +86,11 @@ These services can crawl your website/docs and create a chatbot that understands
 - Embed widget or use API
 
 **Cost:** 
-- Free tier: 20 messages/month
+- **FREE: 20 messages/month** ✅
 - Starter: $19/month (2,000 messages)
 - Pro: $99/month (10,000 messages)
 
-**Perfect for:** Your use case! Can ingest all your docs and form structure.
+**Perfect for:** Your use case! Can ingest all your docs and form structure. **Start with free tier to test!**
 
 ---
 
@@ -120,6 +120,7 @@ These services can crawl your website/docs and create a chatbot that understands
 - AI chatbot with website context
 - Easy setup
 - Good UI
+- **FREE TIER AVAILABLE!**
 
 **Setup:**
 - Sign up at https://www.tidio.com
@@ -128,8 +129,10 @@ These services can crawl your website/docs and create a chatbot that understands
 - Get API key or use widget
 
 **Cost:**
-- Free tier available
-- Paid: $29-59/month
+- **FREE: Basic chatbot (limited AI features)** ✅
+- Paid: $29-59/month (full AI features)
+
+**Note:** Free tier may have limited AI capabilities, but basic chatbot is free.
 
 ---
 
@@ -357,13 +360,23 @@ If you want to avoid API costs entirely, we could create a simple rule-based cha
 
 ## Recommendation
 
-### 🏆 BEST OPTION: Chatbase or CustomGPT
+### 🏆 BEST FREE OPTION: Chatbase Free Tier
+
+**Why Chatbase Free is perfect to start:**
+1. **100% FREE** - 20 messages/month (perfect for testing!)
+2. **Can crawl your entire website** - Automatically understands all your docs, form structure, FAQs
+3. **No manual context building** - Just point it at your website/docs folder
+4. **Provides API key** - Easy integration with your Next.js app
+5. **Built-in knowledge** - Understands your entire site without you having to write prompts
+6. **Upgrade later** - If you need more messages, just upgrade to $19/month
+
+### 🏆 BEST PAID OPTION: Chatbase Starter ($19/month)
 
 **Why these are perfect for you:**
 1. **Can crawl your entire website** - Automatically understands all your docs, form structure, FAQs
 2. **No manual context building** - Just point it at your website/docs folder
 3. **Provides API key** - Easy integration with your Next.js app
-4. **Affordable** - $19-99/month depending on usage
+4. **Affordable** - $19/month for 2,000 messages (very reasonable)
 5. **Built-in knowledge** - Understands your entire site without you having to write prompts
 
 **How it works:**
@@ -374,12 +387,15 @@ If you want to avoid API costs entirely, we could create a simple rule-based cha
 5. Use their API in your Next.js app
 6. Chatbot knows everything about your site!
 
-**My recommendation: Start with Chatbase**
-- Easiest setup
-- Good pricing ($19/month starter)
+**My recommendation: Start with Chatbase FREE tier**
+- **100% FREE** to start (20 messages/month)
+- Easiest setup (10 minutes)
 - Can crawl your entire site
 - Provides API for custom integration
 - Can also use their widget if you want
+- **Upgrade to $19/month later if you need more messages**
+
+**Perfect for testing!** Once you see it works well, upgrade if needed.
 
 ### Alternative: Vercel AI SDK + OpenAI
 If you want more control and lower cost:
@@ -413,14 +429,17 @@ If you want more control and lower cost:
 
 | Service | Cost | Setup Time | Website Crawl | API Available |
 |---------|------|------------|---------------|---------------|
-| **Chatbase** | $19-99/mo | 10 min | ✅ Yes | ✅ Yes |
+| **Chatbase** | **FREE (20 msgs)** / $19-99/mo | 10 min | ✅ Yes | ✅ Yes |
 | **CustomGPT** | $49-99/mo | 15 min | ✅ Yes | ✅ Yes |
-| **Tidio** | $29-59/mo | 20 min | ✅ Yes | ✅ Yes |
+| **Tidio** | **FREE (basic)** / $29-59/mo | 20 min | ✅ Yes | ✅ Yes |
 | **Vercel AI SDK** | ~$5/mo | 2-3 hours | ✅ Manual | ✅ Yes |
 | **OpenAI Direct** | ~$5/mo | 4-5 hours | ❌ Manual | ✅ Yes |
 | **FAQ Bot** | Free | 1 hour | ❌ No | ✅ Yes |
 
-**For your use case, Chatbase is the best balance of ease, cost, and features!**
+**For your use case, Chatbase FREE tier is perfect to start!**
+- Test it for free (20 messages/month)
+- If you like it, upgrade to $19/month for 2,000 messages
+- Easiest setup, best features
 
 ---
 
