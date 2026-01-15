@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
+import nodemailer from 'nodemailer';
 
 /**
  * Send preliminary approval email to borrower with ARIVE portal link
@@ -103,52 +104,64 @@ export async function POST(request: NextRequest) {
 </html>
 `;
 
-    // For now, we'll use a simple approach
-    // In production, you should use a proper email service like:
-    // - Resend (recommended for Next.js)
-    // - SendGrid
-    // - AWS SES
-    // - Nodemailer with SMTP
-    
-    // Check if email service is configured
-    const emailService = process.env.EMAIL_SERVICE || 'console';
-    
-    if (emailService === 'console') {
-      // Development mode: log email to console
-      console.log('\n📧 EMAIL TO SEND:');
+    // Check if Gmail credentials are configured
+    const gmailUser = process.env.GMAIL_USER;
+    const gmailAppPassword = process.env.GMAIL_APP_PASSWORD;
+
+    if (!gmailUser || !gmailAppPassword) {
+      // Fallback: log to console if Gmail not configured
+      console.log('\n📧 EMAIL TO SEND (Gmail not configured):');
       console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
       console.log(`To: ${borrowerEmail}`);
       console.log(`Subject: ${emailSubject}`);
       console.log(`Body: ${emailBody}`);
       console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
       
-      // In production, you should integrate with a real email service
-      // For now, return success but log that email service needs to be configured
       return NextResponse.json({
-        success: true,
-        message: 'Email prepared successfully. Configure EMAIL_SERVICE environment variable to send real emails.',
+        success: false,
+        message: 'Gmail not configured. Please set GMAIL_USER and GMAIL_APP_PASSWORD environment variables.',
         email: {
           to: borrowerEmail,
           subject: emailSubject,
         },
-        note: 'In development mode, email is logged to console. Configure an email service for production.',
-      });
+      }, { status: 500 });
     }
 
-    // TODO: Integrate with email service (Resend, SendGrid, etc.)
-    // Example with Resend:
-    // const resend = new Resend(process.env.RESEND_API_KEY);
-    // await resend.emails.send({
-    //   from: 'LoanTicks <noreply@loanticks.com>',
-    //   to: borrowerEmail,
-    //   subject: emailSubject,
-    //   html: emailBody,
-    // });
-
-    return NextResponse.json({
-      success: true,
-      message: 'Email sent successfully',
+    // Create Gmail transporter
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: gmailUser,
+        pass: gmailAppPassword,
+      },
     });
+
+    // Send email via Gmail
+    try {
+      const info = await transporter.sendMail({
+        from: `LoanTicks <${gmailUser}>`,
+        to: borrowerEmail,
+        subject: emailSubject,
+        html: emailBody,
+      });
+
+      console.log('✅ Email sent successfully:', info.messageId);
+
+      return NextResponse.json({
+        success: true,
+        message: 'Email sent successfully',
+        messageId: info.messageId,
+      });
+    } catch (emailError) {
+      console.error('❌ Error sending email via Gmail:', emailError);
+      return NextResponse.json(
+        { 
+          error: 'Failed to send email via Gmail',
+          details: emailError instanceof Error ? emailError.message : 'Unknown error',
+        },
+        { status: 500 }
+      );
+    }
 
   } catch (error) {
     console.error('Error sending email:', error);
