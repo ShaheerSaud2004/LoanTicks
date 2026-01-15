@@ -1267,6 +1267,28 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                     <p className="text-sm text-gray-600 mb-2">How many years did you work at your previous job?</p>
                     <input type="number" value={formData.previousYearsEmployed} onChange={(e) => handleInputChange('previousYearsEmployed', e.target.value)} min="0" className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900" required />
                   </div>
+                  <div>
+                    <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
+                      Monthly Income at Previous Job *
+                      <span className="group relative">
+                        <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
+                        <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg">
+                          Enter your gross monthly income (before taxes) from your previous job. This should match the income shown on your previous pay stubs or W-2 forms. This helps verify your income history.
+                        </span>
+                      </span>
+                    </label>
+                    <p className="text-sm text-gray-600 mb-2">Enter your monthly income from your previous job.</p>
+                    <input 
+                      type="number" 
+                      value={formData.previousMonthlyIncome} 
+                      onChange={(e) => handleInputChange('previousMonthlyIncome', e.target.value)} 
+                      min="0" 
+                      step="0.01"
+                      placeholder="0.00"
+                      className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900" 
+                      required 
+                    />
+                  </div>
                 </div>
               </div>
             )}
