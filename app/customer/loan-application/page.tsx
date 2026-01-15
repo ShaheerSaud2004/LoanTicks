@@ -169,6 +169,7 @@ export default function LoanApplicationPage() {
           race: Array.isArray(formData.race) ? (formData.race as string[]).join(', ') : '',
           ethnicity: formData.ethnicity || '',
           sex: formData.sex || '',
+          preferredContactMethod: formData.preferredContactMethod || 'phone',
           },
           currentAddress: {
           street: formData.currentStreet || '123 Main St',

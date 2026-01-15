@@ -766,16 +766,16 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   { value: 'email', label: 'Email' },
                   { value: 'text', label: 'Text Message' }
                 ].map((option) => (
-                    <label key={option.value} className="flex items-center text-base sm:text-lg text-gray-900 cursor-pointer hover:bg-gray-50 p-3 rounded-lg transition">
+                    <label key={option.value} className="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-xl hover:border-yellow-500 transition cursor-pointer touch-manipulation min-h-[60px]">
                     <input
                       type="radio"
                       name="preferredContactMethod"
                       value={option.value}
                       checked={formData.preferredContactMethod === option.value}
                       onChange={(e) => handleInputChange('preferredContactMethod', e.target.value)}
-                        className="mr-3 w-5 h-5"
+                      className="w-6 h-6 sm:w-7 sm:h-7 text-yellow-600 focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 cursor-pointer flex-shrink-0 accent-yellow-600"
                     />
-                    {option.label}
+                    <span className="text-base sm:text-lg text-gray-900 font-medium">{option.label}</span>
                   </label>
                 ))}
                 </div>

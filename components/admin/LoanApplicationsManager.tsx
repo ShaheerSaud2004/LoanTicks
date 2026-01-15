@@ -529,8 +529,13 @@ export default function LoanApplicationsManager({ employeeName }: { employeeName
                     </td>
                     <td className="px-6 py-4">
                       <button
-                        onClick={() => setSelectedApp(app)}
-                        className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium text-sm"
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setSelectedApp(app);
+                        }}
+                        className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 active:bg-blue-800 transition font-medium text-sm cursor-pointer touch-manipulation min-h-[44px]"
                       >
                         <Eye className="w-4 h-4" />
                         Review

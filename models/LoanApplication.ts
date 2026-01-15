@@ -20,6 +20,7 @@ export interface ILoanApplication extends Document {
     maritalStatus: 'married' | 'unmarried' | 'separated';
     dependents: number;
     dependentAges?: string;
+    preferredContactMethod?: 'phone' | 'email' | 'text';
     
     // Citizenship/Immigration Status
     citizenshipType: 'us_citizen' | 'permanent_resident' | 'non_permanent_resident';

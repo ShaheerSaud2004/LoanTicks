@@ -14,8 +14,16 @@ const KEY_LENGTH = 32;
 // Get encryption key from environment variable
 function getEncryptionKey(): Buffer {
   const key = process.env.ENCRYPTION_KEY;
+  
+  // If no key is set, use a default key (for development/testing only)
+  // In production, ENCRYPTION_KEY should always be set
   if (!key) {
-    throw new Error('ENCRYPTION_KEY environment variable is not set');
+    if (process.env.NODE_ENV === 'production') {
+      throw new Error('ENCRYPTION_KEY environment variable is required in production');
+    }
+    // Use a default key for development (not secure, but allows testing)
+    console.warn('⚠️  ENCRYPTION_KEY not set. Using default key for development. Set ENCRYPTION_KEY in production!');
+    return crypto.pbkdf2Sync('default-dev-key-change-in-production', 'loanticks-salt', 100000, KEY_LENGTH, 'sha512');
   }
   
   // If key is a hex string, convert it; otherwise use it directly
