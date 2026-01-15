@@ -1866,46 +1866,59 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
       case 11: // Declarations
         return (
           <div className="space-y-6">
-            <div className="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-4 sm:p-6">
-              <h3 className="font-bold text-yellow-900 mb-2 text-lg sm:text-xl">Section 11: Declarations</h3>
-              <p className="text-yellow-800 text-sm sm:text-base">Please answer the following declarations truthfully</p>
+            <div className="bg-gradient-to-r from-yellow-50 to-yellow-50 border-2 border-yellow-300 rounded-2xl p-6 sm:p-8">
+              <h3 className="font-bold text-yellow-900 mb-3 text-xl sm:text-2xl flex items-center gap-3">
+                <Info className="w-6 h-6 sm:w-7 sm:h-7" />
+                Section 11: Declarations
+              </h3>
+              <p className="text-yellow-800 text-base sm:text-lg leading-relaxed">
+                Please answer the following declarations truthfully. These declarations are required by law and help us process your loan application accurately.
+              </p>
             </div>
-            <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 space-y-6">
-              <label className="flex items-start gap-4 p-4 border-2 border-gray-200 rounded-xl hover:border-yellow-500 transition cursor-pointer touch-manipulation min-h-[60px]">
+            <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 space-y-4">
+              <label className={`flex items-start gap-4 p-4 border rounded-xl cursor-pointer touch-manipulation min-h-[60px] ${
+                formData.propertyForeclosed ? 'border-gray-400 bg-gray-50' : 'border-gray-200 bg-white'
+              }`}>
                 <input 
                   type="checkbox" 
                   checked={formData.propertyForeclosed} 
                   onChange={(e) => handleInputChange('propertyForeclosed', e.target.checked)} 
-                  className="mt-1 w-6 h-6 sm:w-7 sm:h-7 rounded border-2 border-gray-300 text-yellow-600 focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 cursor-pointer flex-shrink-0 accent-yellow-600" 
+                  className="mt-1 w-6 h-6 sm:w-7 sm:h-7 rounded border border-gray-400 cursor-pointer flex-shrink-0 accent-gray-600" 
                 />
-                <span className="text-base sm:text-lg text-gray-700 font-medium leading-relaxed pt-0.5">Have you had property foreclosed upon or given title/deed in lieu of foreclosure?</span>
+                <span className="text-base sm:text-lg text-gray-900 font-medium leading-relaxed pt-0.5">Have you had property foreclosed upon or given title/deed in lieu of foreclosure?</span>
               </label>
-              <label className="flex items-start gap-4 p-4 border-2 border-gray-200 rounded-xl hover:border-yellow-500 transition cursor-pointer touch-manipulation min-h-[60px]">
+              <label className={`flex items-start gap-4 p-4 border rounded-xl cursor-pointer touch-manipulation min-h-[60px] ${
+                formData.lawsuitParty ? 'border-gray-400 bg-gray-50' : 'border-gray-200 bg-white'
+              }`}>
                 <input 
                   type="checkbox" 
                   checked={formData.lawsuitParty} 
                   onChange={(e) => handleInputChange('lawsuitParty', e.target.checked)} 
-                  className="mt-1 w-6 h-6 sm:w-7 sm:h-7 rounded border-2 border-gray-300 text-yellow-600 focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 cursor-pointer flex-shrink-0 accent-yellow-600" 
+                  className="mt-1 w-6 h-6 sm:w-7 sm:h-7 rounded border border-gray-400 cursor-pointer flex-shrink-0 accent-gray-600" 
                 />
-                <span className="text-base sm:text-lg text-gray-700 font-medium leading-relaxed pt-0.5">Are you party to a lawsuit?</span>
+                <span className="text-base sm:text-lg text-gray-900 font-medium leading-relaxed pt-0.5">Are you party to a lawsuit?</span>
               </label>
-              <label className="flex items-start gap-4 p-4 border-2 border-gray-200 rounded-xl hover:border-yellow-500 transition cursor-pointer touch-manipulation min-h-[60px]">
+              <label className={`flex items-start gap-4 p-4 border rounded-xl cursor-pointer touch-manipulation min-h-[60px] ${
+                formData.loanOnProperty ? 'border-gray-400 bg-gray-50' : 'border-gray-200 bg-white'
+              }`}>
                 <input 
                   type="checkbox" 
                   checked={formData.loanOnProperty} 
                   onChange={(e) => handleInputChange('loanOnProperty', e.target.checked)} 
-                  className="mt-1 w-6 h-6 sm:w-7 sm:h-7 rounded border-2 border-gray-300 text-yellow-600 focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 cursor-pointer flex-shrink-0 accent-yellow-600" 
+                  className="mt-1 w-6 h-6 sm:w-7 sm:h-7 rounded border border-gray-400 cursor-pointer flex-shrink-0 accent-gray-600" 
                 />
-                <span className="text-base sm:text-lg text-gray-700 font-medium leading-relaxed pt-0.5">Are you currently obligated on any loan secured by a property?</span>
+                <span className="text-base sm:text-lg text-gray-900 font-medium leading-relaxed pt-0.5">Are you currently obligated on any loan secured by a property?</span>
               </label>
-              <label className="flex items-start gap-4 p-4 border-2 border-gray-200 rounded-xl hover:border-yellow-500 transition cursor-pointer touch-manipulation min-h-[60px]">
+              <label className={`flex items-start gap-4 p-4 border rounded-xl cursor-pointer touch-manipulation min-h-[60px] ${
+                formData.intendToOccupy ? 'border-gray-400 bg-gray-50' : 'border-gray-200 bg-white'
+              }`}>
                 <input 
                   type="checkbox" 
                   checked={formData.intendToOccupy} 
                   onChange={(e) => handleInputChange('intendToOccupy', e.target.checked)} 
-                  className="mt-1 w-6 h-6 sm:w-7 sm:h-7 rounded border-2 border-gray-300 text-yellow-600 focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 cursor-pointer flex-shrink-0 accent-yellow-600" 
+                  className="mt-1 w-6 h-6 sm:w-7 sm:h-7 rounded border border-gray-400 cursor-pointer flex-shrink-0 accent-gray-600" 
                 />
-                <span className="text-base sm:text-lg text-gray-700 font-medium leading-relaxed pt-0.5">Will you occupy the property as your primary residence?</span>
+                <span className="text-base sm:text-lg text-gray-900 font-medium leading-relaxed pt-0.5">Will you occupy the property as your primary residence?</span>
               </label>
             </div>
           </div>
