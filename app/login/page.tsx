@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { LogIn, Loader2, Shield, TrendingUp, Users } from 'lucide-react';
+import { LogIn, Loader2, Shield, TrendingUp, Users, MessageCircle, CheckCircle } from 'lucide-react';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -240,9 +240,20 @@ export default function LoginPage() {
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-3 lg:mb-4">
             Your Dream Home<br/>Starts Here 🏡
           </h2>
-          <p className="text-base sm:text-lg lg:text-xl text-white/90 leading-relaxed">
+          <p className="text-base sm:text-lg lg:text-xl text-white/90 leading-relaxed mb-4">
             Experience streamlined mortgage financing with competitive rates, fast approvals, and expert support every step of the way.
           </p>
+          
+          {/* Expert Loan Advisor Badge */}
+          <div className="flex items-center gap-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-4 mb-6">
+            <div className="bg-yellow-500 p-2 rounded-lg">
+              <MessageCircle className="h-5 w-5 text-gray-900" />
+            </div>
+            <div>
+              <p className="font-semibold text-white text-base">Expert Loan Advisor Available</p>
+              <p className="text-white/80 text-sm">Get personalized guidance from our AI-powered assistant</p>
+            </div>
+          </div>
         </div>
 
           <div className="grid grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
@@ -265,10 +276,22 @@ export default function LoginPage() {
         </div>
 
         {/* Right Side - Login Card */}
-        <div className="bg-white rounded-2xl sm:rounded-3xl shadow-2xl p-6 sm:p-8 lg:p-10">
+        <div className="bg-white rounded-2xl sm:rounded-3xl shadow-2xl p-6 sm:p-8 lg:p-10 border border-gray-100">
           <div className="mb-6 sm:mb-8">
             <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Welcome Back</h2>
             <p className="text-gray-600 text-sm sm:text-base">Sign in to continue to your account</p>
+          </div>
+          
+          {/* Trust Indicators */}
+          <div className="flex items-center gap-4 mb-6 pb-6 border-b border-gray-100">
+            <div className="flex items-center gap-2 text-gray-600">
+              <CheckCircle className="h-4 w-4 text-green-500" />
+              <span className="text-xs sm:text-sm font-medium">Secure Login</span>
+            </div>
+            <div className="flex items-center gap-2 text-gray-600">
+              <CheckCircle className="h-4 w-4 text-green-500" />
+              <span className="text-xs sm:text-sm font-medium">24/7 Support</span>
+            </div>
           </div>
 
           <form className="space-y-4 sm:space-y-6" onSubmit={handleSubmit}>
@@ -303,7 +326,7 @@ export default function LoginPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-yellow-500 focus:outline-none transition text-base"
+                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-base hover:border-gray-300"
                 placeholder="your.email@company.com"
               />
             </div>
@@ -317,7 +340,7 @@ export default function LoginPage() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-yellow-500 focus:outline-none transition text-base"
+                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-base hover:border-gray-300"
                 placeholder="Enter your password"
               />
             </div>
@@ -342,8 +365,8 @@ export default function LoginPage() {
           </form>
 
           {/* Quick Login Options */}
-          <div className="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t-2 border-gray-100">
-            <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3 sm:mb-4">Quick Login</p>
+          <div className="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t border-gray-200">
+            <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4 sm:mb-5">Quick Login</p>
             <div className="space-y-2 text-xs sm:text-sm">
               <button
                 type="button"
@@ -367,7 +390,7 @@ export default function LoginPage() {
                   handleQuickLogin('employee@loanaticks.com', 'employee123');
                 }}
                 disabled={loading}
-                className="w-full flex items-center justify-between p-3 sm:p-4 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-gray-900 rounded-lg transition-all shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full flex items-center justify-between p-3 sm:p-4 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-gray-900 rounded-lg transition-all shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation min-h-[44px] text-sm sm:text-base font-semibold"
               >
                 <span className="font-semibold flex items-center gap-2">
                   <Users className="h-4 w-4" />
@@ -382,7 +405,7 @@ export default function LoginPage() {
                   handleQuickLogin('customer@loanaticks.com', 'customer123');
                 }}
                 disabled={loading}
-                className="w-full flex items-center justify-between p-3 sm:p-4 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-gray-900 rounded-lg transition-all shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full flex items-center justify-between p-3 sm:p-4 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-gray-900 rounded-lg transition-all shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation min-h-[44px] text-sm sm:text-base font-semibold"
               >
                 <span className="font-semibold flex items-center gap-2">
                   <TrendingUp className="h-4 w-4" />
