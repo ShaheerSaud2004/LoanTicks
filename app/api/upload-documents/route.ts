@@ -105,7 +105,7 @@ export async function POST(request: NextRequest) {
     // Merge with existing documents (don't overwrite)
     const existingDocs = application.documents || [];
     const allDocuments = [...existingDocs, ...uploadedFiles];
-    
+
     // Update application with document information
     application.documents = allDocuments;
     await application.save();

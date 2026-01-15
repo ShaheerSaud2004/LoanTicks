@@ -665,7 +665,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                       value={option.value}
                       checked={formData.citizenship === option.value}
                       onChange={(e) => handleInputChange('citizenship', e.target.value)}
-                      className="w-6 h-6 sm:w-7 sm:h-7 text-gray-900 cursor-pointer flex-shrink-0 accent-gray-900"
+                      className="w-6 h-6 sm:w-7 sm:h-7 cursor-pointer flex-shrink-0"
                     />
                     <span className="text-base sm:text-lg font-medium text-gray-900">{option.label}</span>
                   </label>
@@ -702,7 +702,12 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                         value={option.value}
                         checked={formData.creditType === option.value}
                         onChange={(e) => handleInputChange('creditType', e.target.value)}
-                        className="w-6 h-6 sm:w-7 sm:h-7 text-gray-900 cursor-pointer flex-shrink-0 accent-gray-900"
+                        className="w-6 h-6 sm:w-7 sm:h-7 cursor-pointer flex-shrink-0 appearance-none border-2 border-gray-400 rounded-full checked:bg-gray-900 checked:border-gray-900 checked:ring-2 checked:ring-white checked:ring-offset-2"
+                        style={{
+                          backgroundImage: formData.creditType === option.value 
+                            ? 'radial-gradient(circle, white 30%, transparent 30%)' 
+                            : 'none'
+                        }}
                       />
                       <span className="text-base sm:text-lg font-medium text-gray-900">{option.label}</span>
                     </label>
@@ -900,7 +905,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                       value={option.value}
                       checked={formData.preferredContactMethod === option.value}
                       onChange={(e) => handleInputChange('preferredContactMethod', e.target.value)}
-                      className="w-6 h-6 sm:w-7 sm:h-7 text-gray-900 cursor-pointer flex-shrink-0 accent-gray-900"
+                      className="w-6 h-6 sm:w-7 sm:h-7 cursor-pointer flex-shrink-0"
                     />
                     <span className="text-base sm:text-lg font-medium text-gray-900">{option.label}</span>
                   </label>
@@ -1111,7 +1116,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                       value={option.value}
                       checked={formData.currentHousing === option.value}
                       onChange={(e) => handleInputChange('currentHousing', e.target.value)}
-                      className="w-6 h-6 sm:w-7 sm:h-7 text-gray-900 cursor-pointer flex-shrink-0 accent-gray-900"
+                      className="w-6 h-6 sm:w-7 sm:h-7 cursor-pointer flex-shrink-0"
                     />
                     <span className="text-base sm:text-lg font-medium text-gray-900">{option.label}</span>
                   </label>

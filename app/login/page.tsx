@@ -77,8 +77,8 @@ export default function LoginPage() {
           } catch (err) {
             console.error('Error getting session:', err);
             // Fallback to home page
-            router.push('/');
-            router.refresh();
+          router.push('/');
+          router.refresh();
           }
         }, 800);
       }
@@ -230,20 +230,20 @@ export default function LoginPage() {
             <div className="h-20 w-20 sm:h-24 sm:w-24 lg:h-32 lg:w-32 bg-white rounded-xl lg:rounded-2xl flex items-center justify-center shadow-2xl overflow-hidden flex-shrink-0 relative p-2">
               <Image src="/logo.jpg" alt="LoanAticks" fill className="object-contain" priority />
             </div>
-            <div>
+          <div>
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold">LoanAticks</h1>
               <p className="text-white/80 text-sm sm:text-base lg:text-lg">Home Mortgage Solutions</p>
-            </div>
           </div>
+        </div>
 
-          <div>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-3 lg:mb-4">
-              Your Dream Home<br/>Starts Here 🏡
-            </h2>
-            <p className="text-base sm:text-lg lg:text-xl text-white/90 leading-relaxed">
-              Experience streamlined mortgage financing with competitive rates, fast approvals, and expert support every step of the way.
-            </p>
-          </div>
+        <div>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-3 lg:mb-4">
+            Your Dream Home<br/>Starts Here 🏡
+          </h2>
+          <p className="text-base sm:text-lg lg:text-xl text-white/90 leading-relaxed">
+            Experience streamlined mortgage financing with competitive rates, fast approvals, and expert support every step of the way.
+          </p>
+        </div>
 
           <div className="grid grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
             <div className="text-center">

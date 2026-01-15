@@ -67,7 +67,7 @@ export default function LoanApplicationPage() {
     if (isLoggingOut) return; // Prevent double-clicks
     
     try {
-      setIsLoggingOut(true);
+    setIsLoggingOut(true);
       setLogoutStage('signing-out');
       
       // Stage 1: Signing out (1.5 seconds)
@@ -98,7 +98,7 @@ export default function LoanApplicationPage() {
       // Even if there's an error, show animation and redirect
       setLogoutStage('success');
       setTimeout(() => {
-        router.push('/login');
+    router.push('/login');
         setTimeout(() => {
           window.location.href = '/login';
         }, 500);
@@ -224,15 +224,15 @@ export default function LoanApplicationPage() {
           },
           declarations: {
             outstandingJudgments: formData.outstandingJudgments || false,
-            declaredBankruptcy: formData.bankruptcyWithin7Years || false,
-            propertyForeclosed: formData.propertyForeclosed || false,
+          declaredBankruptcy: formData.bankruptcyWithin7Years || false,
+          propertyForeclosed: formData.propertyForeclosed || false,
             lawsuitParty: formData.lawsuitParty || false,
             loanOnProperty: formData.loanOnProperty || false,
-            coMakerOnNote: formData.cosignerOnAnotherLoan || false,
-            usCitizen: formData.citizenship === 'us_citizen' || !formData.citizenship,
-            permanentResident: formData.citizenship === 'permanent_resident',
-            primaryResidence: formData.intendToOccupy !== false,
-            intendToOccupy: formData.intendToOccupy !== false,
+          coMakerOnNote: formData.cosignerOnAnotherLoan || false,
+          usCitizen: formData.citizenship === 'us_citizen' || !formData.citizenship,
+          permanentResident: formData.citizenship === 'permanent_resident',
+          primaryResidence: formData.intendToOccupy !== false,
+          intendToOccupy: formData.intendToOccupy !== false,
           },
           submittedAt: new Date(),
       };
@@ -405,7 +405,7 @@ export default function LoanApplicationPage() {
                         <CheckCircle2 className="h-10 w-10 md:h-12 md:w-12 text-green-600 animate-checkmark" />
                       </div>
                     </div>
-                    <div className="text-center">
+              <div className="text-center">
                       <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-2">Logged out successfully!</h3>
                       <p className="text-sm md:text-base text-gray-600">Redirecting to login page...</p>
                     </div>
@@ -494,7 +494,7 @@ export default function LoanApplicationPage() {
                   <h3 className="text-lg font-bold text-blue-900 mb-3 flex items-center gap-2">
                     <ArrowRight className="w-5 h-5" />
                     What Happens After You Submit
-                  </h3>
+                </h3>
                   <ul className="space-y-2 text-blue-800 text-sm">
                     <li className="flex items-start gap-2">
                       <span className="text-blue-600 mt-1">•</span>
