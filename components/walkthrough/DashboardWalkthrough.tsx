@@ -105,7 +105,7 @@ const walkthroughSteps: Record<string, WalkthroughStep[]> = {
 export default function DashboardWalkthrough({ role, onComplete }: DashboardWalkthroughProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
-  const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 });
+  const [tooltipPosition, setTooltipPosition] = useState<{ top: string | number; left: string }>({ top: '50%', left: '50%' });
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const positionLockRef = useRef(false);
@@ -133,11 +133,13 @@ export default function DashboardWalkthrough({ role, onComplete }: DashboardWalk
       if (wasTriggered === 'true') {
         sessionStorage.removeItem(`walkthrough_${role}_triggered`);
       }
-      // Small delay to ensure page is fully loaded
+      // Small delay to ensure page is fully loaded, then center tooltip
       setTimeout(() => {
         setIsVisible(true);
+        // Always start centered
+        setTooltipPosition({ top: '50%', left: '50%' });
         scrollToStep(0);
-      }, 500);
+      }, 300);
     }
   }, [role]);
 
@@ -155,11 +157,11 @@ export default function DashboardWalkthrough({ role, onComplete }: DashboardWalk
       // Only scroll once - scroll element into view smoothly
       element.scrollIntoView({ behavior: 'smooth', block: 'center' });
       
-      // Unlock after scroll completes
+      // Unlock after scroll completes - reduced delay for less lag
       setTimeout(() => {
         setIsTransitioning(false);
         positionLockRef.current = false;
-      }, 1000); // Wait for scroll animation + buffer
+      }, 600); // Reduced wait time
     } else {
       console.warn('Walkthrough element not found:', step.target);
     }
@@ -212,122 +214,50 @@ export default function DashboardWalkthrough({ role, onComplete }: DashboardWalk
       const element = document.querySelector(currentStepData.target);
       if (!element) {
         console.warn('Walkthrough element not found:', currentStepData.target);
-        // If element not found, position tooltip in center of viewport
-        setTooltipPosition({ 
-          top: window.scrollY + window.innerHeight / 2, 
-          left: window.scrollX + window.innerWidth / 2 
-        });
+        // If element not found, always center tooltip
+        setTooltipPosition({ top: '50%', left: '50%' });
         return;
       }
 
       const rect = element.getBoundingClientRect();
       
-      // If element has no height/width (empty or hidden), position in center
+      // If element has no height/width (empty or hidden), always center
       if (rect.width === 0 || rect.height === 0) {
-        setTooltipPosition({ 
-          top: window.scrollY + window.innerHeight / 2, 
-          left: window.scrollX + window.innerWidth / 2 
-        });
+        setTooltipPosition({ top: '50%', left: '50%' });
         return;
       }
 
+      // Always center the tooltip horizontally for better UX and no lag
+      // Position vertically based on element position
       const scrollY = window.scrollY;
-      const scrollX = window.scrollX;
-      const viewportWidth = window.innerWidth;
       const viewportHeight = window.innerHeight;
+      const viewportWidth = window.innerWidth;
 
-      let top = 0;
-      let left = 0;
+      let top: string | number = '50%';
+      const left = '50%'; // Always center horizontally
 
-      // Mobile positioning - always center horizontally, position vertically
-      if (viewportWidth < 640) {
-        left = scrollX + viewportWidth / 2;
-        // Position below element if possible, otherwise above or center
-        if (rect.bottom + scrollY + 250 < scrollY + viewportHeight) {
-          top = rect.bottom + scrollY + 20;
-        } else if (rect.top + scrollY - 250 > scrollY) {
-          top = rect.top + scrollY - 10;
-        } else {
-          top = scrollY + viewportHeight / 2;
-        }
+      // Calculate vertical position based on element
+      if (rect.bottom + scrollY + 300 < scrollY + viewportHeight) {
+        // Position below element
+        top = rect.bottom + scrollY + 20;
+      } else if (rect.top + scrollY - 300 > scrollY) {
+        // Position above element
+        top = rect.top + scrollY - 10;
       } else {
-        // Desktop positioning - ensure tooltip is always visible and not on edges
-        const tooltipWidth = 384; // max-w-sm = 384px
-        const tooltipHeight = 300; // approximate height
-        const padding = 20; // minimum padding from viewport edges
-        
-        switch (currentStepData.position) {
-          case 'top':
-            top = rect.top + scrollY - tooltipHeight - 20;
-            left = rect.left + scrollX + rect.width / 2;
-            // Ensure tooltip doesn't go off left edge
-            if (left - tooltipWidth / 2 < scrollX + padding) {
-              left = scrollX + tooltipWidth / 2 + padding;
-            }
-            // Ensure tooltip doesn't go off right edge
-            if (left + tooltipWidth / 2 > scrollX + viewportWidth - padding) {
-              left = scrollX + viewportWidth - tooltipWidth / 2 - padding;
-            }
-            break;
-          case 'bottom':
-            top = rect.bottom + scrollY + 20;
-            left = rect.left + scrollX + rect.width / 2;
-            // Ensure tooltip doesn't go off left edge
-            if (left - tooltipWidth / 2 < scrollX + padding) {
-              left = scrollX + tooltipWidth / 2 + padding;
-            }
-            // Ensure tooltip doesn't go off right edge
-            if (left + tooltipWidth / 2 > scrollX + viewportWidth - padding) {
-              left = scrollX + viewportWidth - tooltipWidth / 2 - padding;
-            }
-            break;
-          case 'left':
-            top = rect.top + scrollY + rect.height / 2;
-            left = rect.left + scrollX - tooltipWidth - 20;
-            // If tooltip would go off left edge, position to the right instead
-            if (left < scrollX + padding) {
-              left = rect.right + scrollX + 20;
-            }
-            // Ensure tooltip doesn't go off right edge either
-            if (left + tooltipWidth > scrollX + viewportWidth - padding) {
-              left = scrollX + viewportWidth / 2;
-            }
-            break;
-          case 'right':
-            top = rect.top + scrollY + rect.height / 2;
-            left = rect.right + scrollX + 20;
-            // If tooltip would go off right edge, position to the left instead
-            if (left + tooltipWidth > scrollX + viewportWidth - padding) {
-              left = rect.left + scrollX - tooltipWidth - 20;
-            }
-            // Ensure tooltip doesn't go off left edge either
-            if (left < scrollX + padding) {
-              left = scrollX + viewportWidth / 2;
-            }
-            break;
-          default:
-            top = rect.bottom + scrollY + 20;
-            left = rect.left + scrollX + rect.width / 2;
-            // Ensure tooltip doesn't go off edges
-            if (left - tooltipWidth / 2 < scrollX + padding) {
-              left = scrollX + tooltipWidth / 2 + padding;
-            }
-            if (left + tooltipWidth / 2 > scrollX + viewportWidth - padding) {
-              left = scrollX + viewportWidth - tooltipWidth / 2 - padding;
-            }
-        }
+        // Center vertically if element is in middle
+        top = '50%';
       }
 
       setTooltipPosition({ top, left });
     };
 
-    // Wait for scroll animation to complete, then update position once
+    // Update position immediately, then after scroll completes
     let scrollTimeout: NodeJS.Timeout;
     const timeoutId = setTimeout(() => {
       if (!isTransitioning && !positionLockRef.current) {
         updatePosition();
       }
-    }, 1000); // Wait for smooth scroll to complete + buffer
+    }, 600); // Reduced delay for less lag
 
     // Only update on manual scroll/resize, not on step-initiated scrolls
     const handleScroll = () => {
@@ -335,13 +265,13 @@ export default function DashboardWalkthrough({ role, onComplete }: DashboardWalk
       if (isTransitioning || positionLockRef.current) {
         return;
       }
-      // Debounce scroll updates
+      // Debounce scroll updates - reduced delay
       clearTimeout(scrollTimeout);
       scrollTimeout = setTimeout(() => {
         if (!isTransitioning && !positionLockRef.current) {
           updatePosition();
         }
-      }, 150);
+      }, 100); // Reduced debounce for less lag
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -385,31 +315,17 @@ export default function DashboardWalkthrough({ role, onComplete }: DashboardWalk
         />
       )}
 
-      {/* Tooltip - always visible, responsive for all viewports */}
+      {/* Tooltip - always centered horizontally, positioned vertically */}
       <div
-        className={`fixed z-[10000] bg-white rounded-xl sm:rounded-2xl shadow-2xl p-4 sm:p-6 max-w-[90vw] sm:max-w-sm w-full`}
+        className={`fixed z-[10000] bg-white rounded-xl sm:rounded-2xl shadow-2xl p-4 sm:p-6 max-w-[90vw] sm:max-w-sm w-full transition-all duration-200`}
         style={{
-          top: hasValidElement 
-            ? (isMobile 
-                ? `${Math.max(20, Math.min(tooltipPosition.top - window.scrollY, window.innerHeight - 400)) + window.scrollY}px`
-                : (currentStepData.position === 'left' || currentStepData.position === 'right'
-                    ? `${tooltipPosition.top}px`
-                    : `${tooltipPosition.top}px`))
-            : '50%',
-          left: hasValidElement 
-            ? (isMobile
-                ? '50%'
-                : (currentStepData.position === 'left' || currentStepData.position === 'right'
-                    ? `${Math.max(20, Math.min(tooltipPosition.left, window.innerWidth - 400))}px`
-                    : `${tooltipPosition.left}px`))
-            : '50%',
-          transform: hasValidElement 
-            ? (isMobile
-                ? 'translate(-50%, 0)'
-                : (currentStepData.position === 'left' || currentStepData.position === 'right' 
-                    ? 'translate(0, -50%)' 
-                    : 'translate(-50%, 0)'))
-            : 'translate(-50%, -50%)',
+          top: typeof tooltipPosition.top === 'string' 
+            ? tooltipPosition.top 
+            : `${tooltipPosition.top}px`,
+          left: tooltipPosition.left,
+          transform: typeof tooltipPosition.top === 'string' && tooltipPosition.top === '50%'
+            ? 'translate(-50%, -50%)'
+            : 'translate(-50%, 0)',
           maxHeight: isMobile ? '80vh' : 'none',
           overflowY: isMobile ? 'auto' : 'visible',
         }}
