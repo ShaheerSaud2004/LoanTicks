@@ -14,6 +14,7 @@ import {
 import URLA2019ComprehensiveForm from '@/components/forms/URLA2019ComprehensiveForm';
 import TooltipFixer from '@/components/forms/TooltipFixer';
 import Footer from '@/components/layout/Footer';
+import ChatbotWidget from '@/components/chatbot/ChatbotWidget';
 
 export default function LoanApplicationPage() {
   const { data: session, status } = useSession();
@@ -1133,6 +1134,9 @@ export default function LoanApplicationPage() {
           </div>
         </div>
       )}
+      
+      {/* Chatbot Widget */}
+      <ChatbotWidget />
       
       {/* Footer */}
       <Footer />

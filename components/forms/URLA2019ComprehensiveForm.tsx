@@ -18,6 +18,7 @@ import {
   X
 } from 'lucide-react';
 import FormTooltip from './FormTooltip';
+import ChatbotWidget from '../chatbot/ChatbotWidget';
 
 interface URLA2019ComprehensiveFormProps {
   onSubmit: (data: Record<string, unknown>) => Promise<void>;
@@ -2288,6 +2289,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
           </div>
         </div>
       </div>
+      <ChatbotWidget currentStep={currentStep + 1} />
     </div>
   );
 }

@@ -7,6 +7,7 @@ import { LogOut, Loader2, CheckCircle2 } from 'lucide-react';
 import { ReactNode, useState, useEffect } from 'react';
 import Footer from './Footer';
 import TutorialButton from '@/components/walkthrough/TutorialButton';
+import ChatbotWidget from '@/components/chatbot/ChatbotWidget';
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -250,6 +251,9 @@ export default function DashboardLayout({
 
       {/* Tutorial Button - Fixed position */}
       <TutorialButton role={userRole as 'admin' | 'employee' | 'customer'} />
+
+      {/* Chatbot Widget - Available on all authenticated pages */}
+      <ChatbotWidget />
 
       {/* Footer */}
       <Footer />
