@@ -25,6 +25,7 @@ interface URLA2019ComprehensiveFormProps {
 
 export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019ComprehensiveFormProps) {
   const [currentStep, setCurrentStep] = useState(0);
+  const [validationError, setValidationError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     // SECTION 1: BORROWER INFORMATION
     // 1a. Personal Information
@@ -313,7 +314,109 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
     }
   };
 
+  const validateForm = (): { isValid: boolean; missingFields: string[] } => {
+    const missingFields: string[] = [];
+
+    // Section 1: Borrower Information
+    if (!formData.firstName?.trim()) missingFields.push('First Name');
+    if (!formData.lastName?.trim()) missingFields.push('Last Name');
+    if (!formData.ssn?.trim()) missingFields.push('Social Security Number');
+    if (!formData.dateOfBirth) missingFields.push('Date of Birth');
+    if (!formData.creditType) missingFields.push('Credit Type');
+    if (!formData.maritalStatus) missingFields.push('Marital Status');
+    if (!formData.citizenship) missingFields.push('Citizenship Status');
+
+    // Section 2: Contact Information
+    if (!formData.email?.trim()) missingFields.push('Email Address');
+    if (!formData.cellPhone?.trim() && !formData.homePhone?.trim()) missingFields.push('Phone Number');
+    if (!formData.preferredContactMethod) missingFields.push('Preferred Contact Method');
+
+    // Section 3: Current Address
+    if (!formData.currentStreet?.trim()) missingFields.push('Current Street Address');
+    if (!formData.currentCity?.trim()) missingFields.push('Current City');
+    if (!formData.currentState?.trim()) missingFields.push('Current State');
+    if (!formData.currentZipCode?.trim()) missingFields.push('Current ZIP Code');
+    if (!formData.currentHousing) missingFields.push('Housing Status');
+    if (!formData.yearsAtCurrentAddress?.trim()) missingFields.push('Years at Current Address');
+
+    // Section 4: Prior Address (if less than 2 years at current)
+    if (parseInt(formData.yearsAtCurrentAddress) < 2) {
+      if (!formData.priorStreet?.trim()) missingFields.push('Prior Street Address');
+      if (!formData.priorCity?.trim()) missingFields.push('Prior City');
+      if (!formData.priorState?.trim()) missingFields.push('Prior State');
+      if (!formData.priorZipCode?.trim()) missingFields.push('Prior ZIP Code');
+      if (!formData.yearsAtPriorAddress?.trim()) missingFields.push('Years at Prior Address');
+    }
+
+    // Section 5: Employment
+    if (!formData.employmentStatus) missingFields.push('Employment Status');
+    if (formData.employmentStatus === 'employed') {
+      if (!formData.employerName?.trim()) missingFields.push('Employer Name');
+      if (!formData.position?.trim()) missingFields.push('Position/Title');
+      if (!formData.yearsEmployed?.trim()) missingFields.push('Years in Line of Work');
+      if (!formData.monthlyIncome?.trim() && !formData.totalMonthlyIncome?.trim()) missingFields.push('Monthly Income');
+    }
+    
+    // Previous Employment (if less than 2 years at current)
+    if (parseInt(formData.yearsEmployed || '0') < 2) {
+      if (!formData.previousEmployerName?.trim()) missingFields.push('Previous Employer Name');
+      if (!formData.previousPosition?.trim()) missingFields.push('Previous Position');
+      if (!formData.previousYearsEmployed?.trim()) missingFields.push('Years at Previous Job');
+      if (!formData.previousMonthlyIncome?.trim()) missingFields.push('Monthly Income at Previous Job');
+    }
+
+    // Section 6: Income Details
+    if (!formData.totalMonthlyIncome?.trim() && !formData.grossMonthlyIncome?.trim()) {
+      missingFields.push('Total Monthly Income');
+    }
+
+    // Section 7: Assets (at least checking or savings)
+    if (!formData.checkingAccountBalance?.trim() && !formData.savingsAccountBalance?.trim()) {
+      // Not required, but good to have
+    }
+
+    // Section 8: Liabilities
+    // Not strictly required, but should be filled if they exist
+
+    // Section 9: Property Information
+    if (!formData.propertyAddress?.trim()) missingFields.push('Property Address');
+    if (!formData.propertyCity?.trim()) missingFields.push('Property City');
+    if (!formData.propertyState?.trim()) missingFields.push('Property State');
+    if (!formData.propertyZipCode?.trim()) missingFields.push('Property ZIP Code');
+    if (!formData.purchasePrice?.trim() && !formData.propertyValue?.trim()) missingFields.push('Purchase Price or Property Value');
+    if (!formData.loanAmount?.trim()) missingFields.push('Loan Amount');
+    if (!formData.loanPurpose) missingFields.push('Loan Purpose');
+
+    // Section 10: Loan Details
+    // Declarations are checkboxes, so they're always filled (true/false)
+
+    // Section 14: Supporting Documents
+    const documents = formData.uploadedDocuments as File[];
+    if (!documents || documents.length === 0) {
+      missingFields.push('Supporting Documents (at least Government ID and Pay Stubs)');
+    }
+
+    return {
+      isValid: missingFields.length === 0,
+      missingFields
+    };
+  };
+
   const handleSubmit = async () => {
+    // Clear any previous validation errors
+    setValidationError(null);
+    
+    // Validate all required fields
+    const validation = validateForm();
+    
+    if (!validation.isValid) {
+      const missingFieldsList = validation.missingFields.join(', ');
+      setValidationError(`You didn't fill out everything (everything it needs to).\n\nMissing required fields:\n${missingFieldsList}\n\nPlease complete all required fields before submitting.`);
+      // Scroll to top to show error
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
     // Don't log sensitive form data
     // Only log document count in development
     if (process.env.NODE_ENV === 'development') {
@@ -324,6 +427,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
         console.log('Submitting form without documents');
       }
     }
+    
     await onSubmit(formData);
   };
 
@@ -2036,6 +2140,25 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-700 via-gray-600 to-gray-800">
       <div className="max-w-4xl mx-auto px-4 py-8">
+        {validationError && (
+          <div className="mb-6 bg-red-50 border-2 border-red-500 rounded-xl p-6 shadow-lg">
+            <div className="flex items-start gap-4">
+              <div className="flex-shrink-0">
+                <AlertTriangle className="w-6 h-6 text-red-600" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-lg font-bold text-red-900 mb-2">Validation Error</h3>
+                <p className="text-red-800 whitespace-pre-line">{validationError}</p>
+                <button
+                  onClick={() => setValidationError(null)}
+                  className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition font-medium"
+                >
+                  Dismiss
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
           {/* Logo Header */}
           <div className="flex justify-center mb-6">
             <div className="bg-white rounded-2xl shadow-lg p-4 h-24 w-24 relative">
