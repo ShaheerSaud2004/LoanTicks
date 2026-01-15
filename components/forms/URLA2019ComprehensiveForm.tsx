@@ -27,6 +27,7 @@ interface URLA2019ComprehensiveFormProps {
 export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019ComprehensiveFormProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const [validationError, setValidationError] = useState<string | null>(null);
+  const [missingFields, setMissingFields] = useState<string[]>([]);
   const [formData, setFormData] = useState({
     // SECTION 1: BORROWER INFORMATION
     // 1a. Personal Information
@@ -411,8 +412,8 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
     const validation = validateForm();
     
     if (!validation.isValid) {
-      const missingFieldsList = validation.missingFields.join(', ');
-      setValidationError(`Hold up! Please make sure you fill out the stuff!\n\nMissing required fields:\n${missingFieldsList}`);
+      setMissingFields(validation.missingFields);
+      setValidationError('Hold up! Please make sure you fill out the stuff!');
       return;
     }
 
@@ -2140,19 +2141,49 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
     <div className="min-h-screen bg-gradient-to-br from-gray-700 via-gray-600 to-gray-800">
       <div className="max-w-4xl mx-auto px-4 py-8">
         {validationError && (
-          <div className="mb-6 bg-red-50 border-2 border-red-500 rounded-xl p-6 shadow-lg">
-            <div className="flex items-start gap-4">
-              <div className="flex-shrink-0">
-                <AlertTriangle className="w-6 h-6 text-red-600" />
-              </div>
-              <div className="flex-1">
-                <h3 className="text-lg font-bold text-red-900 mb-2">Validation Error</h3>
-                <p className="text-red-800 whitespace-pre-line">{validationError}</p>
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+              <div className="sticky top-0 bg-yellow-500 rounded-t-2xl p-6 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <AlertTriangle className="w-8 h-8 text-white" />
+                  <h2 className="text-2xl font-bold text-white">{validationError}</h2>
+                </div>
                 <button
-                  onClick={() => setValidationError(null)}
-                  className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition font-medium"
+                  onClick={() => {
+                    setValidationError(null);
+                    setMissingFields([]);
+                  }}
+                  className="text-white hover:bg-yellow-600 rounded-full p-2 transition"
+                  aria-label="Close"
                 >
-                  Dismiss
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+              <div className="p-6">
+                <p className="text-lg text-gray-800 mb-4 font-semibold">
+                  You need to fill out the following required fields:
+                </p>
+                <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
+                  <ul className="space-y-2">
+                    {missingFields.map((field, index) => (
+                      <li key={index} className="flex items-start gap-2 text-gray-700">
+                        <span className="text-yellow-600 font-bold mt-1">•</span>
+                        <span className="text-base">{field}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <p className="text-sm text-gray-600 mt-4">
+                  Please go back and complete all required fields before submitting your application.
+                </p>
+                <button
+                  onClick={() => {
+                    setValidationError(null);
+                    setMissingFields([]);
+                  }}
+                  className="mt-6 w-full px-6 py-3 bg-yellow-500 text-white rounded-xl hover:bg-yellow-600 transition font-semibold text-lg"
+                >
+                  Got it, I'll fill them out!
                 </button>
               </div>
             </div>
