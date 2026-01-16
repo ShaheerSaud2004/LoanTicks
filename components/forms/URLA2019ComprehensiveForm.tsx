@@ -1336,7 +1336,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                 <p className="text-sm text-gray-600 mb-2">Enter your work phone number (optional).</p>
                 <input type="tel" value={formData.workPhone} onChange={(e) => handleInputChange('workPhone', e.target.value)} placeholder="555-123-4567" className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900" />
               </div>
-            </div>
+              </div>
             </div>
           </div>
         );
@@ -1355,8 +1355,8 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
               </div>
             ) : (
               <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
                     <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
                       Previous Employer *
                       <span className="group relative inline-block">
@@ -1368,8 +1368,8 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                     </label>
                     <p className="text-sm text-gray-600 mb-2">Enter your previous employer's full legal name.</p>
                     <input type="text" value={formData.previousEmployerName} onChange={(e) => handleInputChange('previousEmployerName', e.target.value)} className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900" required />
-                  </div>
-                  <div>
+                </div>
+                <div>
                     <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
                       Previous Position *
                       <span className="group relative inline-block">
@@ -1381,10 +1381,10 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                     </label>
                     <p className="text-sm text-gray-600 mb-2">Enter your previous job title or position.</p>
                     <input type="text" value={formData.previousPosition} onChange={(e) => handleInputChange('previousPosition', e.target.value)} className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900" required />
-                  </div>
+                </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
+                <div>
                     <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
                       Years at Previous Job *
                       <span className="group relative inline-block">
