@@ -149,26 +149,20 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             
             // Check approval status
             if (existingUser.role !== 'admin' && !existingUser.isApproved) {
-              return false; // Block sign-in if not approved
+              // Block sign-in and redirect to error page
+              throw new Error('AccountPendingApproval');
             }
           } else {
-            // Create new user (pending approval)
-            const newUser = new User({
-              name: user.name || 'User',
-              email: user.email?.toLowerCase(),
-              role: 'customer',
-              provider: 'google',
-              providerId: account.providerAccountId,
-              isApproved: false, // Requires admin approval
-            });
-            await newUser.save();
-            
-            // Block sign-in until approved
-            return false;
+            // User doesn't exist - block sign-in and redirect to error page
+            throw new Error('AccountNotFound');
           }
         } catch (error) {
           console.error('Google OAuth error:', error);
-          return false;
+          // Re-throw to trigger error page
+          if (error instanceof Error) {
+            throw error;
+          }
+          throw new Error('AccountNotFound');
         }
       }
       return true;
@@ -207,6 +201,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   pages: {
     signIn: '/login',
+    error: '/auth/error',
   },
   session: {
     strategy: 'jwt',

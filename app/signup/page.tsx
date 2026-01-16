@@ -112,8 +112,13 @@ export default function SignUpPage() {
               </div>
               <h1 className="text-2xl font-semibold text-slate-900">Loanaticks</h1>
             </div>
-            <h2 className="text-2xl lg:text-3xl font-semibold text-slate-900 mb-2">Create Account</h2>
-            <p className="text-slate-600 text-base">Sign up to get started</p>
+            <h2 className="text-2xl lg:text-3xl font-semibold text-slate-900 mb-2">Create Customer Account</h2>
+            <p className="text-slate-600 text-base">Sign up to get started with your loan application</p>
+            <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+              <p className="text-xs text-blue-700">
+                <strong>Note:</strong> Sign up is only available for customers. Admin and employee accounts are created by administrators.
+              </p>
+            </div>
           </div>
 
           {error && (

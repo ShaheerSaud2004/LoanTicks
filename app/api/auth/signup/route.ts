@@ -62,13 +62,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Create new user (pending approval)
+    // Create new user (pending approval) - ONLY customers can sign up
     const newUser = new User({
       name: sanitizedData.name,
       email: sanitizedData.email,
       password: sanitizedData.password, // Will be hashed by pre-save hook
       phone: sanitizedData.phone,
-      role: 'customer',
+      role: 'customer', // Sign up is ONLY for customers - admins/employees are created by admin
       provider: 'credentials',
       isApproved: false, // Requires admin approval
     });
