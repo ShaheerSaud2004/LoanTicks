@@ -39,7 +39,7 @@ function ErrorContent() {
       case 'AccessDenied':
         return {
           title: "Account Not Found",
-          message: "You don't have an account yet. Please sign up to create one.",
+          message: "You don't have an account yet. Please sign up to create a customer account.",
           icon: <UserPlus className="w-16 h-16 text-yellow-500" />,
           primaryAction: {
             text: "Sign Up",
