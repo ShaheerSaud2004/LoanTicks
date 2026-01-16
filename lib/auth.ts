@@ -149,20 +149,21 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             
             // Check approval status
             if (existingUser.role !== 'admin' && !existingUser.isApproved) {
-              // Block sign-in and redirect to error page
-              throw new Error('AccountPendingApproval');
+              // Block sign-in - NextAuth will redirect to error page with AccessDenied
+              // Error page will show pending approval message
+              return false;
             }
+            // User exists and is approved - allow sign in
+            return true;
           } else {
-            // User doesn't exist - block sign-in and redirect to error page
-            throw new Error('AccountNotFound');
+            // User doesn't exist - don't auto-create, block sign-in
+            // NextAuth will redirect to error page with AccessDenied
+            // Error page will show "account not found, please sign up" message
+            return false;
           }
         } catch (error) {
           console.error('Google OAuth error:', error);
-          // Re-throw to trigger error page
-          if (error instanceof Error) {
-            throw error;
-          }
-          throw new Error('AccountNotFound');
+          return false;
         }
       }
       return true;
