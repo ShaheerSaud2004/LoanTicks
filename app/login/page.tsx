@@ -189,18 +189,18 @@ export default function LoginPage() {
           <div className="text-center">
             <div className="w-24 h-24 mx-auto mb-6 relative">
               <div className="absolute inset-0 bg-white rounded-full scale-0 animate-[scale_0.3s_ease-out_forwards]"></div>
-              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="absolute inset-0 flex items-center justify-center">
                 <svg className="w-14 h-14 text-yellow-500 opacity-0 animate-[checkmark_0.4s_0.2s_ease-out_forwards]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                </svg>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
               </div>
-            </div>
             <h2 className="text-2xl font-semibold text-white mb-2 opacity-0 animate-[fadeIn_0.4s_0.3s_ease-out_forwards]">
-              Welcome Back!
-            </h2>
+                Welcome Back!
+              </h2>
             <p className="text-slate-300 text-base opacity-0 animate-[fadeIn_0.4s_0.4s_ease-out_forwards]">
-              Redirecting to your dashboard...
-            </p>
+                Redirecting to your dashboard...
+              </p>
           </div>
         </div>
       )}
@@ -220,25 +220,25 @@ export default function LoginPage() {
           {/* Logo and Branding */}
           <div className="flex items-start gap-5">
             <div className="h-16 w-16 lg:h-20 lg:w-20 bg-white rounded-2xl flex items-center justify-center shadow-[0_8px_32px_rgba(0,0,0,0.3)] overflow-hidden flex-shrink-0 relative p-2.5 ring-2 ring-white/10">
-              <Image src="/logo.jpg" alt="loanaticks" fill className="object-contain" priority />
+              <Image src="/logo.jpg" alt="Loanaticks" fill className="object-contain" priority />
             </div>
             <div className="pt-1.5">
-              <h1 className="text-3xl lg:text-4xl font-semibold tracking-tight mb-1">loanaticks</h1>
+              <h1 className="text-3xl lg:text-4xl font-semibold tracking-tight mb-1">Loanaticks</h1>
               <p className="text-slate-300 text-sm lg:text-base font-medium">Home Mortgage Solutions</p>
             </div>
-          </div>
+        </div>
 
           {/* Main Headline */}
           <div className="space-y-4">
             <h2 className="text-4xl lg:text-5xl xl:text-6xl font-semibold leading-[1.1] tracking-tight">
               Your Dream Home<br/>
               <span className="text-yellow-400">Starts Here</span>
-            </h2>
+          </h2>
             <p className="text-lg lg:text-xl text-slate-300 leading-relaxed max-w-xl font-light">
-              Experience streamlined mortgage financing with competitive rates, fast approvals, and expert support every step of the way.
-            </p>
-          </div>
-          
+            Experience streamlined mortgage financing with competitive rates, fast approvals, and expert support every step of the way.
+          </p>
+        </div>
+
           {/* Expert Loan Advisor Feature */}
           <div className="flex items-center gap-4 bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-5 shadow-[0_8px_32px_rgba(0,0,0,0.2)] hover:bg-white/8 transition-colors">
             <div className="bg-yellow-400 p-2.5 rounded-xl shadow-lg">
@@ -432,7 +432,7 @@ export default function LoginPage() {
       {/* Footer */}
       <div className="absolute bottom-6 left-0 right-0 z-10">
         <p className="text-center text-sm text-slate-500">
-          © 2025 loanaticks. All rights reserved.
+          © 2025 Loanaticks. All rights reserved.
         </p>
       </div>
     </div>
