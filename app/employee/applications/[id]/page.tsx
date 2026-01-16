@@ -98,6 +98,21 @@ export default function ApplicationView({ params }: { params: Promise<{ id: stri
       if (response.ok && data.application) {
         console.log('Application loaded:', data.application);
         setApplication(data.application);
+        
+        // Load saved verification checklist if it exists
+        if (data.application.verificationChecklist) {
+          setVerificationChecklist({
+            identityDocuments: data.application.verificationChecklist.identityDocuments || false,
+            incomeVerification: data.application.verificationChecklist.incomeVerification || false,
+            propertyInformation: data.application.verificationChecklist.propertyInformation || false,
+            financialDetails: data.application.verificationChecklist.financialDetails || false,
+          });
+        }
+        
+        // Load saved approval status
+        if (data.application.decision) {
+          setApprovalStatus(data.application.decision as 'pending' | 'approved' | 'rejected');
+        }
       } else {
         console.error('Failed to fetch application:', data.error || 'No application data');
         alert(`Could not load application: ${data.error || 'Application not found'}`);
@@ -122,6 +137,55 @@ export default function ApplicationView({ params }: { params: Promise<{ id: stri
 
     fetchApplication();
   }, [session, status, router, resolvedParams.id, fetchApplication]);
+
+  // Save verification checklist to database
+  const saveVerificationChecklist = async (checklist: typeof verificationChecklist) => {
+    try {
+      const response = await fetch('/api/loan-application', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          applicationId: resolvedParams.id,
+          verificationChecklist: {
+            ...checklist,
+            checkedBy: session?.user?.id,
+            checkedAt: new Date().toISOString(),
+          },
+        }),
+      });
+
+      if (!response.ok) {
+        console.error('Failed to save verification checklist');
+      }
+    } catch (error) {
+      console.error('Error saving verification checklist:', error);
+    }
+  };
+
+  // Save approval status to database
+  const saveApprovalStatus = async (status: 'pending' | 'approved' | 'rejected') => {
+    try {
+      const response = await fetch('/api/loan-application', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          applicationId: resolvedParams.id,
+          decision: status,
+          status: status === 'approved' ? 'approved' : status === 'rejected' ? 'rejected' : 'under_review',
+          decisionNotes: status !== 'pending' ? `Application ${status} by ${session?.user?.email}` : undefined,
+        }),
+      });
+
+      if (!response.ok) {
+        console.error('Failed to save approval status');
+      } else {
+        // Refresh application data
+        await fetchApplication();
+      }
+    } catch (error) {
+      console.error('Error saving approval status:', error);
+    }
+  };
 
   // OCR function to extract text from documents
   const runOCR = async () => {
@@ -722,7 +786,11 @@ export default function ApplicationView({ params }: { params: Promise<{ id: stri
                         <input 
                           type="checkbox" 
                           checked={verificationChecklist.incomeVerification}
-                          onChange={(e) => setVerificationChecklist(prev => ({ ...prev, incomeVerification: e.target.checked }))}
+                          onChange={async (e) => {
+                            const newValue = e.target.checked;
+                            setVerificationChecklist(prev => ({ ...prev, incomeVerification: newValue }));
+                            await saveVerificationChecklist({ ...verificationChecklist, incomeVerification: newValue });
+                          }}
                           className="w-5 h-5 md:w-6 md:h-6 rounded flex-shrink-0 border-2 border-white/50 accent-yellow-400 cursor-pointer focus:ring-2 focus:ring-white/50 focus:outline-none" 
                         />
                         <span className="text-base md:text-lg lg:text-xl font-semibold leading-relaxed drop-shadow select-none">
@@ -733,7 +801,11 @@ export default function ApplicationView({ params }: { params: Promise<{ id: stri
                         <input 
                           type="checkbox" 
                           checked={verificationChecklist.propertyInformation}
-                          onChange={(e) => setVerificationChecklist(prev => ({ ...prev, propertyInformation: e.target.checked }))}
+                          onChange={async (e) => {
+                            const newValue = e.target.checked;
+                            setVerificationChecklist(prev => ({ ...prev, propertyInformation: newValue }));
+                            await saveVerificationChecklist({ ...verificationChecklist, propertyInformation: newValue });
+                          }}
                           className="w-5 h-5 md:w-6 md:h-6 rounded flex-shrink-0 border-2 border-white/50 accent-yellow-400 cursor-pointer focus:ring-2 focus:ring-white/50 focus:outline-none" 
                         />
                         <span className="text-base md:text-lg lg:text-xl font-semibold leading-relaxed drop-shadow select-none">
@@ -744,7 +816,11 @@ export default function ApplicationView({ params }: { params: Promise<{ id: stri
                         <input 
                           type="checkbox" 
                           checked={verificationChecklist.financialDetails}
-                          onChange={(e) => setVerificationChecklist(prev => ({ ...prev, financialDetails: e.target.checked }))}
+                          onChange={async (e) => {
+                            const newValue = e.target.checked;
+                            setVerificationChecklist(prev => ({ ...prev, financialDetails: newValue }));
+                            await saveVerificationChecklist({ ...verificationChecklist, financialDetails: newValue });
+                          }}
                           className="w-5 h-5 md:w-6 md:h-6 rounded flex-shrink-0 border-2 border-white/50 accent-yellow-400 cursor-pointer focus:ring-2 focus:ring-white/50 focus:outline-none" 
                         />
                         <span className="text-base md:text-lg lg:text-xl font-semibold leading-relaxed drop-shadow select-none">
@@ -760,7 +836,10 @@ export default function ApplicationView({ params }: { params: Promise<{ id: stri
                       <h4 className="text-lg md:text-xl font-bold text-white">Application Decision</h4>
                       <div className="flex gap-3">
                         <button
-                          onClick={() => setApprovalStatus('approved')}
+                          onClick={async () => {
+                            setApprovalStatus('approved');
+                            await saveApprovalStatus('approved');
+                          }}
                           className={`px-6 py-3 rounded-xl font-semibold transition-all flex items-center gap-2 ${
                             approvalStatus === 'approved'
                               ? 'bg-green-500 text-white shadow-lg scale-105'
@@ -771,7 +850,10 @@ export default function ApplicationView({ params }: { params: Promise<{ id: stri
                           Approve
                         </button>
                         <button
-                          onClick={() => setApprovalStatus('rejected')}
+                          onClick={async () => {
+                            setApprovalStatus('rejected');
+                            await saveApprovalStatus('rejected');
+                          }}
                           className={`px-6 py-3 rounded-xl font-semibold transition-all flex items-center gap-2 ${
                             approvalStatus === 'rejected'
                               ? 'bg-red-500 text-white shadow-lg scale-105'

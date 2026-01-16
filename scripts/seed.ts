@@ -42,7 +42,11 @@ async function seedDatabase() {
 
     // Create demo users
     for (const userData of demoUsers) {
-      const user = new User(userData);
+      const user = new User({
+        ...userData,
+        isApproved: true, // Auto-approve demo accounts
+        provider: 'credentials',
+      });
       await user.save();
       console.log(`✓ Created ${userData.role}: ${userData.email}`);
     }

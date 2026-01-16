@@ -443,6 +443,25 @@ export async function PATCH(request: NextRequest) {
       delete sanitizedUpdates.propertyInfo;
     }
 
+    // Update verificationChecklist
+    if (sanitizedUpdates.verificationChecklist) {
+      application.verificationChecklist = {
+        ...getObject(application.verificationChecklist || {}),
+        ...sanitizedUpdates.verificationChecklist
+      };
+      delete sanitizedUpdates.verificationChecklist;
+    }
+
+    // Update decision
+    if (sanitizedUpdates.decision !== undefined) {
+      application.decision = sanitizedUpdates.decision;
+      if (sanitizedUpdates.decision !== 'pending') {
+        application.reviewedBy = session.user.id;
+        application.reviewedAt = new Date();
+      }
+      delete sanitizedUpdates.decision;
+    }
+
     // Update declarations
     if (sanitizedUpdates.declarations) {
       application.declarations = {

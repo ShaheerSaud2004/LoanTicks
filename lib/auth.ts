@@ -1,5 +1,6 @@
 import NextAuth, { DefaultSession } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import GoogleProvider from 'next-auth/providers/google';
 
 export type UserRole = 'admin' | 'employee' | 'customer';
 
@@ -35,6 +36,11 @@ if (!nextAuthSecret) {
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID || '',
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
+      allowDangerousEmailAccountLinking: true, // Allow linking accounts with same email
+    }),
     CredentialsProvider({
       name: 'Credentials',
       credentials: {
@@ -87,6 +93,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             throw new Error('Invalid email or password');
           }
 
+          // Check if user is approved (only for non-admin users)
+          if (user.role !== 'admin' && !user.isApproved) {
+            throw new Error('Your account is pending admin approval. Please wait for approval before signing in.');
+          }
+
           // Only log success in development, never in production
           if (process.env.NODE_ENV === 'development') {
             console.log('✓ Login successful');
@@ -110,11 +121,80 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async signIn({ user, account, profile }) {
+      // Handle Google OAuth sign-in
+      if (account?.provider === 'google') {
+        try {
+          const connectDB = (await import('@/lib/mongodb')).default;
+          const User = (await import('@/models/User')).default;
+          
+          await connectDB();
+          
+          // Check if user exists
+          const existingUser = await User.findOne({ 
+            $or: [
+              { email: user.email?.toLowerCase() },
+              { providerId: account.providerAccountId }
+            ]
+          });
+          
+          if (existingUser) {
+            // Update existing user with Google provider info
+            existingUser.provider = 'google';
+            existingUser.providerId = account.providerAccountId;
+            if (!existingUser.name && user.name) {
+              existingUser.name = user.name;
+            }
+            await existingUser.save();
+            
+            // Check approval status
+            if (existingUser.role !== 'admin' && !existingUser.isApproved) {
+              return false; // Block sign-in if not approved
+            }
+          } else {
+            // Create new user (pending approval)
+            const newUser = new User({
+              name: user.name || 'User',
+              email: user.email?.toLowerCase(),
+              role: 'customer',
+              provider: 'google',
+              providerId: account.providerAccountId,
+              isApproved: false, // Requires admin approval
+            });
+            await newUser.save();
+            
+            // Block sign-in until approved
+            return false;
+          }
+        } catch (error) {
+          console.error('Google OAuth error:', error);
+          return false;
+        }
+      }
+      return true;
+    },
+    async jwt({ token, user, account }) {
       if (user) {
         token.role = user.role;
         token.id = user.id;
       }
+      
+      // For Google OAuth, fetch user from DB to get latest approval status
+      if (account?.provider === 'google' && user?.email) {
+        try {
+          const connectDB = (await import('@/lib/mongodb')).default;
+          const User = (await import('@/models/User')).default;
+          await connectDB();
+          const dbUser = await User.findOne({ email: user.email.toLowerCase() });
+          if (dbUser) {
+            token.role = dbUser.role;
+            token.id = dbUser._id.toString();
+          }
+        } catch (error) {
+          console.error('Error fetching user in JWT callback:', error);
+        }
+      }
+      
       return token;
     },
     async session({ session, token }) {

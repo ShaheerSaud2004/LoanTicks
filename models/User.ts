@@ -7,9 +7,14 @@ export interface IUser extends Document {
   _id: string;
   name: string;
   email: string;
-  password: string;
+  password?: string; // Optional for OAuth users
   role: UserRole;
   phone?: string;
+  isApproved: boolean; // Admin approval status
+  approvedBy?: string; // Admin user ID who approved
+  approvedAt?: Date; // When approved
+  provider?: 'credentials' | 'google'; // Auth provider
+  providerId?: string; // OAuth provider user ID
   createdAt: Date;
   updatedAt: Date;
   comparePassword(candidatePassword: string): Promise<boolean>;
@@ -32,7 +37,10 @@ const UserSchema = new Schema<IUser>(
     },
     password: {
       type: String,
-      required: [true, 'Password is required'],
+      required: function(this: IUser) {
+        // Password required only for credentials provider
+        return !this.provider || this.provider === 'credentials';
+      },
       minlength: [12, 'Password must be at least 12 characters'],
       // Password complexity validation is done in pre-save hook
     },
@@ -46,6 +54,25 @@ const UserSchema = new Schema<IUser>(
       type: String,
       trim: true,
     },
+    isApproved: {
+      type: Boolean,
+      default: false, // Requires admin approval
+    },
+    approvedBy: {
+      type: String,
+      ref: 'User',
+    },
+    approvedAt: {
+      type: Date,
+    },
+    provider: {
+      type: String,
+      enum: ['credentials', 'google'],
+      default: 'credentials',
+    },
+    providerId: {
+      type: String, // Google user ID for OAuth users
+    },
   },
   {
     timestamps: true,
@@ -54,8 +81,8 @@ const UserSchema = new Schema<IUser>(
 
 // Validate password complexity before saving
 UserSchema.pre('save', async function (next) {
-  // Only validate on new documents or when password is modified
-  if (this.isModified('password')) {
+  // Only validate password for credentials provider or if password is being set
+  if (this.isModified('password') && this.password && (!this.provider || this.provider === 'credentials')) {
     const password = this.password;
     
     // Password complexity requirements

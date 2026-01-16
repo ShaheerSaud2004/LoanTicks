@@ -319,6 +319,16 @@ export interface ILoanApplication extends Document {
   decision?: 'approved' | 'rejected' | 'pending';
   decisionNotes?: string;
   
+  // Verification Checklist
+  verificationChecklist?: {
+    identityDocuments: boolean;
+    incomeVerification: boolean;
+    propertyInformation: boolean;
+    financialDetails: boolean;
+    checkedBy?: string; // Employee ID
+    checkedAt?: Date;
+  };
+  
   // Rate Information
   rateQuotes?: any[];
   rateAnalysis?: any;
@@ -583,6 +593,14 @@ const LoanApplicationSchema = new Schema<ILoanApplication>(
       default: 'pending',
     },
     decisionNotes: String,
+    verificationChecklist: {
+      identityDocuments: { type: Boolean, default: false },
+      incomeVerification: { type: Boolean, default: false },
+      propertyInformation: { type: Boolean, default: false },
+      financialDetails: { type: Boolean, default: false },
+      checkedBy: String,
+      checkedAt: Date,
+    },
     
     // Rate Information
     rateQuotes: [Schema.Types.Mixed],

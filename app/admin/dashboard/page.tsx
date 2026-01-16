@@ -4,7 +4,7 @@ import DashboardLayout from '@/components/layout/DashboardLayout';
 import LoanApplicationsManager from '@/components/admin/LoanApplicationsManager';
 import AdminDashboardClient from '@/components/admin/AdminDashboardClient';
 import Link from 'next/link';
-import { Users, FileText, TrendingUp, Activity, MessageCircle } from 'lucide-react';
+import { Users, FileText, TrendingUp, Activity, MessageCircle, UserCheck } from 'lucide-react';
 import connectDB from '@/lib/mongodb';
 import User from '@/models/User';
 import LoanApplication from '@/models/LoanApplication';
@@ -171,6 +171,23 @@ export default async function AdminDashboard() {
                 </h3>
                 <p className="text-sm text-gray-500">
                   View user conversations and chatbot interactions
+                </p>
+              </div>
+            </Link>
+            
+            <Link
+              href="/admin/users"
+              className="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-xl hover:border-gray-600 hover:shadow-md transition group"
+            >
+              <div className="bg-blue-500 group-hover:bg-blue-600 p-3 rounded-lg transition">
+                <UserCheck className="h-6 w-6 text-white" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-gray-900 group-hover:text-gray-700 transition">
+                  User Approval
+                </h3>
+                <p className="text-sm text-gray-500">
+                  Review and approve new user registrations
                 </p>
               </div>
             </Link>
