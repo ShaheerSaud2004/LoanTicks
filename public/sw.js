@@ -1,5 +1,5 @@
 // Service Worker for LoanTicks PWA
-const CACHE_NAME = 'loanticks-v1';
+const CACHE_NAME = 'loanticks-v2';
 const urlsToCache = [
   '/',
   '/login',
@@ -43,43 +43,80 @@ self.addEventListener('activate', (event) => {
 
 // Fetch event - serve from cache, fallback to network
 self.addEventListener('fetch', (event) => {
+  const request = event.request;
+  
   // Skip caching for API routes and external resources
   if (
-    event.request.url.includes('/api/') ||
-    event.request.url.includes('_next/') ||
-    event.request.url.startsWith('chrome-extension://') ||
-    event.request.url.startsWith('moz-extension://')
+    request.url.includes('/api/') ||
+    request.url.includes('_next/') ||
+    request.url.startsWith('chrome-extension://') ||
+    request.url.startsWith('moz-extension://')
   ) {
     return;
   }
 
+  // For navigation requests (page loads), always allow redirects
+  // This fixes the www.loanaticks.com -> loanaticks.com redirect issue
+  if (request.mode === 'navigate') {
+    event.respondWith(
+      fetch(request, {
+        redirect: 'follow',
+      }).catch(() => {
+        // If fetch fails, try cache
+        return caches.match('/');
+      })
+    );
+    return;
+  }
+
+  // For other requests, use cache-first strategy
   event.respondWith(
-    caches.match(event.request)
+    caches.match(request)
       .then((response) => {
-        // Return cached version or fetch from network
-        return response || fetch(event.request)
+        // Return cached version if available
+        if (response) {
+          return response;
+        }
+
+        // Fetch with redirect mode set to 'follow' to handle redirects
+        return fetch(request, {
+          redirect: 'follow',
+        })
           .then((response) => {
-            // Don't cache non-successful responses
-            if (!response || response.status !== 200 || response.type !== 'basic') {
+            // Don't cache redirects or non-successful responses
+            if (!response || response.status !== 200 || response.type !== 'basic' || response.redirected) {
               return response;
             }
 
-            // Clone the response
+            // Clone the response for caching
             const responseToCache = response.clone();
 
             caches.open(CACHE_NAME)
               .then((cache) => {
-                cache.put(event.request, responseToCache);
+                cache.put(request, responseToCache);
+              })
+              .catch((error) => {
+                console.error('Service Worker: Cache put failed', error);
               });
 
             return response;
           })
-          .catch(() => {
-            // Return offline page if available
-            if (event.request.destination === 'document') {
+          .catch((error) => {
+            console.error('Service Worker: Fetch failed', error);
+            // Return offline page if available for document requests
+            if (request.destination === 'document') {
               return caches.match('/');
             }
+            // For other requests, return the error
+            throw error;
           });
+      })
+      .catch((error) => {
+        console.error('Service Worker: Cache match failed', error);
+        // Fallback to network fetch with redirect handling
+        return fetch(request, {
+          redirect: 'follow',
+        });
       })
   );
 });

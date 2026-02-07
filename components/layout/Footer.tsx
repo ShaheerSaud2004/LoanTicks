@@ -42,6 +42,17 @@ export default function Footer() {
               <Shield className="h-4 w-4 text-yellow-500" />
               <span>Secure & Trusted</span>
             </div>
+            <p className="text-sm text-gray-400 leading-relaxed">
+              NMLS #2724157 · Licensed in State of TX. For licensing information go to{' '}
+              <a
+                href="https://www.nmlsconsumeraccess.org"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-yellow-500 hover:text-yellow-400 underline transition-colors"
+              >
+                www.nmlsconsumeraccess.org
+              </a>
+            </p>
           </div>
 
           {/* Quick Links */}
@@ -217,12 +228,12 @@ export default function Footer() {
             <p className="text-sm text-gray-400 text-center md:text-left">
               © 2025 LoanAticks. All rights reserved.
             </p>
-            <div className="flex items-center gap-6 text-sm text-gray-400">
+            <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 text-sm text-gray-400">
               <span className="flex items-center gap-2">
                 <Shield className="h-4 w-4 text-yellow-500" />
                 SSL Secured
               </span>
-              <span>Licensed Mortgage Lender</span>
+              <span>Licensed Mortgage Lender · NMLS #2724157 · Licensed in State of TX</span>
             </div>
           </div>
         </div>

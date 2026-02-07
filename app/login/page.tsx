@@ -468,6 +468,17 @@ export default function LoginPage() {
       {/* Footer */}
       <div className="absolute bottom-6 left-0 right-0 z-10">
         <p className="text-center text-sm text-slate-500">
+          NMLS #2724157 · Licensed in State of TX · For licensing information go to{' '}
+          <a
+            href="https://www.nmlsconsumeraccess.org"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-yellow-600 hover:text-yellow-700 underline transition-colors"
+          >
+            www.nmlsconsumeraccess.org
+          </a>
+        </p>
+        <p className="text-center text-sm text-slate-500 mt-1">
           © 2025 Loanaticks. All rights reserved.
         </p>
       </div>
