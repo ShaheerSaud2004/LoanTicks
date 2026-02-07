@@ -122,7 +122,7 @@ export function sanitizeObject(obj: any): any {
   if (typeof obj === 'object') {
     const sanitized: any = {};
     for (const key in obj) {
-      if (obj.hasOwnProperty(key)) {
+      if (Object.prototype.hasOwnProperty.call(obj, key)) {
         sanitized[key] = sanitizeObject(obj[key]);
       }
     }
@@ -159,7 +159,7 @@ export function redactSensitiveData(data: any): any {
   const redacted: any = {};
   
   for (const key in data) {
-    if (data.hasOwnProperty(key)) {
+    if (Object.prototype.hasOwnProperty.call(data, key)) {
       const keyLower = key.toLowerCase();
       // Check if key matches any sensitive field (case-insensitive)
       if (sensitiveFields.some(field => keyLower === field || keyLower.includes(field))) {

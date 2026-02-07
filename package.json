@@ -7,7 +7,7 @@
     "build": "next build --turbopack",
     "build:vercel": "npm run test:ci && next build --turbopack",
     "start": "next start",
-    "lint": "eslint",
+    "lint": "eslint .",
     "seed": "tsx scripts/seed.ts",
     "seed:test": "tsx scripts/seed-test-data.ts",
     "add:test-doc": "tsx scripts/add-test-document.ts",

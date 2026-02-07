@@ -18,7 +18,8 @@ describe('Input Sanitization Utilities', () => {
       
       expect(safe).not.toContain('<script>');
       expect(safe).toContain('&lt;script&gt;');
-      expect(safe).toContain('&lt;/script&gt;');
+      // Closing tag may be escaped as &lt;/script&gt; or &lt;&#x2F;script&gt;
+      expect(safe).toMatch(/&lt;\/script&gt;|&lt;&#x2F;script&gt;/);
     });
 
     it('should escape quotes', () => {

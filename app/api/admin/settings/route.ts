@@ -10,7 +10,7 @@ async function ensureDataDir() {
   const dataDir = join(process.cwd(), 'data');
   try {
     await mkdir(dataDir, { recursive: true });
-  } catch (error) {
+  } catch {
     // Directory might already exist
   }
 }
@@ -29,7 +29,7 @@ export async function GET() {
       const fileContent = await readFile(SETTINGS_FILE, 'utf-8');
       const settings = JSON.parse(fileContent);
       return NextResponse.json({ success: true, settings });
-    } catch (error) {
+    } catch {
       // File doesn't exist, return default settings
       return NextResponse.json({ success: true, settings: null });
     }

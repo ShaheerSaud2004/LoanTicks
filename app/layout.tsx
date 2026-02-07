@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import PWAWrapper from "@/components/PWAWrapper";
+import Providers from "@/components/Providers";
+import { auth } from "@/lib/auth";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -28,11 +30,13 @@ export const viewport: Viewport = {
   themeColor: "#EAB308",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await auth();
+
   return (
     <html lang="en">
       <head>
@@ -43,7 +47,9 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-title" content="loanaticks" />
       </head>
       <body className={inter.className} suppressHydrationWarning>
-        <PWAWrapper>{children}</PWAWrapper>
+        <Providers session={session}>
+          <PWAWrapper>{children}</PWAWrapper>
+        </Providers>
       </body>
     </html>
   );

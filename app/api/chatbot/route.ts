@@ -243,10 +243,10 @@ export async function POST(request: NextRequest) {
     const ipAddress = forwarded ? forwarded.split(',')[0] : request.headers.get('x-real-ip') || undefined;
     const userAgent = request.headers.get('user-agent') || undefined;
 
-    // Get OpenAI API key
-    const apiKey = process.env.OpenAIKey;
+    // Get OpenAI API key (support both OPENAI_API_KEY and OpenAIKey)
+    const apiKey = process.env.OPENAI_API_KEY || process.env.OpenAIKey;
     if (!apiKey) {
-      console.error('OpenAIKey environment variable is not set');
+      console.error('OpenAI API key not set. Add OPENAI_API_KEY or OpenAIKey to environment variables.');
       return NextResponse.json(
         { error: 'Chatbot service is not configured. Please contact support.' },
         { status: 500 }

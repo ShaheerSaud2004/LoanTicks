@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { X, ArrowRight, ArrowLeft, CheckCircle } from 'lucide-react';
 
 interface WalkthroughStep {
@@ -109,7 +109,26 @@ export default function DashboardWalkthrough({ role, onComplete }: DashboardWalk
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const positionLockRef = useRef(false);
-  const steps = walkthroughSteps[role] || [];
+  const steps = useMemo(() => walkthroughSteps[role] || [], [role]);
+
+  const scrollToStep = useCallback((stepIndex: number) => {
+    if (stepIndex >= steps.length) return;
+
+    const step = steps[stepIndex];
+    const element = document.querySelector(step.target);
+    
+    if (element) {
+      setIsTransitioning(true);
+      positionLockRef.current = true;
+      element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setTimeout(() => {
+        setIsTransitioning(false);
+        positionLockRef.current = false;
+      }, 600);
+    } else {
+      console.warn('Walkthrough element not found:', step.target);
+    }
+  }, [steps]);
 
   // Check if mobile on mount and resize
   useEffect(() => {
@@ -122,50 +141,20 @@ export default function DashboardWalkthrough({ role, onComplete }: DashboardWalk
   }, []);
 
   useEffect(() => {
-    // Check if user has seen the walkthrough
     const hasSeenWalkthrough = localStorage.getItem(`walkthrough_${role}_completed`);
-    
-    // Check if walkthrough was manually triggered (by tutorial button)
     const wasTriggered = sessionStorage.getItem(`walkthrough_${role}_triggered`);
     
     if (!hasSeenWalkthrough || wasTriggered === 'true') {
-      // Clear the trigger flag
       if (wasTriggered === 'true') {
         sessionStorage.removeItem(`walkthrough_${role}_triggered`);
       }
-      // Small delay to ensure page is fully loaded, then center tooltip
       setTimeout(() => {
         setIsVisible(true);
-        // Always start centered
         setTooltipPosition({ top: '50%', left: '50%' });
         scrollToStep(0);
       }, 300);
     }
-  }, [role]);
-
-  const scrollToStep = (stepIndex: number) => {
-    if (stepIndex >= steps.length) return;
-
-    const step = steps[stepIndex];
-    const element = document.querySelector(step.target);
-    
-    if (element) {
-      // Lock position updates during scroll
-      setIsTransitioning(true);
-      positionLockRef.current = true;
-      
-      // Only scroll once - scroll element into view smoothly
-      element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      
-      // Unlock after scroll completes - reduced delay for less lag
-      setTimeout(() => {
-        setIsTransitioning(false);
-        positionLockRef.current = false;
-      }, 600); // Reduced wait time
-    } else {
-      console.warn('Walkthrough element not found:', step.target);
-    }
-  };
+  }, [role, scrollToStep]);
 
   const nextStep = () => {
     if (isTransitioning) return; // Prevent rapid clicks
@@ -231,7 +220,7 @@ export default function DashboardWalkthrough({ role, onComplete }: DashboardWalk
       // Position vertically based on element position
       const scrollY = window.scrollY;
       const viewportHeight = window.innerHeight;
-      const viewportWidth = window.innerWidth;
+      const _viewportWidth = window.innerWidth;
 
       let top: string | number = '50%';
       const left = '50%'; // Always center horizontally

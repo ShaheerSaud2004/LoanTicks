@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { LogOut, Loader2, CheckCircle2 } from 'lucide-react';
-import { ReactNode, useState, useEffect } from 'react';
+import { ReactNode, useState } from 'react';
 import Footer from './Footer';
 import TutorialButton from '@/components/walkthrough/TutorialButton';
 import ChatbotWidget from '@/components/chatbot/ChatbotWidget';

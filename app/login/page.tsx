@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { signIn, useSession } from 'next-auth/react';
+import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { LogIn, Loader2, Shield, Lock, KeyRound, MessageCircle, CheckCircle, Users, TrendingUp } from 'lucide-react';
 
@@ -421,7 +421,7 @@ export default function LoginPage() {
                 type="button"
                 onClick={(e) => {
                   e.preventDefault();
-                  handleQuickLogin('admin@loanaticks.com', 'admin123');
+                  handleQuickLogin('admin@loanaticks.com', 'Admin123!@#$');
                 }}
                 disabled={loading}
                 className="w-full flex items-center justify-between p-3.5 bg-slate-100 hover:bg-slate-200 active:bg-slate-100 text-slate-700 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation group border border-slate-200 hover:border-slate-300"
@@ -436,7 +436,7 @@ export default function LoginPage() {
                 type="button"
                 onClick={(e) => {
                   e.preventDefault();
-                  handleQuickLogin('employee@loanaticks.com', 'employee123');
+                  handleQuickLogin('employee@loanaticks.com', 'Employee123!@#');
                 }}
                 disabled={loading}
                 className="w-full flex items-center justify-between p-3.5 bg-yellow-50 hover:bg-yellow-100 active:bg-yellow-50 text-slate-700 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation group border border-yellow-200 hover:border-yellow-300"
@@ -451,7 +451,7 @@ export default function LoginPage() {
                 type="button"
                 onClick={(e) => {
                   e.preventDefault();
-                  handleQuickLogin('customer@loanaticks.com', 'customer123');
+                  handleQuickLogin('customer@loanaticks.com', 'Customer123!@#');
                 }}
                 disabled={loading}
                 className="w-full flex items-center justify-between p-3.5 bg-yellow-50 hover:bg-yellow-100 active:bg-yellow-50 text-slate-700 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation group border border-yellow-200 hover:border-yellow-300"

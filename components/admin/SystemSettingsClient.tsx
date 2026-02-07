@@ -5,7 +5,6 @@ import {
   Settings, 
   Shield, 
   Clock, 
-  Lock, 
   Mail, 
   Database, 
   Save,
@@ -449,7 +448,7 @@ export default function SystemSettingsClient() {
                     <span className="text-sm font-medium text-gray-700">Enable email notifications</span>
                   </label>
                   {settings.notifications.emailEnabled && (
-                    <div className="ml-6 space-y-2 border-l-2 border-gray-200 pl-4">
+                    <div className="ml-6 space-y-2 border-l-2 border-gray-300 pl-4">
                       <label className="flex items-center gap-2">
                         <input
                           type="checkbox"

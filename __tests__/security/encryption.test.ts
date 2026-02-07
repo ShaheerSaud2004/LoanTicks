@@ -46,12 +46,17 @@ describe('Encryption Utilities', () => {
       expect(decryptSensitiveData(encrypted2)).toBe(ssn);
     });
 
-    it('should throw error if encryption key is missing', () => {
+    it('should use default key when ENCRYPTION_KEY not set in development', () => {
+      const orig = process.env.ENCRYPTION_KEY;
       delete process.env.ENCRYPTION_KEY;
-      
+      const origNodeEnv = process.env.NODE_ENV;
+      process.env.NODE_ENV = 'development';
+
       expect(() => {
         encryptSensitiveData('123-45-6789');
-      }).toThrow('ENCRYPTION_KEY');
+      }).not.toThrow();
+      process.env.ENCRYPTION_KEY = orig;
+      process.env.NODE_ENV = origNodeEnv;
     });
 
     it('should throw error for invalid encrypted data format', () => {

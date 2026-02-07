@@ -86,10 +86,10 @@ openssl rand -base64 32
 npm run seed
 ```
 
-This creates three demo accounts:
-- **Admin:** admin@loanaticks.com / admin123
-- **Employee:** employee@loanaticks.com / employee123
-- **Customer:** customer@loanaticks.com / customer123
+This creates three demo accounts (passwords meet 12+ char + complexity):
+- **Admin:** admin@loanaticks.com / Admin123!@#$
+- **Employee:** employee@loanaticks.com / Employee123!@#
+- **Customer:** customer@loanaticks.com / Customer123!@#
 
 ### 4. Start Development Server
 ```bash

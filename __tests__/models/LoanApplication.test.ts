@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeAll, afterAll } from '@jest/globals';
+import { describe, it, expect } from '@jest/globals';
 
 describe('LoanApplication Model', () => {
   it('should have correct structure', () => {

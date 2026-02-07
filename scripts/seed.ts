@@ -7,25 +7,26 @@ dotenv.config({ path: resolve(__dirname, '../.env.local') });
 import User from '../models/User';
 import connectDB from '../lib/mongodb';
 
+// Passwords must meet User model: 12+ chars, upper, lower, number, special (@$!%*?&)
 const demoUsers = [
   {
     name: 'Admin User',
     email: 'admin@loanaticks.com',
-    password: 'admin123',
+    password: 'Admin123!@#$',
     role: 'admin',
     phone: '+1-555-0101',
   },
   {
     name: 'Employee User',
     email: 'employee@loanaticks.com',
-    password: 'employee123',
+    password: 'Employee123!@#',
     role: 'employee',
     phone: '+1-555-0102',
   },
   {
     name: 'Customer User',
     email: 'customer@loanaticks.com',
-    password: 'customer123',
+    password: 'Customer123!@#',
     role: 'customer',
     phone: '+1-555-0103',
   },

@@ -3,7 +3,6 @@
  * Logs all access to sensitive data and important actions
  */
 
-import connectDB from './mongodb';
 
 interface AuditLogEntry {
   userId: string;

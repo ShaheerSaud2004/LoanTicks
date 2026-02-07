@@ -14,7 +14,7 @@ export default async function ChatbotLogsPage() {
 
   // Fetch chatbot conversations
   let conversations = [];
-  let stats = {
+  const stats = {
     totalConversations: 0,
     totalMessages: 0,
     todayMessages: 0,

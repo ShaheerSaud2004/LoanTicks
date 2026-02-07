@@ -265,7 +265,7 @@ export async function GET(request: NextRequest) {
           try {
             const decrypted = decryptSensitiveData(serialized.borrowerInfo.ssn);
             serialized.borrowerInfo.ssn = maskSSN(decrypted);
-          } catch (error) {
+          } catch {
             // If decryption fails, it might be plain text (test data)
             serialized.borrowerInfo.ssn = maskSSN(serialized.borrowerInfo.ssn);
           }
@@ -318,7 +318,7 @@ export async function PATCH(request: NextRequest) {
     await connectDB();
 
     const body = await request.json();
-    const { applicationId, notes, updatedBy, ...updates } = body;
+    const { applicationId, notes, updatedBy: _updatedBy, ...updates } = body;
 
     if (!applicationId) {
       return NextResponse.json({ error: 'Application ID is required' }, { status: 400 });

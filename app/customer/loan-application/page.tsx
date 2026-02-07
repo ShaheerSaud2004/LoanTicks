@@ -5,12 +5,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { signOut } from 'next-auth/react';
-import { LogOut, Loader2, Mail, CheckCircle2, Home, ArrowRight, Info, X, Sparkles } from 'lucide-react';
-import { 
-  FileText, 
-  CheckCircle,
-  ArrowRight as ArrowRightIcon
-} from 'lucide-react';
+import { LogOut, Loader2, Mail, CheckCircle2, Home, ArrowRight, Info, X, Sparkles, FileText, CheckCircle } from 'lucide-react';
 import URLA2019ComprehensiveForm from '@/components/forms/URLA2019ComprehensiveForm';
 import TooltipFixer from '@/components/forms/TooltipFixer';
 import Footer from '@/components/layout/Footer';
@@ -896,7 +891,6 @@ export default function LoanApplicationPage() {
                 onClick={() => router.push('/customer/dashboard')}
                 className="h-12 w-auto rounded-lg overflow-hidden bg-white border border-gray-200 hover:border-gray-300 transition cursor-pointer"
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src="/logo.jpg" alt="LoanTicks" className="h-full w-full object-contain" />
               </button>
               

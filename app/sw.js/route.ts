@@ -13,7 +13,7 @@ export async function GET() {
         'Service-Worker-Allowed': '/',
       },
     });
-  } catch (error) {
+  } catch {
     return new NextResponse('// Service worker not found', {
       status: 404,
       headers: {

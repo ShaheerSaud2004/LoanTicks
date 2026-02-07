@@ -18,7 +18,7 @@ export default function PWAWrapper({ children }: { children: React.ReactNode }) 
             });
             console.log('✅ Service Worker registered:', registration.scope);
             return;
-          } catch (error) {
+          } catch {
             // Try next path
             continue;
           }

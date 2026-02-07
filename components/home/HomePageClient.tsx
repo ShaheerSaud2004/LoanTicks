@@ -20,9 +20,9 @@ import {
 import Footer from '@/components/layout/Footer';
 
 const QUICK_LOGINS = [
-  { label: 'Admin Login', email: 'admin@loanaticks.com', password: 'admin123', icon: Shield },
-  { label: 'Employee Login', email: 'employee@loanaticks.com', password: 'employee123', icon: Users },
-  { label: 'Customer Login', email: 'customer@loanaticks.com', password: 'customer123', icon: LogIn },
+  { label: 'Admin Login', email: 'admin@loanaticks.com', password: 'Admin123!@#$', icon: Shield },
+  { label: 'Employee Login', email: 'employee@loanaticks.com', password: 'Employee123!@#', icon: Users },
+  { label: 'Customer Login', email: 'customer@loanaticks.com', password: 'Customer123!@#', icon: LogIn },
 ] as const;
 
 export default function HomePageClient() {

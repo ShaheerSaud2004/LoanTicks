@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { applicationId, borrowerEmail, borrowerName, ariveUrl } = await request.json();
+    const { borrowerEmail, borrowerName, ariveUrl } = await request.json();
 
     if (!borrowerEmail || !borrowerName || !ariveUrl) {
       return NextResponse.json(

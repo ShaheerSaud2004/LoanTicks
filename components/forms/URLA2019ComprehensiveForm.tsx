@@ -435,7 +435,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
   const renderStep = () => {
     // Calculate property values for case 9
     const purchasePriceNum = Number(formData.purchasePrice) || 0;
-    const appraisedValueNum = Number(formData.appraisedValue) || 0;
+    const _appraisedValueNum = Number(formData.appraisedValue) || 0;
     const loanAmountNum = Number(formData.loanAmount) || 0;
     const downPaymentAmount = purchasePriceNum - loanAmountNum;
     const downPaymentPercent = purchasePriceNum > 0 ? (downPaymentAmount / purchasePriceNum) * 100 : 0;

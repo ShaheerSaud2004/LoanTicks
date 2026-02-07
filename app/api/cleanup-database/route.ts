@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
 import User from '@/models/User';
 import LoanApplication from '@/models/LoanApplication';
-import Waitlist from '@/models/Waitlist';
 
 export async function POST() {
   try {

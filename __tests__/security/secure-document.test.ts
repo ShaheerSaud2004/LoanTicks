@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from '@jest/globals';
+import { describe, it, expect, beforeEach, beforeAll } from '@jest/globals';
 import { NextRequest } from 'next/server';
 
 // Mock Next.js server components
@@ -57,6 +57,13 @@ jest.mock('@/lib/auditLogger', () => ({
 }));
 
 describe('Secure Document API', () => {
+  let GET: (request: NextRequest) => Promise<Response>;
+
+  beforeAll(async () => {
+    const route = await import('@/app/api/secure-document/route');
+    GET = route.GET;
+  });
+
   beforeEach(() => {
     jest.clearAllMocks();
   });

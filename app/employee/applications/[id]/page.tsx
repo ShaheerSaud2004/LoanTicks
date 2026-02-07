@@ -1302,16 +1302,16 @@ LoanTicks - Home Mortgage Solutions`}
               
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-2 text-gray-900">
-                  <p><span className="font-medium">US Citizen:</span> {Boolean(application.declarations?.usCitizen) ? 'Yes' : 'No'}</p>
-                  <p><span className="font-medium">Primary Residence:</span> {Boolean(application.declarations?.primaryResidence) ? 'Yes' : 'No'}</p>
-                  <p><span className="font-medium">Outstanding Judgments:</span> {Boolean(application.declarations?.outstandingJudgments) ? 'Yes' : 'No'}</p>
-                  <p><span className="font-medium">Bankruptcy (7 years):</span> {Boolean(application.declarations?.declaredBankruptcy) ? 'Yes' : 'No'}</p>
+                  <p><span className="font-medium">US Citizen:</span> {application.declarations?.usCitizen ? 'Yes' : 'No'}</p>
+                  <p><span className="font-medium">Primary Residence:</span> {application.declarations?.primaryResidence ? 'Yes' : 'No'}</p>
+                  <p><span className="font-medium">Outstanding Judgments:</span> {application.declarations?.outstandingJudgments ? 'Yes' : 'No'}</p>
+                  <p><span className="font-medium">Bankruptcy (7 years):</span> {application.declarations?.declaredBankruptcy ? 'Yes' : 'No'}</p>
                 </div>
                 <div className="space-y-2 text-gray-900">
-                  <p><span className="font-medium">Property Foreclosed:</span> {Boolean(application.declarations?.propertyForeclosed) ? 'Yes' : 'No'}</p>
-                  <p><span className="font-medium">Party to Lawsuit:</span> {Boolean(application.declarations?.lawsuitParty) ? 'Yes' : 'No'}</p>
-                  <p><span className="font-medium">Loan on Property:</span> {Boolean(application.declarations?.loanOnProperty) ? 'Yes' : 'No'}</p>
-                  <p><span className="font-medium">Co-maker on Note:</span> {Boolean(application.declarations?.coMakerOnNote) ? 'Yes' : 'No'}</p>
+                  <p><span className="font-medium">Property Foreclosed:</span> {application.declarations?.propertyForeclosed ? 'Yes' : 'No'}</p>
+                  <p><span className="font-medium">Party to Lawsuit:</span> {application.declarations?.lawsuitParty ? 'Yes' : 'No'}</p>
+                  <p><span className="font-medium">Loan on Property:</span> {application.declarations?.loanOnProperty ? 'Yes' : 'No'}</p>
+                  <p><span className="font-medium">Co-maker on Note:</span> {application.declarations?.coMakerOnNote ? 'Yes' : 'No'}</p>
                 </div>
               </div>
             </div>

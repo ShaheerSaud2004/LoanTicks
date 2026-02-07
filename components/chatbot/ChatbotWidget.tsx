@@ -105,7 +105,16 @@ export default function ChatbotWidget({ currentStep }: ChatbotWidgetProps) {
         };
         setMessages((prev) => [...prev, assistantMessage]);
       } else {
-        throw new Error(data.error || 'Failed to get response');
+        // Show API error in chat instead of throwing (avoids error overlay)
+        const errorContent = data.error === 'Chatbot service is not configured. Please contact support.'
+          ? 'The chatbot is not set up yet. An admin can add an OpenAI API key in environment variables (OPENAI_API_KEY or OpenAIKey) to enable it. You can still use the rest of the site.'
+          : (data.error || 'Sorry, I could not get a response. Please try again.');
+        const errorMessage: Message = {
+          role: 'assistant',
+          content: errorContent,
+          timestamp: new Date(),
+        };
+        setMessages((prev) => [...prev, errorMessage]);
       }
     } catch (error) {
       console.error('Chatbot error:', error);

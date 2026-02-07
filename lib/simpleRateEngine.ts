@@ -172,7 +172,6 @@ export function analyzeSimpleRates(quotes: SimpleRateQuote[]) {
 }
 
 // Integration with external rate services (optional)
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function getExternalRates(_loanData: SimpleLoanData): Promise<SimpleRateQuote[]> {
   const externalRates: SimpleRateQuote[] = [];
   

@@ -87,7 +87,7 @@ export async function GET(request: NextRequest) {
               if (urlFileName === fileName) {
                 return true;
               }
-            } catch (e) {
+            } catch {
               if (doc.url.includes(fileName)) {
                 return true;
               }
@@ -127,7 +127,7 @@ export async function GET(request: NextRequest) {
             'X-Content-Type-Options': 'nosniff',
           },
         });
-      } catch (legacyError) {
+      } catch {
         return NextResponse.json(
           { 
             error: 'Document not found in storage. This document may need to be re-uploaded.',
