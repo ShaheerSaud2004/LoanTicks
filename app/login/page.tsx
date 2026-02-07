@@ -182,7 +182,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4 md:p-8 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex flex-col p-4 md:p-8 relative overflow-hidden">
       {/* Success Animation Overlay */}
       {showSuccessAnimation && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 backdrop-blur-sm">
@@ -214,7 +214,9 @@ export default function LoginPage() {
       {/* Grid Pattern Overlay */}
       <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:4rem_4rem]"></div>
 
-      <div className="w-full max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-16 items-center relative z-10">
+      {/* Main content - scrollable so footer is never covered */}
+      <div className="flex-1 flex items-center justify-center min-h-0 relative z-10 overflow-y-auto py-6">
+        <div className="w-full max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
         {/* Left Side - Hero Content */}
         <div className="text-white space-y-8 lg:space-y-10">
           {/* Logo and Branding */}
@@ -464,9 +466,10 @@ export default function LoginPage() {
           </div>
         </div>
       </div>
+      </div>
 
-      {/* Footer */}
-      <div className="absolute bottom-6 left-0 right-0 z-10">
+      {/* Footer - in flow so it's never covered by login card */}
+      <footer className="flex-shrink-0 relative z-10 pt-4 pb-2">
         <p className="text-center text-sm text-slate-500">
           NMLS #2724157 · Licensed in State of TX · For licensing information go to{' '}
           <a
@@ -481,7 +484,7 @@ export default function LoginPage() {
         <p className="text-center text-sm text-slate-500 mt-1">
           © 2025 Loanaticks. All rights reserved.
         </p>
-      </div>
+      </footer>
     </div>
   );
 }

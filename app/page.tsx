@@ -1,21 +1,23 @@
 import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
+import HomePageClient from '@/components/home/HomePageClient';
 
 export default async function HomePage() {
   const session = await auth();
 
   if (session) {
-    // User is logged in, redirect to their dashboard based on role
     const role = session.user?.role;
     if (role === 'admin') {
       redirect('/admin/dashboard');
-    } else if (role === 'employee') {
+    }
+    if (role === 'employee') {
       redirect('/employee/dashboard');
-    } else if (role === 'customer') {
+    }
+    if (role === 'customer') {
       redirect('/customer/dashboard');
     }
   }
 
-  // User is not logged in, redirect to login
-  redirect('/login');
+  // Not logged in: show standalone homepage (no redirect to /login)
+  return <HomePageClient />;
 }
