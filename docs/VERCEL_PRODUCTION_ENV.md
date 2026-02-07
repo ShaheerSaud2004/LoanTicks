@@ -5,10 +5,10 @@ To fix **400** on `/api/auth/providers` and `/api/auth/error` and ensure login w
 ## Required variables (Production + Preview if you use preview URLs)
 
 1. **NEXTAUTH_URL**  
-   Set to the **exact** URL users see in the browser:
-   - If your site is `https://www.loanaticks.com` → `NEXTAUTH_URL=https://www.loanaticks.com`
-   - If your site is `https://loanaticks.com` (no www) → `NEXTAUTH_URL=https://loanaticks.com`  
-   **No trailing slash** (use `https://www.loanaticks.com` not `https://www.loanaticks.com/`). Mismatch causes 400 on auth routes.
+   Set to your **site’s base URL (origin only)** — **not** the login page URL:
+   - Correct: `NEXTAUTH_URL=https://www.loanaticks.com` (no path, no trailing slash)
+   - Wrong: `NEXTAUTH_URL=https://www.loanaticks.com/login`  
+   NextAuth uses this as the app origin for callbacks and redirects. The login screen is at `/login` (set in the app). This value is also exposed to the client via `next.config` so that visiting the base URL (e.g. homepage) does not trigger auth errors from the client calling the wrong origin. Mismatch or including `/login` causes 400 or “NextAuth error” on the base URL.
 
 2. **NEXTAUTH_SECRET**  
    A long random string (e.g. `openssl rand -base64 32`). Required for signing sessions.
