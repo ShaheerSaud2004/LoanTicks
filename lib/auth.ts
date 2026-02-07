@@ -26,19 +26,11 @@ declare module 'next-auth' {
   }
 }
 
-// NextAuth accepts AUTH_SECRET or NEXTAUTH_SECRET (use either in Vercel).
-// In production, do not use a fallback so missing secret fails clearly (Configuration error).
-const nextAuthSecret =
-  process.env.AUTH_SECRET ||
-  process.env.NEXTAUTH_SECRET ||
-  (process.env.NODE_ENV !== 'production' ? 'dev-fallback-secret' : undefined);
-
-if (!nextAuthSecret && process.env.NODE_ENV === 'production') {
-  console.error('❌ NEXTAUTH_SECRET or AUTH_SECRET must be set in Vercel for Production (and Preview if you use it). Redeploy after adding the variable.');
-}
-
+// Do not pass secret here so NextAuth reads AUTH_SECRET/NEXTAUTH_SECRET at request time
+// from process.env (Vercel injects at runtime). Passing it at module load can use a
+// build-time value that was undefined.
 if (process.env.NODE_ENV === 'production' && !process.env.NEXTAUTH_URL) {
-  console.warn('⚠️  WARNING: NEXTAUTH_URL is not set. Set it to your production URL (e.g. https://www.loanaticks.com) to avoid 400 on auth routes.');
+  console.warn('⚠️  NEXTAUTH_URL should be set to your production URL (e.g. https://www.loanaticks.com).');
 }
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
@@ -214,7 +206,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   session: {
     strategy: 'jwt',
   },
-  secret: nextAuthSecret,
   trustHost: true,
   debug: process.env.NODE_ENV === 'development',
 });

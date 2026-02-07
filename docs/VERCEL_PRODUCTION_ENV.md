@@ -1,6 +1,8 @@
 # Vercel Production Environment
 
-To fix **400** on `/api/auth/providers` and `/api/auth/error` and ensure login works on production:
+**Do you need NEXTAUTH_SECRET?** Yes. NextAuth (Auth.js) requires a secret to sign and encrypt session cookies. There is no secure way to use NextAuth without it in production. The app is configured to use **Node.js runtime** for the auth API route so Vercel injects env vars correctly.
+
+To fix **400** on `/api/auth/session`, **Configuration** on login, and ensure login works on production:
 
 ## Required variables (Production + Preview if you use preview URLs)
 
@@ -16,7 +18,8 @@ To fix **400** on `/api/auth/providers` and `/api/auth/error` and ensure login w
    - In Vercel → Project → **Settings** → **Environment Variables**, add or edit **NEXTAUTH_SECRET** (or **AUTH_SECRET**).
    - Value: paste the secret with **no leading or trailing spaces**.
    - Enable it for **Production** (and **Preview** if you use preview URLs).
-   - **Redeploy**: Deployments → ⋮ on latest deployment → **Redeploy**. Env vars are applied at deploy time; a redeploy is required after adding or changing them.
+   - **Redeploy**: Deployments → ⋮ on latest deployment → **Redeploy** (optionally **Clear cache and redeploy**). Env vars are applied at deploy time; a redeploy is required after adding or changing them.
+   - If it still fails, add **AUTH_SECRET** with the **same value** as NEXTAUTH_SECRET (Auth.js checks both). Ensure the value has no leading/trailing spaces; if it contains `+` or `/`, try wrapping the value in quotes in Vercel.
 
 3. **MONGODB_URI**  
    Your MongoDB connection string.

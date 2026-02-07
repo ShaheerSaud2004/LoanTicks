@@ -2,6 +2,9 @@ import { handlers } from '@/lib/auth';
 import { loginRateLimiter } from '@/lib/rateLimiter';
 import { NextRequest } from 'next/server';
 
+// Use Node.js runtime so Vercel injects NEXTAUTH_SECRET (Edge can omit some env vars)
+export const runtime = 'nodejs';
+
 // Apply rate limiting to login POST requests
 async function POST_WITH_RATE_LIMIT(request: NextRequest) {
   try {
