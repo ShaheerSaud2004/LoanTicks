@@ -10,8 +10,13 @@ To fix **400** on `/api/auth/providers` and `/api/auth/error` and ensure login w
    - Wrong: `NEXTAUTH_URL=https://www.loanaticks.com/login`  
    NextAuth uses this as the app origin for callbacks and redirects. The login screen is at `/login` (set in the app). This value is also exposed to the client via `next.config` so that visiting the base URL (e.g. homepage) does not trigger auth errors from the client calling the wrong origin. Mismatch or including `/login` causes 400 or “NextAuth error” on the base URL.
 
-2. **NEXTAUTH_SECRET**  
-   A long random string (e.g. `openssl rand -base64 32`). Required for signing sessions.
+2. **NEXTAUTH_SECRET** (or **AUTH_SECRET**)  
+   A long random string (e.g. `openssl rand -base64 32`). Required for signing sessions. Set **one** of these; the app checks both.  
+   **If login returns “Configuration” on https://www.loanaticks.com/login** or you see “Server configuration error…” in runtime logs:
+   - In Vercel → Project → **Settings** → **Environment Variables**, add or edit **NEXTAUTH_SECRET** (or **AUTH_SECRET**).
+   - Value: paste the secret with **no leading or trailing spaces**.
+   - Enable it for **Production** (and **Preview** if you use preview URLs).
+   - **Redeploy**: Deployments → ⋮ on latest deployment → **Redeploy**. Env vars are applied at deploy time; a redeploy is required after adding or changing them.
 
 3. **MONGODB_URI**  
    Your MongoDB connection string.
