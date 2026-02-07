@@ -6,8 +6,18 @@ import type { NextRequest } from 'next/server';
 // This middleware file is the correct implementation and will continue to work
 // The warning can be safely ignored or will be fixed in future Next.js versions
 export default async function middleware(request: NextRequest) {
-  const session = await auth();
   const { pathname } = request.nextUrl;
+  const host = request.headers.get('host') || '';
+
+  // Redirect loanaticks.com (no www) to www so both lead to main home page
+  if (host === 'loanaticks.com') {
+    const url = new URL(request.url);
+    url.host = 'www.loanaticks.com';
+    url.protocol = 'https:';
+    return NextResponse.redirect(url, 301);
+  }
+
+  const session = await auth();
 
   // Security headers
   const response = NextResponse.next();

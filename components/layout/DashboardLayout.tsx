@@ -153,7 +153,7 @@ export default function DashboardLayout({
                   userRole === 'employee' ? '/employee/dashboard' :
                   '/customer/dashboard'
                 )}
-                className="h-10 sm:h-12 w-10 sm:w-12 rounded-lg overflow-hidden bg-white border border-gray-200 hover:border-gray-300 transition cursor-pointer flex-shrink-0 relative"
+                className="h-12 sm:h-14 w-12 sm:w-14 rounded-lg overflow-hidden bg-white border border-gray-200 hover:border-gray-300 transition cursor-pointer flex-shrink-0 relative"
               >
                 <Image src="/logo.jpg" alt="LoanTicks" fill className="object-contain" />
               </button>

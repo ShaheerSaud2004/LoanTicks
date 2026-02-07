@@ -29,9 +29,15 @@ declare module 'next-auth' {
 // Get NEXTAUTH_SECRET with fallback
 const nextAuthSecret = process.env.NEXTAUTH_SECRET;
 
+// Production: set NEXTAUTH_URL to your canonical site URL (e.g. https://www.loanaticks.com).
+// Must match the URL users see (www vs non-www). Mismatch causes 400 on /api/auth/providers and /api/auth/error.
 if (!nextAuthSecret) {
   console.warn('⚠️  WARNING: NEXTAUTH_SECRET is not set in environment variables');
   console.warn('   Authentication may not work correctly. Please set NEXTAUTH_SECRET in .env.local');
+}
+
+if (process.env.NODE_ENV === 'production' && !process.env.NEXTAUTH_URL) {
+  console.warn('⚠️  WARNING: NEXTAUTH_URL is not set. Set it to your production URL (e.g. https://www.loanaticks.com) to avoid 400 on auth routes.');
 }
 
 export const { handlers, signIn, signOut, auth } = NextAuth({

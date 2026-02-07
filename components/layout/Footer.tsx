@@ -24,7 +24,7 @@ export default function Footer() {
           {/* Company Info */}
           <div className="space-y-4">
             <div className="flex items-center gap-3">
-              <div className="relative h-10 w-10 rounded-lg overflow-hidden bg-white border border-gray-600">
+              <div className="relative h-14 w-14 rounded-lg overflow-hidden bg-white border border-gray-600 flex-shrink-0">
                 <Image 
                   src="/logo.jpg" 
                   alt="LoanAticks" 
@@ -32,7 +32,7 @@ export default function Footer() {
                   className="object-contain p-1"
                 />
               </div>
-              <h3 className="text-xl font-bold text-white">LoanAticks</h3>
+              <h3 className="text-2xl font-bold text-white">LoanAticks</h3>
             </div>
             <p className="text-sm text-gray-400 leading-relaxed">
               Your trusted partner for home mortgage solutions. We provide competitive rates, 

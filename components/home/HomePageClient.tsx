@@ -13,7 +13,6 @@ import {
   FileText,
   Shield,
   Users,
-  Star,
   Menu,
   X,
 } from 'lucide-react';
@@ -128,12 +127,12 @@ export default function HomePageClient() {
       {/* Main nav - logo + mobile menu */}
       <header className="sticky top-0 z-30 bg-white border-b border-slate-200 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <Link href="/" className="flex items-center gap-3">
-              <div className="relative h-10 w-10 rounded-lg overflow-hidden bg-slate-100 border border-slate-200">
+          <div className="flex items-center justify-between h-20">
+            <Link href="/" className="flex items-center gap-4">
+              <div className="relative h-14 w-14 sm:h-16 sm:w-16 rounded-lg overflow-hidden bg-slate-100 border border-slate-200 flex-shrink-0">
                 <Image src="/logo.jpg" alt="LoanAticks" fill className="object-contain p-1" priority />
               </div>
-              <span className="text-xl font-bold text-slate-900">LoanAticks</span>
+              <span className="text-2xl sm:text-3xl font-bold text-slate-900">LoanAticks</span>
             </Link>
             <button
               type="button"
@@ -144,8 +143,8 @@ export default function HomePageClient() {
               {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
             <nav className="hidden md:flex items-center gap-6">
-              <Link href="#reviews" className="text-slate-600 hover:text-yellow-600 font-medium transition-colors">
-                Reviews
+              <Link href="#what-to-expect" className="text-slate-600 hover:text-yellow-600 font-medium transition-colors">
+                What to Expect
               </Link>
               <Link href="#team" className="text-slate-600 hover:text-yellow-600 font-medium transition-colors">
                 Our Team
@@ -158,8 +157,8 @@ export default function HomePageClient() {
           {mobileMenuOpen && (
             <div className="md:hidden py-4 border-t border-slate-200">
               <div className="flex flex-col gap-2">
-                <Link href="#reviews" className="py-2 text-slate-600 hover:text-yellow-600" onClick={() => setMobileMenuOpen(false)}>
-                  Reviews
+                <Link href="#what-to-expect" className="py-2 text-slate-600 hover:text-yellow-600" onClick={() => setMobileMenuOpen(false)}>
+                  What to Expect
                 </Link>
                 <Link href="#team" className="py-2 text-slate-600 hover:text-yellow-600" onClick={() => setMobileMenuOpen(false)}>
                   Our Team
@@ -207,48 +206,59 @@ export default function HomePageClient() {
         </div>
       </section>
 
-      {/* Reviews - Yelp */}
-      <section id="reviews" className="py-16 sm:py-20 bg-slate-50">
+      {/* By the Numbers - stats and trust */}
+      <section className="py-16 sm:py-20 bg-white border-y border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-slate-900 text-center mb-4">What Our Clients Say</h2>
+          <h2 className="text-3xl font-bold text-slate-900 text-center mb-4">Why LoanAticks</h2>
+          <p className="text-slate-600 text-center mb-12 max-w-2xl mx-auto">
+            Fast, transparent, and backed by a licensed team you can trust.
+          </p>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              { value: '24–48 hrs', label: 'Typical application review' },
+              { value: 'NMLS #2724157', label: 'Licensed in State of TX' },
+              { value: 'Secure', label: 'Encrypted application & docs' },
+              { value: 'Dedicated', label: 'Personal loan officer support' },
+            ].map((stat, i) => (
+              <div key={i} className="text-center p-4 rounded-xl bg-slate-50 border border-slate-100">
+                <p className="text-xl sm:text-2xl font-bold text-slate-900 mb-1">{stat.value}</p>
+                <p className="text-sm text-slate-600">{stat.label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* What to Expect - clear process and benefits */}
+      <section id="what-to-expect" className="py-16 sm:py-20 bg-slate-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl font-bold text-slate-900 text-center mb-4">What to Expect</h2>
           <p className="text-slate-600 text-center mb-10 max-w-2xl mx-auto">
-            See what customers are saying about us on Yelp.
+            A straightforward process, clear communication, and a team that has your back.
           </p>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              { name: 'Sarah M.', stars: 5, text: 'Professional, responsive, and made our first home purchase smooth. Highly recommend!' },
-              { name: 'James L.', stars: 5, text: 'Great rates and the team was incredibly helpful throughout the process.' },
-              { name: 'Maria G.', stars: 5, text: 'Refinanced with LoanAticks and saved a lot. Very satisfied.' },
-            ].map((review, i) => (
+              { title: 'Apply in minutes', desc: 'One simple application. We guide you step by step and tell you exactly what we need.' },
+              { title: 'Fast review', desc: 'We typically review your application within 24–48 hours and keep you updated by email.' },
+              { title: 'No surprises', desc: 'Transparent rates, no hidden fees, and a dedicated point of contact so you always know where you stand.' },
+            ].map((item, i) => (
               <div key={i} className="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
-                <div className="flex gap-1 mb-3">
-                  {Array.from({ length: review.stars }).map((_, j) => (
-                    <Star key={j} className="h-5 w-5 fill-yellow-400 text-yellow-400" />
-                  ))}
-                </div>
-                <p className="text-slate-700 mb-4">&ldquo;{review.text}&rdquo;</p>
-                <p className="text-sm font-medium text-slate-900">{review.name}</p>
-                <a
-                  href="https://www.yelp.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm text-yellow-600 hover:text-yellow-700 font-medium"
-                >
-                  View on Yelp →
-                </a>
+                <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-yellow-100 text-yellow-700 font-bold text-lg mb-3">
+                  {i + 1}
+                </span>
+                <h3 className="text-lg font-semibold text-slate-900 mb-2">{item.title}</h3>
+                <p className="text-slate-700 text-sm">{item.desc}</p>
               </div>
             ))}
           </div>
           <p className="text-center mt-8">
-            <a
-              href="https://www.yelp.com"
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              href="/signup"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-slate-800 hover:bg-slate-900 text-white font-medium transition-colors"
             >
-              <Star className="h-5 w-5" />
-              See more reviews on Yelp
-            </a>
+              <FileText className="h-5 w-5" />
+              Start your application
+            </Link>
           </p>
         </div>
       </section>
