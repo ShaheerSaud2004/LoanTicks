@@ -86,7 +86,9 @@ If login returns **Configuration** and logs show this error even though NEXTAUTH
 
 ---
 
-## Quick login shows "Invalid email or password"
+## Quick login shows "Invalid email or password" or CallbackRouteError
+
+If Vercel logs show **"Authorization error: Error: Invalid email or password"** and **CallbackRouteError**, the **secret/configuration is working** — the failure is that the demo user doesn’t exist in the production DB (or the password is wrong).
 
 Quick login (Admin / Employee / Customer) uses demo users that must exist in the **production** database. If you see "Invalid email or password" (not "Configuration"):
 

@@ -42,9 +42,9 @@ export default function HomePageClient() {
         const msg =
           result.error === 'Configuration'
             ? 'Server configuration error: Set AUTH_SECRET or NEXTAUTH_SECRET in Vercel → Settings → Environment Variables (Production). If the value contains + or /, wrap it in double quotes. Then Redeploy → Clear cache and redeploy.'
-            : result.error.includes('CredentialsSignin') || result.error.includes('Invalid')
-              ? 'Invalid email or password. Ensure the production database is seeded with demo users (scripts/seed.ts).'
-              : `Login failed: ${result.error}. Try the full login page.`;
+            : result.error === 'CallbackRouteError' || result.error?.includes('CredentialsSignin') || result.error?.includes('Invalid')
+              ? 'Invalid email or password. For quick login, seed the production database once: run "npm run seed" with MONGODB_URI set to your production MongoDB URL.'
+              : `Login failed: ${result.error ?? 'Unknown error'}. Try the full login page.`;
         alert(msg);
       } else {
         window.location.href = '/';

@@ -42,10 +42,10 @@ export default function LoginPage() {
         // Handle specific error types
         if (result.error === 'Configuration') {
           setError('Server configuration error: Set AUTH_SECRET or NEXTAUTH_SECRET in Vercel → Settings → Environment Variables (Production). If the value contains + or /, wrap it in double quotes. Then Redeploy → Clear cache and redeploy.');
-        } else if (result.error.includes('CredentialsSignin') || result.error.includes('Invalid email or password')) {
-          setError('Invalid email or password. For quick login, ensure the production database has been seeded with demo users (see scripts/seed.ts).');
+        } else if (result.error === 'CallbackRouteError' || result.error?.includes('CredentialsSignin') || result.error?.includes('Invalid')) {
+          setError('Invalid email or password. For quick login (Admin/Employee/Customer), seed the production database once: run "npm run seed" with MONGODB_URI pointing to your production DB.');
         } else {
-          setError(`Login failed: ${result.error}. Please check your credentials.`);
+          setError(`Login failed: ${result.error ?? 'Unknown error'}. Please check your credentials.`);
         }
         setLoading(false);
         setLoginStatus('');
@@ -127,10 +127,10 @@ export default function LoginPage() {
         // Handle specific error types
         if (result.error === 'Configuration') {
           setError('Server configuration error: Set AUTH_SECRET or NEXTAUTH_SECRET in Vercel → Settings → Environment Variables (Production). If the value contains + or /, wrap it in double quotes. Then Redeploy → Clear cache and redeploy.');
-        } else if (result.error.includes('CredentialsSignin') || result.error.includes('Invalid email or password')) {
-          setError('Invalid email or password. For quick login, ensure the production database has been seeded with demo users (see scripts/seed.ts).');
+        } else if (result.error === 'CallbackRouteError' || result.error?.includes('CredentialsSignin') || result.error?.includes('Invalid')) {
+          setError('Invalid email or password. For quick login (Admin/Employee/Customer), seed the production database once: run "npm run seed" with MONGODB_URI pointing to your production DB.');
         } else {
-          setError(`Login failed: ${result.error}. Please check your credentials.`);
+          setError(`Login failed: ${result.error ?? 'Unknown error'}. Please check your credentials.`);
         }
         setLoading(false);
         setLoginStatus('');
