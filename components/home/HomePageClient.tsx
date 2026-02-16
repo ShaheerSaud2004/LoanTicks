@@ -3,58 +3,19 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { signIn } from 'next-auth/react';
 import {
   Phone,
   Mail,
   MapPin,
-  ChevronDown,
   LogIn,
   FileText,
-  Shield,
-  Users,
   Menu,
   X,
 } from 'lucide-react';
 import Footer from '@/components/layout/Footer';
 
-const QUICK_LOGINS = [
-  { label: 'Admin Login', email: 'admin@loanaticks.com', password: 'Admin123!@#$', icon: Shield },
-  { label: 'Employee Login', email: 'employee@loanaticks.com', password: 'Employee123!@#', icon: Users },
-  { label: 'Customer Login', email: 'customer@loanaticks.com', password: 'Customer123!@#', icon: LogIn },
-] as const;
-
 export default function HomePageClient() {
-  const [loginOpen, setLoginOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [loginLoading, setLoginLoading] = useState<string | null>(null);
-
-  const handleQuickLogin = async (email: string, password: string) => {
-    setLoginLoading(email);
-    setLoginOpen(false);
-    try {
-      const result = await signIn('credentials', {
-        email: email.trim().toLowerCase(),
-        password,
-        redirect: false,
-      });
-      if (result?.error) {
-        const msg =
-          result.error === 'Configuration'
-            ? 'Server configuration error: Set AUTH_SECRET or NEXTAUTH_SECRET in Vercel → Settings → Environment Variables (Production). If the value contains + or /, wrap it in double quotes. Then Redeploy → Clear cache and redeploy.'
-            : result.error === 'CallbackRouteError' || result.error?.includes('CredentialsSignin') || result.error?.includes('Invalid')
-              ? 'Invalid email or password. For quick login, seed the production database once: run "npm run seed" with MONGODB_URI set to your production MongoDB URL.'
-              : `Login failed: ${result.error ?? 'Unknown error'}. Try the full login page.`;
-        alert(msg);
-      } else {
-        window.location.href = '/';
-      }
-    } catch {
-      alert('Login failed. Try again or use the full login page.');
-    } finally {
-      setLoginLoading(null);
-    }
-  };
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
@@ -77,47 +38,13 @@ export default function HomePageClient() {
               </span>
             </div>
             <div className="flex items-center justify-center sm:justify-end gap-2">
-              <div className="relative">
-                <button
-                  onClick={() => setLoginOpen(!loginOpen)}
-                  className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-white font-medium transition-colors"
-                >
-                  <LogIn className="h-4 w-4" />
-                  Login
-                  <ChevronDown className={`h-4 w-4 transition-transform ${loginOpen ? 'rotate-180' : ''}`} />
-                </button>
-                {loginOpen && (
-                  <>
-                    <div className="fixed inset-0 z-40" onClick={() => setLoginOpen(false)} aria-hidden="true" />
-                    <div className="absolute right-0 mt-1 w-56 rounded-xl bg-white shadow-lg border border-slate-200 py-2 z-50">
-                      {QUICK_LOGINS.map(({ label, email, password, icon: Icon }) => (
-                        <button
-                          key={label}
-                          onClick={() => handleQuickLogin(email, password)}
-                          disabled={loginLoading !== null}
-                          className="w-full flex items-center gap-3 px-4 py-3 text-left text-slate-700 hover:bg-yellow-50 transition-colors disabled:opacity-50"
-                        >
-                          <Icon className="h-4 w-4 text-yellow-600 flex-shrink-0" />
-                          <span className="text-sm font-medium">{label}</span>
-                          {loginLoading === email && (
-                            <span className="ml-auto text-xs text-slate-500">Signing in...</span>
-                          )}
-                        </button>
-                      ))}
-                      <div className="border-t border-slate-100 mt-1 pt-1">
-                        <Link
-                          href="/login"
-                          className="flex items-center gap-3 px-4 py-3 text-slate-700 hover:bg-slate-50 transition-colors text-sm"
-                          onClick={() => setLoginOpen(false)}
-                        >
-                          <LogIn className="h-4 w-4 text-slate-500" />
-                          Full login page
-                        </Link>
-                      </div>
-                    </div>
-                  </>
-                )}
-              </div>
+              <Link
+                href="/login"
+                className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-white font-medium transition-colors"
+              >
+                <LogIn className="h-4 w-4" />
+                Login
+              </Link>
               <Link
                 href="/signup"
                 className="flex items-center gap-2 px-4 py-2 rounded-lg bg-yellow-500 hover:bg-yellow-600 text-slate-900 font-semibold transition-colors"
