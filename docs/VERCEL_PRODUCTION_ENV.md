@@ -1,6 +1,10 @@
 # Vercel Production Environment
 
-**Do you need NEXTAUTH_SECRET?** Yes. NextAuth (Auth.js) requires a secret to sign and encrypt session cookies. There is no secure way to use NextAuth without it in production. The app is configured to use **Node.js runtime** for the auth API route so Vercel injects env vars correctly.
+**Do you need NEXTAUTH_SECRET?** Yes. NextAuth (Auth.js) requires a secret to sign and encrypt session cookies (see [NextAuth Errors](https://next-auth.js.org/configuration/pages#errors) — NO_SECRET, JWT_SESSION_ERROR). There is no secure way to use NextAuth without it in production. This app:
+
+- Passes **secret** in the auth config (from `AUTH_SECRET` or `NEXTAUTH_SECRET`).
+- Uses **JWT sessions** (`session.strategy: 'jwt'`) so the Credentials provider works (CALLBACK_CREDENTIALS_JWT_ERROR).
+- Uses **Node.js runtime** for the auth API route so Vercel injects env vars at request time.
 
 ---
 

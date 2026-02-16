@@ -41,7 +41,7 @@ export default function LoginPage() {
         console.error('Login error:', result.error);
         // Handle specific error types
         if (result.error === 'Configuration') {
-          setError('Server configuration error: Your secret contains + or /. In Vercel → Settings → Environment Variables, set NEXTAUTH_SECRET with the value in double quotes, e.g. "Zk7+vN9xQ8mP..." (include the quotes). Then Redeploy → Clear cache and redeploy.');
+          setError('Server configuration error: Set AUTH_SECRET or NEXTAUTH_SECRET in Vercel → Settings → Environment Variables (Production). If the value contains + or /, wrap it in double quotes. Then Redeploy → Clear cache and redeploy.');
         } else if (result.error.includes('CredentialsSignin') || result.error.includes('Invalid email or password')) {
           setError('Invalid email or password. For quick login, ensure the production database has been seeded with demo users (see scripts/seed.ts).');
         } else {
@@ -126,7 +126,7 @@ export default function LoginPage() {
         console.error('Login error:', result.error);
         // Handle specific error types
         if (result.error === 'Configuration') {
-          setError('Server configuration error: Your secret contains + or /. In Vercel → Settings → Environment Variables, set NEXTAUTH_SECRET with the value in double quotes, e.g. "Zk7+vN9xQ8mP..." (include the quotes). Then Redeploy → Clear cache and redeploy.');
+          setError('Server configuration error: Set AUTH_SECRET or NEXTAUTH_SECRET in Vercel → Settings → Environment Variables (Production). If the value contains + or /, wrap it in double quotes. Then Redeploy → Clear cache and redeploy.');
         } else if (result.error.includes('CredentialsSignin') || result.error.includes('Invalid email or password')) {
           setError('Invalid email or password. For quick login, ensure the production database has been seeded with demo users (see scripts/seed.ts).');
         } else {

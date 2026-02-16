@@ -41,7 +41,7 @@ export default function HomePageClient() {
       if (result?.error) {
         const msg =
           result.error === 'Configuration'
-            ? 'Server configuration error: Set AUTH_SECRET or NEXTAUTH_SECRET in Vercel (Production), wrap value in quotes if it contains + or /. Then redeploy.'
+            ? 'Server configuration error: Set AUTH_SECRET or NEXTAUTH_SECRET in Vercel → Settings → Environment Variables (Production). If the value contains + or /, wrap it in double quotes. Then Redeploy → Clear cache and redeploy.'
             : result.error.includes('CredentialsSignin') || result.error.includes('Invalid')
               ? 'Invalid email or password. Ensure the production database is seeded with demo users (scripts/seed.ts).'
               : `Login failed: ${result.error}. Try the full login page.`;

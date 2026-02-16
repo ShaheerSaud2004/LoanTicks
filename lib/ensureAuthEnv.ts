@@ -5,3 +5,4 @@
 if (typeof process !== 'undefined' && process.env && !process.env.AUTH_SECRET && process.env.NEXTAUTH_SECRET) {
   process.env.AUTH_SECRET = process.env.NEXTAUTH_SECRET;
 }
+export {};
