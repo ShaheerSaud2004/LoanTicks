@@ -1,3 +1,5 @@
+// Run first so AUTH_SECRET is set from NEXTAUTH_SECRET before NextAuth reads env
+import '@/lib/ensureAuthEnv';
 import NextAuth, { DefaultSession } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
@@ -26,14 +28,14 @@ declare module 'next-auth' {
   }
 }
 
-// Do not pass secret here so NextAuth reads AUTH_SECRET/NEXTAUTH_SECRET at request time
-// from process.env (Vercel injects at runtime). Passing it at module load can use a
-// build-time value that was undefined.
+// Do not pass secret here so Auth.js reads AUTH_SECRET/NEXTAUTH_SECRET at request time.
+// The auth API route imports @/lib/ensureAuthEnv first so AUTH_SECRET is set from NEXTAUTH_SECRET.
 if (process.env.NODE_ENV === 'production' && !process.env.NEXTAUTH_URL) {
   console.warn('⚠️  NEXTAUTH_URL should be set to your production URL (e.g. https://www.loanaticks.com).');
 }
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  // secret: read by Auth.js from process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET at runtime
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID || '',

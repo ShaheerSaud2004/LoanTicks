@@ -39,7 +39,13 @@ export default function HomePageClient() {
         redirect: false,
       });
       if (result?.error) {
-        alert('Login failed. Try again or use the full login page.');
+        const msg =
+          result.error === 'Configuration'
+            ? 'Server configuration error: Set AUTH_SECRET or NEXTAUTH_SECRET in Vercel (Production), wrap value in quotes if it contains + or /. Then redeploy.'
+            : result.error.includes('CredentialsSignin') || result.error.includes('Invalid')
+              ? 'Invalid email or password. Ensure the production database is seeded with demo users (scripts/seed.ts).'
+              : `Login failed: ${result.error}. Try the full login page.`;
+        alert(msg);
       } else {
         window.location.href = '/';
       }

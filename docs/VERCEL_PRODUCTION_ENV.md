@@ -2,6 +2,24 @@
 
 **Do you need NEXTAUTH_SECRET?** Yes. NextAuth (Auth.js) requires a secret to sign and encrypt session cookies. There is no secure way to use NextAuth without it in production. The app is configured to use **Node.js runtime** for the auth API route so Vercel injects env vars correctly.
 
+---
+
+## ⚠️ "Configuration" / "Server configuration error" when clicking Admin Login
+
+**If your secret contains `+` or `/`** (e.g. `Zk7+vN9xQ8mP2wL5rA3tY6nH4jB8cD1fG0sV7kM9uX2`), Vercel can corrupt it unless you **wrap the value in double quotes**.
+
+1. In Vercel → **Settings** → **Environment Variables**:
+   - Edit **NEXTAUTH_SECRET** (or add **AUTH_SECRET** with the same value).
+   - Set the **Value** to the secret **in double quotes**, e.g.  
+     `"Zk7+vN9xQ8mP2wL5rA3tY6nH4jB8cD1fG0sV7kM9uX2"`  
+   - No spaces inside the quotes; the quotes are required so `+` and `/` are preserved.
+2. Enable the variable for **Production** (and Preview if you use it).
+3. **Redeploy**: **Deployments** → ⋮ on latest deployment → **Redeploy** → **Clear cache and redeploy**.
+
+After redeploy, try Admin Login again.
+
+---
+
 To fix **400** on `/api/auth/session`, **Configuration** on login, and ensure login works on production:
 
 ## Required variables (Production + Preview if you use preview URLs)
@@ -37,3 +55,40 @@ To fix **400** on `/api/auth/session`, **Configuration** on login, and ensure lo
 ## After changing env vars
 
 Redeploy the project so the new values are applied.
+
+---
+
+## Still seeing "NEXTAUTH_SECRET Server configuration error"?
+
+If login returns **Configuration** and logs show this error even though NEXTAUTH_SECRET (and/or AUTH_SECRET) is set in Vercel:
+
+1. **Set both secrets for Production**  
+   NextAuth v5 (Auth.js) checks `AUTH_SECRET` first, then `NEXTAUTH_SECRET`. In **Settings → Environment Variables**:
+   - Add or edit **AUTH_SECRET** and **NEXTAUTH_SECRET**.
+   - Use the **same value** for both (e.g. from `openssl rand -base64 32`).
+   - Enable **Production** (and Preview if you use it) for **both** variables.
+
+2. **Avoid value corruption**  
+   - No leading or trailing spaces when pasting the secret.  
+   - If the secret contains `+` or `/` (common in base64), in Vercel set the value **in quotes**, e.g. `"Zk7+vN9xQ8mP2wL5rA3tY6nH4jB8cD1fG..."`.
+
+3. **Redeploy so env vars are applied**  
+   Env vars are applied at **deploy time**, not at runtime. After any change:
+   - Go to **Deployments** → ⋮ on the latest deployment → **Redeploy**.
+   - Prefer **Redeploy** with **Clear cache and redeploy** so the new env is picked up.
+
+4. **Confirm Production**  
+   Ensure the URL you’re testing (e.g. `https://www.loanaticks.com`) is served by a **Production** deployment, not a Preview, so the Production env vars are used.
+
+---
+
+## Quick login shows "Invalid email or password"
+
+Quick login (Admin / Employee / Customer) uses demo users that must exist in the **production** database. If you see "Invalid email or password" (not "Configuration"):
+
+1. **Seed the production database** with the same users as local:
+   - Set `MONGODB_URI` in Vercel to your **production** MongoDB connection string.
+   - Run the seed script **once** against that DB (e.g. from your machine with `MONGODB_URI` pointing to production): `npm run seed`
+   - Demo users: `admin@loanaticks.com` / `Admin123!@#$`, `employee@loanaticks.com` / `Employee123!@#`, `customer@loanaticks.com` / `Customer123!@#`.
+
+2. The app now explicitly uses `AUTH_SECRET || NEXTAUTH_SECRET` for session signing, so set at least one (or both with the same value) for Production and redeploy.

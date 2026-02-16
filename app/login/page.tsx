@@ -41,9 +41,9 @@ export default function LoginPage() {
         console.error('Login error:', result.error);
         // Handle specific error types
         if (result.error === 'Configuration') {
-          setError('Server configuration error. Please ensure NEXTAUTH_SECRET is set correctly. Restart the server if you just added it.');
+          setError('Server configuration error: Your secret contains + or /. In Vercel → Settings → Environment Variables, set NEXTAUTH_SECRET with the value in double quotes, e.g. "Zk7+vN9xQ8mP..." (include the quotes). Then Redeploy → Clear cache and redeploy.');
         } else if (result.error.includes('CredentialsSignin') || result.error.includes('Invalid email or password')) {
-          setError('Invalid email or password. Please check your credentials and try again.');
+          setError('Invalid email or password. For quick login, ensure the production database has been seeded with demo users (see scripts/seed.ts).');
         } else {
           setError(`Login failed: ${result.error}. Please check your credentials.`);
         }
@@ -126,9 +126,9 @@ export default function LoginPage() {
         console.error('Login error:', result.error);
         // Handle specific error types
         if (result.error === 'Configuration') {
-          setError('Server configuration error. Please ensure NEXTAUTH_SECRET is set correctly. Restart the server if you just added it.');
+          setError('Server configuration error: Your secret contains + or /. In Vercel → Settings → Environment Variables, set NEXTAUTH_SECRET with the value in double quotes, e.g. "Zk7+vN9xQ8mP..." (include the quotes). Then Redeploy → Clear cache and redeploy.');
         } else if (result.error.includes('CredentialsSignin') || result.error.includes('Invalid email or password')) {
-          setError('Invalid email or password. Please check your credentials and try again.');
+          setError('Invalid email or password. For quick login, ensure the production database has been seeded with demo users (see scripts/seed.ts).');
         } else {
           setError(`Login failed: ${result.error}. Please check your credentials.`);
         }
