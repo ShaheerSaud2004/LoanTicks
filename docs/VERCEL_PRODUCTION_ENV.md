@@ -86,6 +86,12 @@ If login returns **Configuration** and logs show this error even though NEXTAUTH
 
 ---
 
+## JWTSessionError: "no matching decryption secret"
+
+This can happen when the session (JWT) is decoded in **Edge** (e.g. middleware) with a different or missing secret than the one used to sign it in **Node** (auth API). The app avoids this by **not** calling `auth()` in middleware; auth and redirects for `/admin`, `/employee`, `/customer` run in server-rendered pages (Node), which use the same secret.
+
+---
+
 ## Quick login shows "Invalid email or password" or CallbackRouteError
 
 If Vercel logs show **"Authorization error: Error: Invalid email or password"** and **CallbackRouteError**, the **secret/configuration is working** — the failure is that the demo user doesn’t exist in the production DB (or the password is wrong).
