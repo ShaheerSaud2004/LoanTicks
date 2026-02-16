@@ -57,17 +57,17 @@ export default function HomePageClient() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 py-3">
             <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4 sm:gap-6">
-              <a href="tel:8665989232" className="flex items-center gap-1.5 hover:text-yellow-400 transition-colors">
+              <a href="tel:7137821309" className="flex items-center gap-1.5 hover:text-yellow-400 transition-colors">
                 <Phone className="h-4 w-4" />
-                <span>866-598-9232</span>
+                <span>713-782-1309</span>
               </a>
-              <a href="mailto:support@loanaticks.com" className="flex items-center gap-1.5 hover:text-yellow-400 transition-colors">
+              <a href="mailto:Loanaticks@gmail.com" className="flex items-center gap-1.5 hover:text-yellow-400 transition-colors">
                 <Mail className="h-4 w-4" />
-                <span>support@loanaticks.com</span>
+                <span>Loanaticks@gmail.com</span>
               </a>
               <span className="hidden md:flex items-center gap-1.5 text-slate-400">
                 <MapPin className="h-4 w-4" />
-                8270 Aspen St, Rancho Cucamonga, CA 91730
+                5606 Theall Rd, Houston, TX 77066
               </span>
             </div>
             <div className="flex items-center justify-center sm:justify-end gap-2">
@@ -132,7 +132,7 @@ export default function HomePageClient() {
               <div className="relative h-14 w-14 sm:h-16 sm:w-16 rounded-lg overflow-hidden bg-slate-100 border border-slate-200 flex-shrink-0">
                 <Image src="/logo.jpg" alt="LoanAticks" fill className="object-contain p-1" priority />
               </div>
-              <span className="text-2xl sm:text-3xl font-bold text-slate-900">LoanAticks</span>
+              <span className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">LOANATICKS</span>
             </Link>
             <button
               type="button"
@@ -292,8 +292,12 @@ export default function HomePageClient() {
       <section id="contact" className="py-16 sm:py-20 bg-slate-900 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold mb-4">Ready to Get Started?</h2>
-          <p className="text-slate-300 mb-8 max-w-xl mx-auto">
+          <p className="text-slate-300 mb-4 max-w-xl mx-auto">
             Apply now for a competitive rate quote or contact us with any questions.
+          </p>
+          <p className="text-slate-400 text-sm mb-8">
+            Office: 713-782-1309 · 5606 Theall Rd, Houston, TX 77066<br />
+            Loanaticks@gmail.com or Yasin@loanaticks.com
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
@@ -304,11 +308,11 @@ export default function HomePageClient() {
               Apply Now
             </Link>
             <a
-              href="tel:8665989232"
+              href="tel:7137821309"
               className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-white/10 hover:bg-white/20 font-semibold border border-white/20 transition-colors"
             >
               <Phone className="h-5 w-5" />
-              866-598-9232
+              713-782-1309
             </a>
           </div>
         </div>

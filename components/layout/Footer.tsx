@@ -32,7 +32,7 @@ export default function Footer() {
                   className="object-contain p-1"
                 />
               </div>
-              <h3 className="text-2xl font-bold text-white">LoanAticks</h3>
+              <h3 className="text-2xl font-bold text-white tracking-tight">LOANATICKS</h3>
             </div>
             <p className="text-sm text-gray-400 leading-relaxed">
               Your trusted partner for home mortgage solutions. We provide competitive rates, 
@@ -107,10 +107,16 @@ export default function Footer() {
                 <div>
                   <p className="text-sm text-gray-400">Email</p>
                   <a 
-                    href="mailto:support@loanaticks.com" 
-                    className="text-gray-300 hover:text-yellow-500 transition-colors text-sm"
+                    href="mailto:Loanaticks@gmail.com" 
+                    className="text-gray-300 hover:text-yellow-500 transition-colors text-sm block"
                   >
-                    support@loanaticks.com
+                    Loanaticks@gmail.com
+                  </a>
+                  <a 
+                    href="mailto:Yasin@loanaticks.com" 
+                    className="text-gray-300 hover:text-yellow-500 transition-colors text-sm block"
+                  >
+                    Yasin@loanaticks.com
                   </a>
                 </div>
               </li>
@@ -119,10 +125,10 @@ export default function Footer() {
                 <div>
                   <p className="text-sm text-gray-400">Phone</p>
                   <a 
-                    href="tel:+18005551234" 
+                    href="tel:7137821309" 
                     className="text-gray-300 hover:text-yellow-500 transition-colors text-sm"
                   >
-                    (800) 555-1234
+                    713-782-1309
                   </a>
                 </div>
               </li>
@@ -131,8 +137,8 @@ export default function Footer() {
                 <div>
                   <p className="text-sm text-gray-400">Address</p>
                   <p className="text-gray-300 text-sm">
-                    123 Financial District<br />
-                    San Francisco, CA 94105
+                    5606 Theall Rd<br />
+                    Houston, TX 77066
                   </p>
                 </div>
               </li>
