@@ -444,12 +444,12 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
       case 0: // Personal Information
         return (
           <div className="space-y-8">
-            <div className="bg-gradient-to-r from-yellow-50 to-yellow-50 border-2 border-yellow-300 rounded-2xl p-6 sm:p-8">
-              <h3 className="font-bold text-yellow-900 mb-3 text-xl sm:text-2xl flex items-center gap-3">
+            <div className="bg-gradient-to-r from-teal-50 to-teal-50 border-2 border-teal-300 rounded-2xl p-6 sm:p-8">
+              <h3 className="font-bold text-teal-900 mb-3 text-xl sm:text-2xl flex items-center gap-3">
                 <Info className="w-6 h-6 sm:w-7 sm:h-7" />
                 Section 1a: Personal Information
               </h3>
-              <p className="text-yellow-800 text-base sm:text-lg leading-relaxed">
+              <p className="text-teal-800 text-base sm:text-lg leading-relaxed">
                 Please provide your complete personal information exactly as it appears on your government-issued identification. This information is used to verify your identity and process your loan application. All fields marked with an asterisk (*) are required.
               </p>
             </div>
@@ -466,7 +466,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   type="text"
                   value={formData.firstName}
                   onChange={(e) => handleInputChange('firstName', e.target.value)}
-                    className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900"
+                    className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900"
                   required
                 />
               </div>
@@ -485,7 +485,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   type="text"
                   value={formData.middleName}
                   onChange={(e) => handleInputChange('middleName', e.target.value)}
-                    className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900"
+                    className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900"
                 />
               </div>
               <div>
@@ -503,7 +503,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   type="text"
                   value={formData.lastName}
                   onChange={(e) => handleInputChange('lastName', e.target.value)}
-                    className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900"
+                    className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900"
                   required
                 />
               </div>
@@ -521,7 +521,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                 <select
                   value={formData.suffix}
                   onChange={(e) => handleInputChange('suffix', e.target.value)}
-                  className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900 cursor-pointer touch-manipulation min-h-[60px] bg-white"
+                  className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900 cursor-pointer touch-manipulation min-h-[60px] bg-white"
                 >
                   <option value="">Select Suffix</option>
                   <option value="Jr.">Jr.</option>
@@ -550,7 +550,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                 value={formData.alternateNames}
                 onChange={(e) => handleInputChange('alternateNames', e.target.value)}
                 placeholder="e.g., maiden name, former name"
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-yellow-500 focus:outline-none transition text-gray-900"
+                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none transition text-gray-900"
               />
             </div>
 
@@ -571,7 +571,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   value={formData.ssn}
                   onChange={(e) => handleInputChange('ssn', e.target.value)}
                   placeholder="XXX-XX-XXXX"
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-yellow-500 focus:outline-none transition text-gray-900"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none transition text-gray-900"
                   required
                 />
               </div>
@@ -590,14 +590,14 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   type="date"
                   value={formData.dateOfBirth}
                   onChange={(e) => handleInputChange('dateOfBirth', e.target.value)}
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-yellow-500 focus:outline-none transition text-gray-900"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none transition text-gray-900"
                   required
                 />
               </div>
             </div>
 
-            <div className="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-4">
-              <h3 className="font-bold text-yellow-900 mb-3 flex items-center gap-2">
+            <div className="bg-teal-50 border-2 border-teal-200 rounded-xl p-4">
+              <h3 className="font-bold text-teal-900 mb-3 flex items-center gap-2">
                 <Info className="w-5 h-5" />
                 Credit Information
               </h3>
@@ -620,7 +620,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                     value={formData.creditScore}
                     onChange={(e) => handleInputChange('creditScore', e.target.value)}
                     placeholder="e.g., 720"
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-yellow-500 focus:outline-none transition text-gray-900"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none transition text-gray-900"
                   />
                   <p className="text-xs text-gray-500 mt-1">Range: 300-850 (Optional, helps with rate estimation)</p>
                 </div>
@@ -669,8 +669,8 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
               </div>
             </div>
 
-            <div className="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-4">
-              <h3 className="font-bold text-yellow-900 mb-2 flex items-center gap-2">
+            <div className="bg-teal-50 border-2 border-teal-200 rounded-xl p-4">
+              <h3 className="font-bold text-teal-900 mb-2 flex items-center gap-2">
                 <AlertTriangle className="w-5 h-5" />
                 Section 1b: Credit Type
               </h3>
@@ -708,8 +708,8 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
             </div>
 
             {formData.creditType === 'joint' && (
-              <div className="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-4">
-                <h3 className="font-bold text-yellow-900 mb-2">
+              <div className="bg-teal-50 border-2 border-teal-200 rounded-xl p-4">
+                <h3 className="font-bold text-teal-900 mb-2">
                   Joint Borrower Information
                 </h3>
                 <div>
@@ -721,7 +721,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                     value={formData.otherBorrowerNames}
                     onChange={(e) => handleInputChange('otherBorrowerNames', e.target.value)}
                     placeholder="Full names of other borrowers"
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-yellow-500 focus:outline-none transition text-gray-900"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none transition text-gray-900"
                   />
                 </div>
               </div>
@@ -735,7 +735,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
               <select
                 value={formData.maritalStatus}
                 onChange={(e) => handleInputChange('maritalStatus', e.target.value)}
-                className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900 cursor-pointer touch-manipulation min-h-[60px] bg-white"
+                className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900 cursor-pointer touch-manipulation min-h-[60px] bg-white"
               >
                 <option value="unmarried">Unmarried</option>
                 <option value="married">Married</option>
@@ -755,7 +755,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   min="0"
                   value={formData.dependents}
                   onChange={(e) => handleInputChange('dependents', parseInt(e.target.value) || 0)}
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-yellow-500 focus:outline-none transition text-gray-900"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none transition text-gray-900"
                 />
               </div>
               {formData.dependents > 0 && (
@@ -768,7 +768,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                     value={formData.dependentAges}
                     onChange={(e) => handleInputChange('dependentAges', e.target.value)}
                     placeholder="e.g., 5, 8, 12"
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-yellow-500 focus:outline-none transition text-gray-900"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none transition text-gray-900"
                   />
                 </div>
               )}
@@ -780,12 +780,12 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
       case 1: // Contact Information
         return (
           <div className="space-y-8">
-            <div className="bg-gradient-to-r from-yellow-50 to-yellow-50 border-2 border-yellow-300 rounded-2xl p-6 sm:p-8">
-              <h3 className="font-bold text-yellow-900 mb-3 text-xl sm:text-2xl flex items-center gap-3">
+            <div className="bg-gradient-to-r from-teal-50 to-teal-50 border-2 border-teal-300 rounded-2xl p-6 sm:p-8">
+              <h3 className="font-bold text-teal-900 mb-3 text-xl sm:text-2xl flex items-center gap-3">
                 <Info className="w-6 h-6 sm:w-7 sm:h-7" />
                 Section 2: Contact Information
               </h3>
-              <p className="text-yellow-800 text-base sm:text-lg leading-relaxed">
+              <p className="text-teal-800 text-base sm:text-lg leading-relaxed">
                 Please provide your complete contact information. This information is essential for loan processing, communications, and updates regarding your application status. We will use this to contact you throughout the loan process.
               </p>
             </div>
@@ -801,7 +801,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   value={formData.homePhone}
                   onChange={(e) => handleInputChange('homePhone', e.target.value)}
                   placeholder="(XXX) XXX-XXXX"
-                    className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900"
+                    className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900"
                 />
               </div>
               <div>
@@ -820,7 +820,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   value={formData.cellPhone}
                   onChange={(e) => handleInputChange('cellPhone', e.target.value)}
                   placeholder="(XXX) XXX-XXXX"
-                    className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900"
+                    className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900"
                   required
                 />
               </div>
@@ -833,7 +833,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   value={formData.workPhone}
                   onChange={(e) => handleInputChange('workPhone', e.target.value)}
                   placeholder="(XXX) XXX-XXXX"
-                    className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900"
+                    className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900"
                 />
               </div>
               <div>
@@ -852,7 +852,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   value={formData.email}
                   onChange={(e) => handleInputChange('email', e.target.value)}
                   placeholder="your.email@example.com"
-                    className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900"
+                    className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900"
                   required
                 />
               </div>
@@ -867,7 +867,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                 value={formData.alternateEmail}
                 onChange={(e) => handleInputChange('alternateEmail', e.target.value)}
                 placeholder="alternate.email@example.com"
-                  className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900"
+                  className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900"
               />
             </div>
 
@@ -910,12 +910,12 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
       case 2: // Current Address
         return (
           <div className="space-y-8">
-            <div className="bg-gradient-to-r from-yellow-50 to-yellow-50 border-2 border-yellow-300 rounded-2xl p-6 sm:p-8">
-              <h3 className="font-bold text-yellow-900 mb-3 text-xl sm:text-2xl flex items-center gap-3">
+            <div className="bg-gradient-to-r from-teal-50 to-teal-50 border-2 border-teal-300 rounded-2xl p-6 sm:p-8">
+              <h3 className="font-bold text-teal-900 mb-3 text-xl sm:text-2xl flex items-center gap-3">
                 <Info className="w-6 h-6 sm:w-7 sm:h-7" />
                 Section 3: Current Address
               </h3>
-              <p className="text-yellow-800 text-base sm:text-lg leading-relaxed">
+              <p className="text-teal-800 text-base sm:text-lg leading-relaxed">
                 Please provide your current residential address information. This address is used for verification purposes and must match the address on your identification documents. If you have lived at your current address for less than 2 years, you will need to provide your prior address in the next section.
               </p>
             </div>
@@ -936,7 +936,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                 type="text"
                 value={formData.currentStreet}
                 onChange={(e) => handleInputChange('currentStreet', e.target.value)}
-                  className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900"
+                  className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900"
                 required
               />
             </div>
@@ -958,7 +958,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   value={formData.currentUnit}
                   onChange={(e) => handleInputChange('currentUnit', e.target.value)}
                   placeholder="Apt 1B, Unit 2, etc."
-                    className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900"
+                    className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900"
                 />
               </div>
               <div>
@@ -976,7 +976,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   type="text"
                   value={formData.currentCity}
                   onChange={(e) => handleInputChange('currentCity', e.target.value)}
-                    className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900"
+                    className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900"
                   required
                 />
               </div>
@@ -997,7 +997,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                 <select
                   value={formData.currentState}
                   onChange={(e) => handleInputChange('currentState', e.target.value)}
-                  className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900 cursor-pointer touch-manipulation min-h-[60px] bg-white"
+                  className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900 cursor-pointer touch-manipulation min-h-[60px] bg-white"
                   required
                 >
                   <option value="">Select State</option>
@@ -1069,7 +1069,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   value={formData.currentZipCode}
                   onChange={(e) => handleInputChange('currentZipCode', e.target.value)}
                   placeholder="12345"
-                  className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900"
+                  className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900"
                   required
                 />
               </div>
@@ -1134,7 +1134,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   value={formData.currentMonthlyPayment}
                   onChange={(e) => handleInputChange('currentMonthlyPayment', e.target.value)}
                   placeholder="0.00"
-                  className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900"
+                  className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900"
                 />
               </div>
               <div>
@@ -1153,19 +1153,19 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   min="0"
                   value={formData.yearsAtCurrentAddress}
                   onChange={(e) => handleInputChange('yearsAtCurrentAddress', e.target.value)}
-                  className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900"
+                  className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900"
                   required
                 />
               </div>
             </div>
 
             {parseInt(formData.yearsAtCurrentAddress) < 2 && (
-              <div className="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-4">
-                <h3 className="font-bold text-yellow-900 mb-2 flex items-center gap-2">
+              <div className="bg-teal-50 border-2 border-teal-200 rounded-xl p-4">
+                <h3 className="font-bold text-teal-900 mb-2 flex items-center gap-2">
                   <AlertTriangle className="w-5 h-5" />
                   Prior Address Required
                 </h3>
-                <p className="text-yellow-800 text-sm mb-4">
+                <p className="text-teal-800 text-sm mb-4">
                   Since you have lived at your current address for less than 2 years, 
                   you will need to provide your prior address information in the next step.
                 </p>
@@ -1187,13 +1187,13 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
       case 3: // Prior Address
         return (
           <div className="space-y-6">
-            <div className="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-4">
-              <h3 className="font-bold text-yellow-900 mb-2">Section 3b: Prior Address</h3>
-              <p className="text-yellow-800 text-sm">If you lived at your current address for less than 2 years, provide prior address.</p>
+            <div className="bg-teal-50 border-2 border-teal-200 rounded-xl p-4">
+              <h3 className="font-bold text-teal-900 mb-2">Section 3b: Prior Address</h3>
+              <p className="text-teal-800 text-sm">If you lived at your current address for less than 2 years, provide prior address.</p>
             </div>
             {parseInt(formData.yearsAtCurrentAddress) >= 2 ? (
               <div className="text-center py-8">
-                <CheckCircle className="w-12 h-12 text-yellow-600 mx-auto mb-4" />
+                <CheckCircle className="w-12 h-12 text-teal-600 mx-auto mb-4" />
                 <p className="text-gray-600">No prior address needed (2+ years at current address)</p>
               </div>
             ) : (
@@ -1209,7 +1209,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                     </span>
                   </label>
                   <p className="text-sm text-gray-600 mb-2">Enter your previous residential street address.</p>
-                  <input type="text" value={formData.priorStreet} onChange={(e) => handleInputChange('priorStreet', e.target.value)} className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900" required />
+                  <input type="text" value={formData.priorStreet} onChange={(e) => handleInputChange('priorStreet', e.target.value)} className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900" required />
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
@@ -1223,7 +1223,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                       </span>
                     </label>
                     <p className="text-sm text-gray-600 mb-2">Enter the city of your prior address.</p>
-                    <input type="text" value={formData.priorCity} onChange={(e) => handleInputChange('priorCity', e.target.value)} className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900" required />
+                    <input type="text" value={formData.priorCity} onChange={(e) => handleInputChange('priorCity', e.target.value)} className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900" required />
                   </div>
                   <div>
                     <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
@@ -1236,7 +1236,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                       </span>
                     </label>
                     <p className="text-sm text-gray-600 mb-2">Enter the state abbreviation (e.g., CA, NY).</p>
-                    <input type="text" value={formData.priorState} onChange={(e) => handleInputChange('priorState', e.target.value)} placeholder="CA" maxLength={2} className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900 uppercase" required />
+                    <input type="text" value={formData.priorState} onChange={(e) => handleInputChange('priorState', e.target.value)} placeholder="CA" maxLength={2} className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900 uppercase" required />
                   </div>
                   <div>
                     <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
@@ -1249,7 +1249,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                       </span>
                     </label>
                     <p className="text-sm text-gray-600 mb-2">Enter the 5-digit ZIP code.</p>
-                    <input type="text" value={formData.priorZipCode} onChange={(e) => handleInputChange('priorZipCode', e.target.value)} placeholder="12345" maxLength={5} className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900" required />
+                    <input type="text" value={formData.priorZipCode} onChange={(e) => handleInputChange('priorZipCode', e.target.value)} placeholder="12345" maxLength={5} className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900" required />
                   </div>
                   <div>
                     <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
@@ -1262,7 +1262,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                       </span>
                     </label>
                     <p className="text-sm text-gray-600 mb-2">How many years did you live at this address?</p>
-                    <input type="number" value={formData.yearsAtPriorAddress} onChange={(e) => handleInputChange('yearsAtPriorAddress', e.target.value)} min="0" className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900" required />
+                    <input type="number" value={formData.yearsAtPriorAddress} onChange={(e) => handleInputChange('yearsAtPriorAddress', e.target.value)} min="0" className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900" required />
                   </div>
                 </div>
               </div>
@@ -1273,12 +1273,12 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
       case 4: // Current Employment
         return (
           <div className="space-y-6">
-            <div className="bg-gradient-to-r from-yellow-50 to-yellow-50 border-2 border-yellow-300 rounded-2xl p-6 sm:p-8">
-              <h3 className="font-bold text-yellow-900 mb-3 text-xl sm:text-2xl flex items-center gap-3">
+            <div className="bg-gradient-to-r from-teal-50 to-teal-50 border-2 border-teal-300 rounded-2xl p-6 sm:p-8">
+              <h3 className="font-bold text-teal-900 mb-3 text-xl sm:text-2xl flex items-center gap-3">
                 <Info className="w-6 h-6 sm:w-7 sm:h-7" />
                 Section 5a: Current Employment
               </h3>
-              <p className="text-yellow-800 text-base sm:text-lg leading-relaxed">
+              <p className="text-teal-800 text-base sm:text-lg leading-relaxed">
                 Provide complete details about your current employment. This information is used to verify your income and employment stability. If you have been at your current job for less than 2 years, you will need to provide previous employment information in the next section.
               </p>
             </div>
@@ -1295,7 +1295,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   </span>
                 </label>
                 <p className="text-sm text-gray-600 mb-2">Enter your current employer's full legal name.</p>
-                <input type="text" value={formData.employerName} onChange={(e) => handleInputChange('employerName', e.target.value)} className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900" required />
+                <input type="text" value={formData.employerName} onChange={(e) => handleInputChange('employerName', e.target.value)} className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900" required />
               </div>
               <div>
                 <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
@@ -1308,7 +1308,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   </span>
                 </label>
                 <p className="text-sm text-gray-600 mb-2">Enter your current job title or position.</p>
-                <input type="text" value={formData.position} onChange={(e) => handleInputChange('position', e.target.value)} className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900" required />
+                <input type="text" value={formData.position} onChange={(e) => handleInputChange('position', e.target.value)} className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900" required />
               </div>
               <div>
                 <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
@@ -1321,7 +1321,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   </span>
                 </label>
                 <p className="text-sm text-gray-600 mb-2">How many years have you worked in this profession?</p>
-                <input type="number" value={formData.yearsEmployed} onChange={(e) => handleInputChange('yearsEmployed', e.target.value)} min="0" className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900" required />
+                <input type="number" value={formData.yearsEmployed} onChange={(e) => handleInputChange('yearsEmployed', e.target.value)} min="0" className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900" required />
               </div>
               <div>
                 <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
@@ -1334,7 +1334,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   </span>
                 </label>
                 <p className="text-sm text-gray-600 mb-2">Enter your work phone number (optional).</p>
-                <input type="tel" value={formData.workPhone} onChange={(e) => handleInputChange('workPhone', e.target.value)} placeholder="555-123-4567" className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900" />
+                <input type="tel" value={formData.workPhone} onChange={(e) => handleInputChange('workPhone', e.target.value)} placeholder="555-123-4567" className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900" />
               </div>
               </div>
             </div>
@@ -1344,13 +1344,13 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
       case 5: // Previous Employment  
         return (
           <div className="space-y-6">
-            <div className="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-4">
-              <h3 className="font-bold text-yellow-900 mb-2">Section 5b: Previous Employment</h3>
-              <p className="text-yellow-800 text-sm">If less than 2 years at current job, provide previous employment</p>
+            <div className="bg-teal-50 border-2 border-teal-200 rounded-xl p-4">
+              <h3 className="font-bold text-teal-900 mb-2">Section 5b: Previous Employment</h3>
+              <p className="text-teal-800 text-sm">If less than 2 years at current job, provide previous employment</p>
             </div>
             {parseInt(formData.yearsEmployed) >= 2 ? (
               <div className="text-center py-8">
-                <CheckCircle className="w-12 h-12 text-yellow-600 mx-auto mb-4" />
+                <CheckCircle className="w-12 h-12 text-teal-600 mx-auto mb-4" />
                 <p className="text-gray-600">No previous employment needed (2+ years at current job)</p>
               </div>
             ) : (
@@ -1367,7 +1367,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                       </span>
                     </label>
                     <p className="text-sm text-gray-600 mb-2">Enter your previous employer's full legal name.</p>
-                    <input type="text" value={formData.previousEmployerName} onChange={(e) => handleInputChange('previousEmployerName', e.target.value)} className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900" required />
+                    <input type="text" value={formData.previousEmployerName} onChange={(e) => handleInputChange('previousEmployerName', e.target.value)} className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900" required />
                 </div>
                 <div>
                     <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
@@ -1380,7 +1380,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                       </span>
                     </label>
                     <p className="text-sm text-gray-600 mb-2">Enter your previous job title or position.</p>
-                    <input type="text" value={formData.previousPosition} onChange={(e) => handleInputChange('previousPosition', e.target.value)} className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900" required />
+                    <input type="text" value={formData.previousPosition} onChange={(e) => handleInputChange('previousPosition', e.target.value)} className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900" required />
                 </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1395,7 +1395,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                       </span>
                     </label>
                     <p className="text-sm text-gray-600 mb-2">How many years did you work at your previous job?</p>
-                    <input type="number" value={formData.previousYearsEmployed} onChange={(e) => handleInputChange('previousYearsEmployed', e.target.value)} min="0" className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900" required />
+                    <input type="number" value={formData.previousYearsEmployed} onChange={(e) => handleInputChange('previousYearsEmployed', e.target.value)} min="0" className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900" required />
                   </div>
                   <div>
                     <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
@@ -1415,7 +1415,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                       min="0" 
                       step="0.01"
                       placeholder="0.00"
-                      className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900" 
+                      className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900" 
                       required 
                     />
                   </div>
@@ -1428,12 +1428,12 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
       case 6: // Income Details
         return (
           <div className="space-y-6">
-            <div className="bg-gradient-to-r from-yellow-50 to-yellow-50 border-2 border-yellow-300 rounded-2xl p-6 sm:p-8">
-              <h3 className="font-bold text-yellow-900 mb-3 text-xl sm:text-2xl flex items-center gap-3">
+            <div className="bg-gradient-to-r from-teal-50 to-teal-50 border-2 border-teal-300 rounded-2xl p-6 sm:p-8">
+              <h3 className="font-bold text-teal-900 mb-3 text-xl sm:text-2xl flex items-center gap-3">
                 <Info className="w-6 h-6 sm:w-7 sm:h-7" />
                 Section 6: Income Details
               </h3>
-              <p className="text-yellow-800 text-base sm:text-lg leading-relaxed">
+              <p className="text-teal-800 text-base sm:text-lg leading-relaxed">
                 Provide a detailed breakdown of your monthly income from all sources. Enter amounts in dollars (e.g., 5000 for $5,000). The total will be calculated automatically. This information is critical for determining your loan eligibility and debt-to-income ratio.
               </p>
             </div>
@@ -1450,7 +1450,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   </span>
                 </label>
                 <p className="text-sm text-gray-600 mb-2">Enter your base monthly salary (regular pay before overtime/bonuses).</p>
-                <input type="number" value={formData.baseIncome} onChange={(e) => handleInputChange('baseIncome', e.target.value)} min="0" step="0.01" placeholder="5000" className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900" required />
+                <input type="number" value={formData.baseIncome} onChange={(e) => handleInputChange('baseIncome', e.target.value)} min="0" step="0.01" placeholder="5000" className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900" required />
               </div>
               <div>
                 <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
@@ -1463,7 +1463,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   </span>
                 </label>
                 <p className="text-sm text-gray-600 mb-2">Enter your average monthly overtime pay (if applicable).</p>
-                <input type="number" value={formData.overtimeIncome} onChange={(e) => handleInputChange('overtimeIncome', e.target.value)} min="0" step="0.01" placeholder="0" className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900" />
+                <input type="number" value={formData.overtimeIncome} onChange={(e) => handleInputChange('overtimeIncome', e.target.value)} min="0" step="0.01" placeholder="0" className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900" />
               </div>
               <div>
                 <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
@@ -1476,7 +1476,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   </span>
                 </label>
                 <p className="text-sm text-gray-600 mb-2">Enter your average monthly bonus income (if applicable).</p>
-                <input type="number" value={formData.bonusIncome} onChange={(e) => handleInputChange('bonusIncome', e.target.value)} min="0" step="0.01" placeholder="0" className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900" />
+                <input type="number" value={formData.bonusIncome} onChange={(e) => handleInputChange('bonusIncome', e.target.value)} min="0" step="0.01" placeholder="0" className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900" />
               </div>
               <div>
                 <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
@@ -1489,13 +1489,13 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   </span>
                 </label>
                 <p className="text-sm text-gray-600 mb-2">Enter your average monthly commission income (if applicable).</p>
-                <input type="number" value={formData.commissionIncome} onChange={(e) => handleInputChange('commissionIncome', e.target.value)} min="0" step="0.01" placeholder="0" className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900" />
+                <input type="number" value={formData.commissionIncome} onChange={(e) => handleInputChange('commissionIncome', e.target.value)} min="0" step="0.01" placeholder="0" className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900" />
               </div>
             </div>
-            <div className="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-5">
-              <h4 className="font-bold text-yellow-900 mb-2 text-lg">Total Monthly Income</h4>
-              <p className="text-3xl font-bold text-yellow-600">${parseFloat(formData.totalMonthlyIncome || '0').toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-              <p className="text-sm text-yellow-700 mt-2">This total is calculated automatically from all income sources above.</p>
+            <div className="bg-teal-50 border-2 border-teal-200 rounded-xl p-5">
+              <h4 className="font-bold text-teal-900 mb-2 text-lg">Total Monthly Income</h4>
+              <p className="text-3xl font-bold text-teal-600">${parseFloat(formData.totalMonthlyIncome || '0').toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+              <p className="text-sm text-teal-700 mt-2">This total is calculated automatically from all income sources above.</p>
             </div>
             </div>
           </div>
@@ -1504,12 +1504,12 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
       case 7: // Assets
         return (
           <div className="space-y-6">
-            <div className="bg-gradient-to-r from-yellow-50 to-yellow-50 border-2 border-yellow-300 rounded-2xl p-6 sm:p-8">
-              <h3 className="font-bold text-yellow-900 mb-3 text-xl sm:text-2xl flex items-center gap-3">
+            <div className="bg-gradient-to-r from-teal-50 to-teal-50 border-2 border-teal-300 rounded-2xl p-6 sm:p-8">
+              <h3 className="font-bold text-teal-900 mb-3 text-xl sm:text-2xl flex items-center gap-3">
                 <Info className="w-6 h-6 sm:w-7 sm:h-7" />
                 Section 7: Assets
               </h3>
-              <p className="text-yellow-800 text-base sm:text-lg leading-relaxed">
+              <p className="text-teal-800 text-base sm:text-lg leading-relaxed">
                 List all your financial assets. Assets demonstrate your financial stability and ability to cover down payment, closing costs, and reserves. Enter amounts in dollars (e.g., 10000 for $10,000). You may be asked to provide bank statements or account statements to verify these amounts.
               </p>
             </div>
@@ -1526,7 +1526,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   </span>
                 </label>
                 <p className="text-sm text-gray-600 mb-2">Enter the total balance in all your checking accounts.</p>
-                <input type="number" value={formData.checkingAccountBalance} onChange={(e) => handleInputChange('checkingAccountBalance', e.target.value)} min="0" step="0.01" placeholder="0" className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900" />
+                <input type="number" value={formData.checkingAccountBalance} onChange={(e) => handleInputChange('checkingAccountBalance', e.target.value)} min="0" step="0.01" placeholder="0" className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900" />
               </div>
               <div>
                 <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
@@ -1539,7 +1539,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   </span>
                 </label>
                 <p className="text-sm text-gray-600 mb-2">Enter the total balance in all your savings accounts.</p>
-                <input type="number" value={formData.savingsAccountBalance} onChange={(e) => handleInputChange('savingsAccountBalance', e.target.value)} min="0" step="0.01" placeholder="0" className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900" />
+                <input type="number" value={formData.savingsAccountBalance} onChange={(e) => handleInputChange('savingsAccountBalance', e.target.value)} min="0" step="0.01" placeholder="0" className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900" />
               </div>
               <div>
                 <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
@@ -1552,7 +1552,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   </span>
                 </label>
                 <p className="text-sm text-gray-600 mb-2">Enter the total balance in all your money market accounts.</p>
-                <input type="number" value={formData.moneyMarketBalance} onChange={(e) => handleInputChange('moneyMarketBalance', e.target.value)} min="0" step="0.01" placeholder="0" className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900" />
+                <input type="number" value={formData.moneyMarketBalance} onChange={(e) => handleInputChange('moneyMarketBalance', e.target.value)} min="0" step="0.01" placeholder="0" className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900" />
               </div>
               <div>
                 <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
@@ -1565,13 +1565,13 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   </span>
                 </label>
                 <p className="text-sm text-gray-600 mb-2">Enter the total value of all your retirement accounts.</p>
-                <input type="number" value={formData.retirementAccountValue} onChange={(e) => handleInputChange('retirementAccountValue', e.target.value)} min="0" step="0.01" placeholder="0" className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900" />
+                <input type="number" value={formData.retirementAccountValue} onChange={(e) => handleInputChange('retirementAccountValue', e.target.value)} min="0" step="0.01" placeholder="0" className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900" />
               </div>
             </div>
-            <div className="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-5">
-              <h4 className="font-bold text-yellow-900 mb-2 text-lg">Total Assets</h4>
-              <p className="text-3xl font-bold text-yellow-600">${parseFloat(formData.totalAssets || '0').toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-              <p className="text-sm text-yellow-700 mt-2">This total is calculated automatically from all asset values above.</p>
+            <div className="bg-teal-50 border-2 border-teal-200 rounded-xl p-5">
+              <h4 className="font-bold text-teal-900 mb-2 text-lg">Total Assets</h4>
+              <p className="text-3xl font-bold text-teal-600">${parseFloat(formData.totalAssets || '0').toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+              <p className="text-sm text-teal-700 mt-2">This total is calculated automatically from all asset values above.</p>
             </div>
             </div>
           </div>
@@ -1580,12 +1580,12 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
       case 8: // Liabilities
         return (
           <div className="space-y-6">
-            <div className="bg-gradient-to-r from-yellow-50 to-yellow-50 border-2 border-yellow-300 rounded-2xl p-6 sm:p-8">
-              <h3 className="font-bold text-yellow-900 mb-3 text-xl sm:text-2xl flex items-center gap-3">
+            <div className="bg-gradient-to-r from-teal-50 to-teal-50 border-2 border-teal-300 rounded-2xl p-6 sm:p-8">
+              <h3 className="font-bold text-teal-900 mb-3 text-xl sm:text-2xl flex items-center gap-3">
                 <Info className="w-6 h-6 sm:w-7 sm:h-7" />
                 Section 8: Liabilities
               </h3>
-              <p className="text-yellow-800 text-base sm:text-lg leading-relaxed">
+              <p className="text-teal-800 text-base sm:text-lg leading-relaxed">
                 List all your monthly debt payments and liabilities. This information is used to calculate your debt-to-income (DTI) ratio, which is a key factor in loan approval. Enter the minimum monthly payment amounts, not the total balances. Do not include your current housing payment here.
               </p>
             </div>
@@ -1602,7 +1602,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   </span>
                 </label>
                 <p className="text-sm text-gray-600 mb-3">Enter the total minimum monthly payment for all credit cards.</p>
-                <input type="number" value={formData.creditCardPayments} onChange={(e) => handleInputChange('creditCardPayments', e.target.value)} min="0" step="0.01" placeholder="0" className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900 min-h-[56px]" />
+                <input type="number" value={formData.creditCardPayments} onChange={(e) => handleInputChange('creditCardPayments', e.target.value)} min="0" step="0.01" placeholder="0" className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900 min-h-[56px]" />
               </div>
               <div className="flex flex-col">
                 <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
@@ -1610,7 +1610,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   <FormTooltip content="Enter the total monthly payment for all installment loans (auto loans, student loans, personal loans, etc.). Include the monthly payment amount, not the total balance. If you have multiple loans, add all monthly payments together." />
                 </label>
                 <p className="text-sm text-gray-600 mb-3">Enter the total monthly payment for all installment loans.</p>
-                <input type="number" value={formData.installmentLoanPayments} onChange={(e) => handleInputChange('installmentLoanPayments', e.target.value)} min="0" step="0.01" placeholder="0" className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900 min-h-[56px]" />
+                <input type="number" value={formData.installmentLoanPayments} onChange={(e) => handleInputChange('installmentLoanPayments', e.target.value)} min="0" step="0.01" placeholder="0" className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900 min-h-[56px]" />
               </div>
               <div className="flex flex-col md:col-span-2">
                 <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
@@ -1618,7 +1618,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   <FormTooltip content="Enter the total monthly payment for any other debts not listed above (e.g., child support, alimony, other loans, etc.). Do not include your current housing payment, utilities, or insurance premiums here." />
                 </label>
                 <p className="text-sm text-gray-600 mb-3">Enter the total monthly payment for other debts (child support, alimony, etc.).</p>
-                <input type="number" value={formData.otherMonthlyPayments} onChange={(e) => handleInputChange('otherMonthlyPayments', e.target.value)} min="0" step="0.01" placeholder="0" className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900 min-h-[56px]" />
+                <input type="number" value={formData.otherMonthlyPayments} onChange={(e) => handleInputChange('otherMonthlyPayments', e.target.value)} min="0" step="0.01" placeholder="0" className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900 min-h-[56px]" />
               </div>
             </div>
             <div className="bg-orange-50 border-2 border-orange-200 rounded-xl p-5">
@@ -1633,12 +1633,12 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
       case 9: // Property Information
         return (
           <div className="space-y-8">
-            <div className="bg-gradient-to-r from-yellow-50 to-yellow-50 border-2 border-yellow-300 rounded-2xl p-6 sm:p-8">
-              <h3 className="font-bold text-yellow-900 mb-3 text-xl sm:text-2xl flex items-center gap-3">
+            <div className="bg-gradient-to-r from-teal-50 to-teal-50 border-2 border-teal-300 rounded-2xl p-6 sm:p-8">
+              <h3 className="font-bold text-teal-900 mb-3 text-xl sm:text-2xl flex items-center gap-3">
                 <Info className="w-6 h-6 sm:w-7 sm:h-7" />
                 Section 9: Subject Property Information
               </h3>
-              <p className="text-yellow-800 text-base sm:text-lg leading-relaxed">
+              <p className="text-teal-800 text-base sm:text-lg leading-relaxed">
                 Please provide complete details about the property you are purchasing or refinancing. This information is critical for loan underwriting and helps us determine the appropriate loan amount and terms.
               </p>
             </div>
@@ -1660,7 +1660,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   value={formData.propertyAddress} 
                   onChange={(e) => handleInputChange('propertyAddress', e.target.value)} 
                   placeholder="Enter the complete street address"
-                  className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900" 
+                  className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900" 
                   required 
                 />
             </div>
@@ -1681,7 +1681,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                     type="text" 
                     value={formData.propertyCity} 
                     onChange={(e) => handleInputChange('propertyCity', e.target.value)} 
-                    className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900" 
+                    className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900" 
                     required 
                   />
               </div>
@@ -1702,7 +1702,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                     onChange={(e) => handleInputChange('propertyState', e.target.value.toUpperCase())} 
                     placeholder="e.g., CA, NY, TX"
                     maxLength={2}
-                    className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900 uppercase" 
+                    className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900 uppercase" 
                     required 
                   />
               </div>
@@ -1723,7 +1723,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                     onChange={(e) => handleInputChange('propertyZipCode', e.target.value)} 
                     placeholder="12345"
                     maxLength={5}
-                    className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900" 
+                    className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900" 
                     required 
                   />
               </div>
@@ -1755,7 +1755,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                         handleInputChange('propertyValue', e.target.value);
                       }} 
                       placeholder="500000"
-                      className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900" 
+                      className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900" 
                       required 
                     />
                   </div>
@@ -1776,7 +1776,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                       value={formData.appraisedValue} 
                       onChange={(e) => handleInputChange('appraisedValue', e.target.value)} 
                       placeholder="500000"
-                      className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900" 
+                      className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900" 
                       required 
                     />
                   </div>
@@ -1799,7 +1799,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                       value={formData.loanAmount} 
                       onChange={(e) => handleInputChange('loanAmount', e.target.value)} 
                       placeholder="400000"
-                      className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900" 
+                      className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900" 
                       required 
                     />
                   </div>
@@ -1809,15 +1809,15 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                       Down Payment
                     </label>
                     <p className="text-sm text-gray-600 mb-2">Calculated automatically from purchase price and loan amount</p>
-                    <div className="w-full px-5 py-4 text-base sm:text-lg border-2 border-yellow-300 bg-yellow-50 rounded-xl font-bold text-yellow-800">
+                    <div className="w-full px-5 py-4 text-base sm:text-lg border-2 border-teal-300 bg-teal-50 rounded-xl font-bold text-teal-800">
                       ${downPaymentAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ({downPaymentPercent.toFixed(2)}%)
                     </div>
                   </div>
                 </div>
 
                 {purchasePriceNum > 0 && loanAmountNum > 0 && (
-                  <div className="mt-6 bg-yellow-50 border-2 border-yellow-200 rounded-xl p-5">
-                    <h4 className="font-bold text-yellow-900 mb-2 text-lg">Loan-to-Value (LTV) Ratio</h4>
+                  <div className="mt-6 bg-teal-50 border-2 border-teal-200 rounded-xl p-5">
+                    <h4 className="font-bold text-teal-900 mb-2 text-lg">Loan-to-Value (LTV) Ratio</h4>
                     <p className="text-2xl font-bold text-blue-600">
                       {((loanAmountNum / purchasePriceNum) * 100).toFixed(2)}%
                     </p>
@@ -1834,18 +1834,18 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
       case 10: // Loan Details
         return (
           <div className="space-y-6">
-            <div className="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-4">
-              <h3 className="font-bold text-yellow-900 mb-2">Section 10: Loan Details</h3>
-              <p className="text-yellow-800 text-sm">Specify loan amount and purpose</p>
+            <div className="bg-teal-50 border-2 border-teal-200 rounded-xl p-4">
+              <h3 className="font-bold text-teal-900 mb-2">Section 10: Loan Details</h3>
+              <p className="text-teal-800 text-sm">Specify loan amount and purpose</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Loan Amount Requested *</label>
-                <input type="number" value={formData.loanAmount} onChange={(e) => handleInputChange('loanAmount', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-yellow-500 focus:outline-none transition text-gray-900" required />
+                <input type="number" value={formData.loanAmount} onChange={(e) => handleInputChange('loanAmount', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none transition text-gray-900" required />
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Loan Purpose *</label>
-                <select value={formData.loanPurpose} onChange={(e) => handleInputChange('loanPurpose', e.target.value)} className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900 cursor-pointer touch-manipulation min-h-[60px] bg-white" required>
+                <select value={formData.loanPurpose} onChange={(e) => handleInputChange('loanPurpose', e.target.value)} className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900 cursor-pointer touch-manipulation min-h-[60px] bg-white" required>
                   <option value="">Select Purpose</option>
                   <option value="purchase">Purchase</option>
                   <option value="refinance">Refinance</option>
@@ -1853,9 +1853,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                 </select>
               </div>
             </div>
-            <div className="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-4">
-              <h4 className="font-bold text-yellow-900 mb-2">Loan-to-Value Ratio</h4>
-              <p className="text-lg text-yellow-800">
+            <div className="bg-teal-50 border-2 border-teal-200 rounded-xl p-4">
+              <h4 className="font-bold text-teal-900 mb-2">Loan-to-Value Ratio</h4>
+              <p className="text-lg text-teal-800">
                 {formData.propertyValue && formData.loanAmount 
                   ? `${((Number(formData.loanAmount) / Number(formData.propertyValue)) * 100).toFixed(2)}%` 
                   : 'N/A'}
@@ -1867,12 +1867,12 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
       case 11: // Declarations
         return (
           <div className="space-y-6">
-            <div className="bg-gradient-to-r from-yellow-50 to-yellow-50 border-2 border-yellow-300 rounded-2xl p-6 sm:p-8">
-              <h3 className="font-bold text-yellow-900 mb-3 text-xl sm:text-2xl flex items-center gap-3">
+            <div className="bg-gradient-to-r from-teal-50 to-teal-50 border-2 border-teal-300 rounded-2xl p-6 sm:p-8">
+              <h3 className="font-bold text-teal-900 mb-3 text-xl sm:text-2xl flex items-center gap-3">
                 <Info className="w-6 h-6 sm:w-7 sm:h-7" />
                 Section 11: Declarations
               </h3>
-              <p className="text-yellow-800 text-base sm:text-lg leading-relaxed">
+              <p className="text-teal-800 text-base sm:text-lg leading-relaxed">
                 Please answer the following declarations truthfully. These declarations are required by law and help us process your loan application accurately.
               </p>
             </div>
@@ -1928,14 +1928,14 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
       case 12: // Military Service
         return (
           <div className="space-y-6">
-            <div className="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-4">
-              <h3 className="font-bold text-yellow-900 mb-2">Section 12: Military Service</h3>
-              <p className="text-yellow-800 text-sm">Military service information</p>
+            <div className="bg-teal-50 border-2 border-teal-200 rounded-xl p-4">
+              <h3 className="font-bold text-teal-900 mb-2">Section 12: Military Service</h3>
+              <p className="text-teal-800 text-sm">Military service information</p>
             </div>
             <div>
               <label className="block text-base sm:text-lg font-bold text-gray-800 mb-3">Military Service Status</label>
               <p className="text-sm text-gray-600 mb-3">Select your military service status if applicable.</p>
-              <select value={formData.militaryService} onChange={(e) => handleInputChange('militaryService', e.target.value)} className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900 cursor-pointer touch-manipulation min-h-[60px] bg-white">
+              <select value={formData.militaryService} onChange={(e) => handleInputChange('militaryService', e.target.value)} className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900 cursor-pointer touch-manipulation min-h-[60px] bg-white">
                 <option value="none">No Military Service</option>
                 <option value="active">Active Duty</option>
                 <option value="reserve">Reserves/National Guard</option>
@@ -1949,13 +1949,13 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
       case 13: // Demographics
         return (
           <div className="space-y-6">
-            <div className="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-4">
-              <h3 className="font-bold text-yellow-900 mb-2">Section 13: Demographics (Optional)</h3>
-              <p className="text-yellow-800 text-sm">This information is optional and for monitoring purposes</p>
+            <div className="bg-teal-50 border-2 border-teal-200 rounded-xl p-4">
+              <h3 className="font-bold text-teal-900 mb-2">Section 13: Demographics (Optional)</h3>
+              <p className="text-teal-800 text-sm">This information is optional and for monitoring purposes</p>
             </div>
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">Citizenship Status</label>
-              <select value={formData.citizenship} onChange={(e) => handleInputChange('citizenship', e.target.value)} className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900 cursor-pointer touch-manipulation min-h-[60px] bg-white">
+              <select value={formData.citizenship} onChange={(e) => handleInputChange('citizenship', e.target.value)} className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900 cursor-pointer touch-manipulation min-h-[60px] bg-white">
                 <option value="us_citizen">U.S. Citizen</option>
                 <option value="permanent_resident">Permanent Resident Alien</option>
                 <option value="non_permanent_resident">Non-Permanent Resident Alien</option>
@@ -1967,12 +1967,12 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
       case 14: // Documents
         return (
           <div className="space-y-8">
-            <div className="bg-gradient-to-r from-yellow-50 to-yellow-50 border-2 border-yellow-300 rounded-2xl p-6 sm:p-8">
-              <h3 className="font-bold text-yellow-900 mb-3 text-xl sm:text-2xl flex items-center gap-3">
+            <div className="bg-gradient-to-r from-teal-50 to-teal-50 border-2 border-teal-300 rounded-2xl p-6 sm:p-8">
+              <h3 className="font-bold text-teal-900 mb-3 text-xl sm:text-2xl flex items-center gap-3">
                 <Info className="w-6 h-6 sm:w-7 sm:h-7" />
                 Section 14: Supporting Documents
               </h3>
-              <p className="text-yellow-800 text-base sm:text-lg leading-relaxed">
+              <p className="text-teal-800 text-base sm:text-lg leading-relaxed">
                 Please upload the required documents to support your loan application. These documents are essential for verifying your identity, income, and financial status. All required documents must be submitted for your application to be processed.
               </p>
             </div>
@@ -2011,11 +2011,11 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                         }
                       }
                     }} 
-                    className="w-full px-5 py-4 text-base border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900" 
+                    className="w-full px-5 py-4 text-base border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900" 
                     required
                   />
                   {formData.idDocument && (
-                    <p className="text-yellow-700 text-sm mt-2 font-medium">✓ ID Document uploaded: {(formData.idDocument as File).name}</p>
+                    <p className="text-teal-700 text-sm mt-2 font-medium">✓ ID Document uploaded: {(formData.idDocument as File).name}</p>
                   )}
             </div>
 
@@ -2045,11 +2045,11 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                         }
                       }
                     }} 
-                    className="w-full px-5 py-4 text-base border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900" 
+                    className="w-full px-5 py-4 text-base border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900" 
                     required
                   />
                   {formData.paystubsDocument && (
-                    <p className="text-yellow-700 text-sm mt-2 font-medium">✓ Pay Stubs uploaded: {(formData.paystubsDocument as File).name}</p>
+                    <p className="text-teal-700 text-sm mt-2 font-medium">✓ Pay Stubs uploaded: {(formData.paystubsDocument as File).name}</p>
                   )}
             </div>
 
@@ -2075,22 +2075,22 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                         handleInputChange('uploadedDocuments', [...currentDocs, ...newFiles]);
                       }
                     }} 
-                    className="w-full px-5 py-4 text-base border-2 border-gray-300 rounded-xl focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 focus:outline-none transition text-gray-900" 
+                    className="w-full px-5 py-4 text-base border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900" 
                   />
                   <p className="text-sm text-gray-500 mt-2">Accepted formats: PDF, JPG, PNG (Max 10MB per file)</p>
                 </div>
               </div>
 
             {(formData.uploadedDocuments as File[])?.length > 0 && (
-                <div className="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-5">
-                  <h4 className="font-bold text-yellow-900 mb-3 text-lg">
+                <div className="bg-teal-50 border-2 border-teal-200 rounded-xl p-5">
+                  <h4 className="font-bold text-teal-900 mb-3 text-lg">
                     Uploaded Documents Summary ({formData.uploadedDocuments ? (formData.uploadedDocuments as File[]).length : 0} file(s))
                   </h4>
                   <ul className="space-y-2">
                   {(formData.uploadedDocuments as File[]).map((file: File, idx: number) => (
-                      <li key={idx} className="text-yellow-800 text-sm flex items-center justify-between gap-2 bg-white p-2 rounded-lg">
+                      <li key={idx} className="text-teal-800 text-sm flex items-center justify-between gap-2 bg-white p-2 rounded-lg">
                         <div className="flex items-center gap-2">
-                          <CheckCircle className="w-4 h-4 text-yellow-600" />
+                          <CheckCircle className="w-4 h-4 text-teal-600" />
                           <span className="font-medium">{file.name}</span>
                           <span className="text-gray-500">({(file.size / 1024 / 1024).toFixed(2)} MB)</span>
                         </div>
@@ -2118,7 +2118,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                       </li>
                   ))}
                 </ul>
-                <p className="text-xs text-yellow-700 mt-3">
+                <p className="text-xs text-teal-700 mt-3">
                   All documents will be uploaded when you submit the application.
                 </p>
               </div>
@@ -2140,11 +2140,41 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-700 via-gray-600 to-gray-800">
-      <div className="max-w-4xl mx-auto px-4 py-8">
+      <div className="max-w-6xl mx-auto px-4 py-6 lg:py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-6 lg:gap-8 items-start">
+          {/* Left sidebar: step list */}
+          <div className="lg:sticky lg:top-6 order-2 lg:order-1">
+            <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+              <div className="bg-gradient-to-r from-teal-600 to-teal-600 px-4 py-3 text-white">
+                <h2 className="font-bold text-sm uppercase tracking-wide">Steps</h2>
+                <p className="text-teal-100 text-xs mt-0.5">Step {currentStep + 1} of {steps.length}</p>
+              </div>
+              <nav className="p-2 max-h-[70vh] overflow-y-auto">
+                {steps.map((step, index) => (
+                  <button
+                    key={index}
+                    type="button"
+                    onClick={() => setCurrentStep(index)}
+                    className={`w-full text-left px-3 py-2.5 rounded-xl text-sm font-medium transition flex items-center gap-2 ${
+                      currentStep === index
+                        ? 'bg-teal-100 text-teal-800 border border-teal-200'
+                        : 'text-gray-600 hover:bg-gray-100 border border-transparent'
+                    }`}
+                  >
+                    {step.icon && React.createElement(step.icon, { className: 'w-4 h-4 flex-shrink-0' })}
+                    <span className="truncate">{index + 1}. {step.title}</span>
+                  </button>
+                ))}
+              </nav>
+            </div>
+          </div>
+
+          {/* Right: form content */}
+          <div className="order-1 lg:order-2 space-y-6">
         {validationError && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto">
-              <div className="sticky top-0 bg-yellow-500 rounded-t-2xl p-6 flex items-center justify-between">
+              <div className="sticky top-0 bg-teal-500 rounded-t-2xl p-6 flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <AlertTriangle className="w-8 h-8 text-white" />
                   <h2 className="text-2xl font-bold text-white">{validationError}</h2>
@@ -2154,7 +2184,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                     setValidationError(null);
                     setMissingFields([]);
                   }}
-                  className="text-white hover:bg-yellow-600 rounded-full p-2 transition"
+                  className="text-white hover:bg-teal-600 rounded-full p-2 transition"
                   aria-label="Close"
                 >
                   <X className="w-6 h-6" />
@@ -2168,7 +2198,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   <ul className="space-y-2">
                     {missingFields.map((field, index) => (
                       <li key={index} className="flex items-start gap-2 text-gray-700">
-                        <span className="text-yellow-600 font-bold mt-1">•</span>
+                        <span className="text-teal-600 font-bold mt-1">•</span>
                         <span className="text-base">{field}</span>
                       </li>
                     ))}
@@ -2182,7 +2212,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                     setValidationError(null);
                     setMissingFields([]);
                   }}
-                  className="mt-6 w-full px-6 py-3 bg-yellow-500 text-white rounded-xl hover:bg-yellow-600 transition font-semibold text-lg"
+                  className="mt-6 w-full px-6 py-3 bg-teal-500 text-white rounded-xl hover:bg-teal-600 transition font-semibold text-lg"
                 >
                   Got it, I'll fill them out!
                 </button>
@@ -2199,7 +2229,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
         
         {/* Progress Bar */}
         <div className="bg-white rounded-2xl shadow-2xl mb-8 overflow-hidden">
-          <div className="bg-gradient-to-r from-yellow-600 to-yellow-600 p-6 text-white">
+          <div className="bg-gradient-to-r from-teal-600 to-teal-600 p-6 text-white">
             <div className="flex items-center justify-between mb-4">
               <h1 className="text-2xl font-bold">URLA 2019 Comprehensive Application</h1>
               <span className="text-sm bg-white/20 px-3 py-1 rounded-full">
@@ -2217,8 +2247,8 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
           <div className="p-6">
             {/* Step Info */}
             <div className="flex items-center gap-4 mb-6">
-              <div className="p-3 bg-yellow-100 rounded-xl">
-                {steps[currentStep].icon && React.createElement(steps[currentStep].icon, { className: "w-6 h-6 text-yellow-600" })}
+              <div className="p-3 bg-teal-100 rounded-xl">
+                {steps[currentStep].icon && React.createElement(steps[currentStep].icon, { className: "w-6 h-6 text-teal-600" })}
               </div>
               <div>
                 <h2 className="text-xl font-bold text-gray-900">{steps[currentStep].title}</h2>
@@ -2255,7 +2285,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                     handleSubmit();
                   }}
                   disabled={saving}
-                  className="flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-yellow-600 to-yellow-600 text-white rounded-xl hover:from-yellow-700 hover:to-yellow-700 active:from-yellow-800 active:to-yellow-800 transition disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation min-h-[44px] font-bold shadow-lg hover:shadow-xl"
+                  className="flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-teal-600 to-teal-600 text-white rounded-xl hover:from-teal-700 hover:to-teal-700 active:from-teal-800 active:to-teal-800 transition disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation min-h-[44px] font-bold shadow-lg hover:shadow-xl"
                   aria-label="Submit application"
                 >
                   {saving ? (
@@ -2278,7 +2308,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                     e.stopPropagation();
                     nextStep();
                   }}
-                  className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-yellow-600 to-yellow-600 text-white rounded-xl hover:from-yellow-700 hover:to-yellow-700 active:from-yellow-800 active:to-yellow-800 transition touch-manipulation min-h-[44px] font-bold shadow-lg hover:shadow-xl"
+                  className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-teal-600 to-teal-600 text-white rounded-xl hover:from-teal-700 hover:to-teal-700 active:from-teal-800 active:to-teal-800 transition touch-manipulation min-h-[44px] font-bold shadow-lg hover:shadow-xl"
                   aria-label="Next step"
                 >
                   Next
@@ -2286,6 +2316,8 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                 </button>
               )}
             </div>
+          </div>
+        </div>
           </div>
         </div>
       </div>
