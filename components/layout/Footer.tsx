@@ -228,8 +228,29 @@ export default function Footer() {
           </div>
         </div>
 
+        {/* Equal Housing Opportunity & Fair Lending (federal compliance) */}
+        <div className="mt-8 pt-6 border-t border-gray-700">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mb-4">
+            <Image
+              src="/equal-housing-opportunity-logo-1200w.png"
+              alt="Equal Housing Opportunity"
+              width={120}
+              height={80}
+              className="object-contain flex-shrink-0"
+            />
+            <div className="text-center sm:text-left">
+              <p className="text-sm text-gray-400 mb-2">
+                <strong className="text-gray-300">Equal Housing Opportunity.</strong> We are pledged to the letter and spirit of U.S. policy for the achievement of equal housing opportunity. We do not discriminate on the basis of race, color, religion, sex, handicap, familial status, or national origin.
+              </p>
+              <p className="text-xs text-gray-500">
+                Fair lending: We comply with the Equal Credit Opportunity Act and the Fair Housing Act. All qualified applicants will receive consideration without regard to protected characteristics.
+              </p>
+            </div>
+          </div>
+        </div>
+
         {/* Bottom Bar */}
-        <div className="mt-12 pt-8 border-t border-gray-700">
+        <div className="mt-8 pt-6 border-t border-gray-700">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-sm text-gray-400 text-center md:text-left">
               © 2025 LoanAticks. All rights reserved.

@@ -65,7 +65,10 @@ export default function HomePageClient() {
               <div className="relative h-14 w-14 sm:h-16 sm:w-16 rounded-lg overflow-hidden bg-slate-100 border border-slate-200 flex-shrink-0">
                 <Image src="/logo.jpg" alt="LOANATICKS" fill className="object-contain p-1" priority />
               </div>
-              <span className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">LOANATICKS</span>
+              <div className="flex flex-col">
+                <span className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">LOANATICKS</span>
+                <span className="text-xs sm:text-sm text-slate-500 font-medium mt-0.5">Expert Loan Advisor</span>
+              </div>
             </Link>
             <button
               type="button"
@@ -134,6 +137,9 @@ export default function HomePageClient() {
             </div>
             <p className="mt-6 text-sm text-slate-400">
               NMLS #2724157 · Licensed in State of TX
+            </p>
+            <p className="mt-2 text-xs text-slate-500">
+              Equal Housing Opportunity · We do not discriminate on the basis of race, color, religion, sex, handicap, familial status, or national origin.
             </p>
           </div>
         </div>
