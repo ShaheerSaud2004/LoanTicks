@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { LogIn, Loader2, Shield, Lock, KeyRound, MessageCircle, CheckCircle, Users, TrendingUp } from 'lucide-react';
+import { LogIn, Loader2, Shield, Lock, KeyRound, MessageCircle, CheckCircle } from 'lucide-react';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -99,86 +99,6 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     await handleLogin(email, password);
-  };
-
-  const handleQuickLogin = async (userEmail: string, userPassword: string) => {
-    setError('');
-    setEmail(userEmail);
-    setPassword(userPassword);
-    setLoading(true);
-    setLoginStatus('Authenticating...');
-    
-    try {
-      // Never log user emails
-      if (process.env.NODE_ENV === 'development') {
-        console.log('Attempting quick login');
-      }
-      const result = await signIn('credentials', {
-        email: userEmail.trim().toLowerCase(),
-        password: userPassword,
-        redirect: false,
-      });
-
-      console.log('Login result:', JSON.stringify(result, null, 2));
-      
-      // NextAuth v5 returns { error: string } on failure or { url: string } on success
-      if (result?.error) {
-        console.error('Login error:', result.error);
-        // Handle specific error types
-        if (result.error === 'Configuration') {
-          setError('Server configuration error: Set AUTH_SECRET or NEXTAUTH_SECRET in Vercel → Settings → Environment Variables (Production). If the value contains + or /, wrap it in double quotes. Then Redeploy → Clear cache and redeploy.');
-        } else if (result.error === 'CallbackRouteError' || result.error?.includes('CredentialsSignin') || result.error?.includes('Invalid')) {
-          setError('Invalid email or password. For quick login (Admin/Employee/Customer), seed the production database once: run "npm run seed" with MONGODB_URI pointing to your production DB.');
-        } else {
-          setError(`Login failed: ${result.error ?? 'Unknown error'}. Please check your credentials.`);
-        }
-        setLoading(false);
-        setLoginStatus('');
-      } else {
-        // Success - no error means login worked
-        console.log('✓ Login successful, redirecting...');
-        setLoginStatus('✓ Login successful!');
-        setShowSuccessAnimation(true);
-        
-        // Get session to determine role and redirect accordingly
-        setTimeout(async () => {
-          try {
-            // Fetch session to get user role
-            const response = await fetch('/api/auth/session');
-            const session = await response.json();
-            
-            // Redirect based on role
-            if (session?.user?.role === 'admin') {
-              router.push('/admin/dashboard');
-            } else if (session?.user?.role === 'employee') {
-              router.push('/employee/dashboard');
-            } else if (session?.user?.role === 'customer') {
-              router.push('/customer/dashboard');
-            } else {
-              // Fallback to home page which will redirect
-              router.push('/');
-            }
-            router.refresh();
-          } catch (err) {
-            console.error('Error getting session:', err);
-            // Fallback to home page
-            router.push('/');
-            router.refresh();
-          }
-        }, 800);
-      }
-    } catch (error) {
-      console.error('Login exception:', error);
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-      // Handle URL construction errors specifically
-      if (errorMessage.includes('URL') || errorMessage.includes('Invalid')) {
-        setError('Configuration error. Please ensure NEXTAUTH_URL is set correctly in environment variables.');
-      } else {
-        setError(`Connection error: ${errorMessage}. Please check your internet and try again.`);
-      }
-      setLoading(false);
-      setLoginStatus('');
-    }
   };
 
   return (
@@ -412,58 +332,6 @@ export default function LoginPage() {
               </p>
             </div>
           </form>
-
-          {/* Quick Login Options */}
-          <div className="mt-8 pt-8 border-t border-slate-200">
-            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-5">Quick Login</p>
-            <div className="space-y-3">
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleQuickLogin('admin@loanaticks.com', 'Admin123!@#$');
-                }}
-                disabled={loading}
-                className="w-full flex items-center justify-between p-3.5 bg-slate-100 hover:bg-slate-200 active:bg-slate-100 text-slate-700 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation group border border-slate-200 hover:border-slate-300"
-              >
-                <span className="font-medium flex items-center gap-2.5 text-sm">
-                  <Shield className="h-4 w-4 text-slate-600" />
-                  Admin Login
-                </span>
-                <span className="text-xs text-slate-500 group-hover:text-slate-600 transition-colors">→</span>
-              </button>
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleQuickLogin('employee@loanaticks.com', 'Employee123!@#');
-                }}
-                disabled={loading}
-                className="w-full flex items-center justify-between p-3.5 bg-yellow-50 hover:bg-yellow-100 active:bg-yellow-50 text-slate-700 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation group border border-yellow-200 hover:border-yellow-300"
-              >
-                <span className="font-medium flex items-center gap-2.5 text-sm">
-                  <Users className="h-4 w-4 text-slate-600" />
-                  Employee Login
-                </span>
-                <span className="text-xs text-slate-500 group-hover:text-slate-600 transition-colors">→</span>
-              </button>
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleQuickLogin('customer@loanaticks.com', 'Customer123!@#');
-                }}
-                disabled={loading}
-                className="w-full flex items-center justify-between p-3.5 bg-yellow-50 hover:bg-yellow-100 active:bg-yellow-50 text-slate-700 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation group border border-yellow-200 hover:border-yellow-300"
-              >
-                <span className="font-medium flex items-center gap-2.5 text-sm">
-                  <TrendingUp className="h-4 w-4 text-slate-600" />
-                  Customer Login
-                </span>
-                <span className="text-xs text-slate-500 group-hover:text-slate-600 transition-colors">→</span>
-              </button>
-            </div>
-          </div>
         </div>
       </div>
       </div>
@@ -473,7 +341,7 @@ export default function LoginPage() {
         <p className="text-center text-sm text-slate-500">
           NMLS #2724157 · Licensed in State of TX · For licensing information go to{' '}
           <a
-            href="https://www.nmlsconsumeraccess.org"
+            href="https://www.nmlsconsumeraccess.org/"
             target="_blank"
             rel="noopener noreferrer"
             className="text-yellow-600 hover:text-yellow-700 underline transition-colors"

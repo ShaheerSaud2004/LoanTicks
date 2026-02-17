@@ -20,6 +20,7 @@ export default function LoanApplicationPage() {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [logoutStage, setLogoutStage] = useState<'signing-out' | 'clearing' | 'success' | null>(null);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [documentsUploadedCount, setDocumentsUploadedCount] = useState(0);
   const [successData, setSuccessData] = useState<{
     applicationId: string;
     purchasePrice: number;
@@ -104,6 +105,7 @@ export default function LoanApplicationPage() {
 
   const handleFormSubmit = async (formData: Record<string, unknown>) => {
     setSaving(true);
+    setDocumentsUploadedCount(0);
     try {
       const documents = formData.uploadedDocuments as File[];
       console.log('Submitting loan application...', {
@@ -263,8 +265,8 @@ export default function LoanApplicationPage() {
 
             if (uploadResponse.ok) {
               const uploadData = await uploadResponse.json();
+              setDocumentsUploadedCount(uploadData.totalDocuments ?? documents.length);
               console.log('✅ Documents uploaded successfully:', uploadData);
-              console.log(`   Total documents: ${uploadData.totalDocuments}`);
             } else {
               const errorData = await uploadResponse.json();
               console.error('❌ Document upload failed:', errorData);
@@ -329,12 +331,13 @@ export default function LoanApplicationPage() {
       } else {
         const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
         console.error('Failed to submit application:', errorData);
-        alert(`❌ Failed to submit application: ${errorData.error || 'Please try again or contact support.'}`);
+        const msg = errorData.error || 'Please try again or contact support.';
+        alert(`We couldn't save your application.\n\n${msg}\n\nCheck that all required fields are filled and try again, or call us at 713-782-1309.`);
       }
     } catch (error) {
       console.error('Error submitting application:', error);
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-      alert(`❌ Error submitting application: ${errorMessage}. Please check your connection and try again.`);
+      const errorMessage = error instanceof Error ? error.message : 'Something went wrong';
+      alert(`We couldn't submit your application.\n\n${errorMessage}\n\nPlease check your connection and try again, or call us at 713-782-1309.`);
     } finally {
       setSaving(false);
     }
@@ -953,9 +956,6 @@ export default function LoanApplicationPage() {
 
       <TooltipFixer />
       <URLA2019ComprehensiveForm onSubmit={handleFormSubmit} saving={saving} />
-      
-      {/* Footer */}
-      <Footer />
 
       {/* Modern Success Screen */}
       {showSuccess && successData && (
@@ -990,6 +990,20 @@ export default function LoanApplicationPage() {
 
             {/* Content */}
             <div className="p-6 md:p-8 space-y-6 max-h-[70vh] overflow-y-auto">
+              {/* Success summary */}
+              {documentsUploadedCount > 0 && (
+                <div className="bg-green-50 border-2 border-green-200 rounded-xl p-5 animate-slideUp" style={{animationDelay: '0.15s'}}>
+                  <div className="flex items-start gap-3">
+                    <CheckCircle className="w-6 h-6 text-green-600 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <h3 className="font-bold text-green-900 mb-1">Application & documents saved</h3>
+                      <p className="text-sm text-green-800">
+                        Your application was submitted and <strong>{documentsUploadedCount} document{documentsUploadedCount === 1 ? '' : 's'}</strong> were uploaded successfully. Everything has been saved.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
               {/* Email Notification */}
               <div className="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-5 animate-slideUp" style={{animationDelay: '0.2s'}}>
                 <div className="flex items-start gap-3">

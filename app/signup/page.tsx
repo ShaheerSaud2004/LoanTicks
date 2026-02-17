@@ -59,8 +59,9 @@ export default function SignUpPage() {
 
       if (response.ok) {
         setSuccess(true);
-        // Redirect to login after 3 seconds
+        // Redirect to login after 3 seconds so user sees success message
         setTimeout(() => {
+          router.refresh();
           router.push('/login');
         }, 3000);
       } else {

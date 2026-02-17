@@ -1,6 +1,7 @@
 'use client';
 
-import { X, ExternalLink, DollarSign, Calendar, AlertCircle } from 'lucide-react';
+import { useState } from 'react';
+import { X, ExternalLink, DollarSign, Calendar, AlertCircle, CheckCircle } from 'lucide-react';
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -19,15 +20,21 @@ export default function PaymentModal({
   dueDate,
   onConfirm,
 }: PaymentModalProps) {
+  const [redirecting, setRedirecting] = useState(false);
   if (!isOpen) return null;
 
   const ariveUrl = process.env.NEXT_PUBLIC_ARIVE_POS_URL || 'https://app.arive.com';
 
   const handleConfirm = () => {
     onConfirm();
+    setRedirecting(true);
     // Open Arive in a new tab
     window.open(ariveUrl, '_blank', 'noopener,noreferrer');
-    onClose();
+    // Brief success message then close
+    setTimeout(() => {
+      setRedirecting(false);
+      onClose();
+    }, 1500);
   };
 
   return (
@@ -87,6 +94,19 @@ export default function PaymentModal({
               </div>
             </div>
 
+            {redirecting ? (
+            <div className="bg-green-50 border border-green-200 rounded-xl p-4">
+              <div className="flex items-start gap-3">
+                <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0 mt-0.5" />
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-green-900 mb-1">Redirecting...</p>
+                  <p className="text-sm text-green-800">
+                    Opening the payment portal in a new tab. Complete your payment there.
+                  </p>
+                </div>
+              </div>
+            </div>
+          ) : (
             <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
               <div className="flex items-start gap-3">
                 <AlertCircle className="h-5 w-5 text-blue-600 flex-shrink-0 mt-0.5" />
@@ -100,6 +120,7 @@ export default function PaymentModal({
                 </div>
               </div>
             </div>
+          )}
 
             <div className="bg-gray-50 rounded-xl p-4">
               <p className="text-sm text-gray-600 mb-2">

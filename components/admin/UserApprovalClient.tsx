@@ -29,9 +29,11 @@ export default function UserApprovalClient({ pendingUsers, approvedUsers, userNa
   const router = useRouter();
   const [loading, setLoading] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'pending' | 'approved'>('pending');
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const handleApprove = async (userId: string) => {
     setLoading(userId);
+    setSuccessMessage(null);
     try {
       const response = await fetch('/api/admin/users/approve', {
         method: 'POST',
@@ -40,13 +42,16 @@ export default function UserApprovalClient({ pendingUsers, approvedUsers, userNa
       });
 
       if (response.ok) {
+        setSuccessMessage('User approved successfully.');
+        setTimeout(() => setSuccessMessage(null), 4000);
         router.refresh();
       } else {
-        alert('Failed to approve user');
+        const data = await response.json().catch(() => ({}));
+        alert(data.error || 'Failed to approve user. Please try again.');
       }
     } catch (error) {
       console.error('Error approving user:', error);
-      alert('Error approving user');
+      alert('Something went wrong. Please try again.');
     } finally {
       setLoading(null);
     }
@@ -58,6 +63,7 @@ export default function UserApprovalClient({ pendingUsers, approvedUsers, userNa
     }
 
     setLoading(userId);
+    setSuccessMessage(null);
     try {
       const response = await fetch('/api/admin/users/reject', {
         method: 'POST',
@@ -66,13 +72,16 @@ export default function UserApprovalClient({ pendingUsers, approvedUsers, userNa
       });
 
       if (response.ok) {
+        setSuccessMessage('User rejected.');
+        setTimeout(() => setSuccessMessage(null), 4000);
         router.refresh();
       } else {
-        alert('Failed to reject user');
+        const data = await response.json().catch(() => ({}));
+        alert(data.error || 'Failed to reject user. Please try again.');
       }
     } catch (error) {
       console.error('Error rejecting user:', error);
-      alert('Error rejecting user');
+      alert('Something went wrong. Please try again.');
     } finally {
       setLoading(null);
     }
@@ -90,6 +99,12 @@ export default function UserApprovalClient({ pendingUsers, approvedUsers, userNa
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-slate-900 mb-2">User Approval</h1>
           <p className="text-slate-600">Review and approve new user registrations</p>
+          {successMessage && (
+            <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-xl flex items-center gap-2 text-green-800">
+              <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" />
+              <span className="font-medium">{successMessage}</span>
+            </div>
+          )}
         </div>
 
         {/* Tabs */}

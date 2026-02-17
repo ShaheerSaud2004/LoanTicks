@@ -63,7 +63,7 @@ export default function HomePageClient() {
           <div className="flex items-center justify-between h-20">
             <Link href="/" className="flex items-center gap-4">
               <div className="relative h-14 w-14 sm:h-16 sm:w-16 rounded-lg overflow-hidden bg-slate-100 border border-slate-200 flex-shrink-0">
-                <Image src="/logo.jpg" alt="LoanAticks" fill className="object-contain p-1" priority />
+                <Image src="/logo.jpg" alt="LOANATICKS" fill className="object-contain p-1" priority />
               </div>
               <span className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">LOANATICKS</span>
             </Link>
@@ -76,13 +76,13 @@ export default function HomePageClient() {
               {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
             <nav className="hidden md:flex items-center gap-6">
-              <Link href="#what-to-expect" className="text-slate-600 hover:text-yellow-600 font-medium transition-colors">
+              <Link href="/#what-to-expect" className="text-slate-600 hover:text-yellow-600 font-medium transition-colors">
                 What to Expect
               </Link>
-              <Link href="#team" className="text-slate-600 hover:text-yellow-600 font-medium transition-colors">
+              <Link href="/#team" className="text-slate-600 hover:text-yellow-600 font-medium transition-colors">
                 Our Team
               </Link>
-              <Link href="#contact" className="text-slate-600 hover:text-yellow-600 font-medium transition-colors">
+              <Link href="/#contact" className="text-slate-600 hover:text-yellow-600 font-medium transition-colors">
                 Contact
               </Link>
             </nav>
@@ -90,13 +90,13 @@ export default function HomePageClient() {
           {mobileMenuOpen && (
             <div className="md:hidden py-4 border-t border-slate-200">
               <div className="flex flex-col gap-2">
-                <Link href="#what-to-expect" className="py-2 text-slate-600 hover:text-yellow-600" onClick={() => setMobileMenuOpen(false)}>
+                <Link href="/#what-to-expect" className="py-2 text-slate-600 hover:text-yellow-600" onClick={() => setMobileMenuOpen(false)}>
                   What to Expect
                 </Link>
-                <Link href="#team" className="py-2 text-slate-600 hover:text-yellow-600" onClick={() => setMobileMenuOpen(false)}>
+                <Link href="/#team" className="py-2 text-slate-600 hover:text-yellow-600" onClick={() => setMobileMenuOpen(false)}>
                   Our Team
                 </Link>
-                <Link href="#contact" className="py-2 text-slate-600 hover:text-yellow-600" onClick={() => setMobileMenuOpen(false)}>
+                <Link href="/#contact" className="py-2 text-slate-600 hover:text-yellow-600" onClick={() => setMobileMenuOpen(false)}>
                   Contact
                 </Link>
               </div>
@@ -142,7 +142,7 @@ export default function HomePageClient() {
       {/* By the Numbers - stats and trust */}
       <section className="py-16 sm:py-20 bg-white border-y border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-slate-900 text-center mb-4">Why LoanAticks</h2>
+          <h2 className="text-3xl font-bold text-slate-900 text-center mb-4">Why LOANATICKS</h2>
           <p className="text-slate-600 text-center mb-12 max-w-2xl mx-auto">
             Fast, transparent, and backed by a licensed team you can trust.
           </p>

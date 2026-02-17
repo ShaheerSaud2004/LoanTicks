@@ -873,6 +873,57 @@ export default function ApplicationView({ params }: { params: Promise<{ id: stri
                         </p>
                       </div>
                     )}
+
+                    {/* Send ARIVE link to borrower (when approved) */}
+                    {approvalStatus === 'approved' && application?.borrowerInfo?.email && process.env.NEXT_PUBLIC_ARIVE_POS_URL && (
+                      <div className="mt-4 p-4 bg-white/10 rounded-xl border-2 border-white/20">
+                        <p className="text-white font-semibold mb-2">Send ARIVE portal link to borrower</p>
+                        <p className="text-sm text-white/80 mb-3">
+                          Email <strong>{String(application.borrowerInfo.email)}</strong> with the ARIVE link so they can complete their application.
+                        </p>
+                        <button
+                          onClick={async () => {
+                            if (isSendingEmail) return;
+                            setIsSendingEmail(true);
+                            try {
+                              const response = await fetch('/api/send-arive-email', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                  borrowerEmail: application.borrowerInfo.email,
+                                  borrowerName: `${application.borrowerInfo.firstName ?? ''} ${application.borrowerInfo.lastName ?? ''}`.trim() || 'Borrower',
+                                  ariveUrl: ensureHttps(process.env.NEXT_PUBLIC_ARIVE_POS_URL),
+                                }),
+                              });
+                              const data = await response.json();
+                              if (response.ok) {
+                                alert('✅ ARIVE link sent to borrower by email.');
+                              } else {
+                                alert(`❌ Failed to send: ${data.error || data.message || 'Unknown error'}`);
+                              }
+                            } catch (error) {
+                              alert(`❌ Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+                            } finally {
+                              setIsSendingEmail(false);
+                            }
+                          }}
+                          disabled={isSendingEmail}
+                          className="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-slate-900 font-semibold rounded-lg flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          {isSendingEmail ? (
+                            <>
+                              <Loader className="w-4 h-4 animate-spin" />
+                              Sending...
+                            </>
+                          ) : (
+                            <>
+                              <Mail className="w-4 h-4" />
+                              Send ARIVE link via email
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    )}
                   </div>
 
                   {/* OCR Section */}

@@ -95,6 +95,7 @@ export default function LoanApplicationsManager({ employeeName }: { employeeName
   const [notes, setNotes] = useState('');
   const [updating, setUpdating] = useState(false);
   const [filter, setFilter] = useState('all');
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   useEffect(() => {
     fetchApplications();
@@ -150,11 +151,15 @@ export default function LoanApplicationsManager({ employeeName }: { employeeName
         await fetchApplications();
         setSelectedApp(null);
         setNotes('');
-        alert(`Application ${newStatus}!`);
+        setSuccessMessage(`Application ${newStatus} successfully. Changes saved.`);
+        setTimeout(() => setSuccessMessage(null), 4000);
+      } else {
+        const data = await response.json().catch(() => ({}));
+        alert(data.error || 'Failed to update application. Please try again.');
       }
     } catch (error) {
       console.error('Error updating application:', error);
-      alert('Failed to update application');
+      alert('Something went wrong. Please try again.');
     } finally {
       setUpdating(false);
     }
@@ -253,6 +258,12 @@ export default function LoanApplicationsManager({ employeeName }: { employeeName
 
   return (
     <div className="space-y-6">
+      {successMessage && (
+        <div className="p-4 bg-green-50 border border-green-200 rounded-xl flex items-center gap-2 text-green-800">
+          <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" />
+          <span className="font-medium">{successMessage}</span>
+        </div>
+      )}
       {/* Welcome Section */}
       <div className="bg-gradient-to-r from-blue-500 to-cyan-600 rounded-xl p-8 text-white shadow-lg">
         <h1 className="text-3xl font-bold mb-2">

@@ -34,14 +34,25 @@ export default function DemoShowcasePage() {
       if (result?.error) {
         alert('Login failed. Please run demo setup first.');
         setLoading(false);
-      } else {
-        setTimeout(() => {
-          router.push('/');
-          router.refresh();
-        }, 500);
+        return;
       }
+      // Redirect by role so each button leads to the right dashboard
+      const sessionRes = await fetch('/api/auth/session');
+      const session = await sessionRes.json();
+      if (session?.user?.role === 'admin') {
+        router.push('/admin/dashboard');
+      } else if (session?.user?.role === 'employee') {
+        router.push('/employee/dashboard');
+      } else if (session?.user?.role === 'customer') {
+        router.push('/customer/dashboard');
+      } else {
+        router.push('/');
+      }
+      router.refresh();
     } catch (error) {
       console.error('Login error:', error);
+      alert('Something went wrong. Please try again.');
+    } finally {
       setLoading(false);
     }
   };

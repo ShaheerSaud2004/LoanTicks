@@ -45,7 +45,7 @@ export default function Footer() {
             <p className="text-sm text-gray-400 leading-relaxed">
               NMLS #2724157 · Licensed in State of TX. For licensing information go to{' '}
               <a
-                href="https://www.nmlsconsumeraccess.org"
+                href="https://www.nmlsconsumeraccess.org/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-yellow-500 hover:text-yellow-400 underline transition-colors"
@@ -88,7 +88,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link 
-                  href="#contact" 
+                  href="/#contact" 
                   className="text-gray-400 hover:text-yellow-500 transition-colors flex items-center gap-2 text-sm"
                 >
                   <HelpCircle className="h-4 w-4" />
@@ -188,7 +188,7 @@ export default function Footer() {
               <h5 className="text-white font-semibold mb-3 text-sm">Follow Us</h5>
               <div className="flex items-center gap-3">
                 <a
-                  href="https://facebook.com"
+                  href="https://www.facebook.com/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="h-10 w-10 rounded-lg bg-gray-700 hover:bg-yellow-500 flex items-center justify-center transition-colors group"
@@ -197,7 +197,7 @@ export default function Footer() {
                   <Facebook className="h-5 w-5 text-gray-400 group-hover:text-white transition-colors" />
                 </a>
                 <a
-                  href="https://twitter.com"
+                  href="https://www.twitter.com/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="h-10 w-10 rounded-lg bg-gray-700 hover:bg-yellow-500 flex items-center justify-center transition-colors group"
@@ -206,7 +206,7 @@ export default function Footer() {
                   <Twitter className="h-5 w-5 text-gray-400 group-hover:text-white transition-colors" />
                 </a>
                 <a
-                  href="https://linkedin.com"
+                  href="https://www.linkedin.com/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="h-10 w-10 rounded-lg bg-gray-700 hover:bg-yellow-500 flex items-center justify-center transition-colors group"
@@ -215,7 +215,7 @@ export default function Footer() {
                   <Linkedin className="h-5 w-5 text-gray-400 group-hover:text-white transition-colors" />
                 </a>
                 <a
-                  href="https://instagram.com"
+                  href="https://www.instagram.com/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="h-10 w-10 rounded-lg bg-gray-700 hover:bg-yellow-500 flex items-center justify-center transition-colors group"

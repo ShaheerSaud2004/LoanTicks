@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { FileText, X, Eye, Calendar, DollarSign, User } from 'lucide-react';
 
 interface Application {
@@ -36,6 +37,7 @@ interface CustomerApplicationTrackerProps {
 export default function CustomerApplicationTracker({
   applications,
 }: CustomerApplicationTrackerProps) {
+  const router = useRouter();
   const [selectedApp, setSelectedApp] = useState<Application | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -423,12 +425,12 @@ export default function CustomerApplicationTracker({
                 {selectedApp.status === 'approved' && (
                   <button
                     onClick={() => {
-                      // Show loan details or navigate to loan details page
-                      alert(`Loan Details for Application ${selectedApp._id.slice(-8).toUpperCase()}\n\nLoan Amount: ${selectedApp.propertyInfo?.loanAmount ? formatCurrency(selectedApp.propertyInfo.loanAmount) : 'N/A'}\nStatus: Approved\n\nYour loan has been approved! Our team will contact you with next steps.`);
+                      handleCloseModal();
+                      router.push('/customer/dashboard');
                     }}
                     className="px-6 py-3 sm:py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 active:bg-indigo-800 transition-colors font-medium text-sm sm:text-base touch-manipulation min-h-[44px] sm:min-h-0"
                   >
-                    View Loan Details
+                    Go to Dashboard
                   </button>
                 )}
               </div>
