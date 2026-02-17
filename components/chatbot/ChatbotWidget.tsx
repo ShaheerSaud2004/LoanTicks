@@ -145,15 +145,15 @@ export default function ChatbotWidget({ currentStep }: ChatbotWidgetProps) {
             setIsOpen(true);
             setIsMinimized(false);
           }}
-          className="fixed bottom-6 left-6 z-50 bg-yellow-500 hover:bg-yellow-600 text-white rounded-full p-3 shadow-lg transition-all duration-300 hover:scale-110 flex items-center justify-center w-16 h-16 touch-manipulation animate-pulse"
-          aria-label="Open chatbot"
+          className="fixed bottom-6 left-6 z-50 bg-yellow-500 hover:bg-yellow-600 text-white rounded-full p-2 shadow-lg transition-all duration-300 hover:scale-110 flex items-center justify-center w-16 h-16 touch-manipulation animate-pulse overflow-hidden"
+          aria-label="Open LOANATICKS AI chatbot"
         >
           <Image
             src="/logo.jpg"
-            alt="LoanTicks Logo"
-            width={32}
-            height={32}
-            className="rounded-full"
+            alt="LOANATICKS"
+            width={48}
+            height={48}
+            className="rounded-full object-contain"
           />
         </button>
       )}
@@ -170,10 +170,10 @@ export default function ChatbotWidget({ currentStep }: ChatbotWidgetProps) {
             <div className="flex items-center gap-2">
               <Image
                 src="/logo.jpg"
-                alt="LoanTicks Logo"
-                width={24}
-                height={24}
-                className="rounded-full"
+                alt="LOANATICKS"
+                width={32}
+                height={32}
+                className="rounded-full object-contain"
               />
               <h3 className="text-white font-bold text-lg">LOANATICKS AI</h3>
             </div>
