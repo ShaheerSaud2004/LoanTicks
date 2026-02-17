@@ -3,8 +3,8 @@ import Image from 'next/image';
 import Footer from '@/components/layout/Footer';
 
 export const metadata = {
-  title: 'FAQ | LoanAticks',
-  description: 'Frequently asked questions about LoanAticks mortgage application and services.',
+  title: 'FAQ | LOANATICKS',
+  description: 'Frequently asked questions about LOANATICKS mortgage application and services.',
 };
 
 const faqs = [
@@ -22,7 +22,7 @@ const faqs = [
   },
   {
     q: 'Are you licensed?',
-    a: 'Yes. LoanAticks is licensed in the State of Texas. Our NMLS number is 2724157. You can verify at nmlsconsumeraccess.org.',
+    a: 'Yes. LOANATICKS is licensed in the State of Texas. Our NMLS number is 2724157. You can verify at nmlsconsumeraccess.org.',
   },
   {
     q: 'Is my information secure?',
@@ -42,9 +42,9 @@ export default function FAQPage() {
           <div className="flex items-center justify-between h-16">
             <Link href="/" className="flex items-center gap-3">
               <div className="relative h-10 w-10 rounded-lg overflow-hidden bg-slate-100 border border-slate-200 flex-shrink-0">
-                <Image src="/logo.jpg" alt="LoanAticks" fill className="object-contain p-1" priority />
+                <Image src="/logo.jpg" alt="LOANATICKS" fill className="object-contain p-1" priority />
               </div>
-              <span className="text-xl font-bold text-slate-900">LoanAticks</span>
+              <span className="text-xl font-bold text-slate-900">LOANATICKS</span>
             </Link>
             <Link
               href="/"

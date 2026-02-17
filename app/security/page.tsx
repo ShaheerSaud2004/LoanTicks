@@ -4,8 +4,8 @@ import { Shield, Lock, FileCheck, Server } from 'lucide-react';
 import Footer from '@/components/layout/Footer';
 
 export const metadata = {
-  title: 'Security Information | LoanAticks',
-  description: 'How LoanAticks protects your data and keeps your application secure.',
+  title: 'Security Information | LOANATICKS',
+  description: 'How LOANATICKS protects your data and keeps your application secure.',
 };
 
 export default function SecurityPage() {
@@ -16,9 +16,9 @@ export default function SecurityPage() {
           <div className="flex items-center justify-between h-16">
             <Link href="/" className="flex items-center gap-3">
               <div className="relative h-10 w-10 rounded-lg overflow-hidden bg-slate-100 border border-slate-200 flex-shrink-0">
-                <Image src="/logo.jpg" alt="LoanAticks" fill className="object-contain p-1" priority />
+                <Image src="/logo.jpg" alt="LOANATICKS" fill className="object-contain p-1" priority />
               </div>
-              <span className="text-xl font-bold text-slate-900">LoanAticks</span>
+              <span className="text-xl font-bold text-slate-900">LOANATICKS</span>
             </Link>
             <Link
               href="/"

@@ -78,7 +78,7 @@ export async function POST(request: NextRequest) {
 
   <div style="text-align: center; padding: 20px; color: #6b7280; font-size: 12px;">
     <p style="margin: 0;">If you have any questions, please contact us.</p>
-    <p style="margin: 10px 0 0 0;">Thank you for choosing LoanAticks!</p>
+    <p style="margin: 10px 0 0 0;">Thank you for choosing LOANATICKS!</p>
   </div>
 </body>
 </html>
@@ -104,7 +104,7 @@ export async function POST(request: NextRequest) {
     }
 
     const info = await transporter.sendMail({
-      from: `LoanAticks <${getFromEmail()}>`,
+      from: `LOANATICKS <${getFromEmail()}>`,
       to: borrowerEmail,
       subject: emailSubject,
       html: emailBody,

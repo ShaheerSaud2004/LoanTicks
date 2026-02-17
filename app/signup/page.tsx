@@ -109,9 +109,9 @@ export default function SignUpPage() {
           <div className="text-center mb-8">
             <div className="flex items-center justify-center gap-3 mb-4">
               <div className="h-12 w-12 bg-white rounded-xl flex items-center justify-center shadow-lg relative p-2">
-                <Image src="/logo.jpg" alt="Loanaticks" fill className="object-contain" priority />
+                <Image src="/logo.jpg" alt="LOANATICKS" fill className="object-contain" priority />
               </div>
-              <h1 className="text-2xl font-semibold text-slate-900">Loanaticks</h1>
+              <h1 className="text-2xl font-semibold text-slate-900">LOANATICKS</h1>
             </div>
             <h2 className="text-2xl lg:text-3xl font-semibold text-slate-900 mb-2">Create Customer Account</h2>
             <p className="text-slate-600 text-base">Sign up to get started with your loan application</p>

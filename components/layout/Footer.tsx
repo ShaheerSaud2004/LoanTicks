@@ -23,7 +23,7 @@ export default function Footer() {
               <div className="relative h-14 w-14 rounded-lg overflow-hidden bg-white border border-gray-600 flex-shrink-0">
                 <Image 
                   src="/logo.jpg" 
-                  alt="LoanAticks" 
+                  alt="LOANATICKS" 
                   fill 
                   className="object-contain p-1"
                 />

@@ -142,11 +142,11 @@ export default function LoginPage() {
           {/* Logo and Branding */}
           <div className="flex items-start gap-5">
             <div className="h-16 w-16 lg:h-20 lg:w-20 bg-white rounded-2xl flex items-center justify-center shadow-[0_8px_32px_rgba(0,0,0,0.3)] overflow-hidden flex-shrink-0 relative p-2.5 ring-2 ring-white/10">
-              <Image src="/logo.jpg" alt="Loanaticks" fill className="object-contain" priority />
+              <Image src="/logo.jpg" alt="LOANATICKS" fill className="object-contain" priority />
             </div>
             <div className="pt-1.5">
-              <h1 className="text-3xl lg:text-4xl font-semibold tracking-tight mb-1">Loanaticks</h1>
-              <p className="text-slate-300 text-sm lg:text-base font-medium">Home Mortgage Solutions</p>
+              <h1 className="text-3xl lg:text-4xl font-semibold tracking-tight mb-1">LOANATICKS</h1>
+              <p className="text-slate-300 text-sm lg:text-base font-medium">Expert Loan Advisor</p>
             </div>
         </div>
 

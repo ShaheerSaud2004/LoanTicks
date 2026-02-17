@@ -9,7 +9,7 @@ export default function NotFound() {
         <div className="max-w-md w-full text-center">
           <div className="flex justify-center mb-6">
             <div className="relative h-20 w-20 rounded-xl overflow-hidden bg-slate-100 border border-slate-200">
-              <Image src="/logo.jpg" alt="LoanAticks" fill className="object-contain p-2" />
+              <Image src="/logo.jpg" alt="LOANATICKS" fill className="object-contain p-2" />
             </div>
           </div>
           <h1 className="text-6xl font-bold text-slate-200 mb-2">404</h1>

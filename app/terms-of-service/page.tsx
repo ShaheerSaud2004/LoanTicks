@@ -3,8 +3,8 @@ import Image from 'next/image';
 import Footer from '@/components/layout/Footer';
 
 export const metadata = {
-  title: 'Terms of Service | LoanAticks',
-  description: 'Terms of service for LoanAticks home mortgage solutions.',
+  title: 'Terms of Service | LOANATICKS',
+  description: 'Terms of service for LOANATICKS home mortgage solutions.',
 };
 
 export default function TermsOfServicePage() {
@@ -15,9 +15,9 @@ export default function TermsOfServicePage() {
           <div className="flex items-center justify-between h-16">
             <Link href="/" className="flex items-center gap-3">
               <div className="relative h-10 w-10 rounded-lg overflow-hidden bg-slate-100 border border-slate-200 flex-shrink-0">
-                <Image src="/logo.jpg" alt="LoanAticks" fill className="object-contain p-1" priority />
+                <Image src="/logo.jpg" alt="LOANATICKS" fill className="object-contain p-1" priority />
               </div>
-              <span className="text-xl font-bold text-slate-900">LoanAticks</span>
+              <span className="text-xl font-bold text-slate-900">LOANATICKS</span>
             </Link>
             <Link
               href="/"
@@ -34,7 +34,7 @@ export default function TermsOfServicePage() {
         <p className="text-slate-600 mb-4">Last updated: February 2025.</p>
         <div className="prose prose-slate max-w-none space-y-4 text-slate-700">
           <p>
-            By using the LoanAticks website and services, you agree to these Terms of Service. Please read them
+            By using the LOANATICKS website and services, you agree to these Terms of Service. Please read them
             carefully.
           </p>
           <h2 className="text-xl font-semibold text-slate-900 mt-6">Use of Services</h2>
@@ -50,7 +50,7 @@ export default function TermsOfServicePage() {
           </p>
           <h2 className="text-xl font-semibold text-slate-900 mt-6">Limitation of Liability</h2>
           <p>
-            To the fullest extent permitted by law, LoanAticks is not liable for indirect, incidental, or consequential
+            To the fullest extent permitted by law, LOANATICKS is not liable for indirect, incidental, or consequential
             damages arising from your use of our services. Approval and terms of any loan are subject to our
             underwriting criteria and applicable law.
           </p>

@@ -3,8 +3,8 @@ import Image from 'next/image';
 import Footer from '@/components/layout/Footer';
 
 export const metadata = {
-  title: 'Privacy Policy | LoanAticks',
-  description: 'Privacy policy for LoanAticks home mortgage solutions.',
+  title: 'Privacy Policy | LOANATICKS',
+  description: 'Privacy policy for LOANATICKS home mortgage solutions.',
 };
 
 export default function PrivacyPolicyPage() {
@@ -15,9 +15,9 @@ export default function PrivacyPolicyPage() {
           <div className="flex items-center justify-between h-16">
             <Link href="/" className="flex items-center gap-3">
               <div className="relative h-10 w-10 rounded-lg overflow-hidden bg-slate-100 border border-slate-200 flex-shrink-0">
-                <Image src="/logo.jpg" alt="LoanAticks" fill className="object-contain p-1" priority />
+                <Image src="/logo.jpg" alt="LOANATICKS" fill className="object-contain p-1" priority />
               </div>
-              <span className="text-xl font-bold text-slate-900">LoanAticks</span>
+              <span className="text-xl font-bold text-slate-900">LOANATICKS</span>
             </Link>
             <Link
               href="/"
@@ -34,7 +34,7 @@ export default function PrivacyPolicyPage() {
         <p className="text-slate-600 mb-4">Last updated: February 2025.</p>
         <div className="prose prose-slate max-w-none space-y-4 text-slate-700">
           <p>
-            LoanAticks (&quot;we,&quot; &quot;us,&quot; or &quot;our&quot;) is committed to protecting your privacy.
+            LOANATICKS (&quot;we,&quot; &quot;us,&quot; or &quot;our&quot;) is committed to protecting your privacy.
             This policy describes how we collect, use, and safeguard your information when you use our website and
             mortgage application services.
           </p>
