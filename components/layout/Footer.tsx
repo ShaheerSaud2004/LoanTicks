@@ -227,7 +227,7 @@ export default function Footer() {
                 <Shield className="h-4 w-4 text-yellow-500" />
                 SSL Secured
               </span>
-              <span>Licensed Mortgage Lender · NMLS #2724157 · Licensed in State of TX</span>
+              <span>Licensed Mortgage Broker · NMLS #2724157 · Licensed in State of TX</span>
             </div>
           </div>
         </div>
