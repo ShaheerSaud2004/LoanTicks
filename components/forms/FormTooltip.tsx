@@ -6,13 +6,21 @@ import { HelpCircle } from 'lucide-react';
 interface FormTooltipProps {
   content: string;
   className?: string;
+  /** When true, the question mark icon disappears after the user has opened the tooltip once (hover/click then leave). */
+  hideIconAfterView?: boolean;
 }
 
-export default function FormTooltip({ content, className = '' }: FormTooltipProps) {
+export default function FormTooltip({ content, className = '', hideIconAfterView = false }: FormTooltipProps) {
   const [isVisible, setIsVisible] = useState(false);
+  const [hasBeenViewed, setHasBeenViewed] = useState(false);
   const [tooltipStyle, setTooltipStyle] = useState<React.CSSProperties>({});
   const tooltipRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLSpanElement>(null);
+
+  const handleClose = () => {
+    if (hideIconAfterView && isVisible) setHasBeenViewed(true);
+    setIsVisible(false);
+  };
 
   useEffect(() => {
     if (!isVisible || !tooltipRef.current || !triggerRef.current) return;
@@ -114,20 +122,22 @@ export default function FormTooltip({ content, className = '' }: FormTooltipProp
     };
   }, [isVisible, content]);
 
+  if (hideIconAfterView && hasBeenViewed) return null;
+
   return (
     <span 
       ref={triggerRef}
       className={`group relative inline-flex items-center ${className}`}
       onMouseEnter={() => setIsVisible(true)}
-      onMouseLeave={() => setIsVisible(false)}
+      onMouseLeave={handleClose}
       onFocus={() => setIsVisible(true)}
-      onBlur={() => setIsVisible(false)}
+      onBlur={handleClose}
     >
       <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
       {isVisible && (
         <div
           ref={tooltipRef}
-          className="absolute bg-gray-800 text-white text-xs rounded-lg p-3 shadow-lg pointer-events-none z-50 whitespace-normal"
+          className="absolute bg-gray-800 text-white text-xs rounded-lg p-3 shadow-lg pointer-events-none z-50 whitespace-normal max-w-[288px]"
           style={tooltipStyle}
         >
           {content}

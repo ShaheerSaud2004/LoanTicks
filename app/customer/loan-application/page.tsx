@@ -159,6 +159,7 @@ export default function LoanApplicationPage() {
           suffix: formData.suffix || '',
           email: formData.email || 'test@example.com',
           phone: formData.cellPhone || '(555) 000-0000',
+          creditPullConsent: !!formData.creditPullConsent,
             dateOfBirth: formData.dateOfBirth ? new Date(formData.dateOfBirth as string) : new Date('1990-01-01'),
           ssn: formData.ssn || '000-00-0000',
             maritalStatus: formData.maritalStatus || 'unmarried',

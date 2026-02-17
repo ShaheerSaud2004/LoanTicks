@@ -25,6 +25,9 @@ export interface ILoanApplication extends Document {
     // Citizenship/Immigration Status
     citizenshipType: 'us_citizen' | 'permanent_resident' | 'non_permanent_resident';
     
+    // Credit pull authorization
+    creditPullConsent?: boolean;
+
     // Demographics (for government monitoring - optional)
     creditScore?: number;
     race?: string;
@@ -380,6 +383,7 @@ const LoanApplicationSchema = new Schema<ILoanApplication>(
         enum: ['us_citizen', 'permanent_resident', 'non_permanent_resident'],
         default: 'us_citizen',
       },
+      creditPullConsent: { type: Boolean, default: false },
       creditScore: Number,
       race: String,
       ethnicity: String,

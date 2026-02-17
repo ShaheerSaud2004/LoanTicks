@@ -46,6 +46,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
     creditType: 'individual',
     jointBorrowers: '',
     otherBorrowerNames: '',
+    creditPullConsent: false,
     
     // 1c. Marital Status and Dependents
     maritalStatus: 'unmarried',
@@ -328,6 +329,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
     if (!formData.creditType) missingFields.push('Credit Type');
     if (!formData.maritalStatus) missingFields.push('Marital Status');
     if (!formData.citizenship) missingFields.push('Citizenship Status');
+    if (!formData.creditPullConsent) missingFields.push('Credit Pull Authorization (you must authorize a credit check)');
 
     // Section 2: Contact Information
     if (!formData.email?.trim()) missingFields.push('Email Address');
@@ -382,7 +384,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
     // Not strictly required, but should be filled if they exist
 
     // Section 9: Property Information
-    if (!formData.propertyAddress?.trim()) missingFields.push('Property Address');
+    // Street address is optional; city, state, ZIP are required
     if (!formData.propertyCity?.trim()) missingFields.push('Property City');
     if (!formData.propertyState?.trim()) missingFields.push('Property State');
     if (!formData.propertyZipCode?.trim()) missingFields.push('Property ZIP Code');
@@ -459,7 +461,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
               <div>
                   <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
                   First Name *
-                    <FormTooltip content="Your legal first name as it appears on your government-issued ID (driver's license, passport, etc.)" />
+                    <FormTooltip content="Your legal first name as it appears on your government-issued ID (driver's license, passport, etc.)" hideIconAfterView />
                 </label>
                   <p className="text-sm text-gray-600 mb-2">Enter your legal first name exactly as shown on your identification documents.</p>
                 <input
@@ -772,6 +774,29 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   />
                 </div>
               )}
+            </div>
+
+            <div className="bg-teal-50 border-2 border-teal-200 rounded-xl p-5 mt-6">
+              <h3 className="font-bold text-teal-900 mb-3 flex items-center gap-2">
+                <CheckCircle className="w-5 h-5" />
+                Credit Pull Authorization
+              </h3>
+              <p className="text-teal-800 text-sm mb-4">
+                To process your loan application, we need your permission to obtain your credit report. Checking your credit helps us determine loan eligibility and offer you the best terms.
+              </p>
+              <label className={`flex items-start gap-4 p-4 border rounded-xl cursor-pointer touch-manipulation min-h-[60px] ${
+                formData.creditPullConsent ? 'border-teal-500 bg-white' : 'border-gray-200 bg-white'
+              }`}>
+                <input
+                  type="checkbox"
+                  checked={formData.creditPullConsent}
+                  onChange={(e) => handleInputChange('creditPullConsent', e.target.checked)}
+                  className="mt-1 w-6 h-6 sm:w-7 sm:h-7 rounded border-2 border-gray-400 cursor-pointer flex-shrink-0 accent-teal-600"
+                />
+                <span className="text-base sm:text-lg font-medium text-gray-900 pt-0.5">
+                  I authorize LOANATICKS to pull my credit report for the purpose of evaluating this loan application and determining my eligibility and loan terms.
+                </span>
+              </label>
             </div>
             </div>
           </div>
@@ -1607,7 +1632,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
               <div className="flex flex-col">
                 <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
                   Installment Loan Payments (Auto, Student, etc.)
-                  <FormTooltip content="Enter the total monthly payment for all installment loans (auto loans, student loans, personal loans, etc.). Include the monthly payment amount, not the total balance. If you have multiple loans, add all monthly payments together." />
+                  <FormTooltip content="Enter the total monthly payment for all installment loans (auto loans, student loans, personal loans, etc.). Include the monthly payment amount, not the total balance. If you have multiple loans, add all monthly payments together." hideIconAfterView />
                 </label>
                 <p className="text-sm text-gray-600 mb-3">Enter the total monthly payment for all installment loans.</p>
                 <input type="number" value={formData.installmentLoanPayments} onChange={(e) => handleInputChange('installmentLoanPayments', e.target.value)} min="0" step="0.01" placeholder="0" className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900 min-h-[56px]" />
@@ -1615,7 +1640,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
               <div className="flex flex-col md:col-span-2">
                 <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
                   Other Monthly Payments
-                  <FormTooltip content="Enter the total monthly payment for any other debts not listed above (e.g., child support, alimony, other loans, etc.). Do not include your current housing payment, utilities, or insurance premiums here." />
+                  <FormTooltip content="Enter the total monthly payment for any other debts not listed above (e.g., child support, alimony, other loans, etc.). Do not include your current housing payment, utilities, or insurance premiums here." hideIconAfterView />
                 </label>
                 <p className="text-sm text-gray-600 mb-3">Enter the total monthly payment for other debts (child support, alimony, etc.).</p>
                 <input type="number" value={formData.otherMonthlyPayments} onChange={(e) => handleInputChange('otherMonthlyPayments', e.target.value)} min="0" step="0.01" placeholder="0" className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900 min-h-[56px]" />
@@ -1646,13 +1671,8 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
             <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 space-y-6">
             <div>
                 <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
-                  Subject Property Address *
-                  <span className="group relative inline-block">
-                    <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
-                    <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 invisible group-hover:visible shadow-lg">
-                      The complete street address of the property you are purchasing or refinancing. This is the property that will secure your loan. Include the house number, street name, and unit/apartment number if applicable. This must match the address on your purchase agreement or property deed.
-                    </span>
-                  </span>
+                  Subject Property Address
+                  <FormTooltip content="The complete street address of the property you are purchasing or refinancing. This is the property that will secure your loan. Include the house number, street name, and unit/apartment number if applicable. This must match the address on your purchase agreement or property deed." hideIconAfterView />
                 </label>
                 <p className="text-sm text-gray-600 mb-2">Enter the complete street address of the property (house number, street name, apartment/unit if applicable).</p>
                 <input 
@@ -1661,7 +1681,6 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   onChange={(e) => handleInputChange('propertyAddress', e.target.value)} 
                   placeholder="Enter the complete street address"
                   className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900" 
-                  required 
                 />
             </div>
               
@@ -1669,12 +1688,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
               <div>
                   <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
                     City *
-                    <span className="group relative inline-block">
-                      <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
-                      <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 invisible group-hover:visible shadow-lg">
-                        Enter the city where the property is located. This must match the city on the property deed and purchase agreement.
-                      </span>
-                    </span>
+                    <FormTooltip content="Enter the city where the property is located. This must match the city on the property deed and purchase agreement." hideIconAfterView />
                   </label>
                   <p className="text-sm text-gray-600 mb-2">Enter the city where the property is located.</p>
                   <input 
@@ -1688,12 +1702,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
               <div>
                   <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
                     State *
-                    <span className="group relative inline-block">
-                      <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
-                      <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 invisible group-hover:visible shadow-lg">
-                        Enter the 2-letter state abbreviation where the property is located (e.g., CA for California, NY for New York, TX for Texas). This must match the state on the property deed.
-                      </span>
-                    </span>
+                    <FormTooltip content="Enter the 2-letter state abbreviation where the property is located (e.g., CA for California, NY for New York, TX for Texas). This must match the state on the property deed." hideIconAfterView />
                   </label>
                   <p className="text-sm text-gray-600 mb-2">Enter the 2-letter state abbreviation (e.g., CA, NY, TX).</p>
                   <input 
@@ -1709,12 +1718,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
               <div>
                   <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
                     ZIP Code *
-                    <span className="group relative inline-block">
-                      <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
-                      <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 invisible group-hover:visible shadow-lg">
-                        Enter the 5-digit ZIP code where the property is located. This must match the ZIP code on the property deed and purchase agreement.
-                      </span>
-                    </span>
+                    <FormTooltip content="Enter the 5-digit ZIP code where the property is located. This must match the ZIP code on the property deed and purchase agreement." hideIconAfterView />
                   </label>
                   <p className="text-sm text-gray-600 mb-2">Enter the 5-digit ZIP code.</p>
                   <input 
@@ -2042,6 +2046,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                     Upload a clear copy of your valid government-issued photo identification (Driver's License, Passport, or State ID). The document must be current and clearly legible.
                   </p>
                   <input 
+                    id="urla-file-id-doc"
                     type="file" 
                     accept=".pdf,.jpg,.jpeg,.png"
                     onChange={(e) => {
@@ -2049,19 +2054,28 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                       handleInputChange('idDocument', file);
                       if (file) {
                         const currentDocs = (formData.uploadedDocuments as File[]) || [];
-                        // Check if file already exists to avoid duplicates
                         const exists = currentDocs.some(doc => doc.name === file.name && doc.size === file.size);
                         if (!exists) {
                           handleInputChange('uploadedDocuments', [...currentDocs, file]);
                         }
                       }
                     }} 
-                    className="w-full px-5 py-4 text-base border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900" 
+                    className="sr-only" 
                     required
                   />
-                  {formData.idDocument && (
-                    <p className="text-teal-700 text-sm mt-2 font-medium">✓ ID Document uploaded: {(formData.idDocument as File).name}</p>
-                  )}
+                  <label
+                    htmlFor="urla-file-id-doc"
+                    className="inline-flex items-center justify-center min-h-[56px] px-8 py-4 text-lg font-semibold rounded-xl border-2 border-teal-500 bg-teal-50 text-teal-800 hover:bg-teal-100 focus-within:ring-2 focus-within:ring-teal-200 focus-within:ring-offset-2 cursor-pointer transition"
+                  >
+                    Choose File
+                  </label>
+                  <p className="text-sm mt-2">
+                    {formData.idDocument ? (
+                      <span className="text-teal-700 font-medium">✓ ID Document uploaded: {(formData.idDocument as File).name}</span>
+                    ) : (
+                      <span className="text-gray-500">No file chosen</span>
+                    )}
+                  </p>
             </div>
 
             <div>
@@ -2072,6 +2086,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                     Upload your most recent pay stubs (typically the last 2-3 months). If you are self-employed, please upload your most recent tax returns and profit/loss statements instead.
                   </p>
                   <input 
+                    id="urla-file-paystubs"
                     type="file" 
                     multiple
                     accept=".pdf,.jpg,.jpeg,.png"
@@ -2081,7 +2096,6 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                       handleInputChange('paystubsDocument', paystubFile);
                       if (files.length > 0) {
                         const currentDocs = (formData.uploadedDocuments as File[]) || [];
-                        // Filter out duplicates
                         const newFiles = files.filter(file => 
                           !currentDocs.some(doc => doc.name === file.name && doc.size === file.size)
                         );
@@ -2090,12 +2104,22 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                         }
                       }
                     }} 
-                    className="w-full px-5 py-4 text-base border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900" 
+                    className="sr-only" 
                     required
                   />
-                  {formData.paystubsDocument && (
-                    <p className="text-teal-700 text-sm mt-2 font-medium">✓ Pay Stubs uploaded: {(formData.paystubsDocument as File).name}</p>
-                  )}
+                  <label
+                    htmlFor="urla-file-paystubs"
+                    className="inline-flex items-center justify-center min-h-[56px] px-8 py-4 text-lg font-semibold rounded-xl border-2 border-teal-500 bg-teal-50 text-teal-800 hover:bg-teal-100 focus-within:ring-2 focus-within:ring-teal-200 focus-within:ring-offset-2 cursor-pointer transition"
+                  >
+                    Choose Files
+                  </label>
+                  <p className="text-sm mt-2">
+                    {formData.paystubsDocument ? (
+                      <span className="text-teal-700 font-medium">✓ Pay Stubs uploaded: {(formData.paystubsDocument as File).name}</span>
+                    ) : (
+                      <span className="text-gray-500">No file chosen</span>
+                    )}
+                  </p>
             </div>
 
                 <div className="border-t-2 border-gray-200 pt-6">
@@ -2106,6 +2130,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                     You may upload additional documents such as bank statements, tax returns, W-2s, or other financial documents that support your application.
                   </p>
                   <input 
+                    id="urla-file-additional"
                     type="file" 
                     multiple 
                     accept=".pdf,.jpg,.jpeg,.png"
@@ -2113,15 +2138,20 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                       const files = Array.from(e.target.files || []);
                       if (files.length > 0) {
                         const currentDocs = (formData.uploadedDocuments as File[]) || [];
-                        // Avoid duplicates by checking file names
                         const newFiles = files.filter(file => 
                           !currentDocs.some(doc => doc.name === file.name && doc.size === file.size)
                         );
                         handleInputChange('uploadedDocuments', [...currentDocs, ...newFiles]);
                       }
                     }} 
-                    className="w-full px-5 py-4 text-base border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900" 
+                    className="sr-only" 
                   />
+                  <label
+                    htmlFor="urla-file-additional"
+                    className="inline-flex items-center justify-center min-h-[56px] px-8 py-4 text-lg font-semibold rounded-xl border-2 border-teal-500 bg-teal-50 text-teal-800 hover:bg-teal-100 focus-within:ring-2 focus-within:ring-teal-200 focus-within:ring-offset-2 cursor-pointer transition"
+                  >
+                    Choose Files
+                  </label>
                   <p className="text-sm text-gray-500 mt-2">Accepted formats: PDF, JPG, PNG (Max 10MB per file)</p>
                 </div>
               </div>
