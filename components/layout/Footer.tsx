@@ -6,10 +6,6 @@ import {
   Mail, 
   Phone, 
   MapPin, 
-  Facebook, 
-  Twitter, 
-  Linkedin, 
-  Instagram,
   Shield,
   FileText,
   HelpCircle,
@@ -185,45 +181,16 @@ export default function Footer() {
 
             {/* Social Media */}
             <div>
-              <h5 className="text-white font-semibold mb-3 text-sm">Follow Us</h5>
-              <div className="flex items-center gap-3">
-                <a
-                  href="https://www.facebook.com/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="h-10 w-10 rounded-lg bg-gray-700 hover:bg-yellow-500 flex items-center justify-center transition-colors group"
-                  aria-label="Facebook"
-                >
-                  <Facebook className="h-5 w-5 text-gray-400 group-hover:text-white transition-colors" />
-                </a>
-                <a
-                  href="https://www.twitter.com/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="h-10 w-10 rounded-lg bg-gray-700 hover:bg-yellow-500 flex items-center justify-center transition-colors group"
-                  aria-label="Twitter"
-                >
-                  <Twitter className="h-5 w-5 text-gray-400 group-hover:text-white transition-colors" />
-                </a>
-                <a
-                  href="https://www.linkedin.com/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="h-10 w-10 rounded-lg bg-gray-700 hover:bg-yellow-500 flex items-center justify-center transition-colors group"
-                  aria-label="LinkedIn"
-                >
-                  <Linkedin className="h-5 w-5 text-gray-400 group-hover:text-white transition-colors" />
-                </a>
-                <a
-                  href="https://www.instagram.com/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="h-10 w-10 rounded-lg bg-gray-700 hover:bg-yellow-500 flex items-center justify-center transition-colors group"
-                  aria-label="Instagram"
-                >
-                  <Instagram className="h-5 w-5 text-gray-400 group-hover:text-white transition-colors" />
-                </a>
-              </div>
+              <h5 className="text-white font-semibold mb-3 text-sm">Leave a Review</h5>
+              <a
+                href="https://www.yelp.com/biz/ruqayya-yasin-loanaticks-houston"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-gray-700 hover:bg-yellow-500 text-gray-300 hover:text-white font-medium text-sm transition-colors"
+                aria-label="Leave a review on Yelp"
+              >
+                Leave a review on Yelp
+              </a>
             </div>
           </div>
         </div>
