@@ -1,4 +1,4 @@
-// Service Worker for LoanTicks PWA
+// Service Worker for LOANATICKS PWA
 const CACHE_NAME = 'loanticks-v2';
 const urlsToCache = [
   '/',

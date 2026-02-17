@@ -44,7 +44,7 @@ async function generatePDF() {
       },
       printBackground: true,
       displayHeaderFooter: true,
-      headerTemplate: '<div style="font-size: 10px; text-align: center; width: 100%; color: #6B7280; padding: 0 2cm;">LoanAticks Security Implementation Report</div>',
+      headerTemplate: '<div style="font-size: 10px; text-align: center; width: 100%; color: #6B7280; padding: 0 2cm;">LOANATICKS Security Implementation Report</div>',
       footerTemplate: '<div style="font-size: 10px; text-align: center; width: 100%; color: #6B7280; padding: 0 2cm;"><span class="pageNumber"></span> / <span class="totalPages"></span></div>'
     });
 

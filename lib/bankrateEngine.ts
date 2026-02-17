@@ -1,4 +1,4 @@
-// Simple Bankrate Integration for LoanTicks
+// Simple Bankrate Integration for LOANATICKS
 // Easy rate aggregation without complex API setup
 
 export interface BankrateLoanData {

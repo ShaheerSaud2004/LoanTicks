@@ -1012,14 +1012,14 @@ Please reply to this email with the requested information at your earliest conve
 
 Best regards,
 ${session?.user?.name || 'Loan Officer'}
-LoanTicks - Home Mortgage Solutions`}
+LOANATICKS - Home Mortgage Solutions`}
                   className="flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium text-sm md:text-base touch-manipulation"
                 >
                   <Mail className="w-4 h-4 md:w-5 md:h-5" />
                   <span>Email Borrower</span>
                 </a>
                 <a
-                  href={`sms:${application.borrowerInfo?.phone || ''}?&body=Hello ${application.borrowerInfo?.firstName}, this is ${session?.user?.name || 'your loan officer'} from LoanTicks. We need additional information for your mortgage application #${application._id.slice(-8)}. Please check your email for details or call us back. Thanks!`}
+                  href={`sms:${application.borrowerInfo?.phone || ''}?&body=Hello ${application.borrowerInfo?.firstName}, this is ${session?.user?.name || 'your loan officer'} from LOANATICKS. We need additional information for your mortgage application #${application._id.slice(-8)}. Please check your email for details or call us back. Thanks!`}
                   className="flex items-center justify-center gap-2 px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition font-medium text-sm md:text-base touch-manipulation"
                 >
                   <MessageSquare className="w-4 h-4 md:w-5 md:h-5" />

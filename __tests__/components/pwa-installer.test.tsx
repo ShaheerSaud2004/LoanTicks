@@ -54,7 +54,7 @@ describe('PWAInstaller', () => {
     window.dispatchEvent(event);
 
     await waitFor(() => {
-      expect(screen.getByText(/Install LoanTicks/i)).toBeInTheDocument();
+      expect(screen.getByText(/Install LOANATICKS/i)).toBeInTheDocument();
     });
   });
 
@@ -101,7 +101,7 @@ describe('PWAInstaller', () => {
     });
 
     await waitFor(() => {
-      expect(screen.queryByText(/Install LoanTicks/i)).not.toBeInTheDocument();
+      expect(screen.queryByText(/Install LOANATICKS/i)).not.toBeInTheDocument();
     });
   });
 });

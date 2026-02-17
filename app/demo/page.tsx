@@ -205,10 +205,10 @@ export default function DemoShowcasePage() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="h-16 w-16 rounded-xl shadow-lg relative overflow-hidden bg-white">
-                <Image src="/logo.jpg" alt="LoanTicks" fill className="object-contain" priority />
+                <Image src="/logo.jpg" alt="LOANATICKS" fill className="object-contain" priority />
               </div>
               <div>
-                <h1 className="text-3xl font-bold text-white">LoanTicks Demo Showcase</h1>
+                <h1 className="text-3xl font-bold text-white">LOANATICKS Demo Showcase</h1>
                 <p className="text-white/80 mt-1">Explore all features with pre-configured demo accounts</p>
               </div>
             </div>

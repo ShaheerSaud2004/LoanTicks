@@ -155,7 +155,7 @@ export default function DashboardLayout({
                 )}
                 className="h-12 sm:h-14 w-12 sm:w-14 rounded-lg overflow-hidden bg-white border border-gray-200 hover:border-gray-300 transition cursor-pointer flex-shrink-0 relative"
               >
-                <Image src="/logo.jpg" alt="LoanTicks" fill className="object-contain" />
+                <Image src="/logo.jpg" alt="LOANATICKS" fill className="object-contain" />
               </button>
               
               {/* Navigation Menu */}

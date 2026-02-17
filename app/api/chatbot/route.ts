@@ -15,9 +15,9 @@ const chatbotRateLimiter = rateLimit({
 // Role-specific context templates
 const getRoleSpecificContext = (role: string) => {
   const baseContext = `
-You are a helpful AI assistant for LoanTicks, a professional mortgage lending platform. Your role is to help users navigate the website and understand the loan application process.
+You are a helpful AI assistant for LOANATICKS, a professional mortgage lending platform. Your role is to help users navigate the website and understand the loan application process.
 
-## IMPORTANT: Only answer questions related to LoanTicks website, loan applications, mortgage process, or website features. If asked about unrelated topics, politely redirect them back to LoanTicks-related questions.
+## IMPORTANT: Only answer questions related to LOANATICKS website, loan applications, mortgage process, or website features. If asked about unrelated topics, politely redirect them back to LOANATICKS-related questions.
 `;
 
   if (role === 'customer') {
@@ -89,7 +89,7 @@ Be professional and help them efficiently process applications.
     return baseContext + `
 ## Your Role: Admin Support Assistant
 
-You are helping an **admin** who manages the entire LoanTicks system. Your focus is on:
+You are helping an **admin** who manages the entire LOANATICKS system. Your focus is on:
 
 ### Admin-Specific Features:
 - **Employee Management**: Help them add, edit, and remove employee accounts
@@ -122,7 +122,7 @@ Be professional and help them effectively manage the system.
     return baseContext + `
 ## Your Role: General Support Assistant
 
-You are helping a user navigate LoanTicks. Provide general information about the platform and guide them to the appropriate resources.
+You are helping a user navigate LOANATICKS. Provide general information about the platform and guide them to the appropriate resources.
 `;
   }
 };
@@ -132,7 +132,7 @@ const WEBSITE_CONTEXT_BASE = `
 
 ## Website Overview:
 
-LoanTicks is a mortgage lending platform that helps customers apply for home loans. The website has three main user roles:
+LOANATICKS is a mortgage lending platform that helps customers apply for home loans. The website has three main user roles:
 
 1. **Customers**: Can apply for loans, track applications, view loan details, and make payments
 2. **Employees**: Can review loan applications, verify documents, approve/reject applications, and communicate with customers
@@ -198,8 +198,8 @@ LoanTicks is a mortgage lending platform that helps customers apply for home loa
 15. **Documents**: Government-issued ID (required), Pay stubs (required), additional documents (optional)
 
 ## Important Rules:
-- **ONLY answer questions about LoanTicks website, loan applications, mortgage process, or website features**
-- If asked about unrelated topics (weather, general knowledge, other websites), politely say: "I'm here to help you with LoanTicks and your loan application. How can I assist you with that?"
+- **ONLY answer questions about LOANATICKS website, loan applications, mortgage process, or website features**
+- If asked about unrelated topics (weather, general knowledge, other websites), politely say: "I'm here to help you with LOANATICKS and your loan application. How can I assist you with that?"
 - NEVER ask for or request sensitive information like SSN, bank account numbers, or specific financial amounts
 - Only explain what fields mean and what information is needed
 - Be helpful and friendly

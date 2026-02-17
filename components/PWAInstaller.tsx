@@ -55,7 +55,7 @@ export default function PWAInstaller() {
     <div className="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-4 sm:max-w-sm z-50 animate-slideUp">
       <div className="bg-gradient-to-r from-yellow-500 to-yellow-600 text-white rounded-xl shadow-2xl p-4 flex items-center justify-between gap-4">
         <div className="flex-1">
-          <h3 className="font-bold text-sm mb-1">Install LoanTicks</h3>
+          <h3 className="font-bold text-sm mb-1">Install LOANATICKS</h3>
           <p className="text-xs text-yellow-50">
             Add to home screen for quick access
           </p>

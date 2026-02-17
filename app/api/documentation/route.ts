@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 
 export async function GET() {
   const apiDocumentation = {
-    service: "LoanTicks API",
+    service: "LOANATICKS API",
     version: "1.0.0",
     baseUrl: "https://loanticks.vercel.app",
     description: "RESTful API for loan application management and rate requests",
@@ -185,7 +185,7 @@ export async function GET() {
     support: {
       documentation: "https://loanticks.vercel.app/api/documentation",
       mobileFriendlyDocs: "https://loanticks.vercel.app/api/docs",
-      contact: "For API access and integration support, contact your LoanTicks representative"
+      contact: "For API access and integration support, contact your LOANATICKS representative"
     },
     
     links: {

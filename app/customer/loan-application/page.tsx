@@ -549,7 +549,7 @@ export default function LoanApplicationPage() {
                   onClick={() => router.push('/customer/dashboard')}
                   className="h-12 w-12 rounded-lg overflow-hidden bg-white border border-gray-200 hover:border-gray-300 transition cursor-pointer relative"
                 >
-                  <Image src="/logo.jpg" alt="LoanTicks" fill className="object-contain" />
+                  <Image src="/logo.jpg" alt="LOANATICKS" fill className="object-contain" />
                 </button>
                 
                 {/* Navigation Menu */}
@@ -894,7 +894,7 @@ export default function LoanApplicationPage() {
                 onClick={() => router.push('/customer/dashboard')}
                 className="h-12 w-auto rounded-lg overflow-hidden bg-white border border-gray-200 hover:border-gray-300 transition cursor-pointer"
               >
-                <img src="/logo.jpg" alt="LoanTicks" className="h-full w-full object-contain" />
+                <img src="/logo.jpg" alt="LOANATICKS" className="h-full w-full object-contain" />
               </button>
               
               {/* Navigation Menu */}

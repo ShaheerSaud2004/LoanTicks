@@ -29,9 +29,9 @@ export default function HomePageClient() {
                 <Phone className="h-4 w-4" />
                 <span>713-782-1309</span>
               </a>
-              <a href="mailto:Loanaticks@gmail.com" className="flex items-center gap-1.5 hover:text-yellow-400 transition-colors">
+              <a href="mailto:LOANATICKS@gmail.com" className="flex items-center gap-1.5 hover:text-yellow-400 transition-colors">
                 <Mail className="h-4 w-4" />
-                <span>Loanaticks@gmail.com</span>
+                <span>LOANATICKS@gmail.com</span>
               </a>
               <span className="hidden md:flex items-center gap-1.5 text-slate-400">
                 <MapPin className="h-4 w-4" />
@@ -237,7 +237,7 @@ export default function HomePageClient() {
           </p>
           <p className="text-slate-400 text-sm mb-8">
             Office: 713-782-1309 · 5606 Theall Rd, Houston, TX 77066<br />
-            Loanaticks@gmail.com or Yasin@loanaticks.com
+            LOANATICKS@gmail.com or Yasin@loanaticks.com
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link

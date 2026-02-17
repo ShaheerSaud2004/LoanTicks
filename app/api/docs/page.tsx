@@ -152,10 +152,10 @@ Form Data:
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="h-10 w-10 rounded-lg bg-white p-1.5 relative overflow-hidden">
-                <Image src="/logo.jpg" alt="LoanTicks" fill className="object-contain" priority />
+                <Image src="/logo.jpg" alt="LOANATICKS" fill className="object-contain" priority />
               </div>
               <div>
-                <h1 className="text-lg sm:text-2xl font-bold">LoanTicks API</h1>
+                <h1 className="text-lg sm:text-2xl font-bold">LOANATICKS API</h1>
                 <p className="text-yellow-600 text-xs sm:text-sm">Developer Docs</p>
               </div>
             </div>
@@ -464,7 +464,7 @@ Form Data:
               📞 Need Help?
             </p>
             <p className="text-sm text-gray-600 mb-4">
-              Contact your LoanTicks representative for integration support
+              Contact your LOANATICKS representative for integration support
             </p>
             <div className="text-xs text-gray-500 space-y-1">
               <p>Last Updated: October 23, 2025</p>

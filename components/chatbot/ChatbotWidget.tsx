@@ -26,13 +26,13 @@ export default function ChatbotWidget({ currentStep }: ChatbotWidgetProps) {
   // Get role-specific welcome message
   const getWelcomeMessage = () => {
     if (userRole === 'customer') {
-      return 'Hi! I\'m your AI assistant. I can help you with your loan application, explain form fields, track your application status, and answer questions about LoanTicks. What can I help you with?';
+      return 'Hi! I\'m your AI assistant. I can help you with your loan application, explain form fields, track your application status, and answer questions about LOANATICKS. What can I help you with?';
     } else if (userRole === 'employee') {
       return 'Hi! I\'m your AI assistant. I can help you review applications, use the verification checklist, send emails to customers, and navigate the employee dashboard. How can I assist you?';
     } else if (userRole === 'admin') {
       return 'Hi! I\'m your AI assistant. I can help you manage employees, configure system settings, view analytics, access chatbot logs, and navigate the admin dashboard. What do you need help with?';
     }
-    return 'Hi! I\'m here to help you with LoanTicks. Ask me anything about the platform!';
+    return 'Hi! I\'m here to help you with LOANATICKS. Ask me anything about the platform!';
   };
 
   const [messages, setMessages] = useState<Message[]>([

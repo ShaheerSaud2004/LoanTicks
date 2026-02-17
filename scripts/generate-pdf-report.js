@@ -101,7 +101,7 @@ const htmlContent = `<!DOCTYPE html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LoanAticks Security Implementation Report</title>
+  <title>LOANATICKS Security Implementation Report</title>
   <style>
     @page {
       size: A4;
@@ -339,7 +339,7 @@ const htmlContent = `<!DOCTYPE html>
 <body>
   <div class="document-header">
     <h1>🔒 Security Implementation Report</h1>
-    <h2>LoanAticks Mortgage Application System</h2>
+    <h2>LOANATICKS Mortgage Application System</h2>
     <p><strong>Prepared For:</strong> Client Review</p>
     <p><strong>Date:</strong> January 2025</p>
     <p><strong>Document Version:</strong> 1.0</p>

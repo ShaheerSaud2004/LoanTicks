@@ -41,7 +41,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 // Replace the email sending section with:
 const { data, error } = await resend.emails.send({
-  from: 'LoanTicks <noreply@yourdomain.com>',
+  from: 'LOANATICKS <noreply@yourdomain.com>',
   to: borrowerEmail,
   subject: emailSubject,
   html: emailBody,

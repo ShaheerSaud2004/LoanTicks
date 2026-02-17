@@ -1,4 +1,4 @@
-// Rate Engine Integration for LoanTicks
+// Rate Engine Integration for LOANATICKS
 // Direct lender API integrations for real-time rate quotes
 
 export interface LoanData {
@@ -346,7 +346,7 @@ async function getCustomRates(loanData: LoanData): Promise<RateResponse> {
     );
 
     const quotes: RateQuote[] = [{
-      lender: 'LoanTicks Custom',
+      lender: 'LOANATICKS Custom',
       rate: finalRate,
       apr: finalRate + 0.25, // Approximate APR
       monthlyPayment,

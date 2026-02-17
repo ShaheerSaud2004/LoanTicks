@@ -2223,7 +2223,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
           {/* Logo Header */}
           <div className="flex justify-center mb-6">
             <div className="bg-white rounded-2xl shadow-lg p-4 h-24 w-24 relative">
-              <Image src="/logo.jpg" alt="LoanTicks" fill className="object-contain" priority />
+              <Image src="/logo.jpg" alt="LOANATICKS" fill className="object-contain" priority />
             </div>
           </div>
         
