@@ -220,7 +220,7 @@ export default function Footer() {
         <div className="mt-8 pt-6 border-t border-gray-700">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-sm text-gray-400 text-center md:text-left">
-              © 2025 LoanAticks. All rights reserved.
+              © 2025 LOANATICKS. All rights reserved.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 text-sm text-gray-400">
               <span className="flex items-center gap-2">

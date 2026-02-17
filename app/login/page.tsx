@@ -350,7 +350,7 @@ export default function LoginPage() {
           </a>
         </p>
         <p className="text-center text-sm text-slate-500 mt-1">
-          © 2025 Loanaticks. All rights reserved.
+          © 2025 LOANATICKS. All rights reserved.
         </p>
       </footer>
     </div>
