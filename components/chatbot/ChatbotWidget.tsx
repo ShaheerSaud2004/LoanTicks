@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
-import { X, Send, Minimize2 } from 'lucide-react';
+import { X, Send, Minimize2, MessageCircle } from 'lucide-react';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -138,22 +138,28 @@ export default function ChatbotWidget({ currentStep }: ChatbotWidgetProps) {
 
   return (
     <>
-      {/* Always Visible Chat Bubble - Bottom Left */}
+      {/* Always Visible Chat Bubble - Bottom Left (AI chatbot style) */}
       {!isOpen && (
         <button
           onClick={() => {
             setIsOpen(true);
             setIsMinimized(false);
           }}
-          className="fixed bottom-6 left-6 z-50 bg-yellow-500 hover:bg-yellow-600 text-white rounded-full p-2 shadow-lg transition-all duration-300 hover:scale-110 flex items-center justify-center w-16 h-16 touch-manipulation animate-pulse overflow-hidden"
+          className="fixed bottom-6 left-6 z-50 relative flex items-center gap-2 bg-white border-2 border-yellow-500 text-slate-800 rounded-2xl pl-3 pr-4 py-3 shadow-lg hover:shadow-xl hover:bg-yellow-50 transition-all duration-300 hover:scale-105 touch-manipulation group"
           aria-label="Open LOANATICKS AI chatbot"
         >
-          <Image
-            src="/logo.jpg"
-            alt="LOANATICKS"
-            width={48}
-            height={48}
-            className="rounded-full object-contain"
+          {/* Chat bubble icon */}
+          <div className="relative flex items-center justify-center w-12 h-12 rounded-xl bg-yellow-500 text-white group-hover:bg-yellow-600 transition-colors">
+            <MessageCircle className="w-7 h-7" strokeWidth={2.5} />
+          </div>
+          <div className="flex flex-col items-start">
+            <span className="text-sm font-bold text-slate-900 leading-tight">LOANATICKS AI</span>
+            <span className="text-xs text-slate-500 leading-tight">Chat with me</span>
+          </div>
+          {/* Small tail for chat-bubble look */}
+          <div
+            className="absolute -bottom-2 left-6 w-4 h-4 bg-white border-b-2 border-r-2 border-yellow-500 rotate-45"
+            style={{ borderBottomRightRadius: 2 }}
           />
         </button>
       )}

@@ -51,6 +51,18 @@ export default function CustomerApplicationTracker({
     setSelectedApp(null);
   };
 
+  const getStatusLabel = (status: string) => {
+    const labels: Record<string, string> = {
+      draft: 'Draft',
+      submitted: 'Submitted',
+      under_review: 'Under Review',
+      approved: 'Approved',
+      rejected: 'Rejected',
+      pending: 'Pending',
+    };
+    return labels[status?.toLowerCase() ?? ''] ?? status?.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()) ?? status;
+  };
+
   const getStatusColor = (status: string) => {
     switch (status?.toLowerCase()) {
       case 'approved':
@@ -59,6 +71,12 @@ export default function CustomerApplicationTracker({
         return 'bg-red-100 text-red-700';
       case 'pending':
         return 'bg-orange-100 text-orange-700';
+      case 'under_review':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'submitted':
+        return 'bg-blue-100 text-blue-700';
+      case 'draft':
+        return 'bg-gray-100 text-gray-700';
       default:
         return 'bg-gray-100 text-gray-700';
     }
@@ -139,11 +157,11 @@ export default function CustomerApplicationTracker({
                   </div>
                   <div className="flex items-center gap-3">
                     <span
-                      className={`px-3 py-1 text-xs font-semibold rounded-full capitalize ${getStatusColor(
+                      className={`inline-block px-3 py-1 text-xs font-semibold rounded-full whitespace-nowrap ${getStatusColor(
                         app.status
                       )}`}
                     >
-                      {app.status}
+                      {getStatusLabel(app.status)}
                     </span>
                     <button
                       type="button"
@@ -394,7 +412,7 @@ export default function CustomerApplicationTracker({
                     }`}
                   >
                     {getStatusIcon(selectedApp.status)} Current Status:{' '}
-                    <span className="capitalize">{selectedApp.status}</span>
+                    <span>{getStatusLabel(selectedApp.status)}</span>
                   </h4>
                   <p
                     className={`text-sm ${

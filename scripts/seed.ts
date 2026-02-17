@@ -53,11 +53,12 @@ async function seedDatabase() {
     }
 
     console.log('\n✅ Database seeded successfully!');
-    console.log('\nDemo Login Credentials:');
+    console.log('\nDemo accounts created (passwords are hashed in DB; do not log them):');
     console.log('========================');
     demoUsers.forEach((user) => {
-      console.log(`${user.role.toUpperCase()}: ${user.email} / ${user.password}`);
+      console.log(`${user.role.toUpperCase()}: ${user.email}`);
     });
+    console.log('(Passwords are in scripts/seed.ts only—never committed to logs or client.)');
 
     process.exit(0);
   } catch (error) {

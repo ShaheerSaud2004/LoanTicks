@@ -319,8 +319,8 @@ export default function ApplicationView({ params }: { params: Promise<{ id: stri
     };
     
     return (
-      <span className={`px-3 py-1 rounded-full text-sm font-semibold ${statusClasses[status as keyof typeof statusClasses] || 'bg-gray-100 text-gray-800'}`}>
-        {status.replace('_', ' ').toUpperCase()}
+      <span className={`inline-block px-3 py-1 rounded-full text-sm font-semibold whitespace-nowrap ${statusClasses[status as keyof typeof statusClasses] || 'bg-gray-100 text-gray-800'}`}>
+        {status.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())}
       </span>
     );
   };
