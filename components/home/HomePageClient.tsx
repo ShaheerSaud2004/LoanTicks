@@ -11,6 +11,7 @@ import {
   FileText,
   Menu,
   X,
+  Users,
 } from 'lucide-react';
 import Footer from '@/components/layout/Footer';
 
