@@ -343,7 +343,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
     if (!formData.yearsAtCurrentAddress?.trim()) missingFields.push('Years at Current Address');
 
     // Section 4: Prior Address (if less than 2 years at current)
-    if (parseInt(formData.yearsAtCurrentAddress) < 2) {
+    if (parseInt(String(formData.yearsAtCurrentAddress || '0'), 10) < 2) {
       if (!formData.priorStreet?.trim()) missingFields.push('Prior Street Address');
       if (!formData.priorCity?.trim()) missingFields.push('Prior City');
       if (!formData.priorState?.trim()) missingFields.push('Prior State');
@@ -361,7 +361,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
     }
     
     // Previous Employment (if less than 2 years at current)
-    if (parseInt(formData.yearsEmployed || '0') < 2) {
+    if (parseInt(String(formData.yearsEmployed || '0'), 10) < 2) {
       if (!formData.previousEmployerName?.trim()) missingFields.push('Previous Employer Name');
       if (!formData.previousPosition?.trim()) missingFields.push('Previous Position');
       if (!formData.previousYearsEmployed?.trim()) missingFields.push('Years at Previous Job');
