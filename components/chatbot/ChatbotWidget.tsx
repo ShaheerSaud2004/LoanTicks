@@ -175,7 +175,7 @@ export default function ChatbotWidget({ currentStep }: ChatbotWidgetProps) {
                 height={24}
                 className="rounded-full"
               />
-              <h3 className="text-white font-bold text-lg">LoanTicks AI</h3>
+              <h3 className="text-white font-bold text-lg">LOANATICKS AI</h3>
             </div>
             <div className="flex items-center gap-2">
               <button
