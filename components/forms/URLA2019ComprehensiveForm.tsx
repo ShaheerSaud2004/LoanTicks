@@ -1878,6 +1878,34 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
             </div>
             <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 space-y-4">
               <label className={`flex items-start gap-4 p-4 border rounded-xl cursor-pointer touch-manipulation min-h-[60px] ${
+                formData.outstandingJudgments ? 'border-gray-400 bg-gray-50' : 'border-gray-200 bg-white'
+              }`}>
+                <input 
+                  type="checkbox" 
+                  checked={formData.outstandingJudgments} 
+                  onChange={(e) => handleInputChange('outstandingJudgments', e.target.checked)} 
+                  className="mt-1 w-6 h-6 sm:w-7 sm:h-7 rounded border border-gray-400 cursor-pointer flex-shrink-0 accent-gray-600" 
+                />
+                <span className="text-base sm:text-lg text-gray-900 font-medium leading-relaxed pt-0.5">Are there any outstanding judgments against you?</span>
+              </label>
+              <label className={`flex items-start gap-4 p-4 border rounded-xl cursor-pointer touch-manipulation min-h-[60px] ${
+                formData.declaredBankruptcy ? 'border-gray-400 bg-gray-50' : 'border-gray-200 bg-white'
+              }`}>
+                <input 
+                  type="checkbox" 
+                  checked={formData.declaredBankruptcy} 
+                  onChange={(e) => handleInputChange('declaredBankruptcy', e.target.checked)} 
+                  className="mt-1 w-6 h-6 sm:w-7 sm:h-7 rounded border border-gray-400 cursor-pointer flex-shrink-0 accent-gray-600" 
+                />
+                <span className="text-base sm:text-lg text-gray-900 font-medium leading-relaxed pt-0.5">Have you declared bankruptcy within the past 7 years?</span>
+              </label>
+              {formData.declaredBankruptcy && (
+                <div className="pl-10 pr-4 py-2">
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">If yes, approximate date (optional)</label>
+                  <input type="text" value={formData.bankruptcyDate} onChange={(e) => handleInputChange('bankruptcyDate', e.target.value)} placeholder="e.g., January 2020" className="w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-900" />
+                </div>
+              )}
+              <label className={`flex items-start gap-4 p-4 border rounded-xl cursor-pointer touch-manipulation min-h-[60px] ${
                 formData.propertyForeclosed ? 'border-gray-400 bg-gray-50' : 'border-gray-200 bg-white'
               }`}>
                 <input 
@@ -1886,7 +1914,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   onChange={(e) => handleInputChange('propertyForeclosed', e.target.checked)} 
                   className="mt-1 w-6 h-6 sm:w-7 sm:h-7 rounded border border-gray-400 cursor-pointer flex-shrink-0 accent-gray-600" 
                 />
-                <span className="text-base sm:text-lg text-gray-900 font-medium leading-relaxed pt-0.5">Have you had property foreclosed upon or given title/deed in lieu of foreclosure?</span>
+                <span className="text-base sm:text-lg text-gray-900 font-medium leading-relaxed pt-0.5">Have you had property foreclosed upon or given title/deed in lieu of foreclosure in the past 7 years?</span>
               </label>
               <label className={`flex items-start gap-4 p-4 border rounded-xl cursor-pointer touch-manipulation min-h-[60px] ${
                 formData.lawsuitParty ? 'border-gray-400 bg-gray-50' : 'border-gray-200 bg-white'
@@ -1897,8 +1925,14 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   onChange={(e) => handleInputChange('lawsuitParty', e.target.checked)} 
                   className="mt-1 w-6 h-6 sm:w-7 sm:h-7 rounded border border-gray-400 cursor-pointer flex-shrink-0 accent-gray-600" 
                 />
-                <span className="text-base sm:text-lg text-gray-900 font-medium leading-relaxed pt-0.5">Are you party to a lawsuit?</span>
+                <span className="text-base sm:text-lg text-gray-900 font-medium leading-relaxed pt-0.5">Are you a party to a lawsuit in which you potentially have any personal financial liability?</span>
               </label>
+              {formData.lawsuitParty && (
+                <div className="pl-10 pr-4 py-2">
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">Brief description (optional)</label>
+                  <input type="text" value={formData.lawsuitDescription} onChange={(e) => handleInputChange('lawsuitDescription', e.target.value)} placeholder="Describe the lawsuit if you wish" className="w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-900" />
+                </div>
+              )}
               <label className={`flex items-start gap-4 p-4 border rounded-xl cursor-pointer touch-manipulation min-h-[60px] ${
                 formData.loanOnProperty ? 'border-gray-400 bg-gray-50' : 'border-gray-200 bg-white'
               }`}>
@@ -1908,7 +1942,18 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                   onChange={(e) => handleInputChange('loanOnProperty', e.target.checked)} 
                   className="mt-1 w-6 h-6 sm:w-7 sm:h-7 rounded border border-gray-400 cursor-pointer flex-shrink-0 accent-gray-600" 
                 />
-                <span className="text-base sm:text-lg text-gray-900 font-medium leading-relaxed pt-0.5">Are you currently obligated on any loan secured by a property?</span>
+                <span className="text-base sm:text-lg text-gray-900 font-medium leading-relaxed pt-0.5">Are you currently obligated on any loan secured by a property (e.g., mortgage, home equity loan)?</span>
+              </label>
+              <label className={`flex items-start gap-4 p-4 border rounded-xl cursor-pointer touch-manipulation min-h-[60px] ${
+                formData.coMakerOnNote ? 'border-gray-400 bg-gray-50' : 'border-gray-200 bg-white'
+              }`}>
+                <input 
+                  type="checkbox" 
+                  checked={formData.coMakerOnNote} 
+                  onChange={(e) => handleInputChange('coMakerOnNote', e.target.checked)} 
+                  className="mt-1 w-6 h-6 sm:w-7 sm:h-7 rounded border border-gray-400 cursor-pointer flex-shrink-0 accent-gray-600" 
+                />
+                <span className="text-base sm:text-lg text-gray-900 font-medium leading-relaxed pt-0.5">Are you a co-maker, co-signer, or endorser on a note (e.g., for another person&apos;s loan)?</span>
               </label>
               <label className={`flex items-start gap-4 p-4 border rounded-xl cursor-pointer touch-manipulation min-h-[60px] ${
                 formData.intendToOccupy ? 'border-gray-400 bg-gray-50' : 'border-gray-200 bg-white'
