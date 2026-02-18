@@ -4,7 +4,6 @@ import { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { AlertCircle, UserPlus, LogIn } from 'lucide-react';
 import Link from 'next/link';
-import Image from 'next/image';
 
 function ErrorContent() {
   const searchParams = useSearchParams();
@@ -78,8 +77,8 @@ function ErrorContent() {
         <div className="bg-white rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.3)] p-8 lg:p-10 border border-white/20">
           {/* Logo */}
           <div className="flex items-center justify-center gap-3 mb-6">
-            <div className="h-12 w-12 bg-white rounded-xl flex items-center justify-center shadow-lg relative p-2">
-              <Image src="/logo.jpg" alt="LOANATICKS" fill className="object-contain" priority />
+            <div className="h-12 flex items-center">
+              <img src="/logo.jpg" alt="LOANATICKS" className="h-full w-auto object-contain" />
             </div>
             <h1 className="text-2xl font-semibold text-slate-900">LOANATICKS</h1>
           </div>

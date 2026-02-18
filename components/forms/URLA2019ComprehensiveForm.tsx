@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
-import Image from 'next/image';
 import { 
   FileText, 
   User, 
@@ -1928,122 +1927,55 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
           </div>
         );
 
-      case 11: // Declarations (Section 5a & 5b)
-        const DeclareCheck = ({ checked, onChange, label }: { checked: boolean; onChange: (v: boolean) => void; label: string }) => (
-          <label className={`flex items-start gap-4 p-4 border rounded-xl cursor-pointer touch-manipulation min-h-[56px] ${checked ? 'border-gray-400 bg-gray-50' : 'border-gray-200 bg-white'}`}>
-            <input type="checkbox" checked={checked} onChange={(e) => onChange(e.target.checked)} className="mt-1 w-6 h-6 rounded border border-gray-400 cursor-pointer flex-shrink-0 accent-teal-600" />
-            <span className="text-base text-gray-900 font-medium pt-0.5">{label}</span>
-          </label>
+      case 11: // Declarations (Section 12)
+        const DeclareYesNo = ({ name, question, value, onChange, children }: { name: string; question: string; value: boolean; onChange: (v: boolean) => void; children?: React.ReactNode }) => (
+          <div className="space-y-2">
+            <p className="text-sm font-semibold text-gray-700">{question}</p>
+            <div className="flex flex-wrap gap-4">
+              <label className={`flex items-center gap-2 p-3 border rounded-xl cursor-pointer touch-manipulation ${!value ? 'border-teal-500 bg-teal-50' : 'border-gray-200 bg-white'}`}>
+                <input type="radio" name={name} checked={!value} onChange={() => onChange(false)} className="w-5 h-5 accent-teal-600" />
+                <span className="text-base font-medium text-gray-900">NO</span>
+              </label>
+              <label className={`flex items-center gap-2 p-3 border rounded-xl cursor-pointer touch-manipulation ${value ? 'border-teal-500 bg-teal-50' : 'border-gray-200 bg-white'}`}>
+                <input type="radio" name={name} checked={!!value} onChange={() => onChange(true)} className="w-5 h-5 accent-teal-600" />
+                <span className="text-base font-medium text-gray-900">YES</span>
+              </label>
+            </div>
+            {children}
+          </div>
         );
         return (
           <div className="space-y-6">
             <div className="bg-gradient-to-r from-teal-50 to-teal-50 border-2 border-teal-300 rounded-2xl p-6 sm:p-8">
               <h3 className="font-bold text-teal-900 mb-3 text-xl sm:text-2xl flex items-center gap-3">
                 <Info className="w-6 h-6 sm:w-7 sm:h-7" />
-                Section 5: Declarations
+                Section 12: Declarations
               </h3>
               <p className="text-teal-800 text-base sm:text-lg leading-relaxed">
-                Specific questions about the property, your funding, and your past financial history. Answer YES (check) or leave unchecked for NO.
+                Answer each question with YES or NO. Select NO if the statement does not apply to you.
               </p>
             </div>
 
             <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 space-y-6">
-              <h4 className="font-bold text-gray-900 text-lg border-b border-teal-200 pb-2">5a. About this Property and Your Money for this Loan</h4>
+              <h4 className="font-bold text-gray-900 text-lg border-b border-teal-200 pb-2">About Your Finances</h4>
 
-              <div>
-                <p className="text-sm font-semibold text-gray-700 mb-2">A. Will you occupy the property as your primary residence?</p>
-                <DeclareCheck checked={formData.intendToOccupy} onChange={(v) => handleInputChange('intendToOccupy', v)} label="YES, I will occupy the property as my primary residence." />
-                {formData.intendToOccupy && (
-                  <div className="ml-10 mt-3 space-y-3">
-                    <p className="text-sm text-gray-700">If YES, have you had an ownership interest in another property in the last 3 years?</p>
-                    <DeclareCheck checked={formData.ownershipInterestInLast3Years} onChange={(v) => handleInputChange('ownershipInterestInLast3Years', v)} label="YES" />
-                    {formData.ownershipInterestInLast3Years && (
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <div>
-                          <label className="block text-xs font-semibold text-gray-600 mb-1">(1) Type: PR, SR, SH, or IP?</label>
-                          <input type="text" value={formData.ownershipInterestPropertyType} onChange={(e) => handleInputChange('ownershipInterestPropertyType', e.target.value)} placeholder="e.g. PR, SH" className="w-full px-3 py-2 border rounded-lg text-gray-900 text-sm" />
-                        </div>
-                        <div>
-                          <label className="block text-xs font-semibold text-gray-600 mb-1">(2) How did you hold title: S, SP, or O?</label>
-                          <input type="text" value={formData.ownershipInterestHowHeld} onChange={(e) => handleInputChange('ownershipInterestHowHeld', e.target.value)} placeholder="e.g. S, SP" className="w-full px-3 py-2 border rounded-lg text-gray-900 text-sm" />
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-
-              <div>
-                <p className="text-sm font-semibold text-gray-700 mb-2">B. If this is a Purchase: Do you have a family relationship or business affiliation with the seller?</p>
-                <DeclareCheck checked={formData.familyRelationshipWithSeller} onChange={(v) => handleInputChange('familyRelationshipWithSeller', v)} label="YES" />
-              </div>
-
-              <div>
-                <p className="text-sm font-semibold text-gray-700 mb-2">C. Are you borrowing any money for this real estate transaction (e.g. closing costs or down payment) or obtaining money from the seller or realtor that you have not disclosed on this application?</p>
-                <DeclareCheck checked={formData.borrowingDownPayment} onChange={(v) => handleInputChange('borrowingDownPayment', v)} label="YES" />
-                {formData.borrowingDownPayment && (
-                  <div className="ml-10 mt-2">
-                    <label className="block text-xs font-semibold text-gray-600 mb-1">If YES, amount ($)</label>
-                    <input type="text" inputMode="decimal" value={formData.borrowingDownPaymentAmount} onChange={(e) => handleInputChange('borrowingDownPaymentAmount', e.target.value)} placeholder="Amount" className="w-40 px-3 py-2 border rounded-lg text-gray-900 text-sm" />
-                  </div>
-                )}
-              </div>
-
-              <div>
-                <p className="text-sm font-semibold text-gray-700 mb-2">D. (1) Have you or will you be applying for a mortgage loan on another property (not this one) on or before closing that is not disclosed on this application?</p>
-                <DeclareCheck checked={formData.applyingForMortgageOtherProperty} onChange={(v) => handleInputChange('applyingForMortgageOtherProperty', v)} label="YES" />
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-gray-700 mb-2">D. (2) Have you or will you be applying for any new credit (e.g. installment loan, credit card) on or before closing that is not disclosed on this application?</p>
-                <DeclareCheck checked={formData.applyingForOtherNewCredit} onChange={(v) => handleInputChange('applyingForOtherNewCredit', v)} label="YES" />
-              </div>
-
-              <div>
-                <p className="text-sm font-semibold text-gray-700 mb-2">E. Will this property be subject to a lien that could take priority over the first mortgage (e.g. PACE / clean energy lien)?</p>
-                <DeclareCheck checked={formData.propertySubjectToLien} onChange={(v) => handleInputChange('propertySubjectToLien', v)} label="YES" />
-              </div>
-
-              <h4 className="font-bold text-gray-900 text-lg border-b border-teal-200 pb-2 pt-2">5b. About Your Finances</h4>
-
-              <div>
-                <p className="text-sm font-semibold text-gray-700 mb-2">F. Are you a co-signer or guarantor on any debt or loan not disclosed on this application?</p>
-                <DeclareCheck checked={formData.cosignerOrGuarantor} onChange={(v) => handleInputChange('cosignerOrGuarantor', v)} label="YES" />
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-gray-700 mb-2">G. Are there any outstanding judgments against you?</p>
-                <DeclareCheck checked={formData.outstandingJudgments} onChange={(v) => handleInputChange('outstandingJudgments', v)} label="YES" />
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-gray-700 mb-2">H. Are you currently delinquent or in default on a Federal debt?</p>
-                <DeclareCheck checked={formData.federalDebtDelinquent} onChange={(v) => handleInputChange('federalDebtDelinquent', v)} label="YES" />
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-gray-700 mb-2">I. Are you a party to a lawsuit in which you potentially have any personal financial liability?</p>
-                <DeclareCheck checked={formData.lawsuitParty} onChange={(v) => handleInputChange('lawsuitParty', v)} label="YES" />
+              <DeclareYesNo name="decl-f" question="F. Are you a co-signer or guarantor on any debt or loan not disclosed on this application?" value={formData.cosignerOrGuarantor} onChange={(v) => handleInputChange('cosignerOrGuarantor', v)} />
+              <DeclareYesNo name="decl-g" question="G. Are there any outstanding judgments against you?" value={formData.outstandingJudgments} onChange={(v) => handleInputChange('outstandingJudgments', v)} />
+              <DeclareYesNo name="decl-h" question="H. Are you currently delinquent or in default on a Federal debt?" value={formData.federalDebtDelinquent} onChange={(v) => handleInputChange('federalDebtDelinquent', v)} />
+              <DeclareYesNo name="decl-i" question="I. Are you a party to a lawsuit in which you potentially have any personal financial liability?" value={formData.lawsuitParty} onChange={(v) => handleInputChange('lawsuitParty', v)}>
                 {formData.lawsuitParty && (
-                  <div className="ml-10 mt-2">
+                  <div className="ml-0 mt-2">
                     <label className="block text-xs font-semibold text-gray-600 mb-1">Brief description (optional)</label>
                     <input type="text" value={formData.lawsuitDescription} onChange={(e) => handleInputChange('lawsuitDescription', e.target.value)} placeholder="Describe" className="w-full px-3 py-2 border rounded-lg text-gray-900 text-sm" />
                   </div>
                 )}
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-gray-700 mb-2">J. Have you conveyed title to any property in lieu of foreclosure in the past 7 years?</p>
-                <DeclareCheck checked={formData.conveyedTitleInLieu} onChange={(v) => handleInputChange('conveyedTitleInLieu', v)} label="YES" />
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-gray-700 mb-2">K. Within the past 7 years, have you completed a pre-foreclosure sale or short sale?</p>
-                <DeclareCheck checked={formData.completedPreForeclosureSale} onChange={(v) => handleInputChange('completedPreForeclosureSale', v)} label="YES" />
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-gray-700 mb-2">L. Have you had property foreclosed upon in the last 7 years?</p>
-                <DeclareCheck checked={formData.propertyForeclosed} onChange={(v) => handleInputChange('propertyForeclosed', v)} label="YES" />
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-gray-700 mb-2">M. Have you declared bankruptcy within the past 7 years?</p>
-                <DeclareCheck checked={formData.declaredBankruptcy} onChange={(v) => handleInputChange('declaredBankruptcy', v)} label="YES" />
+              </DeclareYesNo>
+              <DeclareYesNo name="decl-j" question="J. Have you conveyed title to any property in lieu of foreclosure in the past 7 years?" value={formData.conveyedTitleInLieu} onChange={(v) => handleInputChange('conveyedTitleInLieu', v)} />
+              <DeclareYesNo name="decl-k" question="K. Within the past 7 years, have you completed a pre-foreclosure sale or short sale?" value={formData.completedPreForeclosureSale} onChange={(v) => handleInputChange('completedPreForeclosureSale', v)} />
+              <DeclareYesNo name="decl-l" question="L. Have you had property foreclosed upon in the last 7 years?" value={formData.propertyForeclosed} onChange={(v) => handleInputChange('propertyForeclosed', v)} />
+              <DeclareYesNo name="decl-m" question="M. Have you declared bankruptcy within the past 7 years?" value={formData.declaredBankruptcy} onChange={(v) => handleInputChange('declaredBankruptcy', v)}>
                 {formData.declaredBankruptcy && (
-                  <div className="ml-10 mt-3">
+                  <div className="ml-0 mt-3">
                     <p className="text-xs font-semibold text-gray-600 mb-2">If YES, identify the type(s):</p>
                     <div className="flex flex-wrap gap-4">
                       <label className="flex items-center gap-2 cursor-pointer">
@@ -2067,11 +1999,10 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                     <input type="text" value={formData.bankruptcyDate} onChange={(e) => handleInputChange('bankruptcyDate', e.target.value)} placeholder="e.g., January 2020" className="w-40 px-3 py-2 border rounded-lg text-gray-900 text-sm mt-1" />
                   </div>
                 )}
-              </div>
+              </DeclareYesNo>
 
               <div className="border-t border-gray-200 pt-4">
-                <p className="text-sm font-semibold text-gray-700 mb-2">Additional: Are you currently obligated on any loan secured by a property (e.g. mortgage, home equity loan)?</p>
-                <DeclareCheck checked={formData.loanOnProperty} onChange={(v) => handleInputChange('loanOnProperty', v)} label="YES" />
+                <DeclareYesNo name="decl-loan" question="Additional: Are you currently obligated on any loan secured by a property (e.g. mortgage, home equity loan)?" value={formData.loanOnProperty} onChange={(v) => handleInputChange('loanOnProperty', v)} />
               </div>
             </div>
           </div>
@@ -2536,8 +2467,8 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
         )}
           {/* Logo Header */}
           <div className="flex justify-center mb-6">
-            <div className="bg-white rounded-2xl shadow-lg p-4 h-24 w-24 relative">
-              <Image src="/logo.jpg" alt="LOANATICKS" fill className="object-contain" priority />
+            <div className="h-14 sm:h-16 flex items-center">
+              <img src="/logo.jpg" alt="LOANATICKS" className="h-full w-auto object-contain" />
             </div>
           </div>
         

@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import {
   Phone,
   Mail,
@@ -63,8 +62,8 @@ export default function HomePageClient() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
             <Link href="/" className="flex items-center gap-4">
-              <div className="relative h-14 w-14 sm:h-16 sm:w-16 rounded-lg overflow-hidden bg-slate-100 border border-slate-200 flex-shrink-0">
-                <Image src="/logo.jpg" alt="LOANATICKS" fill className="object-contain p-1" priority />
+              <div className="h-10 sm:h-12 flex items-center flex-shrink-0">
+                <img src="/logo.jpg" alt="LOANATICKS" className="h-full w-auto object-contain" />
               </div>
               <div className="flex flex-col">
                 <span className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">LOANATICKS</span>

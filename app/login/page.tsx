@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import Image from 'next/image';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { LogIn, Loader2, Shield, Lock, KeyRound, MessageCircle, CheckCircle } from 'lucide-react';
@@ -141,8 +140,8 @@ export default function LoginPage() {
         <div className="text-white space-y-8 lg:space-y-10">
           {/* Logo and Branding */}
           <div className="flex items-start gap-5">
-            <div className="h-16 w-16 lg:h-20 lg:w-20 bg-white rounded-2xl flex items-center justify-center shadow-[0_8px_32px_rgba(0,0,0,0.3)] overflow-hidden flex-shrink-0 relative p-2.5 ring-2 ring-white/10">
-              <Image src="/logo.jpg" alt="LOANATICKS" fill className="object-contain" priority />
+            <div className="h-14 lg:h-16 flex items-center flex-shrink-0">
+              <img src="/logo.jpg" alt="LOANATICKS" className="h-full w-auto object-contain" />
             </div>
             <div className="pt-1.5">
               <h1 className="text-3xl lg:text-4xl font-semibold tracking-tight mb-1">LOANATICKS</h1>

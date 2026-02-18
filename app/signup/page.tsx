@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import Image from 'next/image';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { UserPlus, Loader2, CheckCircle, AlertCircle } from 'lucide-react';
@@ -108,8 +107,8 @@ export default function SignUpPage() {
           {/* Header */}
           <div className="text-center mb-8">
             <div className="flex items-center justify-center gap-3 mb-4">
-              <div className="h-12 w-12 bg-white rounded-xl flex items-center justify-center shadow-lg relative p-2">
-                <Image src="/logo.jpg" alt="LOANATICKS" fill className="object-contain" priority />
+              <div className="h-12 flex items-center">
+                <img src="/logo.jpg" alt="LOANATICKS" className="h-full w-auto object-contain" />
               </div>
               <h1 className="text-2xl font-semibold text-slate-900">LOANATICKS</h1>
             </div>

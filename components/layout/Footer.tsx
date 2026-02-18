@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
 import { 
   Mail, 
   Phone, 
@@ -20,13 +19,8 @@ export default function Footer() {
           {/* Company Info */}
           <div className="space-y-4">
             <div className="flex items-center gap-3">
-              <div className="relative h-14 w-14 rounded-lg overflow-hidden bg-white border border-gray-600 flex-shrink-0">
-                <Image 
-                  src="/logo.jpg" 
-                  alt="LOANATICKS" 
-                  fill 
-                  className="object-contain p-1"
-                />
+              <div className="h-10 sm:h-12 flex items-center flex-shrink-0">
+                <img src="/logo.jpg" alt="LOANATICKS" className="h-full w-auto object-contain" />
               </div>
               <h3 className="text-2xl font-bold text-white tracking-tight">LOANATICKS</h3>
             </div>

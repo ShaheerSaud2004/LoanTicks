@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { signOut } from 'next-auth/react';
@@ -585,9 +584,9 @@ export default function LoanApplicationPage() {
               <div className="flex items-center gap-8">
                 <button
                   onClick={() => router.push('/customer/dashboard')}
-                  className="h-12 w-12 rounded-lg overflow-hidden bg-white border border-gray-200 hover:border-gray-300 transition cursor-pointer relative"
+                  className="h-10 sm:h-12 flex items-center cursor-pointer"
                 >
-                  <Image src="/logo.jpg" alt="LOANATICKS" fill className="object-contain" />
+                  <img src="/logo.jpg" alt="LOANATICKS" className="h-full w-auto object-contain" />
                 </button>
                 
                 {/* Navigation Menu */}
@@ -930,9 +929,9 @@ export default function LoanApplicationPage() {
             <div className="flex items-center gap-8">
               <button
                 onClick={() => router.push('/customer/dashboard')}
-                className="h-12 w-auto rounded-lg overflow-hidden bg-white border border-gray-200 hover:border-gray-300 transition cursor-pointer"
+                className="h-10 sm:h-12 flex items-center cursor-pointer"
               >
-                <img src="/logo.jpg" alt="LOANATICKS" className="h-full w-full object-contain" />
+                <img src="/logo.jpg" alt="LOANATICKS" className="h-full w-auto object-contain" />
               </button>
               
               {/* Navigation Menu */}

@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import Footer from '@/components/layout/Footer';
 
 export const metadata = {
@@ -14,8 +13,8 @@ export default function PrivacyPolicyPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <Link href="/" className="flex items-center gap-3">
-              <div className="relative h-10 w-10 rounded-lg overflow-hidden bg-slate-100 border border-slate-200 flex-shrink-0">
-                <Image src="/logo.jpg" alt="LOANATICKS" fill className="object-contain p-1" priority />
+              <div className="h-10 flex items-center flex-shrink-0">
+                <img src="/logo.jpg" alt="LOANATICKS" className="h-full w-auto object-contain" />
               </div>
               <span className="text-xl font-bold text-slate-900">LOANATICKS</span>
             </Link>

@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import { Home, FileText, Mail } from 'lucide-react';
 
 export default function NotFound() {
@@ -8,8 +7,8 @@ export default function NotFound() {
       <div className="flex-1 flex flex-col items-center justify-center px-4 py-16">
         <div className="max-w-md w-full text-center">
           <div className="flex justify-center mb-6">
-            <div className="relative h-20 w-20 rounded-xl overflow-hidden bg-slate-100 border border-slate-200">
-              <Image src="/logo.jpg" alt="LOANATICKS" fill className="object-contain p-2" />
+            <div className="h-16 flex items-center">
+              <img src="/logo.jpg" alt="LOANATICKS" className="h-full w-auto object-contain" />
             </div>
           </div>
           <h1 className="text-6xl font-bold text-slate-200 mb-2">404</h1>
