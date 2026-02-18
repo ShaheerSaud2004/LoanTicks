@@ -4,7 +4,7 @@
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 
-import { useState, useEffect, useCallback, use } from 'react';
+import React, { useState, useEffect, useCallback, use } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import DashboardLayout from '@/components/layout/DashboardLayout';
@@ -46,6 +46,7 @@ interface Application {
   financialInfo: Record<string, unknown>;
   propertyInfo: Record<string, unknown>;
   declarations: Record<string, unknown>;
+  creditCardAuthorization?: Record<string, unknown>;
   documents: Record<string, unknown>[];
   statusHistory: Record<string, unknown>[];
   assignedTo?: string;
@@ -62,6 +63,30 @@ const ensureHttps = (url: string | undefined): string => {
   }
   return `https://${url}`;
 };
+
+// Consistent row for application info sections
+function InfoRow({ label, value }: { label: string; value: React.ReactNode }) {
+  return (
+    <div className="flex flex-wrap gap-x-2 py-2 border-b border-gray-100 last:border-0">
+      <dt className="font-medium text-gray-500 min-w-[140px] shrink-0">{label}</dt>
+      <dd className="text-gray-900">{value ?? '—'}</dd>
+    </div>
+  );
+}
+
+function fmtVal(val: unknown): string {
+  if (val == null || val === '') return '—';
+  if (typeof val === 'boolean') return val ? 'Yes' : 'No';
+  if (val instanceof Date) return val.toLocaleDateString();
+  if (typeof val === 'string' && /^\d{4}-\d{2}-\d{2}/.test(val)) return new Date(val).toLocaleDateString();
+  return String(val);
+}
+
+function fmtDollar(val: unknown): string {
+  if (val == null || val === '') return '—';
+  const n = Number(val);
+  return Number.isNaN(n) ? String(val) : `$${n.toLocaleString('en-US', { maximumFractionDigits: 0 })}`;
+}
 
 export default function ApplicationView({ params }: { params: Promise<{ id: string }> }) {
   const { data: session, status } = useSession();
@@ -760,143 +785,72 @@ export default function ApplicationView({ params }: { params: Promise<{ id: stri
 
           {/* Application Info Panel */}
           {(activeTab === 'split' || activeTab === 'info') && (
-            <div className="space-y-4">
-              {/* Quick Verification Summary - Enhanced Visibility */}
-              <div className="bg-gradient-to-r from-yellow-500 via-yellow-600 to-yellow-500 rounded-2xl p-6 md:p-8 text-white shadow-2xl border-4 border-yellow-400 relative overflow-hidden">
-                {/* Decorative background pattern */}
-                <div className="absolute inset-0 opacity-10">
-                  <div className="absolute top-0 left-0 w-32 h-32 bg-white rounded-full -translate-x-16 -translate-y-16"></div>
-                  <div className="absolute bottom-0 right-0 w-40 h-40 bg-white rounded-full translate-x-20 translate-y-20"></div>
+            <div className="space-y-5">
+              {/* Verification & Decision – professional card */}
+              <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                <div className="px-4 py-3 border-b border-gray-200 bg-gray-50">
+                  <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                    <CheckCircle className="w-5 h-5 text-teal-600" />
+                    Verification & decision
+                  </h3>
                 </div>
-                
-                <div className="relative z-10">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="bg-white/20 p-3 rounded-xl backdrop-blur-sm">
-                      <CheckCircle className="w-8 h-8 md:w-10 md:h-10 text-white" />
-                    </div>
-                    <h3 className="text-2xl md:text-3xl lg:text-4xl font-extrabold drop-shadow-lg">
-                      📋 Verification Checklist
-                    </h3>
-                  </div>
-                  
-                  <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 md:p-6 border-2 border-white/20">
-                    <div className="space-y-3 md:space-y-4">
-                      <label className="flex items-center gap-3 md:gap-4 cursor-pointer touch-manipulation p-2 md:p-3 hover:bg-white/10 rounded-lg transition active:bg-white/20">
-                        <input 
-                          type="checkbox" 
-                          checked={verificationChecklist.identityDocuments}
-                          onChange={(e) => setVerificationChecklist(prev => ({ ...prev, identityDocuments: e.target.checked }))}
-                          className="w-5 h-5 md:w-6 md:h-6 rounded flex-shrink-0 border-2 border-white/50 accent-yellow-400 cursor-pointer focus:ring-2 focus:ring-white/50 focus:outline-none" 
-                        />
-                        <span className="text-base md:text-lg lg:text-xl font-semibold leading-relaxed drop-shadow select-none">
-                          Identity documents match application
-                        </span>
-                      </label>
-                      <label className="flex items-center gap-3 md:gap-4 cursor-pointer touch-manipulation p-2 md:p-3 hover:bg-white/10 rounded-lg transition active:bg-white/20">
-                        <input 
-                          type="checkbox" 
-                          checked={verificationChecklist.incomeVerification}
-                          onChange={async (e) => {
-                            const newValue = e.target.checked;
-                            setVerificationChecklist(prev => ({ ...prev, incomeVerification: newValue }));
-                            await saveVerificationChecklist({ ...verificationChecklist, incomeVerification: newValue });
-                          }}
-                          className="w-5 h-5 md:w-6 md:h-6 rounded flex-shrink-0 border-2 border-white/50 accent-yellow-400 cursor-pointer focus:ring-2 focus:ring-white/50 focus:outline-none" 
-                        />
-                        <span className="text-base md:text-lg lg:text-xl font-semibold leading-relaxed drop-shadow select-none">
-                          Income verification documents provided
-                        </span>
-                      </label>
-                      <label className="flex items-center gap-3 md:gap-4 cursor-pointer touch-manipulation p-2 md:p-3 hover:bg-white/10 rounded-lg transition active:bg-white/20">
-                        <input 
-                          type="checkbox" 
-                          checked={verificationChecklist.propertyInformation}
-                          onChange={async (e) => {
-                            const newValue = e.target.checked;
-                            setVerificationChecklist(prev => ({ ...prev, propertyInformation: newValue }));
-                            await saveVerificationChecklist({ ...verificationChecklist, propertyInformation: newValue });
-                          }}
-                          className="w-5 h-5 md:w-6 md:h-6 rounded flex-shrink-0 border-2 border-white/50 accent-yellow-400 cursor-pointer focus:ring-2 focus:ring-white/50 focus:outline-none" 
-                        />
-                        <span className="text-base md:text-lg lg:text-xl font-semibold leading-relaxed drop-shadow select-none">
-                          Property information is accurate
-                        </span>
-                      </label>
-                      <label className="flex items-center gap-3 md:gap-4 cursor-pointer touch-manipulation p-2 md:p-3 hover:bg-white/10 rounded-lg transition active:bg-white/20">
-                        <input 
-                          type="checkbox" 
-                          checked={verificationChecklist.financialDetails}
-                          onChange={async (e) => {
-                            const newValue = e.target.checked;
-                            setVerificationChecklist(prev => ({ ...prev, financialDetails: newValue }));
-                            await saveVerificationChecklist({ ...verificationChecklist, financialDetails: newValue });
-                          }}
-                          className="w-5 h-5 md:w-6 md:h-6 rounded flex-shrink-0 border-2 border-white/50 accent-yellow-400 cursor-pointer focus:ring-2 focus:ring-white/50 focus:outline-none" 
-                        />
-                        <span className="text-base md:text-lg lg:text-xl font-semibold leading-relaxed drop-shadow select-none">
-                          Financial details verified
-                        </span>
-                      </label>
+                <div className="p-4 md:p-5 space-y-5">
+                  <div>
+                    <h4 className="text-sm font-medium text-gray-700 mb-3">Checklist</h4>
+                    <div className="space-y-2">
+                      {[
+                        { key: 'identityDocuments' as const, label: 'Identity documents match application' },
+                        { key: 'incomeVerification' as const, label: 'Income verification documents provided' },
+                        { key: 'propertyInformation' as const, label: 'Property information is accurate' },
+                        { key: 'financialDetails' as const, label: 'Financial details verified' },
+                      ].map(({ key, label }) => (
+                        <label key={key} className="flex items-center gap-3 cursor-pointer py-2 rounded-lg hover:bg-gray-50 px-2 -mx-2">
+                          <input
+                            type="checkbox"
+                            checked={verificationChecklist[key]}
+                            onChange={async (e) => {
+                              const newValue = e.target.checked;
+                              setVerificationChecklist(prev => ({ ...prev, [key]: newValue }));
+                              await saveVerificationChecklist({ ...verificationChecklist, [key]: newValue });
+                            }}
+                            className="w-4 h-4 rounded border-gray-300 text-teal-600 focus:ring-teal-500"
+                          />
+                          <span className="text-sm text-gray-700">{label}</span>
+                        </label>
+                      ))}
                     </div>
                   </div>
 
-                  {/* Approval/Rejection Section */}
-                  <div className="mt-6 pt-6 border-t-2 border-white/20">
-                    <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-4">
-                      <h4 className="text-lg md:text-xl font-bold text-white">Application Decision</h4>
-                      <div className="flex gap-3">
-                        <button
-                          onClick={async () => {
-                            setApprovalStatus('approved');
-                            await saveApprovalStatus('approved');
-                          }}
-                          className={`px-6 py-3 rounded-xl font-semibold transition-all flex items-center gap-2 ${
-                            approvalStatus === 'approved'
-                              ? 'bg-green-500 text-white shadow-lg scale-105'
-                              : 'bg-white/20 text-white hover:bg-white/30'
-                          }`}
-                        >
-                          <ThumbsUp className="w-5 h-5" />
-                          Approve
-                        </button>
-                        <button
-                          onClick={async () => {
-                            setApprovalStatus('rejected');
-                            await saveApprovalStatus('rejected');
-                          }}
-                          className={`px-6 py-3 rounded-xl font-semibold transition-all flex items-center gap-2 ${
-                            approvalStatus === 'rejected'
-                              ? 'bg-red-500 text-white shadow-lg scale-105'
-                              : 'bg-white/20 text-white hover:bg-white/30'
-                          }`}
-                        >
-                          <ThumbsDown className="w-5 h-5" />
-                          Reject
-                        </button>
-                      </div>
+                  <div className="pt-4 border-t border-gray-200">
+                    <h4 className="text-sm font-medium text-gray-700 mb-3">Application decision</h4>
+                    <div className="flex flex-wrap items-center gap-3">
+                      <button
+                        onClick={async () => { setApprovalStatus('approved'); await saveApprovalStatus('approved'); }}
+                        className={`px-4 py-2 rounded-lg font-medium text-sm flex items-center gap-2 transition ${approvalStatus === 'approved' ? 'bg-teal-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+                      >
+                        <ThumbsUp className="w-4 h-4" /> Approve
+                      </button>
+                      <button
+                        onClick={async () => { setApprovalStatus('rejected'); await saveApprovalStatus('rejected'); }}
+                        className={`px-4 py-2 rounded-lg font-medium text-sm flex items-center gap-2 transition ${approvalStatus === 'rejected' ? 'bg-red-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+                      >
+                        <ThumbsDown className="w-4 h-4" /> Reject
+                      </button>
+                      {approvalStatus !== 'pending' && (
+                        <span className={`text-sm font-medium px-3 py-1 rounded-full ${approvalStatus === 'approved' ? 'bg-teal-50 text-teal-700' : 'bg-red-50 text-red-700'}`}>
+                          {approvalStatus.toUpperCase()}
+                        </span>
+                      )}
                     </div>
-                    
-                    {approvalStatus !== 'pending' && (
-                      <div className={`p-4 rounded-lg ${approvalStatus === 'approved' ? 'bg-green-500/20 border-2 border-green-400' : 'bg-red-500/20 border-2 border-red-400'}`}>
-                        <p className="text-white font-semibold">
-                          Status: <span className="uppercase">{approvalStatus}</span>
-                        </p>
-                      </div>
-                    )}
-
-                    {/* Send ARIVE link to borrower (when approved) */}
                     {approvalStatus === 'approved' && application?.borrowerInfo?.email && process.env.NEXT_PUBLIC_ARIVE_POS_URL && (
-                      <div className="mt-4 p-4 bg-white/10 rounded-xl border-2 border-white/20">
-                        <p className="text-white font-semibold mb-2">Send ARIVE portal link to borrower</p>
-                        <p className="text-sm text-white/80 mb-3">
-                          Email <strong>{String(application.borrowerInfo.email)}</strong> with the ARIVE link so they can complete their application.
-                        </p>
+                      <div className="mt-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
+                        <p className="text-sm text-gray-700 mb-2">Send ARIVE portal link to <strong>{String(application.borrowerInfo.email)}</strong></p>
                         <button
                           onClick={async () => {
                             if (isSendingEmail) return;
                             setIsSendingEmail(true);
                             try {
-                              const response = await fetch('/api/send-arive-email', {
+                              const res = await fetch('/api/send-arive-email', {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify({
@@ -905,95 +859,52 @@ export default function ApplicationView({ params }: { params: Promise<{ id: stri
                                   ariveUrl: ensureHttps(process.env.NEXT_PUBLIC_ARIVE_POS_URL),
                                 }),
                               });
-                              const data = await response.json();
-                              if (response.ok) {
-                                alert('✅ ARIVE link sent to borrower by email.');
-                              } else {
-                                alert(`❌ Failed to send: ${data.error || data.message || 'Unknown error'}`);
-                              }
-                            } catch (error) {
-                              alert(`❌ Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+                              const data = await res.json();
+                              alert(res.ok ? 'ARIVE link sent.' : (data.error || 'Failed to send'));
+                            } catch (e) {
+                              alert(e instanceof Error ? e.message : 'Error');
                             } finally {
                               setIsSendingEmail(false);
                             }
                           }}
                           disabled={isSendingEmail}
-                          className="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-slate-900 font-semibold rounded-lg flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="px-3 py-2 bg-teal-600 text-white text-sm font-medium rounded-lg hover:bg-teal-700 disabled:opacity-50 flex items-center gap-2"
                         >
-                          {isSendingEmail ? (
-                            <>
-                              <Loader className="w-4 h-4 animate-spin" />
-                              Sending...
-                            </>
-                          ) : (
-                            <>
-                              <Mail className="w-4 h-4" />
-                              Send ARIVE link via email
-                            </>
-                          )}
+                          {isSendingEmail ? <Loader className="w-4 h-4 animate-spin" /> : <Mail className="w-4 h-4" />}
+                          Send ARIVE link via email
                         </button>
                       </div>
                     )}
                   </div>
 
-                  {/* OCR Section */}
-                  <div className="mt-6 pt-6 border-t-2 border-white/20">
-                    <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-4">
-                      <div>
-                        <h4 className="text-lg md:text-xl font-bold text-white mb-2">Document Verification (OCR)</h4>
-                        <p className="text-sm text-white/80">Scan documents to verify they match application data</p>
-                      </div>
-                      <button
-                        onClick={runOCR}
-                        disabled={isRunningOCR || !application?.documents || application.documents.length === 0}
-                        className="px-6 py-3 bg-white/20 hover:bg-white/30 text-white rounded-xl font-semibold transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
-                        {isRunningOCR ? (
-                          <>
-                            <Loader className="w-5 h-5 animate-spin" />
-                            Scanning...
-                          </>
-                        ) : (
-                          <>
-                            <Scan className="w-5 h-5" />
-                            Run OCR Scan
-                          </>
-                        )}
-                      </button>
-                    </div>
-
-                    {/* OCR Results */}
+                  <div className="pt-4 border-t border-gray-200">
+                    <h4 className="text-sm font-medium text-gray-700 mb-2">Document verification (OCR)</h4>
+                    <button
+                      onClick={runOCR}
+                      disabled={isRunningOCR || !application?.documents || application.documents.length === 0}
+                      className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 text-sm font-medium rounded-lg flex items-center gap-2 disabled:opacity-50"
+                    >
+                      {isRunningOCR ? <Loader className="w-4 h-4 animate-spin" /> : <Scan className="w-4 h-4" />}
+                      Run OCR scan
+                    </button>
                     {ocrResults.length > 0 && (
-                      <div className="space-y-4 mt-4">
+                      <div className="mt-3 space-y-2">
                         {ocrResults.map((result, index) => (
-                          <div key={index} className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border-2 border-white/20">
-                            <h5 className="font-bold text-white mb-2">{result.documentName}</h5>
-                            
+                          <div key={index} className="rounded-lg border border-gray-200 p-3 bg-gray-50 text-sm">
+                            <p className="font-medium text-gray-900 mb-2">{result.documentName}</p>
                             {result.matches.length > 0 && (
-                              <div className="space-y-2 mb-3">
-                                {result.matches.map((match, matchIndex) => (
-                                  <div key={matchIndex} className="flex items-center gap-2">
-                                    {match.match ? (
-                                      <CheckCircle className="w-4 h-4 text-green-300" />
-                                    ) : (
-                                      <AlertTriangle className="w-4 h-4 text-yellow-300" />
-                                    )}
-                                    <span className="text-sm text-white">
-                                      <strong>{match.field}:</strong> {match.match ? '✓ Match' : '✗ No Match'} 
-                                      <span className="text-white/70 ml-2">({match.confidence} confidence)</span>
-                                    </span>
-                                  </div>
+                              <ul className="space-y-1 mb-2">
+                                {result.matches.map((m, i) => (
+                                  <li key={i} className="flex items-center gap-2">
+                                    {m.match ? <CheckCircle className="w-3.5 h-3.5 text-teal-600" /> : <AlertTriangle className="w-3.5 h-3.5 text-amber-600" />}
+                                    <span>{m.field}: {m.match ? 'Match' : 'No match'} ({m.confidence})</span>
+                                  </li>
                                 ))}
-                              </div>
+                              </ul>
                             )}
-
-                            <details className="mt-2">
-                              <summary className="text-sm text-white/80 cursor-pointer hover:text-white">
-                                View extracted text
-                              </summary>
-                              <div className="mt-2 p-2 bg-white/5 rounded text-xs text-white/90 font-mono max-h-32 overflow-y-auto">
-                                {result.extractedText}
-                              </div>
+                            <details className="mt-1">
+                              <summary className="cursor-pointer text-gray-500 hover:text-gray-700">View extracted text</summary>
+                              <pre className="mt-1 p-2 bg-white rounded text-xs overflow-auto max-h-24">{result.extractedText}</pre>
                             </details>
                           </div>
                         ))}
@@ -1003,13 +914,13 @@ export default function ApplicationView({ params }: { params: Promise<{ id: stri
                 </div>
               </div>
 
-            {/* Communication Actions */}
-            <div className="bg-white rounded-xl shadow-sm p-4 md:p-6">
-              <h3 className="text-base md:text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                <MessageSquare className="w-5 h-5 text-blue-600" />
-                Contact Borrower
+            {/* Communication */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 md:p-5">
+              <h3 className="text-base font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                <MessageSquare className="w-5 h-5 text-gray-600" />
+                Contact borrower
               </h3>
-              <div className="grid sm:grid-cols-2 gap-3">
+              <div className="grid sm:grid-cols-2 gap-2">
                 <a
                   href={`mailto:${application.borrowerInfo?.email}?subject=Additional Information Needed for Mortgage Application #${application._id.slice(-8)}&body=Dear ${application.borrowerInfo?.firstName},
 
@@ -1023,359 +934,213 @@ Please reply to this email with the requested information at your earliest conve
 Best regards,
 ${session?.user?.name || 'Loan Officer'}
 LOANATICKS - Home Mortgage Solutions`}
-                  className="flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium text-sm md:text-base touch-manipulation"
+                  className="flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 transition font-medium text-sm"
                 >
-                  <Mail className="w-4 h-4 md:w-5 md:h-5" />
-                  <span>Email Borrower</span>
+                  <Mail className="w-4 h-4" /> Email borrower
                 </a>
                 <a
                   href={`sms:${application.borrowerInfo?.phone || ''}?&body=Hello ${application.borrowerInfo?.firstName}, this is ${session?.user?.name || 'your loan officer'} from LOANATICKS. We need additional information for your mortgage application #${application._id.slice(-8)}. Please check your email for details or call us back. Thanks!`}
-                  className="flex items-center justify-center gap-2 px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition font-medium text-sm md:text-base touch-manipulation"
+                  className="flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 transition font-medium text-sm"
                 >
-                  <MessageSquare className="w-4 h-4 md:w-5 md:h-5" />
-                  <span>Text Borrower</span>
+                  <MessageSquare className="w-4 h-4" /> Text borrower
                 </a>
               </div>
             </div>
 
-            {/* Financial Breakdown with Formulas */}
-            <div className="bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl shadow-lg p-4 md:p-6 text-white">
+            {/* Financial analysis */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
               <button
                 onClick={() => setIsFinancialExpanded(!isFinancialExpanded)}
-                className="w-full flex items-center justify-between hover:bg-white/10 rounded-lg p-2 -mx-2 transition"
+                className="w-full flex items-center justify-between px-4 py-3 border-b border-gray-200 bg-gray-50 hover:bg-gray-100 transition text-left"
               >
-                <div className="flex items-center gap-2">
-                  <Calculator className="w-5 h-5 md:w-6 md:h-6" />
-                  <h3 className="text-base md:text-lg lg:text-xl font-bold">
-                    Financial Analysis & Formulas
-                  </h3>
-                </div>
-                {isFinancialExpanded ? (
-                  <ChevronUp className="w-5 h-5 md:w-6 md:h-6" />
-                ) : (
-                  <ChevronDown className="w-5 h-5 md:w-6 md:h-6" />
-                )}
+                <h3 className="text-base font-semibold text-gray-900 flex items-center gap-2">
+                  <Calculator className="w-5 h-5 text-gray-600" />
+                  Financial analysis
+                </h3>
+                {isFinancialExpanded ? <ChevronUp className="w-5 h-5 text-gray-500" /> : <ChevronDown className="w-5 h-5 text-gray-500" />}
               </button>
-              
               {isFinancialExpanded && (
-                <div className="space-y-4 mt-4">
-                {/* LTV Ratio */}
-                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3 md:p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="font-semibold text-sm md:text-base">Loan-to-Value (LTV) Ratio</span>
-                    <span className="text-lg md:text-xl font-bold">{((Number(application.propertyInfo?.loanAmount || 0) / Number(application.propertyInfo?.propertyValue || 1)) * 100).toFixed(2)}%</span>
+                <div className="p-4 space-y-4">
+                  <div className="rounded-lg border border-gray-200 p-3 bg-gray-50">
+                    <div className="flex justify-between items-center mb-1">
+                      <span className="text-sm font-medium text-gray-700">LTV</span>
+                      <span className="font-semibold text-gray-900">{((Number(application.propertyInfo?.loanAmount || 0) / Number(application.propertyInfo?.propertyValue || 1)) * 100).toFixed(2)}%</span>
+                    </div>
+                    <p className="text-xs text-gray-500">Loan ÷ Property value. {Number(application.propertyInfo?.loanAmount || 0) / Number(application.propertyInfo?.propertyValue || 1) > 0.8 ? 'High LTV – PMI likely.' : 'Within typical range.'}</p>
                   </div>
-                  <div className="text-xs md:text-sm opacity-90 space-y-1">
-                    <p className="font-mono bg-white/10 p-2 rounded">
-                      LTV = (Loan Amount ÷ Property Value) × 100
-                    </p>
-                    <p>= (${Number(application.propertyInfo?.loanAmount || 0).toLocaleString()} ÷ ${Number(application.propertyInfo?.propertyValue || 1).toLocaleString()}) × 100</p>
-                    <p className="text-yellow-300 mt-2">
-                      {Number(application.propertyInfo?.loanAmount || 0) / Number(application.propertyInfo?.propertyValue || 1) > 0.8 
-                        ? '⚠️ High LTV - May require PMI'
-                        : '✅ Good LTV - No PMI required'}
-                    </p>
+                  <div className="rounded-lg border border-gray-200 p-3 bg-gray-50">
+                    <div className="flex justify-between items-center mb-1">
+                      <span className="text-sm font-medium text-gray-700">DTI (est.)</span>
+                      <span className="font-semibold text-gray-900">
+                        {(() => {
+                          const income = Number(application.employment?.monthlyIncome || 0) + Number(application.financialInfo?.otherIncome || 0);
+                          const debts = Number(application.currentAddress?.monthlyPayment || 0) + Number(application.financialInfo?.totalLiabilities || 0) + Number(application.propertyInfo?.loanAmount || 0) * 0.005;
+                          return income > 0 ? ((debts / income) * 100).toFixed(2) : '0';
+                        })()}%
+                      </span>
+                    </div>
+                    <p className="text-xs text-gray-500">Debts + est. mortgage ÷ income.</p>
                   </div>
-                </div>
-
-                {/* DTI Ratio */}
-                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3 md:p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="font-semibold text-sm md:text-base">Debt-to-Income (DTI) Ratio</span>
-                    <span className="text-lg md:text-xl font-bold">
-                      {(() => {
-                        const monthlyIncome = Number(application.employment?.monthlyIncome || 0) + Number(application.financialInfo?.otherIncome || 0);
-                        const monthlyDebts = Number(application.currentAddress?.monthlyPayment || 0) + Number(application.financialInfo?.totalLiabilities || 0);
-                        const estimatedMortgage = Number(application.propertyInfo?.loanAmount || 0) * 0.005; // Rough estimate
-                        return monthlyIncome > 0 ? ((monthlyDebts + estimatedMortgage) / monthlyIncome * 100).toFixed(2) : '0.00';
-                      })()}%
-                    </span>
+                  <div className="rounded-lg border border-gray-200 p-3 bg-gray-50">
+                    <div className="flex justify-between items-center mb-1">
+                      <span className="text-sm font-medium text-gray-700">Down payment</span>
+                      <span className="font-semibold text-gray-900">{fmtDollar(Number(application.propertyInfo?.propertyValue || 0) - Number(application.propertyInfo?.loanAmount || 0))}</span>
+                    </div>
+                    <p className="text-xs text-gray-500">Property value − loan amount.</p>
                   </div>
-                  <div className="text-xs md:text-sm opacity-90 space-y-1">
-                    <p className="font-mono bg-white/10 p-2 rounded">
-                      DTI = (Total Monthly Debts + Est. Mortgage) ÷ Gross Monthly Income × 100
-                    </p>
-                    <p>Monthly Income: ${(Number(application.employment?.monthlyIncome || 0) + Number(application.financialInfo?.otherIncome || 0)).toLocaleString()}</p>
-                    <p>Current Housing: ${Number(application.currentAddress?.monthlyPayment || 0).toLocaleString()}</p>
-                    <p>Other Debts: ${Number(application.financialInfo?.totalLiabilities || 0).toLocaleString()}</p>
-                    <p>Est. New Mortgage: ${(Number(application.propertyInfo?.loanAmount || 0) * 0.005).toLocaleString()}/mo</p>
-                    <p className="text-yellow-300 mt-2">
-                      {(() => {
-                        const dti = (Number(application.currentAddress?.monthlyPayment || 0) + Number(application.financialInfo?.totalLiabilities || 0) + (Number(application.propertyInfo?.loanAmount || 0) * 0.005)) / (Number(application.employment?.monthlyIncome || 0) + Number(application.financialInfo?.otherIncome || 0));
-                        return dti > 0.43 ? '⚠️ DTI exceeds 43% - May not qualify' : dti > 0.36 ? '⚠️ DTI borderline - Review carefully' : '✅ Good DTI ratio';
-                      })()}
-                    </p>
+                  <div className="rounded-lg border border-gray-200 p-3 bg-gray-50">
+                    <div className="flex justify-between items-center mb-1">
+                      <span className="text-sm font-medium text-gray-700">Est. monthly PITI</span>
+                      <span className="font-semibold text-gray-900">
+                        {fmtDollar((() => {
+                          const loan = Number(application.propertyInfo?.loanAmount || 0);
+                          const val = Number(application.propertyInfo?.propertyValue || 1);
+                          const r = 0.065 / 12, n = 30 * 12;
+                          const pi = loan * (r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+                          const tax = val * 0.0125 / 12, ins = val * 0.0035 / 12, pmi = loan / val > 0.8 ? loan * 0.005 / 12 : 0;
+                          return pi + tax + ins + pmi;
+                        })())}
+                      </span>
+                    </div>
+                    <p className="text-xs text-gray-500">Principal, interest, tax, insurance (6.5%, 30 yr).</p>
                   </div>
                 </div>
-
-                {/* Down Payment */}
-                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3 md:p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="font-semibold text-sm md:text-base">Down Payment</span>
-                    <span className="text-lg md:text-xl font-bold">
-                      ${(Number(application.propertyInfo?.propertyValue || 0) - Number(application.propertyInfo?.loanAmount || 0)).toLocaleString()}
-                    </span>
-                  </div>
-                  <div className="text-xs md:text-sm opacity-90 space-y-1">
-                    <p className="font-mono bg-white/10 p-2 rounded">
-                      Down Payment = Property Value - Loan Amount
-                    </p>
-                    <p>= ${Number(application.propertyInfo?.propertyValue || 0).toLocaleString()} - ${Number(application.propertyInfo?.loanAmount || 0).toLocaleString()}</p>
-                    <p className="font-mono bg-white/10 p-2 rounded mt-2">
-                      Down Payment % = (Down Payment ÷ Property Value) × 100
-                    </p>
-                    <p>= {(((Number(application.propertyInfo?.propertyValue || 0) - Number(application.propertyInfo?.loanAmount || 0)) / Number(application.propertyInfo?.propertyValue || 1)) * 100).toFixed(2)}%</p>
-                  </div>
-                </div>
-
-                {/* Liquid Assets to Loan Amount */}
-                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3 md:p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="font-semibold text-sm md:text-base">Liquid Assets Coverage</span>
-                    <span className="text-lg md:text-xl font-bold">
-                      {(() => {
-                        const liquidAssets = Number(application.financialInfo?.checkingAccountBalance || 0) + Number(application.financialInfo?.savingsAccountBalance || 0);
-                        const loanAmount = Number(application.propertyInfo?.loanAmount || 0);
-                        return loanAmount > 0 ? ((liquidAssets / loanAmount) * 100).toFixed(2) : '0.00';
-                      })()}%
-                    </span>
-                  </div>
-                  <div className="text-xs md:text-sm opacity-90 space-y-1">
-                    <p className="font-mono bg-white/10 p-2 rounded">
-                      Coverage = (Checking + Savings) ÷ Loan Amount × 100
-                    </p>
-                    <p>Checking: ${Number(application.financialInfo?.checkingAccountBalance || 0).toLocaleString()}</p>
-                    <p>Savings: ${Number(application.financialInfo?.savingsAccountBalance || 0).toLocaleString()}</p>
-                    <p>Total Liquid: ${(Number(application.financialInfo?.checkingAccountBalance || 0) + Number(application.financialInfo?.savingsAccountBalance || 0)).toLocaleString()}</p>
-                    <p>Loan Amount: ${Number(application.propertyInfo?.loanAmount || 0).toLocaleString()}</p>
-                  </div>
-                </div>
-
-                {/* Estimated Monthly Payment */}
-                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3 md:p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="font-semibold text-sm md:text-base">Estimated Monthly Payment (PITI)</span>
-                    <span className="text-lg md:text-xl font-bold">
-                      ${(() => {
-                        const loanAmount = Number(application.propertyInfo?.loanAmount || 0);
-                        const rate = 0.065; // 6.5% assumed rate
-                        const monthlyRate = rate / 12;
-                        const numPayments = 30 * 12; // 30 years
-                        const principal = loanAmount * (monthlyRate * Math.pow(1 + monthlyRate, numPayments)) / (Math.pow(1 + monthlyRate, numPayments) - 1);
-                        const propertyTax = Number(application.propertyInfo?.propertyValue || 0) * 0.0125 / 12; // 1.25% annual
-                        const insurance = Number(application.propertyInfo?.propertyValue || 0) * 0.0035 / 12; // 0.35% annual
-                        const pmi = (Number(application.propertyInfo?.loanAmount || 0) / Number(application.propertyInfo?.propertyValue || 1)) > 0.8 ? loanAmount * 0.005 / 12 : 0;
-                        return (principal + propertyTax + insurance + pmi).toLocaleString(undefined, {maximumFractionDigits: 0});
-                      })()}
-                    </span>
-                  </div>
-                  <div className="text-xs md:text-sm opacity-90 space-y-1">
-                    <p className="font-bold mb-1">Formula: P + I + T + I (+ PMI if LTV {">"} 80%)</p>
-                    <p>• Principal & Interest: ${(() => {
-                        const loanAmount = Number(application.propertyInfo?.loanAmount || 0);
-                        const rate = 0.065;
-                        const monthlyRate = rate / 12;
-                        const numPayments = 30 * 12;
-                        const pi = loanAmount * (monthlyRate * Math.pow(1 + monthlyRate, numPayments)) / (Math.pow(1 + monthlyRate, numPayments) - 1);
-                        return pi.toLocaleString(undefined, {maximumFractionDigits: 0});
-                      })()}/mo @ 6.5% for 30yr</p>
-                    <p>• Property Tax: ${(Number(application.propertyInfo?.propertyValue || 0) * 0.0125 / 12).toLocaleString(undefined, {maximumFractionDigits: 0})}/mo (1.25% annual)</p>
-                    <p>• Homeowners Insurance: ${(Number(application.propertyInfo?.propertyValue || 0) * 0.0035 / 12).toLocaleString(undefined, {maximumFractionDigits: 0})}/mo (0.35% annual)</p>
-                    {(Number(application.propertyInfo?.loanAmount || 0) / Number(application.propertyInfo?.propertyValue || 1)) > 0.8 && (
-                      <p>• PMI: ${(Number(application.propertyInfo?.loanAmount || 0) * 0.005 / 12).toLocaleString(undefined, {maximumFractionDigits: 0})}/mo (0.5% annual)</p>
-                    )}
-                  </div>
-                </div>
-              </div>
               )}
             </div>
 
-            {/* Borrower Information */}
-              <div className="bg-white rounded-xl shadow-sm p-4 md:p-6">
-              <button
-                onClick={() => setIsBorrowerInfoExpanded(!isBorrowerInfoExpanded)}
-                className="flex items-center justify-between w-full gap-3 mb-6 hover:opacity-80 transition cursor-pointer"
-              >
-                <div className="flex items-center gap-3">
-                  <User className="w-6 h-6 text-green-600" />
-                  <h2 className="text-xl font-semibold text-gray-900">Borrower Information</h2>
-                </div>
-                {isBorrowerInfoExpanded ? (
-                  <ChevronUp className="w-5 h-5 text-gray-500" />
-                ) : (
-                  <ChevronDown className="w-5 h-5 text-gray-500" />
-                )}
+            {/* Borrower */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+              <button onClick={() => setIsBorrowerInfoExpanded(!isBorrowerInfoExpanded)} className="w-full flex items-center justify-between px-4 py-3 border-b border-gray-200 bg-gray-50 hover:bg-gray-100 transition text-left">
+                <h3 className="text-base font-semibold text-gray-900 flex items-center gap-2"><User className="w-5 h-5 text-gray-600" /> Borrower information</h3>
+                {isBorrowerInfoExpanded ? <ChevronUp className="w-5 h-5 text-gray-500" /> : <ChevronDown className="w-5 h-5 text-gray-500" />}
               </button>
-              
               {isBorrowerInfoExpanded && (
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <h3 className="font-semibold text-gray-700 mb-3">Personal Details</h3>
-                  <div className="space-y-2 text-gray-900">
-                    <p><span className="font-medium">Name:</span> {String(application.borrowerInfo?.firstName || '')} {String(application.borrowerInfo?.lastName || '')}</p>
-                    <p><span className="font-medium">Email:</span> {String(application.borrowerInfo?.email || '')}</p>
-                    <p><span className="font-medium">Phone:</span> {String(application.borrowerInfo?.phone || '')}</p>
-                    <p><span className="font-medium">DOB:</span> {application.borrowerInfo?.dateOfBirth ? new Date(String(application.borrowerInfo.dateOfBirth)).toLocaleDateString() : 'N/A'}</p>
-                    <p><span className="font-medium">SSN:</span> {String(application.borrowerInfo?.ssn || 'N/A')}</p>
-                    <p><span className="font-medium">Marital Status:</span> {String(application.borrowerInfo?.maritalStatus || 'N/A')}</p>
-                    <p><span className="font-medium">Dependents:</span> {Number(application.borrowerInfo?.dependents || 0)}</p>
-                  </div>
-                </div>
-                
-                <div>
-                  <h3 className="font-semibold text-gray-700 mb-3">Contact Information</h3>
-                  <div className="space-y-2 text-gray-900">
-                    <p><span className="font-medium">Email:</span> {String(application.borrowerInfo?.email || 'N/A')}</p>
-                    <p><span className="font-medium">Phone:</span> {String(application.borrowerInfo?.phone || 'N/A')}</p>
-                  </div>
-                </div>
-              </div>
+                <dl className="p-4 md:p-5">
+                  <InfoRow label="Name" value={`${fmtVal(application.borrowerInfo?.firstName)} ${fmtVal(application.borrowerInfo?.middleName)} ${fmtVal(application.borrowerInfo?.lastName)}`.replace(/\s+/g, ' ').trim()} />
+                  <InfoRow label="Email" value={fmtVal(application.borrowerInfo?.email)} />
+                  <InfoRow label="Phone" value={fmtVal(application.borrowerInfo?.phone)} />
+                  <InfoRow label="Cell" value={fmtVal(application.borrowerInfo?.cellPhone)} />
+                  <InfoRow label="Date of birth" value={application.borrowerInfo?.dateOfBirth ? new Date(String(application.borrowerInfo.dateOfBirth)).toLocaleDateString() : '—'} />
+                  <InfoRow label="SSN" value={fmtVal(application.borrowerInfo?.ssn)} />
+                  <InfoRow label="Marital status" value={fmtVal(application.borrowerInfo?.maritalStatus)} />
+                  <InfoRow label="Dependents" value={fmtVal(application.borrowerInfo?.dependents)} />
+                  <InfoRow label="Citizenship" value={fmtVal(application.borrowerInfo?.citizenshipType)} />
+                  <InfoRow label="Credit pull consent" value={fmtVal(application.borrowerInfo?.creditPullConsent)} />
+                </dl>
               )}
             </div>
 
-            {/* Current Address */}
-            <div className="bg-white rounded-xl shadow-sm p-4 md:p-6">
-              <button
-                onClick={() => setIsCurrentAddressExpanded(!isCurrentAddressExpanded)}
-                className="flex items-center justify-between w-full gap-3 mb-6 hover:opacity-80 transition cursor-pointer"
-              >
-                <div className="flex items-center gap-3">
-                  <Home className="w-6 h-6 text-green-600" />
-                  <h2 className="text-xl font-semibold text-gray-900">Current Address</h2>
-                </div>
-                {isCurrentAddressExpanded ? (
-                  <ChevronUp className="w-5 h-5 text-gray-500" />
-                ) : (
-                  <ChevronDown className="w-5 h-5 text-gray-500" />
-                )}
+            {/* Current address */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+              <button onClick={() => setIsCurrentAddressExpanded(!isCurrentAddressExpanded)} className="w-full flex items-center justify-between px-4 py-3 border-b border-gray-200 bg-gray-50 hover:bg-gray-100 transition text-left">
+                <h3 className="text-base font-semibold text-gray-900 flex items-center gap-2"><Home className="w-5 h-5 text-gray-600" /> Current address</h3>
+                {isCurrentAddressExpanded ? <ChevronUp className="w-5 h-5 text-gray-500" /> : <ChevronDown className="w-5 h-5 text-gray-500" />}
               </button>
-              
               {isCurrentAddressExpanded && (
-              <div className="space-y-2 text-gray-900">
-                <p><span className="font-medium">Address:</span> {String(application.currentAddress?.street || 'N/A')}</p>
-                {application.currentAddress?.unit && <p><span className="font-medium">Unit:</span> {String(application.currentAddress.unit)}</p>}
-                <p><span className="font-medium">City:</span> {String(application.currentAddress?.city || 'N/A')}</p>
-                <p><span className="font-medium">State:</span> {String(application.currentAddress?.state || 'N/A')}</p>
-                <p><span className="font-medium">ZIP:</span> {String(application.currentAddress?.zipCode || 'N/A')}</p>
-                <p><span className="font-medium">Residency Type:</span> {String(application.currentAddress?.residencyType || 'N/A')}</p>
-                <p><span className="font-medium">Monthly Payment:</span> ${Number(application.currentAddress?.monthlyPayment || 0)}</p>
-                <p><span className="font-medium">Years at Address:</span> {String(application.currentAddress?.yearsAtAddress || 'N/A')}</p>
-              </div>
+                <dl className="p-4 md:p-5">
+                  <InfoRow label="Street" value={fmtVal(application.currentAddress?.street)} />
+                  <InfoRow label="Unit" value={fmtVal(application.currentAddress?.unit)} />
+                  <InfoRow label="City" value={fmtVal(application.currentAddress?.city)} />
+                  <InfoRow label="State" value={fmtVal(application.currentAddress?.state)} />
+                  <InfoRow label="ZIP" value={fmtVal(application.currentAddress?.zipCode)} />
+                  <InfoRow label="Residency type" value={fmtVal(application.currentAddress?.residencyType)} />
+                  <InfoRow label="Monthly payment" value={fmtDollar(application.currentAddress?.monthlyPayment)} />
+                  <InfoRow label="Years at address" value={fmtVal(application.currentAddress?.yearsAtAddress)} />
+                </dl>
               )}
             </div>
 
             {/* Employment */}
-            <div className="bg-white rounded-xl shadow-sm p-4 md:p-6">
-              <button
-                onClick={() => setIsEmploymentExpanded(!isEmploymentExpanded)}
-                className="flex items-center justify-between w-full gap-3 mb-6 hover:opacity-80 transition cursor-pointer"
-              >
-                <div className="flex items-center gap-3">
-                  <Briefcase className="w-6 h-6 text-green-600" />
-                  <h2 className="text-xl font-semibold text-gray-900">Employment Information</h2>
-                </div>
-                {isEmploymentExpanded ? (
-                  <ChevronUp className="w-5 h-5 text-gray-500" />
-                ) : (
-                  <ChevronDown className="w-5 h-5 text-gray-500" />
-                )}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+              <button onClick={() => setIsEmploymentExpanded(!isEmploymentExpanded)} className="w-full flex items-center justify-between px-4 py-3 border-b border-gray-200 bg-gray-50 hover:bg-gray-100 transition text-left">
+                <h3 className="text-base font-semibold text-gray-900 flex items-center gap-2"><Briefcase className="w-5 h-5 text-gray-600" /> Employment</h3>
+                {isEmploymentExpanded ? <ChevronUp className="w-5 h-5 text-gray-500" /> : <ChevronDown className="w-5 h-5 text-gray-500" />}
               </button>
-              
               {isEmploymentExpanded && (
-              <div className="space-y-2 text-gray-900">
-                <p><span className="font-medium">Status:</span> {String(application.employment?.employmentStatus || 'N/A')}</p>
-                <p><span className="font-medium">Employer:</span> {String(application.employment?.employerName || 'N/A')}</p>
-                <p><span className="font-medium">Position:</span> {String(application.employment?.position || 'N/A')}</p>
-                <p><span className="font-medium">Years Employed:</span> {String(application.employment?.yearsEmployed || 'N/A')}</p>
-                <p><span className="font-medium">Monthly Income:</span> ${Number(application.employment?.monthlyIncome || 0)}</p>
-                <p><span className="font-medium">Employer Phone:</span> {String(application.employment?.employerPhone || 'N/A')}</p>
-              </div>
+                <dl className="p-4 md:p-5">
+                  <InfoRow label="Status" value={fmtVal(application.employment?.employmentStatus)} />
+                  <InfoRow label="Employer" value={fmtVal(application.employment?.employerName)} />
+                  <InfoRow label="Phone" value={fmtVal(application.employment?.phone || application.employment?.employerPhone)} />
+                  <InfoRow label="Position" value={fmtVal(application.employment?.position)} />
+                  <InfoRow label="Years in line of work" value={fmtVal(application.employment?.yearsInLineOfWork || application.employment?.yearsEmployed)} />
+                  <InfoRow label="Monthly income" value={fmtDollar(application.employment?.monthlyIncome)} />
+                </dl>
               )}
             </div>
 
-            {/* Financial Information */}
-            <div className="bg-white rounded-xl shadow-sm p-4 md:p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <DollarSign className="w-6 h-6 text-green-600" />
-                <h2 className="text-lg md:text-xl font-semibold text-gray-900">Financial Information</h2>
+            {/* Financial information */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+              <div className="px-4 py-3 border-b border-gray-200 bg-gray-50">
+                <h3 className="text-base font-semibold text-gray-900 flex items-center gap-2"><DollarSign className="w-5 h-5 text-gray-600" /> Financial information</h3>
               </div>
-              
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <h3 className="font-semibold text-gray-700 mb-3">Income</h3>
-                  <div className="space-y-2 text-gray-900">
-                    <p><span className="font-medium">Gross Monthly Income:</span> ${Number(application.financialInfo?.grossMonthlyIncome || 0)}</p>
-                    <p><span className="font-medium">Other Income:</span> ${Number(application.financialInfo?.otherIncome || 0)}</p>
-                    <p><span className="font-medium">Other Income Source:</span> {String(application.financialInfo?.otherIncomeSource || 'N/A')}</p>
-                  </div>
-                </div>
-                
-                <div>
-                  <h3 className="font-semibold text-gray-700 mb-3">Assets</h3>
-                  <div className="space-y-2 text-gray-900">
-                    <p><span className="font-medium">Checking Balance:</span> ${Number(application.financialInfo?.checkingAccountBalance || 0)}</p>
-                    <p><span className="font-medium">Savings Balance:</span> ${Number(application.financialInfo?.savingsAccountBalance || 0)}</p>
-                    <p><span className="font-medium">Total Assets:</span> ${Number(application.financialInfo?.totalAssets || 0)}</p>
-                    <p><span className="font-medium">Total Liabilities:</span> ${Number(application.financialInfo?.totalLiabilities || 0)}</p>
-                  </div>
-                </div>
-              </div>
+              <dl className="p-4 md:p-5">
+                <InfoRow label="Gross monthly income" value={fmtDollar(application.financialInfo?.grossMonthlyIncome)} />
+                <InfoRow label="Other income" value={fmtDollar(application.financialInfo?.otherIncome)} />
+                <InfoRow label="Other income source" value={fmtVal(application.financialInfo?.otherIncomeSource)} />
+                <InfoRow label="Checking balance" value={fmtDollar(application.financialInfo?.checkingAccountBalance)} />
+                <InfoRow label="Savings balance" value={fmtDollar(application.financialInfo?.savingsAccountBalance)} />
+                <InfoRow label="Total assets" value={fmtDollar(application.financialInfo?.totalAssets)} />
+                <InfoRow label="Total liabilities" value={fmtDollar(application.financialInfo?.totalLiabilities)} />
+              </dl>
             </div>
 
-            {/* Property Information */}
-            <div className="bg-white rounded-2xl shadow-sm p-6">
-              <div className="flex items-center gap-3 mb-6">
-                <Home className="w-6 h-6 text-green-600" />
-                <h2 className="text-xl font-semibold text-gray-900">Property & Loan Information</h2>
+            {/* Property & loan */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+              <div className="px-4 py-3 border-b border-gray-200 bg-gray-50">
+                <h3 className="text-base font-semibold text-gray-900 flex items-center gap-2"><Home className="w-5 h-5 text-gray-600" /> Property & loan</h3>
               </div>
-              
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <h3 className="font-semibold text-gray-700 mb-3">Property Details</h3>
-                  <div className="space-y-2 text-gray-900">
-                    <p><span className="font-medium">Address:</span> {String(application.propertyInfo?.propertyAddress || 'N/A')}</p>
-                    <p><span className="font-medium">City:</span> {String(application.propertyInfo?.propertyCity || 'N/A')}</p>
-                    <p><span className="font-medium">State:</span> {String(application.propertyInfo?.propertyState || 'N/A')}</p>
-                    <p><span className="font-medium">ZIP:</span> {String(application.propertyInfo?.propertyZipCode || 'N/A')}</p>
-                    <p><span className="font-medium">Property Type:</span> {String(application.propertyInfo?.propertyType || 'N/A')}</p>
-                    <p><span className="font-medium">Property Value:</span> ${Number(application.propertyInfo?.propertyValue || 0)}</p>
-                  </div>
-                </div>
-                
-                <div>
-                  <h3 className="font-semibold text-gray-700 mb-3">Loan Details</h3>
-                  <div className="space-y-2 text-gray-900">
-                    <p><span className="font-medium">Loan Amount:</span> ${Number(application.propertyInfo?.loanAmount || 0)}</p>
-                    <p><span className="font-medium">Loan Purpose:</span> {String(application.propertyInfo?.loanPurpose || 'N/A')}</p>
-                    <p><span className="font-medium">Down Payment:</span> ${Number(application.propertyInfo?.downPaymentAmount || 0)}</p>
-                    <p><span className="font-medium">Down Payment %:</span> {Number(application.propertyInfo?.downPaymentPercentage || 0).toFixed(2)}%</p>
-                  </div>
-                </div>
-              </div>
+              <dl className="p-4 md:p-5">
+                <InfoRow label="Address" value={[application.propertyInfo?.propertyAddress, application.propertyInfo?.unit, application.propertyInfo?.propertyCity, application.propertyInfo?.propertyState, application.propertyInfo?.propertyZipCode].filter(Boolean).map(String).join(', ')} />
+                <InfoRow label="Property type" value={fmtVal(application.propertyInfo?.propertyType)} />
+                <InfoRow label="Occupancy" value={fmtVal(application.propertyInfo?.occupancyType)} />
+                <InfoRow label="Property value" value={fmtDollar(application.propertyInfo?.propertyValue)} />
+                <InfoRow label="Loan amount" value={fmtDollar(application.propertyInfo?.loanAmount)} />
+                <InfoRow label="Loan purpose" value={fmtVal(application.propertyInfo?.loanPurpose)} />
+                <InfoRow label="Down payment" value={fmtDollar(application.propertyInfo?.downPaymentAmount)} />
+                <InfoRow label="Down payment %" value={application.propertyInfo?.downPaymentPercentage != null ? `${Number(application.propertyInfo.downPaymentPercentage).toFixed(2)}%` : '—'} />
+              </dl>
             </div>
 
             {/* Declarations */}
-            <div className="bg-white rounded-xl shadow-sm p-4 md:p-6">
-              <div className="flex items-center gap-3 mb-6">
-                <CheckCircle className="w-6 h-6 text-green-600" />
-                <h2 className="text-xl font-semibold text-gray-900">Declarations</h2>
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+              <div className="px-4 py-3 border-b border-gray-200 bg-gray-50">
+                <h3 className="text-base font-semibold text-gray-900 flex items-center gap-2"><FileText className="w-5 h-5 text-gray-600" /> Declarations</h3>
               </div>
-              
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="space-y-2 text-gray-900">
-                  <p><span className="font-medium">US Citizen:</span> {application.declarations?.usCitizen ? 'Yes' : 'No'}</p>
-                  <p><span className="font-medium">Primary Residence:</span> {application.declarations?.primaryResidence ? 'Yes' : 'No'}</p>
-                  <p><span className="font-medium">Outstanding Judgments:</span> {application.declarations?.outstandingJudgments ? 'Yes' : 'No'}</p>
-                  <p><span className="font-medium">Bankruptcy (7 years):</span> {application.declarations?.declaredBankruptcy ? 'Yes' : 'No'}</p>
+              <dl className="p-4 md:p-5 grid sm:grid-cols-2 gap-x-6">
+                <div>
+                  <InfoRow label="U.S. citizen" value={fmtVal(application.declarations?.usCitizen)} />
+                  <InfoRow label="Primary residence" value={fmtVal(application.declarations?.primaryResidence)} />
+                  <InfoRow label="Intend to occupy" value={fmtVal(application.declarations?.intendToOccupy)} />
+                  <InfoRow label="Outstanding judgments" value={fmtVal(application.declarations?.outstandingJudgments)} />
+                  <InfoRow label="Bankruptcy (7 yr)" value={fmtVal(application.declarations?.declaredBankruptcy)} />
                 </div>
-                <div className="space-y-2 text-gray-900">
-                  <p><span className="font-medium">Property Foreclosed:</span> {application.declarations?.propertyForeclosed ? 'Yes' : 'No'}</p>
-                  <p><span className="font-medium">Party to Lawsuit:</span> {application.declarations?.lawsuitParty ? 'Yes' : 'No'}</p>
-                  <p><span className="font-medium">Loan on Property:</span> {application.declarations?.loanOnProperty ? 'Yes' : 'No'}</p>
-                  <p><span className="font-medium">Co-maker on Note:</span> {application.declarations?.coMakerOnNote ? 'Yes' : 'No'}</p>
+                <div>
+                  <InfoRow label="Property foreclosed" value={fmtVal(application.declarations?.propertyForeclosed)} />
+                  <InfoRow label="Party to lawsuit" value={fmtVal(application.declarations?.lawsuitParty)} />
+                  <InfoRow label="Loan on property" value={fmtVal(application.declarations?.loanOnProperty)} />
+                  <InfoRow label="Co-maker on note" value={fmtVal(application.declarations?.coMakerOnNote)} />
                 </div>
-              </div>
+              </dl>
             </div>
+
+            {/* Credit Card & Authorization */}
+            {(application.creditCardAuthorization && (application.creditCardAuthorization.authorizationAgreed || application.creditCardAuthorization.authBorrower1Name || application.creditCardAuthorization.cardType)) && (
+              <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                <div className="px-4 py-3 border-b border-gray-200 bg-teal-50">
+                  <h3 className="text-base font-semibold text-gray-900 flex items-center gap-2"><CheckCircle className="w-5 h-5 text-teal-600" /> Credit card & authorization</h3>
+                  <p className="text-xs text-gray-600 mt-1">Borrower authorized credit check and card charges for application fees.</p>
+                </div>
+                <dl className="p-4 md:p-5">
+                  <InfoRow label="Authorization agreed" value={fmtVal(application.creditCardAuthorization?.authorizationAgreed)} />
+                  <InfoRow label="Borrower 1" value={fmtVal(application.creditCardAuthorization?.authBorrower1Name)} />
+                  <InfoRow label="Borrower 2" value={fmtVal(application.creditCardAuthorization?.authBorrower2Name)} />
+                  <InfoRow label="Card type" value={fmtVal(application.creditCardAuthorization?.cardType)} />
+                  <InfoRow label="Card last 4" value={application.creditCardAuthorization?.cardLast4 ? `****${String(application.creditCardAuthorization.cardLast4)}` : '—'} />
+                  <InfoRow label="Name on card" value={fmtVal(application.creditCardAuthorization?.nameOnCard)} />
+                  <InfoRow label="Signature / date" value={[application.creditCardAuthorization?.authSignature1, application.creditCardAuthorization?.authDate1].filter(Boolean).map(String).join(' · ')} />
+                </dl>
+              </div>
+            )}
           </div>
           )}
 

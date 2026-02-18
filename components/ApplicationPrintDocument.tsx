@@ -10,12 +10,22 @@ export interface PrintApplication {
   createdAt?: string;
   borrowerInfo?: Record<string, unknown>;
   currentAddress?: Record<string, unknown>;
+  mailingAddress?: Record<string, unknown>;
+  formerAddresses?: Array<Record<string, unknown>>;
   employment?: Record<string, unknown>;
+  additionalEmployment?: Array<Record<string, unknown>>;
+  otherIncomeSources?: Array<Record<string, unknown>>;
   financialInfo?: Record<string, unknown>;
+  assets?: Record<string, unknown>;
+  liabilities?: Record<string, unknown>;
   propertyInfo?: Record<string, unknown>;
+  realEstateOwned?: Array<Record<string, unknown>>;
+  additionalMortgages?: Array<Record<string, unknown>>;
+  giftsOrGrants?: Array<Record<string, unknown>>;
   declarations?: Record<string, unknown>;
+  militaryService?: Record<string, unknown>;
   creditCardAuthorization?: Record<string, unknown>;
-  documents?: Array<{ name?: string; type?: string; uploadedAt?: string }>;
+  documents?: Array<{ name?: string; type?: string; uploadedAt?: string; url?: string }>;
   statusHistory?: Array<{ status?: string; changedAt?: string; notes?: string }>;
 }
 
@@ -25,6 +35,13 @@ function fmt(val: unknown): string {
   if (val instanceof Date) return val.toLocaleDateString();
   if (typeof val === 'string' && val.match(/^\d{4}-\d{2}-\d{2}/)) return new Date(val).toLocaleDateString();
   return String(val);
+}
+
+function fmtDollar(val: unknown): string {
+  if (val == null || val === '') return '—';
+  const n = Number(val);
+  if (Number.isNaN(n)) return fmt(val);
+  return `$${n.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
 }
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
@@ -50,12 +67,28 @@ function Row({ label, value }: { label: string; value: React.ReactNode }) {
 export default function ApplicationPrintDocument({ application }: { application: PrintApplication }) {
   const b = application.borrowerInfo || {};
   const addr = application.currentAddress || {};
+  const mailAddr = application.mailingAddress || {};
+  const formerAddrs = application.formerAddresses || [];
   const emp = application.employment || {};
+  const addlEmp = application.additionalEmployment || [];
+  const otherIncome = application.otherIncomeSources || [];
   const fin = application.financialInfo || {};
+  const assets = application.assets || {};
+  const liabilities = application.liabilities || {};
   const prop = application.propertyInfo || {};
+  const realEstate = application.realEstateOwned || [];
+  const addlMortgages = application.additionalMortgages || [];
+  const gifts = application.giftsOrGrants || [];
   const decl = application.declarations || {};
+  const military = application.militaryService || {};
   const auth = application.creditCardAuthorization || {};
   const docs = application.documents || [];
+
+  const bankAccounts = (assets.bankAccounts as Array<Record<string, unknown>>) || [];
+  const otherAssets = (assets.otherAssets as Array<Record<string, unknown>>) || [];
+  const liabilityItems = (liabilities.items as Array<Record<string, unknown>>) || [];
+  const hasMailing = mailAddr.street || mailAddr.city || mailAddr.state || mailAddr.zipCode;
+  const hasAuth = auth && (auth.authorizationAgreed || auth.authBorrower1Name || auth.authSignature1 || auth.cardType);
 
   return (
     <div className="bg-white text-gray-900 print:bg-white print:text-black" style={{ fontFamily: 'Georgia, serif' }}>
@@ -107,33 +140,149 @@ export default function ApplicationPrintDocument({ application }: { application:
       <Section title="4. Employment">
         <Row label="Status" value={fmt(emp.employmentStatus)} />
         <Row label="Employer" value={fmt(emp.employerName)} />
+        <Row label="Employer phone" value={fmt(emp.phone)} />
+        <Row label="Employer address" value={[fmt(emp.street), fmt(emp.unit), fmt(emp.city), fmt(emp.state), fmt(emp.zipCode)].filter(Boolean).join(', ') || '—'} />
         <Row label="Position" value={fmt(emp.position)} />
-        <Row label="Monthly income" value={typeof emp.monthlyIncome === 'number' ? `$${Number(emp.monthlyIncome).toLocaleString()}` : fmt(emp.monthlyIncome)} />
+        <Row label="Start date" value={fmt(emp.startDate)} />
         <Row label="Years in line of work" value={fmt(emp.yearsInLineOfWork)} />
+        <Row label="Base income" value={fmtDollar(emp.baseIncome)} />
+        <Row label="Overtime / Bonus / Commission" value={[emp.overtime, emp.bonus, emp.commission].some((v) => v != null && v !== '') ? `${fmtDollar(emp.overtime)} / ${fmtDollar(emp.bonus)} / ${fmtDollar(emp.commission)}` : '—'} />
+        <Row label="Monthly income (total)" value={fmtDollar(emp.monthlyIncome)} />
       </Section>
+
+      {/* Additional Employment */}
+      {addlEmp.length > 0 && (
+        <Section title="4b. Additional Employment">
+          {addlEmp.map((job, i) => (
+            <div key={i} className="mb-3 pb-2 border-b border-gray-200 last:border-0">
+              <Row label="Employer" value={fmt(job.employerName)} />
+              <Row label="Position" value={fmt(job.position)} />
+              <Row label="Monthly income" value={fmtDollar(job.monthlyIncome)} />
+            </div>
+          ))}
+        </Section>
+      )}
+
+      {/* Other Income Sources */}
+      {otherIncome.length > 0 && (
+        <Section title="4c. Other Income Sources">
+          {otherIncome.map((src, i) => (
+            <Row key={i} label={fmt(src.type)} value={fmtDollar(src.monthlyAmount)} />
+          ))}
+        </Section>
+      )}
 
       {/* Financial */}
       <Section title="5. Financial Information">
-        <Row label="Gross monthly income" value={typeof fin.grossMonthlyIncome === 'number' ? `$${Number(fin.grossMonthlyIncome).toLocaleString()}` : fmt(fin.grossMonthlyIncome)} />
-        <Row label="Other income" value={typeof fin.otherIncome === 'number' ? `$${Number(fin.otherIncome).toLocaleString()}` : fmt(fin.otherIncome)} />
-        <Row label="Total assets" value={typeof fin.totalAssets === 'number' ? `$${Number(fin.totalAssets).toLocaleString()}` : fmt(fin.totalAssets)} />
-        <Row label="Total liabilities" value={typeof fin.totalLiabilities === 'number' ? `$${Number(fin.totalLiabilities).toLocaleString()}` : fmt(fin.totalLiabilities)} />
-        <Row label="Checking balance" value={typeof fin.checkingAccountBalance === 'number' ? `$${Number(fin.checkingAccountBalance).toLocaleString()}` : fmt(fin.checkingAccountBalance)} />
-        <Row label="Savings balance" value={typeof fin.savingsAccountBalance === 'number' ? `$${Number(fin.savingsAccountBalance).toLocaleString()}` : fmt(fin.savingsAccountBalance)} />
+        <Row label="Gross monthly income" value={fmtDollar(fin.grossMonthlyIncome)} />
+        <Row label="Other income" value={fmtDollar(fin.otherIncome)} />
+        {fin.otherIncomeSource && <Row label="Other income source" value={fmt(fin.otherIncomeSource)} />}
+        <Row label="Total assets" value={fmtDollar(fin.totalAssets)} />
+        <Row label="Total liabilities" value={fmtDollar(fin.totalLiabilities)} />
+        <Row label="Checking balance" value={fmtDollar(fin.checkingAccountBalance)} />
+        <Row label="Savings balance" value={fmtDollar(fin.savingsAccountBalance)} />
       </Section>
+
+      {/* Assets (bank accounts & other) */}
+      {(bankAccounts.length > 0 || otherAssets.length > 0) && (
+        <Section title="5a. Assets – Bank Accounts & Other">
+          {bankAccounts.map((acct, i) => (
+            <div key={i} className="mb-2">
+              <Row label={`${fmt(acct.accountType)} – ${fmt(acct.financialInstitution)}`} value={fmtDollar(acct.cashOrMarketValue)} />
+            </div>
+          ))}
+          {otherAssets.map((a, i) => (
+            <Row key={i} label={fmt(a.assetType)} value={fmtDollar(a.cashOrMarketValue)} />
+          ))}
+        </Section>
+      )}
+
+      {/* Liabilities */}
+      {liabilityItems.length > 0 && (
+        <Section title="5b. Liabilities">
+          {liabilityItems.map((item, i) => (
+            <div key={i} className="mb-2">
+              <Row label={`${fmt(item.liabilityType)} – ${fmt(item.creditorName)}`} value={`Payment ${fmtDollar(item.monthlyPayment)} · Balance ${fmtDollar(item.unpaidBalance)}`} />
+            </div>
+          ))}
+          {(liabilities.alimony != null || liabilities.childSupport != null) && (
+            <>
+              <Row label="Alimony" value={fmtDollar(liabilities.alimony)} />
+              <Row label="Child support" value={fmtDollar(liabilities.childSupport)} />
+            </>
+          )}
+        </Section>
+      )}
+
+      {/* Mailing Address */}
+      {hasMailing && (
+        <Section title="3a. Mailing Address (if different)">
+          <Row label="Street" value={fmt(mailAddr.street)} />
+          <Row label="City, State, ZIP" value={[fmt(mailAddr.city), fmt(mailAddr.state), fmt(mailAddr.zipCode)].filter(Boolean).join(', ')} />
+        </Section>
+      )}
+
+      {/* Former Addresses */}
+      {formerAddrs.length > 0 && (
+        <Section title="3b. Former Addresses">
+          {formerAddrs.map((fa, i) => (
+            <div key={i} className="mb-2">
+              <Row label="Address" value={[fmt(fa.street), fmt(fa.city), fmt(fa.state), fmt(fa.zipCode)].filter(Boolean).join(', ')} />
+              <Row label="Years there" value={fmt(fa.yearsAtAddress)} />
+            </div>
+          ))}
+        </Section>
+      )}
 
       {/* Property */}
       <Section title="6. Property Information">
         <Row label="Address" value={[fmt(prop.propertyAddress), fmt(prop.unit), fmt(prop.propertyCity), fmt(prop.propertyState), fmt(prop.propertyZipCode)].filter(Boolean).join(', ')} />
-        <Row label="Property value" value={typeof prop.propertyValue === 'number' ? `$${Number(prop.propertyValue).toLocaleString()}` : fmt(prop.propertyValue)} />
-        <Row label="Loan amount" value={typeof prop.loanAmount === 'number' ? `$${Number(prop.loanAmount).toLocaleString()}` : fmt(prop.loanAmount)} />
+        <Row label="Property type" value={fmt(prop.propertyType)} />
+        <Row label="Occupancy" value={fmt(prop.occupancyType)} />
+        <Row label="Number of units" value={fmt(prop.numberOfUnits)} />
+        <Row label="Property value" value={fmtDollar(prop.propertyValue)} />
+        <Row label="Loan amount" value={fmtDollar(prop.loanAmount)} />
         <Row label="Loan purpose" value={fmt(prop.loanPurpose)} />
-        <Row label="Down payment" value={typeof prop.downPaymentAmount === 'number' ? `$${Number(prop.downPaymentAmount).toLocaleString()}` : fmt(prop.downPaymentAmount)} />
+        {prop.refinancePurpose && <Row label="Refinance purpose" value={fmt(prop.refinancePurpose)} />}
+        <Row label="Down payment" value={fmtDollar(prop.downPaymentAmount)} />
         <Row label="Down payment %" value={typeof prop.downPaymentPercentage === 'number' ? `${Number(prop.downPaymentPercentage).toFixed(1)}%` : fmt(prop.downPaymentPercentage)} />
+        {prop.titleHolder && <Row label="Title holder" value={fmt(prop.titleHolder)} />}
       </Section>
+
+      {/* Additional Mortgages / Gifts */}
+      {(addlMortgages.length > 0 || gifts.length > 0) && (
+        <Section title="6a. Additional Mortgages / Gifts or Grants">
+          {addlMortgages.map((m, i) => (
+            <Row key={i} label={`Mortgage – ${fmt(m.creditorName)}`} value={fmtDollar(m.amount)} />
+          ))}
+          {gifts.map((g, i) => (
+            <Row key={i} label={`Gift – ${fmt(g.source)}`} value={fmtDollar(g.cashOrMarketValue)} />
+          ))}
+        </Section>
+      )}
+
+      {/* Real Estate Owned */}
+      {realEstate.length > 0 && (
+        <Section title="6b. Real Estate Owned">
+          {realEstate.map((re, i) => (
+            <div key={i} className="mb-2">
+              <Row label="Property" value={[fmt(re.propertyAddress), fmt(re.city), fmt(re.state), fmt(re.zipCode)].filter(Boolean).join(', ')} />
+              <Row label="Value / Status" value={`${fmtDollar(re.propertyValue)} – ${fmt(re.propertyStatus)}`} />
+            </div>
+          ))}
+        </Section>
+      )}
 
       {/* Declarations (Section 12 style) */}
       <Section title="7. Declarations (Section 12)">
+        <Row label="Will occupy as primary residence?" value={fmt(decl.willOccupyAsProperty)} />
+        <Row label="Ownership interest in property (last 3 yr)?" value={fmt(decl.ownershipInterestInLast3Years)} />
+        {decl.ownershipInterestPropertyType && <Row label="Property type (if yes)" value={fmt(decl.ownershipInterestPropertyType)} />}
+        <Row label="Borrowing down payment?" value={fmt(decl.borrowingDownPayment)} />
+        {decl.familyRelationshipWithSeller != null && <Row label="Family relationship with seller?" value={fmt(decl.familyRelationshipWithSeller)} />}
+        <Row label="Applying for new credit (other property)?" value={fmt(decl.applyingForNewCredit)} />
+        <Row label="Applying for other new credit?" value={fmt(decl.applyingForOtherNewCredit)} />
+        <Row label="Property subject to lien?" value={fmt(decl.propertySubjectToLien)} />
         <Row label="Co-signer/guarantor on undisclosed debt?" value={fmt(decl.cosignerOrGuarantor)} />
         <Row label="Outstanding judgments?" value={fmt(decl.outstandingJudgments)} />
         <Row label="Delinquent on Federal debt?" value={fmt(decl.federalDebtDelinquent)} />
@@ -144,11 +293,30 @@ export default function ApplicationPrintDocument({ application }: { application:
         <Row label="Declared bankruptcy (7 yr)?" value={fmt(decl.declaredBankruptcy)} />
         {decl.bankruptcyChapter && <Row label="Bankruptcy chapter(s)" value={fmt(decl.bankruptcyChapter)} />}
         <Row label="Obligated on loan secured by property?" value={fmt(decl.loanOnProperty)} />
+        <Row label="Co-maker on note?" value={fmt(decl.coMakerOnNote)} />
+        <Row label="U.S. citizen?" value={fmt(decl.usCitizen)} />
+        <Row label="Primary residence / intend to occupy?" value={fmt(decl.intendToOccupy)} />
       </Section>
 
-      {/* Credit Card & Authorization */}
-      {(auth.authBorrower1Name || auth.authorizationAgreed) && (
+      {/* Military Service */}
+      {(military.hasServed != null || military.isCurrentlyServing != null) && (
+        <Section title="7a. Military Service">
+          <Row label="Has served" value={fmt(military.hasServed)} />
+          <Row label="Currently serving" value={fmt(military.isCurrentlyServing)} />
+          <Row label="Retired" value={fmt(military.isRetired)} />
+        </Section>
+      )}
+
+      {/* Credit Card & Borrower Authorization – authorization to check is the main point */}
+      {hasAuth ? (
         <Section title="8. Credit Card & Borrower Authorization">
+          <div className="mb-3 p-3 bg-gray-100 border border-gray-300 rounded">
+            <div className="font-semibold text-gray-900">Authorization to obtain credit report and to charge card</div>
+            <div className="mt-1 text-sm">
+              Borrower(s) have given authorization to LOANATICKS to obtain their credit report and to charge the provided card for application-related fees (appraisal, credit report, etc.). This authorization has been agreed to and is on file.
+            </div>
+            <Row label="Authorization given / agreed" value={auth.authorizationAgreed ? 'Yes' : fmt(auth.authorizationAgreed)} />
+          </div>
           <Row label="Borrower 1 name" value={fmt(auth.authBorrower1Name)} />
           <Row label="Borrower 1 SSN" value={fmt(auth.authBorrower1SSN)} />
           <Row label="Borrower 1 DOB" value={fmt(auth.authBorrower1DOB)} />
@@ -156,20 +324,23 @@ export default function ApplicationPrintDocument({ application }: { application:
           <Row label="Borrower 2 SSN" value={fmt(auth.authBorrower2SSN)} />
           <Row label="Borrower 2 DOB" value={fmt(auth.authBorrower2DOB)} />
           <Row label="Card type" value={fmt(auth.cardType)} />
-          <Row label="Card last 4" value={auth.cardLast4 ? `****${auth.cardLast4}` : '—'} />
+          <Row label="Card last 4" value={auth.cardLast4 ? `****${String(auth.cardLast4)}` : '—'} />
           <Row label="Name on card" value={fmt(auth.nameOnCard)} />
           <Row label="Billing address" value={fmt(auth.cardBillingAddress)} />
           <Row label="Amount verified" value={fmt(auth.amountVerified)} />
-          <Row label="Authorization agreed" value={fmt(auth.authorizationAgreed)} />
           <Row label="Signature 1" value={fmt(auth.authSignature1)} />
           <Row label="Date 1" value={fmt(auth.authDate1)} />
           <Row label="Signature 2" value={fmt(auth.authSignature2)} />
           <Row label="Date 2" value={fmt(auth.authDate2)} />
         </Section>
+      ) : (
+        <Section title="8. Credit Card & Borrower Authorization">
+          <p className="text-sm text-gray-600">Not provided. No credit card or authorization data on file for this application.</p>
+        </Section>
       )}
 
       {/* Documents */}
-      <Section title={auth.authBorrower1Name || auth.authorizationAgreed ? '9. Documents' : '8. Documents'}>
+      <Section title="9. Documents">
         {docs.length === 0 ? (
           <div>No documents listed.</div>
         ) : (

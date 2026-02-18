@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { LogIn, Loader2, Shield, Lock, KeyRound, MessageCircle, CheckCircle } from 'lucide-react';
+import { LogIn, Loader2, Shield, CheckCircle } from 'lucide-react';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -135,73 +135,18 @@ export default function LoginPage() {
 
       {/* Main content - scrollable so footer is never covered */}
       <div className="flex-1 flex items-center justify-center min-h-0 relative z-10 overflow-y-auto py-6">
-        <div className="w-full max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-        {/* Left Side - Hero Content */}
-        <div className="text-white space-y-8 lg:space-y-10">
-          {/* Logo and Branding */}
-          <div className="flex items-start gap-5">
-            <div className="h-14 lg:h-16 flex items-center flex-shrink-0">
-              <img src="/logo.jpg" alt="LOANATICKS" className="h-full w-auto object-contain" />
+        <div className="w-full max-w-md mx-auto flex flex-col items-center gap-10">
+          {/* Logo only */}
+          <div className="text-white text-center">
+            <div className="flex justify-center mb-3">
+              <img src="/logo.jpg" alt="LOANATICKS" className="h-14 lg:h-16 w-auto object-contain" />
             </div>
-            <div className="pt-1.5">
-              <h1 className="text-3xl lg:text-4xl font-semibold tracking-tight mb-1">LOANATICKS</h1>
-              <p className="text-slate-300 text-sm lg:text-base font-medium">Expert Loan Advisor</p>
-            </div>
-        </div>
-
-          {/* Main Headline */}
-          <div className="space-y-4">
-            <h2 className="text-4xl lg:text-5xl xl:text-6xl font-semibold leading-[1.1] tracking-tight">
-              Your Dream Home<br/>
-              <span className="text-yellow-400">Starts Here</span>
-          </h2>
-            <p className="text-lg lg:text-xl text-slate-300 leading-relaxed max-w-xl font-light">
-            Experience streamlined mortgage financing with competitive rates, fast approvals, and expert support every step of the way.
-          </p>
-        </div>
-
-          {/* Expert Loan Advisor Feature */}
-          <div className="flex items-center gap-4 bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-5 shadow-[0_8px_32px_rgba(0,0,0,0.2)] hover:bg-white/8 transition-colors">
-            <div className="bg-yellow-400 p-2.5 rounded-xl shadow-lg">
-              <MessageCircle className="h-5 w-5 text-slate-900" />
-            </div>
-            <div className="flex-1">
-              <div className="flex items-center gap-2 mb-1">
-                <p className="font-semibold text-white text-base">Expert Loan Advisor</p>
-                <span className="px-2 py-0.5 bg-yellow-400/20 border border-yellow-400/30 rounded text-xs text-yellow-300 font-medium">Registered</span>
-              </div>
-              <p className="text-slate-300 text-sm">Get personalized guidance from our AI-powered assistant available 24/7</p>
-            </div>
+            <h1 className="text-3xl lg:text-4xl font-semibold tracking-tight mb-1">LOANATICKS</h1>
+            <p className="text-slate-300 text-sm lg:text-base font-medium">Expert Loan Advisor</p>
           </div>
 
-          {/* Security Stats */}
-          <div className="grid grid-cols-3 gap-6 pt-4">
-            <div className="text-center group">
-              <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-white/5 border border-white/10 mb-3 group-hover:bg-white/10 transition-colors">
-                <Shield className="h-6 w-6 text-yellow-400" />
-              </div>
-              <div className="text-2xl font-semibold mb-1">256-bit</div>
-              <div className="text-xs text-slate-400 font-medium uppercase tracking-wide">Encryption</div>
-            </div>
-            <div className="text-center group">
-              <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-white/5 border border-white/10 mb-3 group-hover:bg-white/10 transition-colors">
-                <Lock className="h-6 w-6 text-yellow-400" />
-              </div>
-              <div className="text-2xl font-semibold mb-1">SSL</div>
-              <div className="text-xs text-slate-400 font-medium uppercase tracking-wide">Protected</div>
-            </div>
-            <div className="text-center group">
-              <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-white/5 border border-white/10 mb-3 group-hover:bg-white/10 transition-colors">
-                <KeyRound className="h-6 w-6 text-yellow-400" />
-              </div>
-              <div className="text-2xl font-semibold mb-1">SOC 2</div>
-              <div className="text-xs text-slate-400 font-medium uppercase tracking-wide">Compliant</div>
-            </div>
-          </div>
-        </div>
-
-        {/* Right Side - Login Card */}
-        <div className="bg-white rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.3)] p-8 lg:p-10 border border-white/20 backdrop-blur-sm">
+          {/* Login Card */}
+        <div className="w-full bg-white rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.3)] p-8 lg:p-10 border border-white/20 backdrop-blur-sm">
           {/* Header */}
           <div className="mb-8">
             <h2 className="text-2xl lg:text-3xl font-semibold text-slate-900 mb-2 tracking-tight">Welcome Back</h2>
@@ -332,7 +277,7 @@ export default function LoginPage() {
             </div>
           </form>
         </div>
-      </div>
+        </div>
       </div>
 
       {/* Footer - in flow so it's never covered by login card */}
