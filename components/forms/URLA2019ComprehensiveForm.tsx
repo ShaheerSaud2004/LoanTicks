@@ -2062,7 +2062,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
 
             <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 space-y-6">
               <div>
-                <h4 className="font-bold text-gray-900 mb-3 text-lg">Borrower Information</h4>
+                <h4 className="font-bold text-teal-900 mb-2 text-lg">Borrower 1 (Primary Applicant)</h4>
                 <p className="text-sm text-gray-600 mb-4">Primary applicant (pre-filled from your application when available).</p>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
@@ -2078,25 +2078,25 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                     <input type="date" value={formData.authBorrower1DOB} onChange={(e) => handleInputChange('authBorrower1DOB', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-gray-900" />
                   </div>
                 </div>
-                {formData.creditType === 'joint' && (
-                  <>
-                    <p className="text-sm text-gray-600 mt-4 mb-2">Co-borrower (optional for this form).</p>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-1">Name</label>
-                        <input type="text" value={formData.authBorrower2Name} onChange={(e) => handleInputChange('authBorrower2Name', e.target.value)} placeholder="Co-borrower name" className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-gray-900" />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-1">SS#</label>
-                        <input type="text" value={formData.authBorrower2SSN} onChange={(e) => handleInputChange('authBorrower2SSN', e.target.value)} placeholder="XXX-XX-XXXX" className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-gray-900" />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-1">DOB</label>
-                        <input type="date" value={formData.authBorrower2DOB} onChange={(e) => handleInputChange('authBorrower2DOB', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-gray-900" />
-                      </div>
-                    </div>
-                  </>
-                )}
+              </div>
+
+              <div className="border-t border-gray-200 pt-6">
+                <h4 className="font-bold text-teal-900 mb-2 text-lg">Borrower 2 (Co-borrower – optional)</h4>
+                <p className="text-sm text-gray-600 mb-4">If another person is on the application, complete this section so both borrowers are included when you submit.</p>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">Name</label>
+                    <input type="text" value={formData.authBorrower2Name} onChange={(e) => handleInputChange('authBorrower2Name', e.target.value)} placeholder="Full legal name" className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-gray-900" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">SS#</label>
+                    <input type="text" value={formData.authBorrower2SSN} onChange={(e) => handleInputChange('authBorrower2SSN', e.target.value)} placeholder="XXX-XX-XXXX" className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-gray-900" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">DOB</label>
+                    <input type="date" value={formData.authBorrower2DOB} onChange={(e) => handleInputChange('authBorrower2DOB', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-gray-900" />
+                  </div>
+                </div>
               </div>
 
               <div>
@@ -2156,28 +2156,34 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
 
               <div>
                 <h4 className="font-bold text-gray-900 mb-3 text-lg">Signature</h4>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-1">Signature (type full legal name)</label>
-                    <input type="text" value={formData.authSignature1} onChange={(e) => handleInputChange('authSignature1', e.target.value)} placeholder="Full legal name" className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-gray-900" />
+                    <p className="text-sm font-semibold text-gray-700 mb-2">Borrower 1</p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">Signature (type full legal name)</label>
+                        <input type="text" value={formData.authSignature1} onChange={(e) => handleInputChange('authSignature1', e.target.value)} placeholder="Full legal name" className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-gray-900" />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">Date</label>
+                        <input type="date" value={formData.authDate1} onChange={(e) => handleInputChange('authDate1', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-gray-900" />
+                      </div>
+                    </div>
                   </div>
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-1">Date</label>
-                    <input type="date" value={formData.authDate1} onChange={(e) => handleInputChange('authDate1', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-gray-900" />
+                  <div className="border-t border-gray-200 pt-4">
+                    <p className="text-sm font-semibold text-gray-700 mb-2">Borrower 2 (Co-borrower – if applicable)</p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">Signature (type full legal name)</label>
+                        <input type="text" value={formData.authSignature2} onChange={(e) => handleInputChange('authSignature2', e.target.value)} placeholder="Full legal name" className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-gray-900" />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">Date</label>
+                        <input type="date" value={formData.authDate2} onChange={(e) => handleInputChange('authDate2', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-gray-900" />
+                      </div>
+                    </div>
                   </div>
                 </div>
-                {formData.creditType === 'joint' && (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                    <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-1">Co-borrower signature (type full legal name)</label>
-                      <input type="text" value={formData.authSignature2} onChange={(e) => handleInputChange('authSignature2', e.target.value)} placeholder="Full legal name" className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-gray-900" />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-1">Date</label>
-                      <input type="date" value={formData.authDate2} onChange={(e) => handleInputChange('authDate2', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-gray-900" />
-                    </div>
-                  </div>
-                )}
               </div>
             </div>
           </div>
