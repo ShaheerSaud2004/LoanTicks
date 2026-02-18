@@ -219,22 +219,22 @@ export default function ApplicationDecision({ params }: { params: Promise<{ id: 
               <div className="space-y-6">
                 {/* Decision Options */}
                 <div className="space-y-5">
-                  <label className={`block relative p-6 border-3 rounded-2xl cursor-pointer transition-all duration-200 ${
+                  <label className={`block relative p-6 pr-14 border-2 rounded-2xl cursor-pointer transition-all duration-200 ${
                     decision === 'approved' 
-                      ? 'border-green-500 bg-gradient-to-br from-green-50 to-emerald-50 shadow-lg shadow-green-200/50 scale-[1.02]' 
+                      ? 'border-green-500 bg-gradient-to-br from-green-50 to-emerald-50 shadow-lg shadow-green-200/50' 
                       : 'border-gray-200 hover:border-green-400 hover:shadow-md bg-white'
                   }`}>
-                    <div className="flex items-start gap-4">
+                    <div className="flex items-start gap-4 min-w-0">
                       <input
                         type="radio"
                         name="decision"
                         value="approved"
                         checked={decision === 'approved'}
                         onChange={(e) => setDecision(e.target.value as 'approved')}
-                        className="mt-1 w-5 h-5 text-green-600 focus:ring-green-500"
+                        className="mt-1 w-5 h-5 shrink-0 text-green-600 focus:ring-green-500"
                       />
-                      <div className="flex items-center gap-4 flex-1">
-                        <div className={`p-4 rounded-xl transition-all ${
+                      <div className="flex items-center gap-4 flex-1 min-w-0">
+                        <div className={`p-4 rounded-xl shrink-0 transition-all ${
                           decision === 'approved' 
                             ? 'bg-green-500 shadow-lg' 
                             : 'bg-green-100'
@@ -243,35 +243,35 @@ export default function ApplicationDecision({ params }: { params: Promise<{ id: 
                             decision === 'approved' ? 'text-white' : 'text-green-600'
                           }`} />
                         </div>
-                        <div className="flex-1">
-                          <p className="font-bold text-xl text-gray-900 mb-1">Approve Application</p>
-                          <p className="text-sm text-gray-600">Approve this mortgage loan application and proceed with funding</p>
+                        <div className="flex-1 min-w-0">
+                          <p className="font-bold text-lg text-gray-900 mb-1">Approve Application</p>
+                          <p className="text-sm text-gray-600 break-words">Approve this mortgage loan application and proceed with funding.</p>
                         </div>
                       </div>
                     </div>
                     {decision === 'approved' && (
-                      <div className="absolute -top-2 -right-2 bg-green-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+                      <div className="absolute top-4 right-4 bg-green-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
                         SELECTED
                       </div>
                     )}
                   </label>
                   
-                  <label className={`block relative p-6 border-3 rounded-2xl cursor-pointer transition-all duration-200 ${
+                  <label className={`block relative p-6 pr-14 border-2 rounded-2xl cursor-pointer transition-all duration-200 ${
                     decision === 'rejected' 
-                      ? 'border-red-500 bg-gradient-to-br from-red-50 to-pink-50 shadow-lg shadow-red-200/50 scale-[1.02]' 
+                      ? 'border-red-500 bg-gradient-to-br from-red-50 to-pink-50 shadow-lg shadow-red-200/50' 
                       : 'border-gray-200 hover:border-red-400 hover:shadow-md bg-white'
                   }`}>
-                    <div className="flex items-start gap-4">
+                    <div className="flex items-start gap-4 min-w-0">
                       <input
                         type="radio"
                         name="decision"
                         value="rejected"
                         checked={decision === 'rejected'}
                         onChange={(e) => setDecision(e.target.value as 'rejected')}
-                        className="mt-1 w-5 h-5 text-red-600 focus:ring-red-500"
+                        className="mt-1 w-5 h-5 shrink-0 text-red-600 focus:ring-red-500"
                       />
-                      <div className="flex items-center gap-4 flex-1">
-                        <div className={`p-4 rounded-xl transition-all ${
+                      <div className="flex items-center gap-4 flex-1 min-w-0">
+                        <div className={`p-4 rounded-xl shrink-0 transition-all ${
                           decision === 'rejected' 
                             ? 'bg-red-500 shadow-lg' 
                             : 'bg-red-100'
@@ -280,14 +280,14 @@ export default function ApplicationDecision({ params }: { params: Promise<{ id: 
                             decision === 'rejected' ? 'text-white' : 'text-red-600'
                           }`} />
                         </div>
-                        <div className="flex-1">
-                          <p className="font-bold text-xl text-gray-900 mb-1">Reject Application</p>
-                          <p className="text-sm text-gray-600">Reject this mortgage loan application with detailed reasoning</p>
+                        <div className="flex-1 min-w-0">
+                          <p className="font-bold text-lg text-gray-900 mb-1">Reject Application</p>
+                          <p className="text-sm text-gray-600 break-words">Reject this mortgage loan application with detailed reasoning.</p>
                         </div>
                       </div>
                     </div>
                     {decision === 'rejected' && (
-                      <div className="absolute -top-2 -right-2 bg-red-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+                      <div className="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
                         SELECTED
                       </div>
                     )}

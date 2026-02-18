@@ -2,61 +2,46 @@
 
 ## Overview
 
-The ARIVE section now includes an email button that sends preliminary approval emails to borrowers with a link to complete their application in the ARIVE portal.
+The ARIVE section sends approval emails to borrowers with a link to complete their application. The app supports **Resend** (recommended), **Gmail**, or **Outlook**.
 
-## Current Implementation
+---
 
-### Development Mode
-- Currently logs emails to the console
-- No actual emails are sent
-- Perfect for testing the email template
+## Fix: "535 5.7.139 Authentication unsuccessful, basic authentication is disabled" (Outlook)
 
-### Production Setup Required
+Microsoft 365 has **disabled SMTP basic authentication** for many tenants. You cannot fix this with app passwords alone.
 
-To send actual emails in production, you need to configure an email service. Here are recommended options:
+**Use Resend instead (no code changes):**
 
-## Option 1: Resend (Recommended for Next.js)
+1. Sign up at [resend.com](https://resend.com) (free tier: 100 emails/day).
+2. Create an **API Key** in the dashboard.
+3. In Vercel (or `.env.local`), set:
+   - `RESEND_API_KEY` = your Resend API key
+   - `RESEND_FROM` = sender address (for testing use `onboarding@resend.dev`; for production add and verify your domain in Resend, then use e.g. `noreply@yourdomain.com`)
+4. Redeploy. The app will use Resend when `RESEND_API_KEY` is set and will stop using Outlook for sending.
+
+---
+
+## Option 1: Resend (recommended — built-in)
+
+Resend is **already integrated**. No extra npm install or code changes.
 
 ### 1. Sign up for Resend
 - Visit: https://resend.com
 - Create a free account (100 emails/day free tier)
 
 ### 2. Get API Key
-- Go to API Keys section
-- Create a new API key
+- Dashboard → API Keys → Create API Key
 - Copy the key
 
-### 3. Install Resend
-```bash
-npm install resend
-```
+### 3. Environment variables
+In Vercel (or `.env.local`):
 
-### 4. Update API Route
-Update `app/api/send-arive-email/route.ts`:
+| Variable         | Value                          |
+|------------------|--------------------------------|
+| `RESEND_API_KEY` | Your Resend API key            |
+| `RESEND_FROM`    | `onboarding@resend.dev` (test) or `noreply@yourdomain.com` (after verifying domain in Resend) |
 
-```typescript
-import { Resend } from 'resend';
-
-const resend = new Resend(process.env.RESEND_API_KEY);
-
-// Replace the email sending section with:
-const { data, error } = await resend.emails.send({
-  from: 'LOANATICKS <noreply@yourdomain.com>',
-  to: borrowerEmail,
-  subject: emailSubject,
-  html: emailBody,
-});
-
-if (error) {
-  return NextResponse.json({ error: error.message }, { status: 500 });
-}
-```
-
-### 5. Add Environment Variable
-In Vercel:
-- Variable: `RESEND_API_KEY`
-- Value: Your Resend API key
-- Environment: Production, Preview
+Redeploy. Approval emails will send via Resend.
 
 ## Option 2: SendGrid
 

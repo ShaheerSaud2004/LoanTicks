@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
-import { getEmailTransporter, getFromEmail, isEmailConfigured } from '@/lib/email';
+import { sendEmail, getFromEmail, isEmailConfigured } from '@/lib/email';
 
 /**
  * Send approval email to borrower with ARIVE portal link.
@@ -90,32 +90,25 @@ export async function POST(request: NextRequest) {
       console.log('Subject:', emailSubject);
       return NextResponse.json({
         success: false,
-        message: 'Email not configured. Set EMAIL_USER and EMAIL_APP_PASSWORD (Outlook) or GMAIL_USER and GMAIL_APP_PASSWORD.',
+        message: 'Email not configured. Set RESEND_API_KEY (recommended), or GMAIL_USER + GMAIL_APP_PASSWORD, or EMAIL_USER + EMAIL_APP_PASSWORD.',
         email: { to: borrowerEmail, subject: emailSubject },
       }, { status: 500 });
     }
 
-    const transporter = getEmailTransporter();
-    if (!transporter) {
-      return NextResponse.json(
-        { error: 'Email transporter could not be created.' },
-        { status: 500 }
-      );
-    }
-
-    const info = await transporter.sendMail({
-      from: `LOANATICKS <${getFromEmail()}>`,
+    const from = getFromEmail();
+    const { messageId } = await sendEmail({
+      from: from.includes('@') ? `LOANATICKS <${from}>` : from,
       to: borrowerEmail,
       subject: emailSubject,
       html: emailBody,
     });
 
-    console.log('✅ Approval email sent:', info.messageId);
+    console.log('✅ Approval email sent:', messageId);
 
     return NextResponse.json({
       success: true,
       message: 'Email sent successfully',
-      messageId: info.messageId,
+      messageId,
     });
   } catch (error) {
     console.error('Error sending approval email:', error);

@@ -783,232 +783,11 @@ export default function ApplicationView({ params }: { params: Promise<{ id: stri
             </div>
           )}
 
-          {/* Application Info Panel */}
+          {/* Application Info Panel – split screen: doc left, submitted info right (borrower at top) */}
           {(activeTab === 'split' || activeTab === 'info') && (
-            <div className="space-y-5">
-              {/* Verification & Decision – professional card */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                <div className="px-4 py-3 border-b border-gray-200 bg-gray-50">
-                  <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                    <CheckCircle className="w-5 h-5 text-teal-600" />
-                    Verification & decision
-                  </h3>
-                </div>
-                <div className="p-4 md:p-5 space-y-5">
-                  <div>
-                    <h4 className="text-sm font-medium text-gray-700 mb-3">Checklist</h4>
-                    <div className="space-y-2">
-                      {[
-                        { key: 'identityDocuments' as const, label: 'Identity documents match application' },
-                        { key: 'incomeVerification' as const, label: 'Income verification documents provided' },
-                        { key: 'propertyInformation' as const, label: 'Property information is accurate' },
-                        { key: 'financialDetails' as const, label: 'Financial details verified' },
-                      ].map(({ key, label }) => (
-                        <label key={key} className="flex items-center gap-3 cursor-pointer py-2 rounded-lg hover:bg-gray-50 px-2 -mx-2">
-                          <input
-                            type="checkbox"
-                            checked={verificationChecklist[key]}
-                            onChange={async (e) => {
-                              const newValue = e.target.checked;
-                              setVerificationChecklist(prev => ({ ...prev, [key]: newValue }));
-                              await saveVerificationChecklist({ ...verificationChecklist, [key]: newValue });
-                            }}
-                            className="w-4 h-4 rounded border-gray-300 text-teal-600 focus:ring-teal-500"
-                          />
-                          <span className="text-sm text-gray-700">{label}</span>
-                        </label>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="pt-4 border-t border-gray-200">
-                    <h4 className="text-sm font-medium text-gray-700 mb-3">Application decision</h4>
-                    <div className="flex flex-wrap items-center gap-3">
-                      <button
-                        onClick={async () => { setApprovalStatus('approved'); await saveApprovalStatus('approved'); }}
-                        className={`px-4 py-2 rounded-lg font-medium text-sm flex items-center gap-2 transition ${approvalStatus === 'approved' ? 'bg-teal-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
-                      >
-                        <ThumbsUp className="w-4 h-4" /> Approve
-                      </button>
-                      <button
-                        onClick={async () => { setApprovalStatus('rejected'); await saveApprovalStatus('rejected'); }}
-                        className={`px-4 py-2 rounded-lg font-medium text-sm flex items-center gap-2 transition ${approvalStatus === 'rejected' ? 'bg-red-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
-                      >
-                        <ThumbsDown className="w-4 h-4" /> Reject
-                      </button>
-                      {approvalStatus !== 'pending' && (
-                        <span className={`text-sm font-medium px-3 py-1 rounded-full ${approvalStatus === 'approved' ? 'bg-teal-50 text-teal-700' : 'bg-red-50 text-red-700'}`}>
-                          {approvalStatus.toUpperCase()}
-                        </span>
-                      )}
-                    </div>
-                    {approvalStatus === 'approved' && application?.borrowerInfo?.email && process.env.NEXT_PUBLIC_ARIVE_POS_URL && (
-                      <div className="mt-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
-                        <p className="text-sm text-gray-700 mb-2">Send ARIVE portal link to <strong>{String(application.borrowerInfo.email)}</strong></p>
-                        <button
-                          onClick={async () => {
-                            if (isSendingEmail) return;
-                            setIsSendingEmail(true);
-                            try {
-                              const res = await fetch('/api/send-arive-email', {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({
-                                  borrowerEmail: application.borrowerInfo.email,
-                                  borrowerName: `${application.borrowerInfo.firstName ?? ''} ${application.borrowerInfo.lastName ?? ''}`.trim() || 'Borrower',
-                                  ariveUrl: ensureHttps(process.env.NEXT_PUBLIC_ARIVE_POS_URL),
-                                }),
-                              });
-                              const data = await res.json();
-                              alert(res.ok ? 'ARIVE link sent.' : (data.error || 'Failed to send'));
-                            } catch (e) {
-                              alert(e instanceof Error ? e.message : 'Error');
-                            } finally {
-                              setIsSendingEmail(false);
-                            }
-                          }}
-                          disabled={isSendingEmail}
-                          className="px-3 py-2 bg-teal-600 text-white text-sm font-medium rounded-lg hover:bg-teal-700 disabled:opacity-50 flex items-center gap-2"
-                        >
-                          {isSendingEmail ? <Loader className="w-4 h-4 animate-spin" /> : <Mail className="w-4 h-4" />}
-                          Send ARIVE link via email
-                        </button>
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="pt-4 border-t border-gray-200">
-                    <h4 className="text-sm font-medium text-gray-700 mb-2">Document verification (OCR)</h4>
-                    <button
-                      onClick={runOCR}
-                      disabled={isRunningOCR || !application?.documents || application.documents.length === 0}
-                      className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 text-sm font-medium rounded-lg flex items-center gap-2 disabled:opacity-50"
-                    >
-                      {isRunningOCR ? <Loader className="w-4 h-4 animate-spin" /> : <Scan className="w-4 h-4" />}
-                      Run OCR scan
-                    </button>
-                    {ocrResults.length > 0 && (
-                      <div className="mt-3 space-y-2">
-                        {ocrResults.map((result, index) => (
-                          <div key={index} className="rounded-lg border border-gray-200 p-3 bg-gray-50 text-sm">
-                            <p className="font-medium text-gray-900 mb-2">{result.documentName}</p>
-                            {result.matches.length > 0 && (
-                              <ul className="space-y-1 mb-2">
-                                {result.matches.map((m, i) => (
-                                  <li key={i} className="flex items-center gap-2">
-                                    {m.match ? <CheckCircle className="w-3.5 h-3.5 text-teal-600" /> : <AlertTriangle className="w-3.5 h-3.5 text-amber-600" />}
-                                    <span>{m.field}: {m.match ? 'Match' : 'No match'} ({m.confidence})</span>
-                                  </li>
-                                ))}
-                              </ul>
-                            )}
-                            <details className="mt-1">
-                              <summary className="cursor-pointer text-gray-500 hover:text-gray-700">View extracted text</summary>
-                              <pre className="mt-1 p-2 bg-white rounded text-xs overflow-auto max-h-24">{result.extractedText}</pre>
-                            </details>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-            {/* Communication */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 md:p-5">
-              <h3 className="text-base font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                <MessageSquare className="w-5 h-5 text-gray-600" />
-                Contact borrower
-              </h3>
-              <div className="grid sm:grid-cols-2 gap-2">
-                <a
-                  href={`mailto:${application.borrowerInfo?.email}?subject=Additional Information Needed for Mortgage Application #${application._id.slice(-8)}&body=Dear ${application.borrowerInfo?.firstName},
-
-We are reviewing your mortgage application and need some additional information to proceed. Please provide the following:
-
-1. [Specify what you need]
-2. [Additional requirements]
-
-Please reply to this email with the requested information at your earliest convenience.
-
-Best regards,
-${session?.user?.name || 'Loan Officer'}
-LOANATICKS - Home Mortgage Solutions`}
-                  className="flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 transition font-medium text-sm"
-                >
-                  <Mail className="w-4 h-4" /> Email borrower
-                </a>
-                <a
-                  href={`sms:${application.borrowerInfo?.phone || ''}?&body=Hello ${application.borrowerInfo?.firstName}, this is ${session?.user?.name || 'your loan officer'} from LOANATICKS. We need additional information for your mortgage application #${application._id.slice(-8)}. Please check your email for details or call us back. Thanks!`}
-                  className="flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 transition font-medium text-sm"
-                >
-                  <MessageSquare className="w-4 h-4" /> Text borrower
-                </a>
-              </div>
-            </div>
-
-            {/* Financial analysis */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-              <button
-                onClick={() => setIsFinancialExpanded(!isFinancialExpanded)}
-                className="w-full flex items-center justify-between px-4 py-3 border-b border-gray-200 bg-gray-50 hover:bg-gray-100 transition text-left"
-              >
-                <h3 className="text-base font-semibold text-gray-900 flex items-center gap-2">
-                  <Calculator className="w-5 h-5 text-gray-600" />
-                  Financial analysis
-                </h3>
-                {isFinancialExpanded ? <ChevronUp className="w-5 h-5 text-gray-500" /> : <ChevronDown className="w-5 h-5 text-gray-500" />}
-              </button>
-              {isFinancialExpanded && (
-                <div className="p-4 space-y-4">
-                  <div className="rounded-lg border border-gray-200 p-3 bg-gray-50">
-                    <div className="flex justify-between items-center mb-1">
-                      <span className="text-sm font-medium text-gray-700">LTV</span>
-                      <span className="font-semibold text-gray-900">{((Number(application.propertyInfo?.loanAmount || 0) / Number(application.propertyInfo?.propertyValue || 1)) * 100).toFixed(2)}%</span>
-                    </div>
-                    <p className="text-xs text-gray-500">Loan ÷ Property value. {Number(application.propertyInfo?.loanAmount || 0) / Number(application.propertyInfo?.propertyValue || 1) > 0.8 ? 'High LTV – PMI likely.' : 'Within typical range.'}</p>
-                  </div>
-                  <div className="rounded-lg border border-gray-200 p-3 bg-gray-50">
-                    <div className="flex justify-between items-center mb-1">
-                      <span className="text-sm font-medium text-gray-700">DTI (est.)</span>
-                      <span className="font-semibold text-gray-900">
-                        {(() => {
-                          const income = Number(application.employment?.monthlyIncome || 0) + Number(application.financialInfo?.otherIncome || 0);
-                          const debts = Number(application.currentAddress?.monthlyPayment || 0) + Number(application.financialInfo?.totalLiabilities || 0) + Number(application.propertyInfo?.loanAmount || 0) * 0.005;
-                          return income > 0 ? ((debts / income) * 100).toFixed(2) : '0';
-                        })()}%
-                      </span>
-                    </div>
-                    <p className="text-xs text-gray-500">Debts + est. mortgage ÷ income.</p>
-                  </div>
-                  <div className="rounded-lg border border-gray-200 p-3 bg-gray-50">
-                    <div className="flex justify-between items-center mb-1">
-                      <span className="text-sm font-medium text-gray-700">Down payment</span>
-                      <span className="font-semibold text-gray-900">{fmtDollar(Number(application.propertyInfo?.propertyValue || 0) - Number(application.propertyInfo?.loanAmount || 0))}</span>
-                    </div>
-                    <p className="text-xs text-gray-500">Property value − loan amount.</p>
-                  </div>
-                  <div className="rounded-lg border border-gray-200 p-3 bg-gray-50">
-                    <div className="flex justify-between items-center mb-1">
-                      <span className="text-sm font-medium text-gray-700">Est. monthly PITI</span>
-                      <span className="font-semibold text-gray-900">
-                        {fmtDollar((() => {
-                          const loan = Number(application.propertyInfo?.loanAmount || 0);
-                          const val = Number(application.propertyInfo?.propertyValue || 1);
-                          const r = 0.065 / 12, n = 30 * 12;
-                          const pi = loan * (r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
-                          const tax = val * 0.0125 / 12, ins = val * 0.0035 / 12, pmi = loan / val > 0.8 ? loan * 0.005 / 12 : 0;
-                          return pi + tax + ins + pmi;
-                        })())}
-                      </span>
-                    </div>
-                    <p className="text-xs text-gray-500">Principal, interest, tax, insurance (6.5%, 30 yr).</p>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Borrower */}
+            <div className={`space-y-5 flex flex-col ${activeTab === 'split' ? 'lg:max-h-[calc(100vh-11rem)] lg:overflow-y-auto lg:min-h-0' : ''}`}>
+              {/* Submitted info first (for doc + info split view): Borrower at top */}
+            {/* Borrower – always first so you see who applied while viewing the doc */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
               <button onClick={() => setIsBorrowerInfoExpanded(!isBorrowerInfoExpanded)} className="w-full flex items-center justify-between px-4 py-3 border-b border-gray-200 bg-gray-50 hover:bg-gray-100 transition text-left">
                 <h3 className="text-base font-semibold text-gray-900 flex items-center gap-2"><User className="w-5 h-5 text-gray-600" /> Borrower information</h3>
@@ -1141,6 +920,235 @@ LOANATICKS - Home Mortgage Solutions`}
                 </dl>
               </div>
             )}
+
+            {/* Verification & decision – below submitted info for split-screen workflow */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+              <div className="px-4 py-3 border-b border-gray-200 bg-gray-50">
+                <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                  <CheckCircle className="w-5 h-5 text-teal-600" />
+                  Verification & decision
+                </h3>
+              </div>
+              <div className="p-4 md:p-5 space-y-5">
+                <div>
+                  <h4 className="text-sm font-medium text-gray-700 mb-3">Checklist</h4>
+                  <div className="space-y-2">
+                    {[
+                      { key: 'identityDocuments' as const, label: 'Identity documents match application' },
+                      { key: 'incomeVerification' as const, label: 'Income verification documents provided' },
+                      { key: 'propertyInformation' as const, label: 'Property information is accurate' },
+                      { key: 'financialDetails' as const, label: 'Financial details verified' },
+                    ].map(({ key, label }) => (
+                      <label key={key} className="flex items-center gap-3 cursor-pointer py-2 rounded-lg hover:bg-gray-50 px-2 -mx-2">
+                        <input
+                          type="checkbox"
+                          checked={verificationChecklist[key]}
+                          onChange={async (e) => {
+                            const newValue = e.target.checked;
+                            setVerificationChecklist(prev => ({ ...prev, [key]: newValue }));
+                            await saveVerificationChecklist({ ...verificationChecklist, [key]: newValue });
+                          }}
+                          className="w-4 h-4 rounded border-gray-300 text-teal-600 focus:ring-teal-500"
+                        />
+                        <span className="text-sm text-gray-700">{label}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+                <div className="pt-4 border-t border-gray-200">
+                  <h4 className="text-sm font-medium text-gray-700 mb-3">Application decision</h4>
+                  <div className="flex flex-wrap items-center gap-3">
+                    <button
+                      onClick={async () => { setApprovalStatus('approved'); await saveApprovalStatus('approved'); }}
+                      className={`px-4 py-2 rounded-lg font-medium text-sm flex items-center gap-2 transition ${approvalStatus === 'approved' ? 'bg-teal-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+                    >
+                      <ThumbsUp className="w-4 h-4" /> Approve
+                    </button>
+                    <button
+                      onClick={async () => { setApprovalStatus('rejected'); await saveApprovalStatus('rejected'); }}
+                      className={`px-4 py-2 rounded-lg font-medium text-sm flex items-center gap-2 transition ${approvalStatus === 'rejected' ? 'bg-red-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+                    >
+                      <ThumbsDown className="w-4 h-4" /> Reject
+                    </button>
+                    {approvalStatus !== 'pending' && (
+                      <span className={`text-sm font-medium px-3 py-1 rounded-full ${approvalStatus === 'approved' ? 'bg-teal-50 text-teal-700' : 'bg-red-50 text-red-700'}`}>
+                        {approvalStatus.toUpperCase()}
+                      </span>
+                    )}
+                  </div>
+                  {approvalStatus === 'approved' && application?.borrowerInfo?.email && process.env.NEXT_PUBLIC_ARIVE_POS_URL && (
+                    <div className="mt-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
+                      <p className="text-sm text-gray-700 mb-2">Send ARIVE portal link to <strong>{String(application.borrowerInfo.email)}</strong></p>
+                      <button
+                        onClick={async () => {
+                          if (isSendingEmail) return;
+                          setIsSendingEmail(true);
+                          try {
+                            const res = await fetch('/api/send-arive-email', {
+                              method: 'POST',
+                              headers: { 'Content-Type': 'application/json' },
+                              body: JSON.stringify({
+                                borrowerEmail: application.borrowerInfo.email,
+                                borrowerName: `${application.borrowerInfo.firstName ?? ''} ${application.borrowerInfo.lastName ?? ''}`.trim() || 'Borrower',
+                                ariveUrl: ensureHttps(process.env.NEXT_PUBLIC_ARIVE_POS_URL),
+                              }),
+                            });
+                            const data = await res.json();
+                            alert(res.ok ? 'ARIVE link sent.' : (data.error || 'Failed to send'));
+                          } catch (e) {
+                            alert(e instanceof Error ? e.message : 'Error');
+                          } finally {
+                            setIsSendingEmail(false);
+                          }
+                        }}
+                        disabled={isSendingEmail}
+                        className="px-3 py-2 bg-teal-600 text-white text-sm font-medium rounded-lg hover:bg-teal-700 disabled:opacity-50 flex items-center gap-2"
+                      >
+                        {isSendingEmail ? <Loader className="w-4 h-4 animate-spin" /> : <Mail className="w-4 h-4" />}
+                        Send ARIVE link via email
+                      </button>
+                      <p className="text-xs text-gray-500 mt-3 mb-2">Or upload their info to ARIVE yourself:</p>
+                      <a
+                        href={`/api/loan-application/export-arive-xml?id=${application._id}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 px-3 py-2 bg-white border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50"
+                      >
+                        <FileText className="w-4 h-4" />
+                        Download XML for ARIVE (3.4)
+                      </a>
+                      <p className="text-xs text-gray-500 mt-2">Import this file in ARIVE: + Loan → Import 3.4 file.</p>
+                    </div>
+                  )}
+                </div>
+                <div className="pt-4 border-t border-gray-200">
+                  <h4 className="text-sm font-medium text-gray-700 mb-2">Document verification (OCR)</h4>
+                  <button
+                    onClick={runOCR}
+                    disabled={isRunningOCR || !application?.documents || application.documents.length === 0}
+                    className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 text-sm font-medium rounded-lg flex items-center gap-2 disabled:opacity-50"
+                  >
+                    {isRunningOCR ? <Loader className="w-4 h-4 animate-spin" /> : <Scan className="w-4 h-4" />}
+                    Run OCR scan
+                  </button>
+                  {ocrResults.length > 0 && (
+                    <div className="mt-3 space-y-2">
+                      {ocrResults.map((result, index) => (
+                        <div key={index} className="rounded-lg border border-gray-200 p-3 bg-gray-50 text-sm">
+                          <p className="font-medium text-gray-900 mb-2">{result.documentName}</p>
+                          {result.matches.length > 0 && (
+                            <ul className="space-y-1 mb-2">
+                              {result.matches.map((m, i) => (
+                                <li key={i} className="flex items-center gap-2">
+                                  {m.match ? <CheckCircle className="w-3.5 h-3.5 text-teal-600" /> : <AlertTriangle className="w-3.5 h-3.5 text-amber-600" />}
+                                  <span>{m.field}: {m.match ? 'Match' : 'No match'} ({m.confidence})</span>
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+                          <details className="mt-1">
+                            <summary className="cursor-pointer text-gray-500 hover:text-gray-700">View extracted text</summary>
+                            <pre className="mt-1 p-2 bg-white rounded text-xs overflow-auto max-h-24">{result.extractedText}</pre>
+                          </details>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 md:p-5">
+              <h3 className="text-base font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                <MessageSquare className="w-5 h-5 text-gray-600" />
+                Contact borrower
+              </h3>
+              <div className="grid sm:grid-cols-2 gap-2">
+                <a
+                  href={`mailto:${application.borrowerInfo?.email}?subject=Additional Information Needed for Mortgage Application #${application._id.slice(-8)}&body=Dear ${application.borrowerInfo?.firstName},
+
+We are reviewing your mortgage application and need some additional information to proceed. Please provide the following:
+
+1. [Specify what you need]
+2. [Additional requirements]
+
+Please reply to this email with the requested information at your earliest convenience.
+
+Best regards,
+${session?.user?.name || 'Loan Officer'}
+LOANATICKS - Home Mortgage Solutions`}
+                  className="flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 transition font-medium text-sm"
+                >
+                  <Mail className="w-4 h-4" /> Email borrower
+                </a>
+                <a
+                  href={`sms:${application.borrowerInfo?.phone || ''}?&body=Hello ${application.borrowerInfo?.firstName}, this is ${session?.user?.name || 'your loan officer'} from LOANATICKS. We need additional information for your mortgage application #${application._id.slice(-8)}. Please check your email for details or call us back. Thanks!`}
+                  className="flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 transition font-medium text-sm"
+                >
+                  <MessageSquare className="w-4 h-4" /> Text borrower
+                </a>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+              <button
+                onClick={() => setIsFinancialExpanded(!isFinancialExpanded)}
+                className="w-full flex items-center justify-between px-4 py-3 border-b border-gray-200 bg-gray-50 hover:bg-gray-100 transition text-left"
+              >
+                <h3 className="text-base font-semibold text-gray-900 flex items-center gap-2">
+                  <Calculator className="w-5 h-5 text-gray-600" />
+                  Financial analysis
+                </h3>
+                {isFinancialExpanded ? <ChevronUp className="w-5 h-5 text-gray-500" /> : <ChevronDown className="w-5 h-5 text-gray-500" />}
+              </button>
+              {isFinancialExpanded && (
+                <div className="p-4 space-y-4">
+                  <div className="rounded-lg border border-gray-200 p-3 bg-gray-50">
+                    <div className="flex justify-between items-center mb-1">
+                      <span className="text-sm font-medium text-gray-700">LTV</span>
+                      <span className="font-semibold text-gray-900">{((Number(application.propertyInfo?.loanAmount || 0) / Number(application.propertyInfo?.propertyValue || 1)) * 100).toFixed(2)}%</span>
+                    </div>
+                    <p className="text-xs text-gray-500">Loan ÷ Property value. {Number(application.propertyInfo?.loanAmount || 0) / Number(application.propertyInfo?.propertyValue || 1) > 0.8 ? 'High LTV – PMI likely.' : 'Within typical range.'}</p>
+                  </div>
+                  <div className="rounded-lg border border-gray-200 p-3 bg-gray-50">
+                    <div className="flex justify-between items-center mb-1">
+                      <span className="text-sm font-medium text-gray-700">DTI (est.)</span>
+                      <span className="font-semibold text-gray-900">
+                        {(() => {
+                          const income = Number(application.employment?.monthlyIncome || 0) + Number(application.financialInfo?.otherIncome || 0);
+                          const debts = Number(application.currentAddress?.monthlyPayment || 0) + Number(application.financialInfo?.totalLiabilities || 0) + Number(application.propertyInfo?.loanAmount || 0) * 0.005;
+                          return income > 0 ? ((debts / income) * 100).toFixed(2) : '0';
+                        })()}%
+                      </span>
+                    </div>
+                    <p className="text-xs text-gray-500">Debts + est. mortgage ÷ income.</p>
+                  </div>
+                  <div className="rounded-lg border border-gray-200 p-3 bg-gray-50">
+                    <div className="flex justify-between items-center mb-1">
+                      <span className="text-sm font-medium text-gray-700">Down payment</span>
+                      <span className="font-semibold text-gray-900">{fmtDollar(Number(application.propertyInfo?.propertyValue || 0) - Number(application.propertyInfo?.loanAmount || 0))}</span>
+                    </div>
+                    <p className="text-xs text-gray-500">Property value − loan amount.</p>
+                  </div>
+                  <div className="rounded-lg border border-gray-200 p-3 bg-gray-50">
+                    <div className="flex justify-between items-center mb-1">
+                      <span className="text-sm font-medium text-gray-700">Est. monthly PITI</span>
+                      <span className="font-semibold text-gray-900">
+                        {fmtDollar((() => {
+                          const loan = Number(application.propertyInfo?.loanAmount || 0);
+                          const val = Number(application.propertyInfo?.propertyValue || 1);
+                          const r = 0.065 / 12, n = 30 * 12;
+                          const pi = loan * (r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+                          const tax = val * 0.0125 / 12, ins = val * 0.0035 / 12, pmi = loan / val > 0.8 ? loan * 0.005 / 12 : 0;
+                          return pi + tax + ins + pmi;
+                        })())}
+                      </span>
+                    </div>
+                    <p className="text-xs text-gray-500">Principal, interest, tax, insurance (6.5%, 30 yr).</p>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
           )}
 
@@ -1307,6 +1315,26 @@ LOANATICKS - Home Mortgage Solutions`}
                   </div>
                 </div>
               )}
+
+              {/* Download XML for ARIVE import */}
+              <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+                <h4 className="font-bold text-gray-900 mb-2 flex items-center gap-2">
+                  <FileText className="w-5 h-5 text-teal-600" />
+                  Upload to ARIVE (no borrower re-entry)
+                </h4>
+                <p className="text-sm text-gray-600 mb-3">
+                  Download a MISMO 3.4 XML file with this application&apos;s borrower and loan data. In ARIVE, use <strong>+ Loan → Import 3.4 file</strong> to create the loan so the borrower doesn&apos;t have to enter everything again.
+                </p>
+                <a
+                  href={`/api/loan-application/export-arive-xml?id=${application._id}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-4 py-3 bg-teal-600 text-white font-semibold rounded-lg hover:bg-teal-700"
+                >
+                  <Download className="w-5 h-5" />
+                  Download XML for ARIVE (3.4)
+                </a>
+              </div>
 
               {/* Configuration Status */}
               {process.env.NEXT_PUBLIC_ARIVE_POS_URL ? (
