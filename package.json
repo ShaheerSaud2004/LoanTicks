@@ -10,6 +10,7 @@
     "lint": "eslint .",
     "seed": "tsx scripts/seed.ts",
     "seed:test": "tsx scripts/seed-test-data.ts",
+    "seed:demo": "tsx scripts/seed-demo-application.ts",
     "add:test-doc": "tsx scripts/add-test-document.ts",
     "encrypt-data": "tsx scripts/encrypt-existing-data.ts",
     "generate-pdf": "node scripts/generate-pdf-report.js",
