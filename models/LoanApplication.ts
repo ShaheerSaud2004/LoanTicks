@@ -255,9 +255,13 @@ export interface ILoanApplication extends Document {
     borrowingDownPaymentAmount?: number;
     borrowingDownPaymentSource?: string;
     
-    applyingForNewCredit: boolean; // Have you or will you be applying for a mortgage loan on another property?
+    familyRelationshipWithSeller?: boolean; // Purchase: family or business affiliation with seller?
+    
+    applyingForNewCredit: boolean; // Mortgage on another property not disclosed?
     applyingForNewCreditAmount?: number;
     applyingForNewCreditProperty?: string;
+    
+    applyingForOtherNewCredit?: boolean; // New credit (installment, credit card) not disclosed?
     
     propertySubjectToLien: boolean; // Will this property be subject to a lien that could take priority?
     
@@ -290,6 +294,27 @@ export interface ILoanApplication extends Document {
     isRetired: boolean;
     isNonActivatedReservist: boolean;
     isSurvivingSpouse: boolean;
+  };
+
+  // Credit Card Information and Borrower Authorization (per LOANATICKS form; no full PAN or CVV stored)
+  creditCardAuthorization?: {
+    authBorrower1Name?: string;
+    authBorrower1SSN?: string;
+    authBorrower1DOB?: string;
+    authBorrower2Name?: string;
+    authBorrower2SSN?: string;
+    authBorrower2DOB?: string;
+    cardType?: string;
+    cardLast4?: string;
+    cardExpiration?: string;
+    nameOnCard?: string;
+    cardBillingAddress?: string;
+    amountVerified?: string;
+    authorizationAgreed?: boolean;
+    authSignature1?: string;
+    authDate1?: string;
+    authSignature2?: string;
+    authDate2?: string;
   };
 
   // Documents
@@ -533,9 +558,11 @@ const LoanApplicationSchema = new Schema<ILoanApplication>(
       borrowingDownPayment: { type: Boolean, default: false },
       borrowingDownPaymentAmount: Number,
       borrowingDownPaymentSource: String,
+      familyRelationshipWithSeller: Boolean,
       applyingForNewCredit: { type: Boolean, default: false },
       applyingForNewCreditAmount: Number,
       applyingForNewCreditProperty: String,
+      applyingForOtherNewCredit: Boolean,
       propertySubjectToLien: { type: Boolean, default: false },
       cosignerOrGuarantor: { type: Boolean, default: false },
       cosignerDebtAmount: Number,
@@ -560,6 +587,26 @@ const LoanApplicationSchema = new Schema<ILoanApplication>(
     },
 
     militaryService: Schema.Types.Mixed,
+
+    creditCardAuthorization: {
+      authBorrower1Name: String,
+      authBorrower1SSN: String,
+      authBorrower1DOB: String,
+      authBorrower2Name: String,
+      authBorrower2SSN: String,
+      authBorrower2DOB: String,
+      cardType: String,
+      cardLast4: String,
+      cardExpiration: String,
+      nameOnCard: String,
+      cardBillingAddress: String,
+      amountVerified: String,
+      authorizationAgreed: Boolean,
+      authSignature1: String,
+      authDate1: String,
+      authSignature2: String,
+      authDate2: String,
+    },
 
     documents: [
       {

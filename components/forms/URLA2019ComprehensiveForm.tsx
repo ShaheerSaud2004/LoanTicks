@@ -15,7 +15,8 @@ import {
   AlertTriangle,
   Info,
   HelpCircle,
-  X
+  X,
+  CreditCard
 } from 'lucide-react';
 import FormTooltip from './FormTooltip';
 import ChatbotWidget from '../chatbot/ChatbotWidget';
@@ -181,20 +182,36 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
     pmiRequired: false,
     pmiAmount: '',
     
-    // SECTION 11: DECLARATIONS
+    // SECTION 11: DECLARATIONS (Section 5a & 5b)
+    intendToOccupy: true,
+    ownershipInterestInLast3Years: false,
+    ownershipInterestPropertyType: '',
+    ownershipInterestHowHeld: '',
+    familyRelationshipWithSeller: false,
+    borrowingDownPayment: false,
+    borrowingDownPaymentAmount: '',
+    applyingForMortgageOtherProperty: false,
+    applyingForOtherNewCredit: false,
+    propertySubjectToLien: false,
+    cosignerOrGuarantor: false,
     outstandingJudgments: false,
-    declaredBankruptcy: false,
-    bankruptcyDate: '',
-    propertyForeclosed: false,
-    foreclosureDate: '',
+    federalDebtDelinquent: false,
     lawsuitParty: false,
     lawsuitDescription: '',
+    conveyedTitleInLieu: false,
+    completedPreForeclosureSale: false,
+    propertyForeclosed: false,
+    declaredBankruptcy: false,
+    bankruptcyDate: '',
+    bankruptcyChapter7: false,
+    bankruptcyChapter11: false,
+    bankruptcyChapter12: false,
+    bankruptcyChapter13: false,
     loanOnProperty: false,
     coMakerOnNote: false,
     usCitizen: true,
     permanentResident: false,
     primaryResidence: true,
-    intendToOccupy: true,
     
     // SECTION 12: MILITARY SERVICE
     militaryService: 'none',
@@ -211,6 +228,27 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
     additionalInformation: '',
     specialCircumstances: '',
     
+    // Credit Card Information and Borrower Authorization (per LOANATICKS form)
+    authBorrower1Name: '',
+    authBorrower1SSN: '',
+    authBorrower1DOB: '',
+    authBorrower2Name: '',
+    authBorrower2SSN: '',
+    authBorrower2DOB: '',
+    cardType: '',
+    cardNumber: '',
+    cardLast4: '', // only this stored, not full number
+    cardExpiration: '',
+    cardSecurityCode: '', // never persisted
+    nameOnCard: '',
+    cardBillingAddress: '',
+    amountVerified: '',
+    authorizationAgreed: false,
+    authSignature1: '',
+    authDate1: '',
+    authSignature2: '',
+    authDate2: '',
+
     // SECTION 15: DOCUMENTS
     uploadedDocuments: [],
     idDocument: null as File | null,
@@ -232,6 +270,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
     { title: 'Declarations', icon: CheckCircle, description: 'Legal declarations and disclosures' },
     { title: 'Military Service', icon: User, description: 'Military service information' },
     { title: 'Demographics', icon: User, description: 'Demographic information (optional)' },
+    { title: 'Credit Card & Authorization', icon: CreditCard, description: 'Credit card and borrower authorization' },
     { title: 'Documents', icon: FileText, description: 'Supporting documents upload' }
   ];
 
@@ -301,6 +340,22 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
   useEffect(() => {
     calculateTotalMonthlyIncome();
   }, [calculateTotalMonthlyIncome]);
+
+  // Pre-fill Credit Card & Authorization borrower 1 from application when entering that step
+  useEffect(() => {
+    if (currentStep !== 14) return;
+    setFormData(prev => {
+      if (prev.authBorrower1Name?.trim()) return prev;
+      const name = [prev.firstName, prev.lastName].filter(Boolean).join(' ').trim();
+      if (!name && !prev.ssn && !prev.dateOfBirth) return prev;
+      return {
+        ...prev,
+        authBorrower1Name: name,
+        authBorrower1SSN: prev.authBorrower1SSN || prev.ssn || '',
+        authBorrower1DOB: prev.authBorrower1DOB || prev.dateOfBirth || '',
+      };
+    });
+  }, [currentStep]);
 
   const nextStep = () => {
     if (currentStep < steps.length - 1) {
@@ -395,7 +450,12 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
     // Section 10: Loan Details
     // Declarations are checkboxes, so they're always filled (true/false)
 
-    // Section 14: Supporting Documents
+    // Credit Card & Borrower Authorization
+    if (!formData.authorizationAgreed) missingFields.push('Credit Card & Authorization: agree to authorization');
+    if (!formData.authSignature1?.trim()) missingFields.push('Credit Card & Authorization: signature (type your full legal name)');
+    if (!formData.authDate1) missingFields.push('Credit Card & Authorization: date');
+
+    // Section 15: Supporting Documents
     const documents = formData.uploadedDocuments as File[];
     if (!documents || documents.length === 0) {
       missingFields.push('Supporting Documents (at least Government ID and Pay Stubs)');
@@ -1868,108 +1928,151 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
           </div>
         );
 
-      case 11: // Declarations
+      case 11: // Declarations (Section 5a & 5b)
+        const DeclareCheck = ({ checked, onChange, label }: { checked: boolean; onChange: (v: boolean) => void; label: string }) => (
+          <label className={`flex items-start gap-4 p-4 border rounded-xl cursor-pointer touch-manipulation min-h-[56px] ${checked ? 'border-gray-400 bg-gray-50' : 'border-gray-200 bg-white'}`}>
+            <input type="checkbox" checked={checked} onChange={(e) => onChange(e.target.checked)} className="mt-1 w-6 h-6 rounded border border-gray-400 cursor-pointer flex-shrink-0 accent-teal-600" />
+            <span className="text-base text-gray-900 font-medium pt-0.5">{label}</span>
+          </label>
+        );
         return (
           <div className="space-y-6">
             <div className="bg-gradient-to-r from-teal-50 to-teal-50 border-2 border-teal-300 rounded-2xl p-6 sm:p-8">
               <h3 className="font-bold text-teal-900 mb-3 text-xl sm:text-2xl flex items-center gap-3">
                 <Info className="w-6 h-6 sm:w-7 sm:h-7" />
-                Section 11: Declarations
+                Section 5: Declarations
               </h3>
               <p className="text-teal-800 text-base sm:text-lg leading-relaxed">
-                Please answer the following declarations truthfully. These declarations are required by law and help us process your loan application accurately.
+                Specific questions about the property, your funding, and your past financial history. Answer YES (check) or leave unchecked for NO.
               </p>
             </div>
-            <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 space-y-4">
-              <label className={`flex items-start gap-4 p-4 border rounded-xl cursor-pointer touch-manipulation min-h-[60px] ${
-                formData.outstandingJudgments ? 'border-gray-400 bg-gray-50' : 'border-gray-200 bg-white'
-              }`}>
-                <input 
-                  type="checkbox" 
-                  checked={formData.outstandingJudgments} 
-                  onChange={(e) => handleInputChange('outstandingJudgments', e.target.checked)} 
-                  className="mt-1 w-6 h-6 sm:w-7 sm:h-7 rounded border border-gray-400 cursor-pointer flex-shrink-0 accent-gray-600" 
-                />
-                <span className="text-base sm:text-lg text-gray-900 font-medium leading-relaxed pt-0.5">Are there any outstanding judgments against you?</span>
-              </label>
-              <label className={`flex items-start gap-4 p-4 border rounded-xl cursor-pointer touch-manipulation min-h-[60px] ${
-                formData.declaredBankruptcy ? 'border-gray-400 bg-gray-50' : 'border-gray-200 bg-white'
-              }`}>
-                <input 
-                  type="checkbox" 
-                  checked={formData.declaredBankruptcy} 
-                  onChange={(e) => handleInputChange('declaredBankruptcy', e.target.checked)} 
-                  className="mt-1 w-6 h-6 sm:w-7 sm:h-7 rounded border border-gray-400 cursor-pointer flex-shrink-0 accent-gray-600" 
-                />
-                <span className="text-base sm:text-lg text-gray-900 font-medium leading-relaxed pt-0.5">Have you declared bankruptcy within the past 7 years?</span>
-              </label>
-              {formData.declaredBankruptcy && (
-                <div className="pl-10 pr-4 py-2">
-                  <label className="block text-sm font-semibold text-gray-700 mb-1">If yes, approximate date (optional)</label>
-                  <input type="text" value={formData.bankruptcyDate} onChange={(e) => handleInputChange('bankruptcyDate', e.target.value)} placeholder="e.g., January 2020" className="w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-900" />
-                </div>
-              )}
-              <label className={`flex items-start gap-4 p-4 border rounded-xl cursor-pointer touch-manipulation min-h-[60px] ${
-                formData.propertyForeclosed ? 'border-gray-400 bg-gray-50' : 'border-gray-200 bg-white'
-              }`}>
-                <input 
-                  type="checkbox" 
-                  checked={formData.propertyForeclosed} 
-                  onChange={(e) => handleInputChange('propertyForeclosed', e.target.checked)} 
-                  className="mt-1 w-6 h-6 sm:w-7 sm:h-7 rounded border border-gray-400 cursor-pointer flex-shrink-0 accent-gray-600" 
-                />
-                <span className="text-base sm:text-lg text-gray-900 font-medium leading-relaxed pt-0.5">Have you had property foreclosed upon or given title/deed in lieu of foreclosure in the past 7 years?</span>
-              </label>
-              <label className={`flex items-start gap-4 p-4 border rounded-xl cursor-pointer touch-manipulation min-h-[60px] ${
-                formData.lawsuitParty ? 'border-gray-400 bg-gray-50' : 'border-gray-200 bg-white'
-              }`}>
-                <input 
-                  type="checkbox" 
-                  checked={formData.lawsuitParty} 
-                  onChange={(e) => handleInputChange('lawsuitParty', e.target.checked)} 
-                  className="mt-1 w-6 h-6 sm:w-7 sm:h-7 rounded border border-gray-400 cursor-pointer flex-shrink-0 accent-gray-600" 
-                />
-                <span className="text-base sm:text-lg text-gray-900 font-medium leading-relaxed pt-0.5">Are you a party to a lawsuit in which you potentially have any personal financial liability?</span>
-              </label>
-              {formData.lawsuitParty && (
-                <div className="pl-10 pr-4 py-2">
-                  <label className="block text-sm font-semibold text-gray-700 mb-1">Brief description (optional)</label>
-                  <input type="text" value={formData.lawsuitDescription} onChange={(e) => handleInputChange('lawsuitDescription', e.target.value)} placeholder="Describe the lawsuit if you wish" className="w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-900" />
-                </div>
-              )}
-              <label className={`flex items-start gap-4 p-4 border rounded-xl cursor-pointer touch-manipulation min-h-[60px] ${
-                formData.loanOnProperty ? 'border-gray-400 bg-gray-50' : 'border-gray-200 bg-white'
-              }`}>
-                <input 
-                  type="checkbox" 
-                  checked={formData.loanOnProperty} 
-                  onChange={(e) => handleInputChange('loanOnProperty', e.target.checked)} 
-                  className="mt-1 w-6 h-6 sm:w-7 sm:h-7 rounded border border-gray-400 cursor-pointer flex-shrink-0 accent-gray-600" 
-                />
-                <span className="text-base sm:text-lg text-gray-900 font-medium leading-relaxed pt-0.5">Are you currently obligated on any loan secured by a property (e.g., mortgage, home equity loan)?</span>
-              </label>
-              <label className={`flex items-start gap-4 p-4 border rounded-xl cursor-pointer touch-manipulation min-h-[60px] ${
-                formData.coMakerOnNote ? 'border-gray-400 bg-gray-50' : 'border-gray-200 bg-white'
-              }`}>
-                <input 
-                  type="checkbox" 
-                  checked={formData.coMakerOnNote} 
-                  onChange={(e) => handleInputChange('coMakerOnNote', e.target.checked)} 
-                  className="mt-1 w-6 h-6 sm:w-7 sm:h-7 rounded border border-gray-400 cursor-pointer flex-shrink-0 accent-gray-600" 
-                />
-                <span className="text-base sm:text-lg text-gray-900 font-medium leading-relaxed pt-0.5">Are you a co-maker, co-signer, or endorser on a note (e.g., for another person&apos;s loan)?</span>
-              </label>
-              <label className={`flex items-start gap-4 p-4 border rounded-xl cursor-pointer touch-manipulation min-h-[60px] ${
-                formData.intendToOccupy ? 'border-gray-400 bg-gray-50' : 'border-gray-200 bg-white'
-              }`}>
-                <input 
-                  type="checkbox" 
-                  checked={formData.intendToOccupy} 
-                  onChange={(e) => handleInputChange('intendToOccupy', e.target.checked)} 
-                  className="mt-1 w-6 h-6 sm:w-7 sm:h-7 rounded border border-gray-400 cursor-pointer flex-shrink-0 accent-gray-600" 
-                />
-                <span className="text-base sm:text-lg text-gray-900 font-medium leading-relaxed pt-0.5">Will you occupy the property as your primary residence?</span>
-              </label>
+
+            <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 space-y-6">
+              <h4 className="font-bold text-gray-900 text-lg border-b border-teal-200 pb-2">5a. About this Property and Your Money for this Loan</h4>
+
+              <div>
+                <p className="text-sm font-semibold text-gray-700 mb-2">A. Will you occupy the property as your primary residence?</p>
+                <DeclareCheck checked={formData.intendToOccupy} onChange={(v) => handleInputChange('intendToOccupy', v)} label="YES, I will occupy the property as my primary residence." />
+                {formData.intendToOccupy && (
+                  <div className="ml-10 mt-3 space-y-3">
+                    <p className="text-sm text-gray-700">If YES, have you had an ownership interest in another property in the last 3 years?</p>
+                    <DeclareCheck checked={formData.ownershipInterestInLast3Years} onChange={(v) => handleInputChange('ownershipInterestInLast3Years', v)} label="YES" />
+                    {formData.ownershipInterestInLast3Years && (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-xs font-semibold text-gray-600 mb-1">(1) Type: PR, SR, SH, or IP?</label>
+                          <input type="text" value={formData.ownershipInterestPropertyType} onChange={(e) => handleInputChange('ownershipInterestPropertyType', e.target.value)} placeholder="e.g. PR, SH" className="w-full px-3 py-2 border rounded-lg text-gray-900 text-sm" />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-semibold text-gray-600 mb-1">(2) How did you hold title: S, SP, or O?</label>
+                          <input type="text" value={formData.ownershipInterestHowHeld} onChange={(e) => handleInputChange('ownershipInterestHowHeld', e.target.value)} placeholder="e.g. S, SP" className="w-full px-3 py-2 border rounded-lg text-gray-900 text-sm" />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              <div>
+                <p className="text-sm font-semibold text-gray-700 mb-2">B. If this is a Purchase: Do you have a family relationship or business affiliation with the seller?</p>
+                <DeclareCheck checked={formData.familyRelationshipWithSeller} onChange={(v) => handleInputChange('familyRelationshipWithSeller', v)} label="YES" />
+              </div>
+
+              <div>
+                <p className="text-sm font-semibold text-gray-700 mb-2">C. Are you borrowing any money for this real estate transaction (e.g. closing costs or down payment) or obtaining money from the seller or realtor that you have not disclosed on this application?</p>
+                <DeclareCheck checked={formData.borrowingDownPayment} onChange={(v) => handleInputChange('borrowingDownPayment', v)} label="YES" />
+                {formData.borrowingDownPayment && (
+                  <div className="ml-10 mt-2">
+                    <label className="block text-xs font-semibold text-gray-600 mb-1">If YES, amount ($)</label>
+                    <input type="text" inputMode="decimal" value={formData.borrowingDownPaymentAmount} onChange={(e) => handleInputChange('borrowingDownPaymentAmount', e.target.value)} placeholder="Amount" className="w-40 px-3 py-2 border rounded-lg text-gray-900 text-sm" />
+                  </div>
+                )}
+              </div>
+
+              <div>
+                <p className="text-sm font-semibold text-gray-700 mb-2">D. (1) Have you or will you be applying for a mortgage loan on another property (not this one) on or before closing that is not disclosed on this application?</p>
+                <DeclareCheck checked={formData.applyingForMortgageOtherProperty} onChange={(v) => handleInputChange('applyingForMortgageOtherProperty', v)} label="YES" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-gray-700 mb-2">D. (2) Have you or will you be applying for any new credit (e.g. installment loan, credit card) on or before closing that is not disclosed on this application?</p>
+                <DeclareCheck checked={formData.applyingForOtherNewCredit} onChange={(v) => handleInputChange('applyingForOtherNewCredit', v)} label="YES" />
+              </div>
+
+              <div>
+                <p className="text-sm font-semibold text-gray-700 mb-2">E. Will this property be subject to a lien that could take priority over the first mortgage (e.g. PACE / clean energy lien)?</p>
+                <DeclareCheck checked={formData.propertySubjectToLien} onChange={(v) => handleInputChange('propertySubjectToLien', v)} label="YES" />
+              </div>
+
+              <h4 className="font-bold text-gray-900 text-lg border-b border-teal-200 pb-2 pt-2">5b. About Your Finances</h4>
+
+              <div>
+                <p className="text-sm font-semibold text-gray-700 mb-2">F. Are you a co-signer or guarantor on any debt or loan not disclosed on this application?</p>
+                <DeclareCheck checked={formData.cosignerOrGuarantor} onChange={(v) => handleInputChange('cosignerOrGuarantor', v)} label="YES" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-gray-700 mb-2">G. Are there any outstanding judgments against you?</p>
+                <DeclareCheck checked={formData.outstandingJudgments} onChange={(v) => handleInputChange('outstandingJudgments', v)} label="YES" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-gray-700 mb-2">H. Are you currently delinquent or in default on a Federal debt?</p>
+                <DeclareCheck checked={formData.federalDebtDelinquent} onChange={(v) => handleInputChange('federalDebtDelinquent', v)} label="YES" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-gray-700 mb-2">I. Are you a party to a lawsuit in which you potentially have any personal financial liability?</p>
+                <DeclareCheck checked={formData.lawsuitParty} onChange={(v) => handleInputChange('lawsuitParty', v)} label="YES" />
+                {formData.lawsuitParty && (
+                  <div className="ml-10 mt-2">
+                    <label className="block text-xs font-semibold text-gray-600 mb-1">Brief description (optional)</label>
+                    <input type="text" value={formData.lawsuitDescription} onChange={(e) => handleInputChange('lawsuitDescription', e.target.value)} placeholder="Describe" className="w-full px-3 py-2 border rounded-lg text-gray-900 text-sm" />
+                  </div>
+                )}
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-gray-700 mb-2">J. Have you conveyed title to any property in lieu of foreclosure in the past 7 years?</p>
+                <DeclareCheck checked={formData.conveyedTitleInLieu} onChange={(v) => handleInputChange('conveyedTitleInLieu', v)} label="YES" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-gray-700 mb-2">K. Within the past 7 years, have you completed a pre-foreclosure sale or short sale?</p>
+                <DeclareCheck checked={formData.completedPreForeclosureSale} onChange={(v) => handleInputChange('completedPreForeclosureSale', v)} label="YES" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-gray-700 mb-2">L. Have you had property foreclosed upon in the last 7 years?</p>
+                <DeclareCheck checked={formData.propertyForeclosed} onChange={(v) => handleInputChange('propertyForeclosed', v)} label="YES" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-gray-700 mb-2">M. Have you declared bankruptcy within the past 7 years?</p>
+                <DeclareCheck checked={formData.declaredBankruptcy} onChange={(v) => handleInputChange('declaredBankruptcy', v)} label="YES" />
+                {formData.declaredBankruptcy && (
+                  <div className="ml-10 mt-3">
+                    <p className="text-xs font-semibold text-gray-600 mb-2">If YES, identify the type(s):</p>
+                    <div className="flex flex-wrap gap-4">
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input type="checkbox" checked={formData.bankruptcyChapter7} onChange={(e) => handleInputChange('bankruptcyChapter7', e.target.checked)} className="w-5 h-5 rounded border border-gray-400 accent-teal-600" />
+                        <span className="text-sm text-gray-800">Chapter 7</span>
+                      </label>
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input type="checkbox" checked={formData.bankruptcyChapter11} onChange={(e) => handleInputChange('bankruptcyChapter11', e.target.checked)} className="w-5 h-5 rounded border border-gray-400 accent-teal-600" />
+                        <span className="text-sm text-gray-800">Chapter 11</span>
+                      </label>
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input type="checkbox" checked={formData.bankruptcyChapter12} onChange={(e) => handleInputChange('bankruptcyChapter12', e.target.checked)} className="w-5 h-5 rounded border border-gray-400 accent-teal-600" />
+                        <span className="text-sm text-gray-800">Chapter 12</span>
+                      </label>
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input type="checkbox" checked={formData.bankruptcyChapter13} onChange={(e) => handleInputChange('bankruptcyChapter13', e.target.checked)} className="w-5 h-5 rounded border border-gray-400 accent-teal-600" />
+                        <span className="text-sm text-gray-800">Chapter 13</span>
+                      </label>
+                    </div>
+                    <label className="block text-xs text-gray-500 mt-2">Approximate date (optional)</label>
+                    <input type="text" value={formData.bankruptcyDate} onChange={(e) => handleInputChange('bankruptcyDate', e.target.value)} placeholder="e.g., January 2020" className="w-40 px-3 py-2 border rounded-lg text-gray-900 text-sm mt-1" />
+                  </div>
+                )}
+              </div>
+
+              <div className="border-t border-gray-200 pt-4">
+                <p className="text-sm font-semibold text-gray-700 mb-2">Additional: Are you currently obligated on any loan secured by a property (e.g. mortgage, home equity loan)?</p>
+                <DeclareCheck checked={formData.loanOnProperty} onChange={(v) => handleInputChange('loanOnProperty', v)} label="YES" />
+              </div>
             </div>
           </div>
         );
@@ -2013,13 +2116,149 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
           </div>
         );
 
-      case 14: // Documents
+      case 14: // Credit Card Information and Borrower Authorization
+        return (
+          <div className="space-y-8">
+            <div className="bg-gradient-to-r from-teal-50 to-teal-50 border-2 border-teal-300 rounded-2xl p-6 sm:p-8">
+              <h3 className="font-bold text-teal-900 mb-3 text-xl sm:text-2xl flex items-center gap-3">
+                <CreditCard className="w-6 h-6 sm:w-7 sm:h-7" />
+                Credit Card Information and Borrower Authorization
+              </h3>
+              <p className="text-teal-800 text-base sm:text-lg leading-relaxed">
+                Complete this form to authorize LOANATICKS to obtain your credit report and to provide credit card information for appraisal fees, credit reports, and other services. Your card details are used only for verified charges related to your application.
+              </p>
+            </div>
+
+            <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 space-y-6">
+              <div>
+                <h4 className="font-bold text-gray-900 mb-3 text-lg">Borrower Information</h4>
+                <p className="text-sm text-gray-600 mb-4">Primary applicant (pre-filled from your application when available).</p>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">Name</label>
+                    <input type="text" value={formData.authBorrower1Name} onChange={(e) => handleInputChange('authBorrower1Name', e.target.value)} placeholder="Full legal name" className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-gray-900" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">SS#</label>
+                    <input type="text" value={formData.authBorrower1SSN} onChange={(e) => handleInputChange('authBorrower1SSN', e.target.value)} placeholder="XXX-XX-XXXX" className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-gray-900" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">DOB</label>
+                    <input type="date" value={formData.authBorrower1DOB} onChange={(e) => handleInputChange('authBorrower1DOB', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-gray-900" />
+                  </div>
+                </div>
+                {formData.creditType === 'joint' && (
+                  <>
+                    <p className="text-sm text-gray-600 mt-4 mb-2">Co-borrower (optional for this form).</p>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">Name</label>
+                        <input type="text" value={formData.authBorrower2Name} onChange={(e) => handleInputChange('authBorrower2Name', e.target.value)} placeholder="Co-borrower name" className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-gray-900" />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">SS#</label>
+                        <input type="text" value={formData.authBorrower2SSN} onChange={(e) => handleInputChange('authBorrower2SSN', e.target.value)} placeholder="XXX-XX-XXXX" className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-gray-900" />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">DOB</label>
+                        <input type="date" value={formData.authBorrower2DOB} onChange={(e) => handleInputChange('authBorrower2DOB', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-gray-900" />
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
+
+              <div>
+                <h4 className="font-bold text-gray-900 mb-3 text-lg">Credit Card Information</h4>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">Type of Credit Card (Visa, MC, AMEX, Discover)</label>
+                    <select value={formData.cardType} onChange={(e) => handleInputChange('cardType', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-gray-900">
+                      <option value="">Select card type</option>
+                      <option value="visa">Visa</option>
+                      <option value="mc">Mastercard</option>
+                      <option value="amex">American Express</option>
+                      <option value="discover">Discover</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">Credit Card Number</label>
+                    <input type="password" inputMode="numeric" autoComplete="cc-number" value={formData.cardNumber} onChange={(e) => { const v = e.target.value.replace(/\D/g, '').slice(0, 19); setFormData(prev => ({ ...prev, cardNumber: v, cardLast4: v.slice(-4) })); }} placeholder="Card number" maxLength={19} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-gray-900" />
+                    <p className="text-xs text-gray-500 mt-1">Only the last 4 digits are stored for reference. Full number is not saved.</p>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-1">Expiration Date</label>
+                      <input type="text" value={formData.cardExpiration} onChange={(e) => handleInputChange('cardExpiration', e.target.value)} placeholder="MM/YY" maxLength={5} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-gray-900" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-1">Security Code (back of card)</label>
+                      <input type="password" inputMode="numeric" autoComplete="off" value={formData.cardSecurityCode} onChange={(e) => handleInputChange('cardSecurityCode', e.target.value.replace(/\D/g, '').slice(0, 4))} placeholder="CVV" maxLength={4} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-gray-900" />
+                      <p className="text-xs text-gray-500 mt-1">Not stored. Used only for verification.</p>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">Name as it appears on card</label>
+                    <input type="text" value={formData.nameOnCard} onChange={(e) => handleInputChange('nameOnCard', e.target.value)} placeholder="Name on card" className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-gray-900" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">Billing address of card</label>
+                    <input type="text" value={formData.cardBillingAddress} onChange={(e) => handleInputChange('cardBillingAddress', e.target.value)} placeholder="Street, city, state, ZIP" className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-gray-900" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">Amount Verified ($)</label>
+                    <input type="text" inputMode="decimal" value={formData.amountVerified} onChange={(e) => handleInputChange('amountVerified', e.target.value)} placeholder="e.g. 500" className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-gray-900 max-w-[200px]" />
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-gray-50 border-2 border-gray-200 rounded-xl p-5">
+                <h4 className="font-bold text-gray-900 mb-3 text-lg">Authorization</h4>
+                <p className="text-teal-800 text-sm leading-relaxed mb-4">
+                  By signing this form, I hereby acknowledge that I am the authorized user of this card and grant LOANATICKS LLC and its affiliates permission to utilize this card for payments associated with the mortgage transaction, including appraisal fees, credit reports, and other requisite services essential to completing the application process. The appraisal is the property of LOANATICKS LLC and is intended solely for underwriting purposes related to my loan application. Payment for the appraisal does not guarantee loan approval nor a specific valuation of the property. I/We additionally authorize LOANATICKS LLC to obtain a consumer credit report and verify other credit information, including previous and current mortgages, as well as landlord references.
+                </p>
+                <label className={`flex items-start gap-4 p-4 border rounded-xl cursor-pointer touch-manipulation min-h-[60px] ${formData.authorizationAgreed ? 'border-teal-500 bg-teal-50/50' : 'border-gray-200 bg-white'}`}>
+                  <input type="checkbox" checked={formData.authorizationAgreed} onChange={(e) => handleInputChange('authorizationAgreed', e.target.checked)} className="mt-1 w-6 h-6 rounded border-2 border-gray-400 cursor-pointer flex-shrink-0 accent-teal-600" />
+                  <span className="text-base font-medium text-gray-900 pt-0.5">I have read and agree to the authorization above.</span>
+                </label>
+              </div>
+
+              <div>
+                <h4 className="font-bold text-gray-900 mb-3 text-lg">Signature</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">Signature (type full legal name)</label>
+                    <input type="text" value={formData.authSignature1} onChange={(e) => handleInputChange('authSignature1', e.target.value)} placeholder="Full legal name" className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-gray-900" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">Date</label>
+                    <input type="date" value={formData.authDate1} onChange={(e) => handleInputChange('authDate1', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-gray-900" />
+                  </div>
+                </div>
+                {formData.creditType === 'joint' && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-1">Co-borrower signature (type full legal name)</label>
+                      <input type="text" value={formData.authSignature2} onChange={(e) => handleInputChange('authSignature2', e.target.value)} placeholder="Full legal name" className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-gray-900" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-1">Date</label>
+                      <input type="date" value={formData.authDate2} onChange={(e) => handleInputChange('authDate2', e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:outline-none text-gray-900" />
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        );
+
+      case 15: // Documents
         return (
           <div className="space-y-8">
             <div className="bg-gradient-to-r from-teal-50 to-teal-50 border-2 border-teal-300 rounded-2xl p-6 sm:p-8">
               <h3 className="font-bold text-teal-900 mb-3 text-xl sm:text-2xl flex items-center gap-3">
                 <Info className="w-6 h-6 sm:w-7 sm:h-7" />
-                Section 14: Supporting Documents
+                Section 15: Supporting Documents
               </h3>
               <p className="text-teal-800 text-base sm:text-lg leading-relaxed">
                 Please upload the required documents to support your loan application. These documents are essential for verifying your identity, income, and financial status. All required documents must be submitted for your application to be processed.
