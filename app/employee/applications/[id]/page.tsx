@@ -31,7 +31,8 @@ import {
   ThumbsUp,
   ThumbsDown,
   Scan,
-  Loader
+  Loader,
+  Printer
 } from 'lucide-react';
 
 interface Application {
@@ -516,6 +517,15 @@ export default function ApplicationView({ params }: { params: Promise<{ id: stri
               </p>
             </div>
             <div className="flex items-center gap-3 flex-wrap">
+              <a
+                href={`/employee/applications/${application._id}/print`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 text-sm font-medium"
+              >
+                <Printer className="w-4 h-4" />
+                Print application
+              </a>
               {getStatusBadge(application.status)}
               {application.decision && (
                 <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
