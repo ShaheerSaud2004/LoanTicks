@@ -1360,30 +1360,58 @@ LOANATICKS - Home Mortgage Solutions`}
                 </div>
               </div>
 
-              {/* Quick Actions for ARIVE */}
-              <div className="grid sm:grid-cols-2 gap-4">
-                <div className="bg-white rounded-xl shadow-sm p-4 border border-gray-200">
-                  <h4 className="font-semibold text-gray-900 mb-2 flex items-center gap-2">
-                    <User className="w-5 h-5 text-green-600" />
-                    Borrower Info
-                  </h4>
-                  <div className="text-sm text-gray-600 space-y-1">
-                    <p><strong>Name:</strong> {String(application.borrowerInfo?.firstName || '')} {String(application.borrowerInfo?.lastName || '')}</p>
-                    <p><strong>Email:</strong> {String(application.borrowerInfo?.email || '')}</p>
-                    <p><strong>Phone:</strong> {String(application.borrowerInfo?.phone || 'N/A')}</p>
-                  </div>
-                </div>
-                
-                <div className="bg-white rounded-xl shadow-sm p-4 border border-gray-200">
-                  <h4 className="font-semibold text-gray-900 mb-2 flex items-center gap-2">
-                    <DollarSign className="w-5 h-5 text-green-600" />
-                    Loan Details
-                  </h4>
-                  <div className="text-sm text-gray-600 space-y-1">
-                    <p><strong>Amount:</strong> ${Number(application.propertyInfo?.loanAmount || 0).toLocaleString()}</p>
-                    <p><strong>Property Value:</strong> ${Number(application.propertyInfo?.propertyValue || 0).toLocaleString()}</p>
-                    <p><strong>LTV:</strong> {((Number(application.propertyInfo?.loanAmount || 0) / Number(application.propertyInfo?.propertyValue || 1)) * 100).toFixed(2)}%</p>
-                  </div>
+              {/* Applicant info formatted as spreadsheet (matches Excel export) */}
+              <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                <h4 className="font-bold text-gray-900 px-4 py-3 border-b border-gray-200 flex items-center gap-2 bg-gray-50">
+                  <FileText className="w-5 h-5 text-green-600" />
+                  Applicant info in spreadsheet format
+                </h4>
+                <p className="text-xs text-gray-500 px-4 pt-2 pb-1">
+                  Same columns as the Excel (Lead) download. Use the download below to open in Excel or import into ARIVE.
+                </p>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm border-collapse">
+                    <thead>
+                      <tr className="bg-gray-100 text-left">
+                        <th className="p-2 border border-gray-200 font-semibold text-gray-700">First Name</th>
+                        <th className="p-2 border border-gray-200 font-semibold text-gray-700">Middle</th>
+                        <th className="p-2 border border-gray-200 font-semibold text-gray-700">Last Name</th>
+                        <th className="p-2 border border-gray-200 font-semibold text-gray-700">Email</th>
+                        <th className="p-2 border border-gray-200 font-semibold text-gray-700">Phone</th>
+                        <th className="p-2 border border-gray-200 font-semibold text-gray-700">Cell</th>
+                        <th className="p-2 border border-gray-200 font-semibold text-gray-700">Property Address</th>
+                        <th className="p-2 border border-gray-200 font-semibold text-gray-700">City</th>
+                        <th className="p-2 border border-gray-200 font-semibold text-gray-700">State</th>
+                        <th className="p-2 border border-gray-200 font-semibold text-gray-700">ZIP</th>
+                        <th className="p-2 border border-gray-200 font-semibold text-gray-700">Loan Amount</th>
+                        <th className="p-2 border border-gray-200 font-semibold text-gray-700">Prop. Value</th>
+                        <th className="p-2 border border-gray-200 font-semibold text-gray-700">Status</th>
+                        <th className="p-2 border border-gray-200 font-semibold text-gray-700">Decision</th>
+                        <th className="p-2 border border-gray-200 font-semibold text-gray-700">Submitted</th>
+                        <th className="p-2 border border-gray-200 font-semibold text-gray-700">App ID</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr className="bg-white">
+                        <td className="p-2 border border-gray-200 text-gray-900">{String(application.borrowerInfo?.firstName ?? '')}</td>
+                        <td className="p-2 border border-gray-200 text-gray-900">{String(application.borrowerInfo?.middleName ?? '')}</td>
+                        <td className="p-2 border border-gray-200 text-gray-900">{String(application.borrowerInfo?.lastName ?? '')}</td>
+                        <td className="p-2 border border-gray-200 text-gray-900">{String(application.borrowerInfo?.email ?? '')}</td>
+                        <td className="p-2 border border-gray-200 text-gray-900">{String(application.borrowerInfo?.phone ?? '')}</td>
+                        <td className="p-2 border border-gray-200 text-gray-900">{String(application.borrowerInfo?.cellPhone ?? '')}</td>
+                        <td className="p-2 border border-gray-200 text-gray-900">{String(application.propertyInfo?.propertyAddress ?? '')}</td>
+                        <td className="p-2 border border-gray-200 text-gray-900">{String(application.propertyInfo?.propertyCity ?? '')}</td>
+                        <td className="p-2 border border-gray-200 text-gray-900">{String(application.propertyInfo?.propertyState ?? '')}</td>
+                        <td className="p-2 border border-gray-200 text-gray-900">{String(application.propertyInfo?.propertyZipCode ?? '')}</td>
+                        <td className="p-2 border border-gray-200 text-gray-900">{Number(application.propertyInfo?.loanAmount ?? 0).toLocaleString()}</td>
+                        <td className="p-2 border border-gray-200 text-gray-900">{Number(application.propertyInfo?.propertyValue ?? 0).toLocaleString()}</td>
+                        <td className="p-2 border border-gray-200 text-gray-900">{String(application.status ?? '')}</td>
+                        <td className="p-2 border border-gray-200 text-gray-900">{String(application.decision ?? '')}</td>
+                        <td className="p-2 border border-gray-200 text-gray-900">{application.submittedAt ? new Date(application.submittedAt).toLocaleString() : ''}</td>
+                        <td className="p-2 border border-gray-200 text-gray-900 font-mono text-xs">{String(application._id ?? '').slice(-8)}</td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
               </div>
 
@@ -1453,7 +1481,7 @@ LOANATICKS - Home Mortgage Solutions`}
                   Upload to ARIVE (no borrower re-entry)
                 </h4>
                 <p className="text-sm text-gray-600 mb-3">
-                  Download borrower and loan data to import into ARIVE or another platform. XML: use <strong>+ Loan → Import 3.4 file</strong> in ARIVE. Excel: use the Lead-format sheet in your workflow.
+                  Download borrower and loan data to import into ARIVE or another platform. <strong>Excel</strong> has their info already formatted into the spreadsheet (same columns as the table above). XML: use <strong>+ Loan → Import 3.4 file</strong> in ARIVE.
                 </p>
                 <div className="flex flex-wrap gap-3">
                   <a
@@ -1472,7 +1500,7 @@ LOANATICKS - Home Mortgage Solutions`}
                     className="inline-flex items-center gap-2 px-4 py-3 bg-gray-700 text-white font-semibold rounded-lg hover:bg-gray-800"
                   >
                     <Download className="w-5 h-5" />
-                    Download Excel (Lead format)
+                    Download Excel (applicant info in spreadsheet)
                   </a>
                 </div>
               </div>
