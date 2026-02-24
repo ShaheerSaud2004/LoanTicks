@@ -45,6 +45,13 @@ const demoUsers = [
     role: 'customer',
     phone: '+1-555-0103',
   },
+  {
+    name: 'URLA Test Customer',
+    email: 'urla-test@loanaticks.com',
+    password: 'UrlaTest123!@#',
+    role: 'customer',
+    phone: '(512) 555-0198',
+  },
 ];
 
 // Create a minimal valid PDF content
@@ -186,8 +193,9 @@ async function seedTestData() {
       }
     }
 
-    // Get customer user ID
-    const customerUser = createdUsers.find(u => u.role === 'customer');
+    // Get customer user IDs (first customer + URLA test customer)
+    const customerUser = createdUsers.find(u => u.email === 'customer@loanaticks.com');
+    const urlaTestCustomer = createdUsers.find(u => u.email === 'urla-test@loanaticks.com');
     const employeeUser = createdUsers.find(u => u.role === 'employee');
     
     if (!customerUser) {
@@ -198,9 +206,12 @@ async function seedTestData() {
     // Test documents will be created per application
     console.log('\n📄 Documents will be created for each application...');
 
-    // Clear existing loan applications for customer
+    // Clear existing loan applications for demo customers
     console.log('\n🗑️  Clearing existing loan applications...');
     await LoanApplication.deleteMany({ userId: customerUser._id.toString() });
+    if (urlaTestCustomer) {
+      await LoanApplication.deleteMany({ userId: urlaTestCustomer._id.toString() });
+    }
     console.log('✓ Cleared existing applications');
 
     // Create test loan applications
@@ -666,6 +677,163 @@ async function seedTestData() {
         assignedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
         decision: 'pending',
       },
+      // Full URLA-style application for spreadsheet/Excel testing (urla-test@loanaticks.com)
+      ...(urlaTestCustomer ? [{
+        userId: urlaTestCustomer._id.toString(),
+        status: 'submitted',
+        borrowerInfo: {
+          firstName: 'Jamie',
+          middleName: 'Lynn',
+          lastName: 'Rivera',
+          suffix: '',
+          email: 'urla-test@loanaticks.com',
+          phone: '(512) 555-0198',
+          workPhone: '(512) 555-0199',
+          cellPhone: '(512) 555-0198',
+          alternatePhone: '',
+          dateOfBirth: new Date('1988-05-12'),
+          ssn: encryptSSN('987-65-4321'),
+          maritalStatus: 'married',
+          dependents: 2,
+          dependentAges: '5, 9',
+          preferredContactMethod: 'email',
+          citizenshipType: 'us_citizen',
+          creditPullConsent: true,
+          creditScore: 742,
+          race: 'White',
+          ethnicity: 'Not Hispanic or Latino',
+          sex: 'Female',
+        },
+        currentAddress: {
+          street: '4102 Willow Run',
+          unit: 'Apt 2B',
+          city: 'Round Rock',
+          state: 'TX',
+          zipCode: '78664',
+          residencyType: 'rent',
+          monthlyPayment: 1850,
+          yearsAtAddress: 3,
+          monthsAtAddress: 4,
+        },
+        mailingAddress: {
+          street: '4102 Willow Run',
+          unit: 'Apt 2B',
+          city: 'Round Rock',
+          state: 'TX',
+          zipCode: '78664',
+        },
+        formerAddresses: [{
+          street: '1200 Prior St',
+          city: 'Austin',
+          state: 'TX',
+          zipCode: '78701',
+          residencyType: 'rent',
+          monthlyPayment: 1600,
+          yearsAtAddress: 2,
+          monthsAtAddress: 0,
+        }],
+        employment: {
+          employmentStatus: 'employed',
+          employerName: 'Texas Tech Solutions Inc.',
+          phone: '(512) 555-0200',
+          street: '500 Business Park Dr',
+          city: 'Austin',
+          state: 'TX',
+          zipCode: '78758',
+          position: 'Senior Developer',
+          startDate: new Date('2019-03-01'),
+          yearsInLineOfWork: 6,
+          monthsInLineOfWork: 8,
+          monthlyIncome: 7200,
+          baseIncome: 6500,
+          overtime: 300,
+          bonus: 400,
+          commission: 0,
+          otherIncome: 0,
+        },
+        additionalEmployment: [{
+          employerName: 'Freelance Consulting',
+          position: 'Consultant',
+          startDate: new Date('2020-01-01'),
+          monthlyIncome: 800,
+        }],
+        financialInfo: {
+          grossMonthlyIncome: 8000,
+          otherIncome: 800,
+          otherIncomeSource: 'Consulting',
+          totalAssets: 85000,
+          totalLiabilities: 1250,
+          checkingAccountBalance: 22000,
+          savingsAccountBalance: 63000,
+        },
+        assets: {
+          bankAccounts: [
+            { accountType: 'Checking', financialInstitution: 'Chase', cashOrMarketValue: 22000 },
+            { accountType: 'Savings', financialInstitution: 'Chase', cashOrMarketValue: 63000 },
+          ],
+        },
+        liabilities: {
+          items: [
+            { liabilityType: 'Credit Card', creditorName: 'Chase', monthlyPayment: 350, unpaidBalance: 4200 },
+            { liabilityType: 'Auto Loan', creditorName: 'Toyota Financial', monthlyPayment: 450, unpaidBalance: 14000 },
+          ],
+        },
+        propertyInfo: {
+          propertyAddress: '789 Oak Hills Dr',
+          unit: '',
+          propertyCity: 'Round Rock',
+          propertyState: 'TX',
+          propertyZipCode: '78664',
+          propertyType: 'single_family',
+          numberOfUnits: 1,
+          occupancyType: 'primary_residence',
+          propertyValue: 320000,
+          purchasePrice: 320000,
+          appraisedValue: 320000,
+          loanAmount: 285000,
+          loanPurpose: 'purchase',
+          refinancePurpose: '',
+          downPaymentAmount: 35000,
+          downPaymentPercentage: 10.94,
+        },
+        declarations: {
+          willOccupyAsProperty: true,
+          ownershipInterestInLast3Years: false,
+          borrowingDownPayment: false,
+          applyingForNewCredit: false,
+          applyingForOtherNewCredit: false,
+          propertySubjectToLien: false,
+          cosignerOrGuarantor: false,
+          outstandingJudgments: false,
+          federalDebtDelinquent: false,
+          lawsuitParty: false,
+          conveyedTitleInLieu: false,
+          completedPreForeclosureSale: false,
+          propertyForeclosed: false,
+          declaredBankruptcy: false,
+          loanOnProperty: false,
+          coMakerOnNote: false,
+          usCitizen: true,
+          permanentResident: false,
+          primaryResidence: true,
+          intendToOccupy: true,
+        },
+        militaryService: {
+          hasServed: false,
+          isCurrentlyServing: false,
+          isRetired: false,
+          isNonActivatedReservist: false,
+          isSurvivingSpouse: false,
+        },
+        statusHistory: [{
+          status: 'submitted',
+          changedBy: urlaTestCustomer._id.toString(),
+          changedAt: new Date(),
+          notes: 'Application submitted',
+        }],
+        submittedAt: new Date(),
+        decision: 'pending',
+      }] : []),
     ];
 
     for (let i = 0; i < testApplications.length; i++) {

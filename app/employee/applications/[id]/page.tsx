@@ -8,6 +8,7 @@ import React, { useState, useEffect, useCallback, use } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import DashboardLayout from '@/components/layout/DashboardLayout';
+import { LEAD_HEADERS, buildLeadRow } from '@/lib/leadColumns';
 import { 
   ArrowLeft, 
   User, 
@@ -797,8 +798,9 @@ export default function ApplicationView({ params }: { params: Promise<{ id: stri
 
           {/* Application Info Panel – split screen: doc left, submitted info right (borrower at top) */}
           {(activeTab === 'split' || activeTab === 'info') && (
-            <div className={`space-y-6 flex flex-col min-w-0 lg:min-w-[400px] ${activeTab === 'split' ? 'lg:max-h-[calc(100vh-11rem)] lg:overflow-y-auto lg:min-h-[400px]' : ''}`}>
-            {/* Same layout in split view and Application Info tab – no compact mode */}
+            <div className={`flex flex-col min-w-0 lg:min-w-[400px] ${activeTab === 'split' ? 'lg:max-h-[calc(100vh-11rem)] lg:overflow-y-auto lg:min-h-[400px]' : ''}`}>
+            {/* Inner wrapper: in split view prevent flex shrink so accordion content is visible when expanded */}
+            <div className={`space-y-6 flex flex-col ${activeTab === 'split' ? '[&>*]:shrink-0' : ''}`}>
             <SplitViewContext.Provider value={false}>
             {/* Application Info heading */}
             <div className="flex items-center gap-3 px-1 pb-2 border-b-2 border-gray-200">
@@ -1306,6 +1308,7 @@ LOANATICKS - Home Mortgage Solutions`}
               )}
             </div>
             </SplitViewContext.Provider>
+            </div>
           </div>
           )}
 
@@ -1368,48 +1371,22 @@ LOANATICKS - Home Mortgage Solutions`}
                   Applicant info in spreadsheet format
                 </h4>
                 <p className="text-xs text-gray-500 px-4 pt-2 pb-1">
-                  Same columns as the Excel (Lead) download. Use the download below to open in Excel or import into ARIVE.
+                  Same 60 columns as the Excel (Lead) download. Scroll horizontally to see all. Use the download below to open in Excel or import into ARIVE.
                 </p>
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm border-collapse">
+                <div className="overflow-x-auto max-w-full">
+                  <table className="w-full text-sm border-collapse table-fixed" style={{ minWidth: 'max-content' }}>
                     <thead>
                       <tr className="bg-gray-100 text-left">
-                        <th className="p-2 border border-gray-200 font-semibold text-gray-700">First Name</th>
-                        <th className="p-2 border border-gray-200 font-semibold text-gray-700">Middle</th>
-                        <th className="p-2 border border-gray-200 font-semibold text-gray-700">Last Name</th>
-                        <th className="p-2 border border-gray-200 font-semibold text-gray-700">Email</th>
-                        <th className="p-2 border border-gray-200 font-semibold text-gray-700">Phone</th>
-                        <th className="p-2 border border-gray-200 font-semibold text-gray-700">Cell</th>
-                        <th className="p-2 border border-gray-200 font-semibold text-gray-700">Property Address</th>
-                        <th className="p-2 border border-gray-200 font-semibold text-gray-700">City</th>
-                        <th className="p-2 border border-gray-200 font-semibold text-gray-700">State</th>
-                        <th className="p-2 border border-gray-200 font-semibold text-gray-700">ZIP</th>
-                        <th className="p-2 border border-gray-200 font-semibold text-gray-700">Loan Amount</th>
-                        <th className="p-2 border border-gray-200 font-semibold text-gray-700">Prop. Value</th>
-                        <th className="p-2 border border-gray-200 font-semibold text-gray-700">Status</th>
-                        <th className="p-2 border border-gray-200 font-semibold text-gray-700">Decision</th>
-                        <th className="p-2 border border-gray-200 font-semibold text-gray-700">Submitted</th>
-                        <th className="p-2 border border-gray-200 font-semibold text-gray-700">App ID</th>
+                        {LEAD_HEADERS.map((h, i) => (
+                          <th key={i} className="p-2 border border-gray-200 font-semibold text-gray-700 whitespace-nowrap min-w-[100px]">{h}</th>
+                        ))}
                       </tr>
                     </thead>
                     <tbody>
                       <tr className="bg-white">
-                        <td className="p-2 border border-gray-200 text-gray-900">{String(application.borrowerInfo?.firstName ?? '')}</td>
-                        <td className="p-2 border border-gray-200 text-gray-900">{String(application.borrowerInfo?.middleName ?? '')}</td>
-                        <td className="p-2 border border-gray-200 text-gray-900">{String(application.borrowerInfo?.lastName ?? '')}</td>
-                        <td className="p-2 border border-gray-200 text-gray-900">{String(application.borrowerInfo?.email ?? '')}</td>
-                        <td className="p-2 border border-gray-200 text-gray-900">{String(application.borrowerInfo?.phone ?? '')}</td>
-                        <td className="p-2 border border-gray-200 text-gray-900">{String(application.borrowerInfo?.cellPhone ?? '')}</td>
-                        <td className="p-2 border border-gray-200 text-gray-900">{String(application.propertyInfo?.propertyAddress ?? '')}</td>
-                        <td className="p-2 border border-gray-200 text-gray-900">{String(application.propertyInfo?.propertyCity ?? '')}</td>
-                        <td className="p-2 border border-gray-200 text-gray-900">{String(application.propertyInfo?.propertyState ?? '')}</td>
-                        <td className="p-2 border border-gray-200 text-gray-900">{String(application.propertyInfo?.propertyZipCode ?? '')}</td>
-                        <td className="p-2 border border-gray-200 text-gray-900">{Number(application.propertyInfo?.loanAmount ?? 0).toLocaleString()}</td>
-                        <td className="p-2 border border-gray-200 text-gray-900">{Number(application.propertyInfo?.propertyValue ?? 0).toLocaleString()}</td>
-                        <td className="p-2 border border-gray-200 text-gray-900">{String(application.status ?? '')}</td>
-                        <td className="p-2 border border-gray-200 text-gray-900">{String(application.decision ?? '')}</td>
-                        <td className="p-2 border border-gray-200 text-gray-900">{application.submittedAt ? new Date(application.submittedAt).toLocaleString() : ''}</td>
-                        <td className="p-2 border border-gray-200 text-gray-900 font-mono text-xs">{String(application._id ?? '').slice(-8)}</td>
+                        {buildLeadRow(application as unknown as Record<string, any>, session?.user?.email ?? '').map((cell, i) => (
+                          <td key={i} className="p-2 border border-gray-200 text-gray-900 whitespace-nowrap min-w-[100px]">{cell || '—'}</td>
+                        ))}
                       </tr>
                     </tbody>
                   </table>
