@@ -798,9 +798,10 @@ export default function ApplicationView({ params }: { params: Promise<{ id: stri
           {/* Application Info Panel – split screen: doc left, submitted info right (borrower at top) */}
           {(activeTab === 'split' || activeTab === 'info') && (
             <div className={`space-y-6 flex flex-col min-w-0 lg:min-w-[400px] ${activeTab === 'split' ? 'lg:max-h-[calc(100vh-11rem)] lg:overflow-y-auto lg:min-h-[400px]' : ''}`}>
-            <SplitViewContext.Provider value={activeTab === 'split'}>
+            {/* Same layout in split view and Application Info tab – no compact mode */}
+            <SplitViewContext.Provider value={false}>
             {/* Application Info heading */}
-            <div className={`flex items-center gap-3 border-b-2 border-gray-200 ${activeTab === 'split' ? 'gap-2 px-0 pb-1.5' : 'px-1 pb-2'}`}>
+            <div className="flex items-center gap-3 px-1 pb-2 border-b-2 border-gray-200">
               <div className="p-2 rounded-lg bg-teal-100">
                 <User className="w-5 h-5 text-teal-700" />
               </div>
