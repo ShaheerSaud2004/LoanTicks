@@ -1879,12 +1879,12 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                 </div>
 
                 {purchasePriceNum > 0 && loanAmountNum > 0 && (
-                  <div className="mt-6 bg-teal-50 border-2 border-teal-200 rounded-xl p-5">
-                    <h4 className="font-bold text-teal-900 mb-2 text-lg">Loan-to-Value (LTV) Ratio</h4>
-                    <p className="text-2xl font-bold text-blue-600">
+                  <div className="mt-6 bg-slate-50 border-2 border-slate-200 rounded-xl p-5">
+                    <h4 className="font-bold text-slate-900 mb-2 text-lg">Loan-to-Value (LTV) Ratio</h4>
+                    <p className="text-2xl font-bold text-slate-700">
                       {((loanAmountNum / purchasePriceNum) * 100).toFixed(2)}%
                     </p>
-                    <p className="text-sm text-blue-700 mt-2">
+                    <p className="text-sm text-slate-600 mt-2">
                       This ratio helps determine your loan terms and whether private mortgage insurance (PMI) is required.
                     </p>
                   </div>

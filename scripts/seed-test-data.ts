@@ -723,10 +723,10 @@ async function seedTestData() {
     console.log(`   - ${createdUsers.length} users created`);
     console.log(`   - ${testApplications.length} loan applications created`);
     console.log(`   - Test documents available in public/test-documents/`);
-    console.log('\n🔑 Demo accounts (passwords hashed in DB; do not log):');
+    console.log('\n🔑 Login Credentials:');
     console.log('========================');
     demoUsers.forEach((user) => {
-      console.log(`${user.role.toUpperCase()}: ${user.email}`);
+      console.log(`${user.role.toUpperCase()}: ${user.email} / ${user.password}`);
     });
 
     process.exit(0);

@@ -42,8 +42,13 @@ interface Application {
   decision?: string;
   borrowerInfo: Record<string, unknown>;
   currentAddress: Record<string, unknown>;
+  mailingAddress?: Record<string, unknown>;
+  formerAddresses?: Record<string, unknown>[];
   employment: Record<string, unknown>;
+  additionalEmployment?: Record<string, unknown>[];
   financialInfo: Record<string, unknown>;
+  assets?: { bankAccounts?: Record<string, unknown>[] };
+  liabilities?: { items?: Record<string, unknown>[] };
   propertyInfo: Record<string, unknown>;
   declarations: Record<string, unknown>;
   creditCardAuthorization?: Record<string, unknown>;
@@ -64,12 +69,19 @@ const ensureHttps = (url: string | undefined): string => {
   return `https://${url}`;
 };
 
-// Consistent row for application info sections
+// Split view = narrower column; use compact layout so Application Info stays well formatted
+const SplitViewContext = React.createContext(false);
+
+// Consistent row for application info sections – compact in split view, full in Application Info tab
 function InfoRow({ label, value }: { label: string; value: React.ReactNode }) {
+  const isSplitView = React.useContext(SplitViewContext);
+  const isEmpty = value == null || value === '' || value === '—';
   return (
-    <div className="flex flex-wrap gap-x-2 py-2 border-b border-gray-100 last:border-0">
-      <dt className="font-medium text-gray-500 min-w-[140px] shrink-0">{label}</dt>
-      <dd className="text-gray-900">{value ?? '—'}</dd>
+    <div className={`flex flex-wrap gap-x-2 gap-y-1 border-b border-gray-100 last:border-0 items-baseline ${isSplitView ? 'py-2' : 'py-3 gap-x-3'}`}>
+      <dt className={`text-sm font-medium text-gray-600 shrink-0 ${isSplitView ? 'min-w-[90px]' : 'min-w-[160px] sm:min-w-[180px]'}`}>{label}</dt>
+      <dd className={`text-sm font-normal flex-1 min-w-0 ${isEmpty ? 'text-gray-400 italic' : 'text-gray-900'} bg-gray-50/90 rounded-md ${isSplitView ? 'px-2 py-1.5' : 'px-3 py-2'}`}>
+        {value ?? '—'}
+      </dd>
     </div>
   );
 }
@@ -785,38 +797,56 @@ export default function ApplicationView({ params }: { params: Promise<{ id: stri
 
           {/* Application Info Panel – split screen: doc left, submitted info right (borrower at top) */}
           {(activeTab === 'split' || activeTab === 'info') && (
-            <div className={`space-y-5 flex flex-col min-w-0 lg:min-w-[360px] ${activeTab === 'split' ? 'lg:max-h-[calc(100vh-11rem)] lg:overflow-y-auto lg:min-h-[400px]' : ''}`}>
-              {/* Submitted info first (for doc + info split view): Borrower at top */}
+            <div className={`space-y-6 flex flex-col min-w-0 lg:min-w-[400px] ${activeTab === 'split' ? 'lg:max-h-[calc(100vh-11rem)] lg:overflow-y-auto lg:min-h-[400px]' : ''}`}>
+            <SplitViewContext.Provider value={activeTab === 'split'}>
+            {/* Application Info heading */}
+            <div className={`flex items-center gap-3 border-b-2 border-gray-200 ${activeTab === 'split' ? 'gap-2 px-0 pb-1.5' : 'px-1 pb-2'}`}>
+              <div className="p-2 rounded-lg bg-teal-100">
+                <User className="w-5 h-5 text-teal-700" />
+              </div>
+              <div>
+                <h2 className="text-lg font-bold text-gray-900">Application Info</h2>
+                <p className="text-xs text-gray-500 mt-0.5">Submitted application details</p>
+              </div>
+            </div>
             {/* Borrower – always first so you see who applied while viewing the doc */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-              <button onClick={() => setIsBorrowerInfoExpanded(!isBorrowerInfoExpanded)} className="w-full flex items-center justify-between px-4 py-3 border-b border-gray-200 bg-gray-50 hover:bg-gray-100 transition text-left">
-                <h3 className="text-base font-semibold text-gray-900 flex items-center gap-2"><User className="w-5 h-5 text-gray-600" /> Borrower information</h3>
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden border-l-4 border-l-teal-500">
+              <button onClick={() => setIsBorrowerInfoExpanded(!isBorrowerInfoExpanded)} className="w-full flex items-center justify-between px-4 py-3.5 border-b border-gray-200 bg-gray-50 hover:bg-gray-100 transition text-left">
+                <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2 uppercase tracking-wide"><User className="w-5 h-5 text-teal-600" /> Borrower information</h3>
                 {isBorrowerInfoExpanded ? <ChevronUp className="w-5 h-5 text-gray-500" /> : <ChevronDown className="w-5 h-5 text-gray-500" />}
               </button>
               {isBorrowerInfoExpanded && (
-                <dl className="p-4 md:p-5 min-h-[120px]">
-                  <InfoRow label="Name" value={`${fmtVal(application.borrowerInfo?.firstName)} ${fmtVal(application.borrowerInfo?.middleName)} ${fmtVal(application.borrowerInfo?.lastName)}`.replace(/\s+/g, ' ').trim()} />
+                <dl className="px-4 py-4 md:px-5 md:py-5 min-h-[120px] text-gray-900">
+                  <InfoRow label="Name" value={`${fmtVal(application.borrowerInfo?.firstName)} ${fmtVal(application.borrowerInfo?.middleName)} ${fmtVal(application.borrowerInfo?.lastName)} ${fmtVal(application.borrowerInfo?.suffix)}`.replace(/\s+/g, ' ').trim()} />
                   <InfoRow label="Email" value={fmtVal(application.borrowerInfo?.email)} />
                   <InfoRow label="Phone" value={fmtVal(application.borrowerInfo?.phone)} />
+                  <InfoRow label="Work phone" value={fmtVal(application.borrowerInfo?.workPhone)} />
                   <InfoRow label="Cell" value={fmtVal(application.borrowerInfo?.cellPhone)} />
+                  <InfoRow label="Alternate phone" value={fmtVal(application.borrowerInfo?.alternatePhone)} />
                   <InfoRow label="Date of birth" value={application.borrowerInfo?.dateOfBirth ? new Date(String(application.borrowerInfo.dateOfBirth)).toLocaleDateString() : '—'} />
                   <InfoRow label="SSN" value={fmtVal(application.borrowerInfo?.ssn)} />
                   <InfoRow label="Marital status" value={fmtVal(application.borrowerInfo?.maritalStatus)} />
                   <InfoRow label="Dependents" value={fmtVal(application.borrowerInfo?.dependents)} />
+                  <InfoRow label="Dependent ages" value={fmtVal(application.borrowerInfo?.dependentAges)} />
+                  <InfoRow label="Preferred contact" value={fmtVal(application.borrowerInfo?.preferredContactMethod)} />
                   <InfoRow label="Citizenship" value={fmtVal(application.borrowerInfo?.citizenshipType)} />
+                  <InfoRow label="Credit score" value={fmtVal(application.borrowerInfo?.creditScore)} />
                   <InfoRow label="Credit pull consent" value={fmtVal(application.borrowerInfo?.creditPullConsent)} />
+                  <InfoRow label="Race" value={fmtVal(application.borrowerInfo?.race)} />
+                  <InfoRow label="Ethnicity" value={fmtVal(application.borrowerInfo?.ethnicity)} />
+                  <InfoRow label="Sex" value={fmtVal(application.borrowerInfo?.sex)} />
                 </dl>
               )}
             </div>
 
             {/* Current address */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-              <button onClick={() => setIsCurrentAddressExpanded(!isCurrentAddressExpanded)} className="w-full flex items-center justify-between px-4 py-3 border-b border-gray-200 bg-gray-50 hover:bg-gray-100 transition text-left">
-                <h3 className="text-base font-semibold text-gray-900 flex items-center gap-2"><Home className="w-5 h-5 text-gray-600" /> Current address</h3>
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden border-l-4 border-l-blue-500">
+              <button onClick={() => setIsCurrentAddressExpanded(!isCurrentAddressExpanded)} className="w-full flex items-center justify-between px-4 py-3.5 border-b border-gray-200 bg-gray-50 hover:bg-gray-100 transition text-left">
+                <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2 uppercase tracking-wide"><Home className="w-5 h-5 text-blue-600" /> Current address</h3>
                 {isCurrentAddressExpanded ? <ChevronUp className="w-5 h-5 text-gray-500" /> : <ChevronDown className="w-5 h-5 text-gray-500" />}
               </button>
               {isCurrentAddressExpanded && (
-                <dl className="p-4 md:p-5 min-h-[120px]">
+                <dl className="px-4 py-4 md:px-5 md:py-5 min-h-[120px] text-gray-900">
                   <InfoRow label="Street" value={fmtVal(application.currentAddress?.street)} />
                   <InfoRow label="Unit" value={fmtVal(application.currentAddress?.unit)} />
                   <InfoRow label="City" value={fmtVal(application.currentAddress?.city)} />
@@ -825,34 +855,103 @@ export default function ApplicationView({ params }: { params: Promise<{ id: stri
                   <InfoRow label="Residency type" value={fmtVal(application.currentAddress?.residencyType)} />
                   <InfoRow label="Monthly payment" value={fmtDollar(application.currentAddress?.monthlyPayment)} />
                   <InfoRow label="Years at address" value={fmtVal(application.currentAddress?.yearsAtAddress)} />
+                  <InfoRow label="Months at address" value={fmtVal(application.currentAddress?.monthsAtAddress)} />
                 </dl>
               )}
             </div>
 
+            {/* Mailing address (if different) */}
+            {application.mailingAddress && (application.mailingAddress as { street?: string }).street && (
+              <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden border-l-4 border-l-slate-400">
+                <div className="px-4 py-3.5 border-b border-gray-200 bg-gray-50">
+                  <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2 uppercase tracking-wide"><Mail className="w-5 h-5 text-slate-600" /> Mailing address</h3>
+                </div>
+                <dl className="px-4 py-4 md:px-5 md:py-5 text-gray-900">
+                  <InfoRow label="Street" value={fmtVal((application.mailingAddress as { street?: string }).street)} />
+                  <InfoRow label="Unit" value={fmtVal((application.mailingAddress as { unit?: string }).unit)} />
+                  <InfoRow label="City" value={fmtVal((application.mailingAddress as { city?: string }).city)} />
+                  <InfoRow label="State" value={fmtVal((application.mailingAddress as { state?: string }).state)} />
+                  <InfoRow label="ZIP" value={fmtVal((application.mailingAddress as { zipCode?: string }).zipCode)} />
+                </dl>
+              </div>
+            )}
+
+            {/* Former addresses */}
+            {application.formerAddresses && Array.isArray(application.formerAddresses) && application.formerAddresses.length > 0 && (
+              <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden border-l-4 border-l-slate-400">
+                <div className="px-4 py-3.5 border-b border-gray-200 bg-gray-50">
+                  <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2 uppercase tracking-wide"><Home className="w-5 h-5 text-slate-600" /> Former addresses</h3>
+                </div>
+                <div className="px-4 py-4 md:px-5 md:py-5 space-y-4 text-gray-900">
+                  {application.formerAddresses.map((addr: Record<string, unknown>, i: number) => (
+                    <div key={i} className="border-b border-gray-100 last:border-0 pb-4 last:pb-0">
+                      <p className="text-xs font-semibold text-gray-500 uppercase mb-2">Prior address {i + 1}</p>
+                      <dl>
+                        <InfoRow label="Street" value={fmtVal(addr.street)} />
+                        <InfoRow label="City, State ZIP" value={[addr.city, addr.state, addr.zipCode].filter(Boolean).map(String).join(', ')} />
+                        <InfoRow label="Residency type" value={fmtVal(addr.residencyType)} />
+                        <InfoRow label="Years / months" value={[addr.yearsAtAddress != null ? `${addr.yearsAtAddress} yr` : '', addr.monthsAtAddress != null ? `${addr.monthsAtAddress} mo` : ''].filter(Boolean).join(', ') || '—'} />
+                      </dl>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* Employment */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-              <button onClick={() => setIsEmploymentExpanded(!isEmploymentExpanded)} className="w-full flex items-center justify-between px-4 py-3 border-b border-gray-200 bg-gray-50 hover:bg-gray-100 transition text-left">
-                <h3 className="text-base font-semibold text-gray-900 flex items-center gap-2"><Briefcase className="w-5 h-5 text-gray-600" /> Employment</h3>
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden border-l-4 border-l-amber-500">
+              <button onClick={() => setIsEmploymentExpanded(!isEmploymentExpanded)} className="w-full flex items-center justify-between px-4 py-3.5 border-b border-gray-200 bg-gray-50 hover:bg-gray-100 transition text-left">
+                <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2 uppercase tracking-wide"><Briefcase className="w-5 h-5 text-amber-600" /> Employment</h3>
                 {isEmploymentExpanded ? <ChevronUp className="w-5 h-5 text-gray-500" /> : <ChevronDown className="w-5 h-5 text-gray-500" />}
               </button>
               {isEmploymentExpanded && (
-                <dl className="p-4 md:p-5 min-h-[120px]">
+                <dl className="px-4 py-4 md:px-5 md:py-5 min-h-[120px] text-gray-900">
                   <InfoRow label="Status" value={fmtVal(application.employment?.employmentStatus)} />
                   <InfoRow label="Employer" value={fmtVal(application.employment?.employerName)} />
                   <InfoRow label="Phone" value={fmtVal(application.employment?.phone || application.employment?.employerPhone)} />
+                  <InfoRow label="Employer address" value={[application.employment?.street, application.employment?.city, application.employment?.state, application.employment?.zipCode].filter(Boolean).map(String).join(', ')} />
                   <InfoRow label="Position" value={fmtVal(application.employment?.position)} />
+                  <InfoRow label="Start date" value={application.employment?.startDate ? new Date(String(application.employment.startDate)).toLocaleDateString() : '—'} />
                   <InfoRow label="Years in line of work" value={fmtVal(application.employment?.yearsInLineOfWork || application.employment?.yearsEmployed)} />
+                  <InfoRow label="Months in line of work" value={fmtVal(application.employment?.monthsInLineOfWork)} />
                   <InfoRow label="Monthly income" value={fmtDollar(application.employment?.monthlyIncome)} />
+                  <InfoRow label="Base income" value={fmtDollar(application.employment?.baseIncome)} />
+                  <InfoRow label="Overtime" value={fmtDollar(application.employment?.overtime)} />
+                  <InfoRow label="Bonus" value={fmtDollar(application.employment?.bonus)} />
+                  <InfoRow label="Commission" value={fmtDollar(application.employment?.commission)} />
+                  <InfoRow label="Other income" value={fmtDollar(application.employment?.otherIncome)} />
                 </dl>
               )}
             </div>
 
-            {/* Financial information */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden min-h-[140px]">
-              <div className="px-4 py-3 border-b border-gray-200 bg-gray-50">
-                <h3 className="text-base font-semibold text-gray-900 flex items-center gap-2"><DollarSign className="w-5 h-5 text-gray-600" /> Financial information</h3>
+            {/* Additional employment */}
+            {application.additionalEmployment && Array.isArray(application.additionalEmployment) && application.additionalEmployment.length > 0 && (
+              <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden border-l-4 border-l-amber-400">
+                <div className="px-4 py-3.5 border-b border-gray-200 bg-gray-50">
+                  <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2 uppercase tracking-wide"><Briefcase className="w-5 h-5 text-amber-600" /> Additional employment</h3>
+                </div>
+                <div className="px-4 py-4 md:px-5 md:py-5 space-y-4 text-gray-900">
+                  {application.additionalEmployment.map((job: Record<string, unknown>, i: number) => (
+                    <div key={i} className="border-b border-gray-100 last:border-0 pb-4 last:pb-0">
+                      <p className="text-xs font-semibold text-gray-500 uppercase mb-2">Job {i + 1}</p>
+                      <dl>
+                        <InfoRow label="Employer" value={fmtVal(job.employerName)} />
+                        <InfoRow label="Position" value={fmtVal(job.position)} />
+                        <InfoRow label="Start / end" value={[job.startDate ? new Date(String(job.startDate)).toLocaleDateString() : '', job.endDate ? new Date(String(job.endDate)).toLocaleDateString() : ''].filter(Boolean).join(' – ')} />
+                        <InfoRow label="Monthly income" value={fmtDollar(job.monthlyIncome)} />
+                      </dl>
+                    </div>
+                  ))}
+                </div>
               </div>
-              <dl className="p-4 md:p-5">
+            )}
+
+            {/* Financial information */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden min-h-[140px] border-l-4 border-l-emerald-500">
+              <div className="px-4 py-3.5 border-b border-gray-200 bg-gray-50">
+                <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2 uppercase tracking-wide"><DollarSign className="w-5 h-5 text-emerald-600" /> Financial information</h3>
+              </div>
+              <dl className="px-4 py-4 md:px-5 md:py-5 text-gray-900">
                 <InfoRow label="Gross monthly income" value={fmtDollar(application.financialInfo?.grossMonthlyIncome)} />
                 <InfoRow label="Other income" value={fmtDollar(application.financialInfo?.otherIncome)} />
                 <InfoRow label="Other income source" value={fmtVal(application.financialInfo?.otherIncomeSource)} />
@@ -864,52 +963,95 @@ export default function ApplicationView({ params }: { params: Promise<{ id: stri
             </div>
 
             {/* Property & loan */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-              <div className="px-4 py-3 border-b border-gray-200 bg-gray-50">
-                <h3 className="text-base font-semibold text-gray-900 flex items-center gap-2"><Home className="w-5 h-5 text-gray-600" /> Property & loan</h3>
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden border-l-4 border-l-indigo-500">
+              <div className="px-4 py-3.5 border-b border-gray-200 bg-gray-50">
+                <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2 uppercase tracking-wide"><Home className="w-5 h-5 text-indigo-600" /> Property & loan</h3>
               </div>
-              <dl className="p-4 md:p-5">
+              <dl className="px-4 py-4 md:px-5 md:py-5 text-gray-900">
                 <InfoRow label="Address" value={[application.propertyInfo?.propertyAddress, application.propertyInfo?.unit, application.propertyInfo?.propertyCity, application.propertyInfo?.propertyState, application.propertyInfo?.propertyZipCode].filter(Boolean).map(String).join(', ')} />
                 <InfoRow label="Property type" value={fmtVal(application.propertyInfo?.propertyType)} />
+                <InfoRow label="Number of units" value={fmtVal(application.propertyInfo?.numberOfUnits)} />
                 <InfoRow label="Occupancy" value={fmtVal(application.propertyInfo?.occupancyType)} />
                 <InfoRow label="Property value" value={fmtDollar(application.propertyInfo?.propertyValue)} />
                 <InfoRow label="Loan amount" value={fmtDollar(application.propertyInfo?.loanAmount)} />
                 <InfoRow label="Loan purpose" value={fmtVal(application.propertyInfo?.loanPurpose)} />
+                <InfoRow label="Refinance purpose" value={fmtVal(application.propertyInfo?.refinancePurpose)} />
                 <InfoRow label="Down payment" value={fmtDollar(application.propertyInfo?.downPaymentAmount)} />
                 <InfoRow label="Down payment %" value={application.propertyInfo?.downPaymentPercentage != null ? `${Number(application.propertyInfo.downPaymentPercentage).toFixed(2)}%` : '—'} />
               </dl>
             </div>
 
-            {/* Declarations */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-              <div className="px-4 py-3 border-b border-gray-200 bg-gray-50">
-                <h3 className="text-base font-semibold text-gray-900 flex items-center gap-2"><FileText className="w-5 h-5 text-gray-600" /> Declarations</h3>
+            {/* Assets (bank accounts from application) */}
+            {application.assets?.bankAccounts && Array.isArray(application.assets.bankAccounts) && application.assets.bankAccounts.length > 0 && (
+              <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden border-l-4 border-l-emerald-400">
+                <div className="px-4 py-3.5 border-b border-gray-200 bg-gray-50">
+                  <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2 uppercase tracking-wide"><DollarSign className="w-5 h-5 text-emerald-600" /> Assets (bank accounts)</h3>
+                </div>
+                <dl className="px-4 py-4 md:px-5 md:py-5 text-gray-900">
+                  {application.assets.bankAccounts.map((acct: Record<string, unknown>, i: number) => (
+                    <InfoRow key={i} label={String(acct.accountType || 'Account')} value={fmtDollar(acct.cashOrMarketValue)} />
+                  ))}
+                </dl>
               </div>
-              <dl className="p-4 md:p-5 grid sm:grid-cols-2 gap-x-6">
+            )}
+
+            {/* Liabilities (items from application) */}
+            {application.liabilities?.items && Array.isArray(application.liabilities.items) && application.liabilities.items.length > 0 && (
+              <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden border-l-4 border-l-rose-400">
+                <div className="px-4 py-3.5 border-b border-gray-200 bg-gray-50">
+                  <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2 uppercase tracking-wide"><DollarSign className="w-5 h-5 text-rose-600" /> Liabilities</h3>
+                </div>
+                <div className="px-4 py-4 md:px-5 md:py-5 space-y-3 text-gray-900">
+                  {application.liabilities.items.map((item: Record<string, unknown>, i: number) => (
+                    <div key={i} className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
+                      <span className="font-medium text-gray-600">{fmtVal(item.liabilityType)}</span>
+                      <span>{fmtVal(item.creditorName)}</span>
+                      <span>Payment: {fmtDollar(item.monthlyPayment)}</span>
+                      <span>Balance: {fmtDollar(item.unpaidBalance)}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Declarations */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden border-l-4 border-l-violet-500">
+              <div className="px-4 py-3.5 border-b border-gray-200 bg-gray-50">
+                <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2 uppercase tracking-wide"><FileText className="w-5 h-5 text-violet-600" /> Declarations</h3>
+              </div>
+              <dl className="px-4 py-4 md:px-5 md:py-5 grid sm:grid-cols-2 gap-x-6 text-gray-900">
                 <div>
                   <InfoRow label="U.S. citizen" value={fmtVal(application.declarations?.usCitizen)} />
                   <InfoRow label="Primary residence" value={fmtVal(application.declarations?.primaryResidence)} />
                   <InfoRow label="Intend to occupy" value={fmtVal(application.declarations?.intendToOccupy)} />
+                  <InfoRow label="Borrowing down payment" value={fmtVal(application.declarations?.borrowingDownPayment)} />
+                  <InfoRow label="Ownership interest (3 yr)" value={fmtVal(application.declarations?.ownershipInterestInLast3Years)} />
                   <InfoRow label="Outstanding judgments" value={fmtVal(application.declarations?.outstandingJudgments)} />
+                  <InfoRow label="Federal debt delinquent" value={fmtVal(application.declarations?.federalDebtDelinquent)} />
                   <InfoRow label="Bankruptcy (7 yr)" value={fmtVal(application.declarations?.declaredBankruptcy)} />
+                  <InfoRow label="Bankruptcy chapter" value={fmtVal(application.declarations?.bankruptcyChapter)} />
                 </div>
                 <div>
                   <InfoRow label="Property foreclosed" value={fmtVal(application.declarations?.propertyForeclosed)} />
+                  <InfoRow label="Conveyed title in lieu" value={fmtVal(application.declarations?.conveyedTitleInLieu)} />
+                  <InfoRow label="Pre-foreclosure/short sale" value={fmtVal(application.declarations?.completedPreForeclosureSale)} />
                   <InfoRow label="Party to lawsuit" value={fmtVal(application.declarations?.lawsuitParty)} />
                   <InfoRow label="Loan on property" value={fmtVal(application.declarations?.loanOnProperty)} />
                   <InfoRow label="Co-maker on note" value={fmtVal(application.declarations?.coMakerOnNote)} />
+                  <InfoRow label="Property subject to lien" value={fmtVal(application.declarations?.propertySubjectToLien)} />
+                  <InfoRow label="Co-signer or guarantor" value={fmtVal(application.declarations?.cosignerOrGuarantor)} />
                 </div>
               </dl>
             </div>
 
             {/* Credit Card & Authorization */}
             {(application.creditCardAuthorization && (application.creditCardAuthorization.authorizationAgreed || application.creditCardAuthorization.authBorrower1Name || application.creditCardAuthorization.cardType)) && (
-              <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                <div className="px-4 py-3 border-b border-gray-200 bg-teal-50">
-                  <h3 className="text-base font-semibold text-gray-900 flex items-center gap-2"><CheckCircle className="w-5 h-5 text-teal-600" /> Credit card & authorization</h3>
+              <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden border-l-4 border-l-teal-500">
+                <div className="px-4 py-3.5 border-b border-gray-200 bg-teal-50">
+                  <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2 uppercase tracking-wide"><CheckCircle className="w-5 h-5 text-teal-600" /> Credit card & authorization</h3>
                   <p className="text-xs text-gray-600 mt-1">Borrower authorized credit check and card charges for application fees.</p>
                 </div>
-                <dl className="p-4 md:p-5">
+                <dl className="px-4 py-4 md:px-5 md:py-5 text-gray-900">
                   <InfoRow label="Authorization agreed" value={fmtVal(application.creditCardAuthorization?.authorizationAgreed)} />
                   <InfoRow label="Borrower 1" value={fmtVal(application.creditCardAuthorization?.authBorrower1Name)} />
                   <InfoRow label="Borrower 2" value={fmtVal(application.creditCardAuthorization?.authBorrower2Name)} />
@@ -921,17 +1063,18 @@ export default function ApplicationView({ params }: { params: Promise<{ id: stri
               </div>
             )}
 
-            {/* Verification & decision – below submitted info for split-screen workflow */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-              <div className="px-4 py-3 border-b border-gray-200 bg-gray-50">
-                <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+            {/* Verification & decision – prominent card with Approve / Reject */}
+            <div className="bg-white rounded-xl shadow-md border-2 border-gray-200 overflow-hidden border-l-4 border-l-teal-600">
+              <div className="px-4 py-3.5 border-b border-gray-200 bg-teal-50">
+                <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2 uppercase tracking-wide">
                   <CheckCircle className="w-5 h-5 text-teal-600" />
                   Verification & decision
                 </h3>
+                <p className="text-xs text-gray-600 mt-1">Review checklist and approve or reject this application.</p>
               </div>
               <div className="p-4 md:p-5 space-y-5">
                 <div>
-                  <h4 className="text-sm font-medium text-gray-700 mb-3">Checklist</h4>
+                  <h4 className="text-sm font-semibold text-gray-900 mb-3">Checklist</h4>
                   <div className="space-y-2">
                     {[
                       { key: 'identityDocuments' as const, label: 'Identity documents match application' },
@@ -950,28 +1093,28 @@ export default function ApplicationView({ params }: { params: Promise<{ id: stri
                           }}
                           className="w-4 h-4 rounded border-gray-300 text-teal-600 focus:ring-teal-500"
                         />
-                        <span className="text-sm text-gray-700">{label}</span>
+                        <span className="text-sm text-gray-800">{label}</span>
                       </label>
                     ))}
                   </div>
                 </div>
-                <div className="pt-4 border-t border-gray-200">
-                  <h4 className="text-sm font-medium text-gray-700 mb-3">Application decision</h4>
+                <div className="pt-4 border-t-2 border-gray-200">
+                  <h4 className="text-sm font-semibold text-gray-900 mb-3">Application decision</h4>
                   <div className="flex flex-wrap items-center gap-3">
                     <button
                       onClick={async () => { setApprovalStatus('approved'); await saveApprovalStatus('approved'); }}
-                      className={`px-4 py-2 rounded-lg font-medium text-sm flex items-center gap-2 transition ${approvalStatus === 'approved' ? 'bg-teal-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+                      className={`px-5 py-2.5 rounded-xl font-semibold text-sm flex items-center gap-2 transition ${approvalStatus === 'approved' ? 'bg-teal-600 text-white ring-2 ring-teal-300' : 'bg-gray-100 text-gray-800 hover:bg-gray-200 border border-gray-300'}`}
                     >
                       <ThumbsUp className="w-4 h-4" /> Approve
                     </button>
                     <button
                       onClick={async () => { setApprovalStatus('rejected'); await saveApprovalStatus('rejected'); }}
-                      className={`px-4 py-2 rounded-lg font-medium text-sm flex items-center gap-2 transition ${approvalStatus === 'rejected' ? 'bg-red-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+                      className={`px-5 py-2.5 rounded-xl font-semibold text-sm flex items-center gap-2 transition ${approvalStatus === 'rejected' ? 'bg-red-600 text-white ring-2 ring-red-300' : 'bg-gray-100 text-gray-800 hover:bg-gray-200 border border-gray-300'}`}
                     >
                       <ThumbsDown className="w-4 h-4" /> Reject
                     </button>
                     {approvalStatus !== 'pending' && (
-                      <span className={`text-sm font-medium px-3 py-1 rounded-full ${approvalStatus === 'approved' ? 'bg-teal-50 text-teal-700' : 'bg-red-50 text-red-700'}`}>
+                      <span className={`text-sm font-semibold px-3 py-1.5 rounded-full ${approvalStatus === 'approved' ? 'bg-teal-50 text-teal-800' : 'bg-red-50 text-red-800'}`}>
                         {approvalStatus.toUpperCase()}
                       </span>
                     )}
@@ -1161,6 +1304,7 @@ LOANATICKS - Home Mortgage Solutions`}
                 </div>
               )}
             </div>
+            </SplitViewContext.Provider>
           </div>
           )}
 

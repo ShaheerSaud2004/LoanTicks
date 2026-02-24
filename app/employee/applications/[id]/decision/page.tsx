@@ -218,14 +218,14 @@ export default function ApplicationDecision({ params }: { params: Promise<{ id: 
               <h3 className="text-lg font-semibold text-gray-900 mb-6">Make Decision</h3>
               
               <div className="space-y-6">
-                {/* Decision Options */}
-                <div className="space-y-5">
-                  <label className={`block relative p-6 pr-14 border-2 rounded-2xl cursor-pointer transition-all duration-200 ${
+                {/* Decision Options – side by side */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <label className={`block relative p-5 pr-12 border-2 rounded-2xl cursor-pointer transition-all duration-200 ${
                     decision === 'approved' 
                       ? 'border-green-500 bg-gradient-to-br from-green-50 to-emerald-50 shadow-lg shadow-green-200/50' 
                       : 'border-gray-200 hover:border-green-400 hover:shadow-md bg-white'
                   }`}>
-                    <div className="flex items-start gap-4 min-w-0">
+                    <div className="flex items-start gap-3 min-w-0">
                       <input
                         type="radio"
                         name="decision"
@@ -234,35 +234,34 @@ export default function ApplicationDecision({ params }: { params: Promise<{ id: 
                         onChange={(e) => setDecision(e.target.value as 'approved')}
                         className="mt-1 w-5 h-5 shrink-0 text-green-600 focus:ring-green-500"
                       />
-                      <div className="flex items-center gap-4 flex-1 min-w-0">
-                        <div className={`p-4 rounded-xl shrink-0 transition-all ${
+                      <div className="flex items-center gap-3 flex-1 min-w-0">
+                        <div className={`p-3 rounded-xl shrink-0 transition-all ${
                           decision === 'approved' 
                             ? 'bg-green-500 shadow-lg' 
                             : 'bg-green-100'
                         }`}>
-                          <CheckCircle className={`w-8 h-8 ${
+                          <CheckCircle className={`w-7 h-7 ${
                             decision === 'approved' ? 'text-white' : 'text-green-600'
                           }`} />
                         </div>
                         <div className="flex-1 min-w-0 overflow-hidden">
-                          <p className="font-bold text-lg text-gray-900 mb-1">Approve Application</p>
-                          <p className="text-sm text-gray-600">Approve this mortgage loan application and proceed with funding.</p>
+                          <p className="font-bold text-base text-gray-900 mb-0.5">Approve</p>
+                          <p className="text-xs text-gray-600">Proceed with funding.</p>
                         </div>
                       </div>
                     </div>
                     {decision === 'approved' && (
-                      <div className="absolute top-4 right-4 bg-green-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+                      <div className="absolute top-3 right-3 bg-green-500 text-white px-2 py-0.5 rounded-full text-xs font-bold shadow-lg">
                         SELECTED
                       </div>
                     )}
                   </label>
-                  
-                  <label className={`block relative p-6 pr-14 border-2 rounded-2xl cursor-pointer transition-all duration-200 ${
+                  <label className={`block relative p-5 pr-12 border-2 rounded-2xl cursor-pointer transition-all duration-200 ${
                     decision === 'rejected' 
                       ? 'border-red-500 bg-gradient-to-br from-red-50 to-pink-50 shadow-lg shadow-red-200/50' 
                       : 'border-gray-200 hover:border-red-400 hover:shadow-md bg-white'
                   }`}>
-                    <div className="flex items-start gap-4 min-w-0">
+                    <div className="flex items-start gap-3 min-w-0">
                       <input
                         type="radio"
                         name="decision"
@@ -271,24 +270,24 @@ export default function ApplicationDecision({ params }: { params: Promise<{ id: 
                         onChange={(e) => setDecision(e.target.value as 'rejected')}
                         className="mt-1 w-5 h-5 shrink-0 text-red-600 focus:ring-red-500"
                       />
-                      <div className="flex items-center gap-4 flex-1 min-w-0">
-                        <div className={`p-4 rounded-xl shrink-0 transition-all ${
+                      <div className="flex items-center gap-3 flex-1 min-w-0">
+                        <div className={`p-3 rounded-xl shrink-0 transition-all ${
                           decision === 'rejected' 
                             ? 'bg-red-500 shadow-lg' 
                             : 'bg-red-100'
                         }`}>
-                          <XCircle className={`w-8 h-8 ${
+                          <XCircle className={`w-7 h-7 ${
                             decision === 'rejected' ? 'text-white' : 'text-red-600'
                           }`} />
                         </div>
                         <div className="flex-1 min-w-0 overflow-hidden">
-                          <p className="font-bold text-lg text-gray-900 mb-1">Reject Application</p>
-                          <p className="text-sm text-gray-600">Reject this mortgage loan application with detailed reasoning.</p>
+                          <p className="font-bold text-base text-gray-900 mb-0.5">Reject</p>
+                          <p className="text-xs text-gray-600">With detailed reasoning.</p>
                         </div>
                       </div>
                     </div>
                     {decision === 'rejected' && (
-                      <div className="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+                      <div className="absolute top-3 right-3 bg-red-500 text-white px-2 py-0.5 rounded-full text-xs font-bold shadow-lg">
                         SELECTED
                       </div>
                     )}

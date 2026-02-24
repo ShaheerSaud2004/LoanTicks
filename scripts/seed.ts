@@ -26,7 +26,7 @@ const demoUsers = [
   {
     name: 'Customer User',
     email: 'customer@loanaticks.com',
-    password: 'Customer123!@#',
+    password: 'fo',
     role: 'customer',
     phone: '+1-555-0103',
   },
@@ -53,12 +53,11 @@ async function seedDatabase() {
     }
 
     console.log('\n✅ Database seeded successfully!');
-    console.log('\nDemo accounts created (passwords are hashed in DB; do not log them):');
+    console.log('\nDemo Login Credentials:');
     console.log('========================');
     demoUsers.forEach((user) => {
-      console.log(`${user.role.toUpperCase()}: ${user.email}`);
+      console.log(`${user.role.toUpperCase()}: ${user.email} / ${user.password}`);
     });
-    console.log('(Passwords are in scripts/seed.ts only—never committed to logs or client.)');
 
     process.exit(0);
   } catch (error) {

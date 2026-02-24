@@ -507,20 +507,24 @@ export async function PATCH(request: NextRequest) {
     // Save the application
     await application.save();
 
-    // Log data update
-    await logDataAccess({
-      userId: session.user.id,
-      userRole: session.user.role,
-      resource: 'loan_application',
-      resourceId: application._id.toString(),
-      action: 'update',
-      ipAddress: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || undefined,
-      userAgent: request.headers.get('user-agent') || undefined,
-      details: {
-        updatedFields: Object.keys(updates),
-        notes: notes || 'Application updated',
-      },
-    });
+    // Log data update (non-fatal: don't fail the request if logging fails)
+    try {
+      await logDataAccess({
+        userId: session.user.id,
+        userRole: session.user.role,
+        resource: 'loan_application',
+        resourceId: application._id.toString(),
+        action: 'update',
+        ipAddress: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || undefined,
+        userAgent: request.headers.get('user-agent') || undefined,
+        details: {
+          updatedFields: Object.keys(updates),
+          notes: notes || 'Application updated',
+        },
+      });
+    } catch (logErr) {
+      console.error('Audit log failed (non-fatal):', logErr);
+    }
 
     // Return updated application (serialized)
     const updatedApp = await LoanApplication.findById(applicationId).lean();

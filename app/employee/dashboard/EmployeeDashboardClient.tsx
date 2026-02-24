@@ -218,7 +218,7 @@ export default function EmployeeDashboardClient() {
                   placeholder="Search applications..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 placeholder:text-gray-500 bg-white"
                 />
               </div>
             </div>
@@ -227,7 +227,7 @@ export default function EmployeeDashboardClient() {
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 bg-white"
               >
                 <option value="all">All Statuses</option>
                 <option value="submitted">Submitted</option>
@@ -239,7 +239,7 @@ export default function EmployeeDashboardClient() {
               <select
                 value={assignedFilter}
                 onChange={(e) => setAssignedFilter(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 bg-white"
               >
                 <option value="all">All Assignments</option>
                 <option value="assigned">Assigned</option>

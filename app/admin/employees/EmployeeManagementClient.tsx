@@ -379,7 +379,7 @@ export default function EmployeeManagementClient() {
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 bg-white"
               >
                 <option value="all">All Statuses</option>
                 <option value="active">Active</option>
@@ -579,7 +579,7 @@ export default function EmployeeManagementClient() {
                 <select
                   value={newEmployee.role}
                   onChange={(e) => setNewEmployee(prev => ({ ...prev, role: e.target.value }))}
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition text-gray-900 bg-white"
                 >
                   <option value="employee">Employee</option>
                   <option value="senior_employee">Senior Employee</option>
@@ -677,7 +677,7 @@ export default function EmployeeManagementClient() {
                 <select
                   value={editEmployee.role}
                   onChange={(e) => setEditEmployee(prev => ({ ...prev, role: e.target.value }))}
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-yellow-500 focus:outline-none transition"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-yellow-500 focus:outline-none transition text-gray-900 bg-white"
                 >
                   <option value="employee">Employee</option>
                   <option value="senior_employee">Senior Employee</option>

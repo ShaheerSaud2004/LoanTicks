@@ -228,9 +228,13 @@ export async function PATCH(request: NextRequest) {
           notes: updateData.decisionNotes
         });
 
-        // If this is a fresh approval, append to lead XLSX sheet
+        // If this is a fresh approval, try to append to lead XLSX (best-effort; don't fail the request)
         if (updateData.decision === 'approved' && !wasPreviouslyApproved) {
-          await appendApprovedLeadToSheet(application);
+          try {
+            await appendApprovedLeadToSheet(application);
+          } catch (e) {
+            console.error('Append lead to XLSX failed (non-fatal):', e);
+          }
         }
         break;
 
@@ -274,7 +278,11 @@ export async function PATCH(request: NextRequest) {
     });
   } catch (error) {
     console.error('Error updating application:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    const message = error instanceof Error ? error.message : 'Internal server error';
+    return NextResponse.json(
+      { error: process.env.NODE_ENV === 'development' ? message : 'Internal server error' },
+      { status: 500 }
+    );
   }
 }
 

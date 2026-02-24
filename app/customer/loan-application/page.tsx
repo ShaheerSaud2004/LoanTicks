@@ -148,7 +148,7 @@ export default function LoanApplicationPage() {
         formData.loanPurpose = formData.loanPurpose || 'purchase';
       }
       
-      // Transform the comprehensive form data to match the API structure
+      // Transform the comprehensive form data to match the API structure – store all fields for employees/admins
       const applicationData = {
           status: 'submitted',
           borrowerInfo: {
@@ -157,68 +157,124 @@ export default function LoanApplicationPage() {
           lastName: formData.lastName || 'User',
           suffix: formData.suffix || '',
           email: formData.email || 'test@example.com',
-          phone: formData.cellPhone || '(555) 000-0000',
+          phone: String(formData.cellPhone || formData.homePhone || '').trim() || '(555) 000-0000',
+          workPhone: formData.workPhone ? String(formData.workPhone).trim() : undefined,
+          cellPhone: formData.cellPhone ? String(formData.cellPhone).trim() : undefined,
+          alternatePhone: formData.alternatePhone ? String(formData.alternatePhone).trim() : undefined,
           creditPullConsent: !!formData.creditPullConsent,
             dateOfBirth: formData.dateOfBirth ? new Date(formData.dateOfBirth as string) : new Date('1990-01-01'),
           ssn: formData.ssn || '000-00-0000',
             maritalStatus: formData.maritalStatus || 'unmarried',
             dependents: Number(formData.dependents) || 0,
-          creditScore: Number(formData.creditScore) || 700,
-          race: Array.isArray(formData.race) ? (formData.race as string[]).join(', ') : '',
-          ethnicity: formData.ethnicity || '',
-          sex: formData.sex || '',
+          dependentAges: formData.dependentAges ? String(formData.dependentAges).trim() : undefined,
+          citizenshipType: (formData.citizenship === 'permanent_resident' ? 'permanent_resident' : formData.citizenship === 'non_permanent_resident' ? 'non_permanent_resident' : 'us_citizen') as 'us_citizen' | 'permanent_resident' | 'non_permanent_resident',
+          creditScore: Number(formData.creditScore) || undefined,
+          race: Array.isArray(formData.race) ? (formData.race as string[]).join(', ') : (formData.race ? String(formData.race) : ''),
+          ethnicity: formData.ethnicity ? String(formData.ethnicity) : '',
+          sex: formData.sex ? String(formData.sex) : '',
           preferredContactMethod: formData.preferredContactMethod || 'phone',
-          creditType: formData.creditType || 'individual',
           },
           currentAddress: {
           street: formData.currentStreet || '123 Main St',
-          unit: formData.currentUnit || '',
+          unit: formData.currentUnit ? String(formData.currentUnit).trim() : '',
           city: formData.currentCity || 'Los Angeles',
           state: formData.currentState || 'CA',
           zipCode: formData.currentZipCode || '90001',
           residencyType: formData.currentHousing || 'own',
           monthlyPayment: Number(formData.currentMonthlyPayment) || 0,
           yearsAtAddress: Number(formData.yearsAtCurrentAddress) || 1,
+          monthsAtAddress: formData.monthsAtCurrentAddress ? Number(formData.monthsAtCurrentAddress) : undefined,
           },
+          mailingAddress: (formData.mailingStreet || formData.mailingCity) ? {
+            street: String(formData.mailingStreet || '').trim(),
+            unit: formData.mailingUnit ? String(formData.mailingUnit).trim() : undefined,
+            city: String(formData.mailingCity || '').trim(),
+            state: String(formData.mailingState || '').trim(),
+            zipCode: String(formData.mailingZipCode || '').trim(),
+          } : undefined,
+          formerAddresses: formData.hasPriorAddress && formData.priorStreet ? [{
+            street: String(formData.priorStreet).trim(),
+            unit: formData.priorUnit ? String(formData.priorUnit).trim() : undefined,
+            city: String(formData.priorCity || '').trim(),
+            state: String(formData.priorState || '').trim(),
+            zipCode: String(formData.priorZipCode || '').trim(),
+            residencyType: formData.priorHousing || 'rent',
+            monthlyPayment: formData.priorMonthlyPayment ? Number(formData.priorMonthlyPayment) : undefined,
+            yearsAtAddress: Number(formData.yearsAtPriorAddress) || 0,
+            monthsAtAddress: formData.monthsAtPriorAddress ? Number(formData.monthsAtPriorAddress) : undefined,
+          }] : undefined,
           employment: {
-          employmentStatus: formData.employmentStatus || 'employed',
+          employmentStatus: (formData.employmentStatus || 'employed') as 'employed' | 'self_employed' | 'retired' | 'other',
             employerName: formData.employerName || 'Sample Employer',
+            phone: formData.workPhone ? String(formData.workPhone).trim() : undefined,
+            street: formData.workAddress ? String(formData.workAddress).trim() : undefined,
+            city: formData.workCity ? String(formData.workCity).trim() : undefined,
+            state: formData.workState ? String(formData.workState).trim() : undefined,
+            zipCode: formData.workZipCode ? String(formData.workZipCode).trim() : undefined,
             position: formData.position || 'Employee',
-          yearsEmployed: Number(formData.yearsEmployed) || Number(formData.yearsInLineOfWork) || 2,
-          monthlyIncome: Number(formData.totalMonthlyIncome) || 5000,
-          employerPhone: formData.workPhone || '',
+            startDate: formData.employmentStartDate ? new Date(formData.employmentStartDate as string) : undefined,
+          yearsInLineOfWork: Number(formData.yearsEmployed ?? formData.yearsInLineOfWork) || undefined,
+          monthsInLineOfWork: formData.monthsEmployed ? Number(formData.monthsEmployed) : undefined,
+          monthlyIncome: Number(formData.monthlyIncome || formData.totalMonthlyIncome) || 5000,
+          baseIncome: formData.baseIncome ? Number(formData.baseIncome) : undefined,
+          overtime: formData.overtimeIncome ? Number(formData.overtimeIncome) : undefined,
+          bonus: formData.bonusIncome ? Number(formData.bonusIncome) : undefined,
+          commission: formData.commissionIncome ? Number(formData.commissionIncome) : undefined,
+          otherIncome: formData.otherIncomeAmount ? Number(formData.otherIncomeAmount) : undefined,
           },
+          additionalEmployment: formData.hasPreviousEmployment && formData.previousEmployerName ? [{
+            employerName: String(formData.previousEmployerName).trim(),
+            position: formData.previousPosition ? String(formData.previousPosition).trim() : undefined,
+            startDate: formData.previousEmploymentStartDate ? new Date(formData.previousEmploymentStartDate as string) : undefined,
+            endDate: formData.previousEmploymentEndDate ? new Date(formData.previousEmploymentEndDate as string) : undefined,
+            monthlyIncome: Number(formData.previousMonthlyIncome) || 0,
+          }] : undefined,
           financialInfo: {
-          grossMonthlyIncome: Number(formData.totalMonthlyIncome) || 5000,
-          otherIncome: Number(formData.totalOtherIncome) || 0,
-          otherIncomeSource: Array.isArray(formData.otherIncomeSources) 
-            ? (formData.otherIncomeSources as Array<{source: string}>).map((item) => item.source).join(', ')
-            : '',
+          grossMonthlyIncome: Number(formData.grossMonthlyIncome || formData.totalMonthlyIncome) || 5000,
+          otherIncome: Number(formData.otherIncomeAmount || formData.otherIncome) || 0,
+          otherIncomeSource: typeof formData.otherIncomeSource === 'string' ? formData.otherIncomeSource : (Array.isArray(formData.otherIncomeSources) 
+            ? (formData.otherIncomeSources as Array<{source?: string}>).map((item) => item?.source ?? '').filter(Boolean).join(', ')
+            : ''),
           totalAssets: Number(formData.totalAssets) || 50000,
-          totalLiabilities: Number(formData.totalMonthlyLiabilities) || 500,
-            checkingAccountBalance: Number(formData.checkingAccountBalance) || 10000,
-            savingsAccountBalance: Number(formData.savingsAccountBalance) || 40000,
+          totalLiabilities: Number(formData.totalMonthlyLiabilities || formData.totalLiabilities) || 500,
+            checkingAccountBalance: Number(formData.checkingAccountBalance) || 0,
+            savingsAccountBalance: Number(formData.savingsAccountBalance) || 0,
+          },
+          assets: {
+            bankAccounts: [
+              ...(Number(formData.checkingAccountBalance) > 0 ? [{ accountType: 'Checking', financialInstitution: '', cashOrMarketValue: Number(formData.checkingAccountBalance) }] : []),
+              ...(Number(formData.savingsAccountBalance) > 0 ? [{ accountType: 'Savings', financialInstitution: '', cashOrMarketValue: Number(formData.savingsAccountBalance) }] : []),
+              ...(Number(formData.moneyMarketBalance) > 0 ? [{ accountType: 'Money Market', financialInstitution: '', cashOrMarketValue: Number(formData.moneyMarketBalance) }] : []),
+              ...(Number(formData.cdsBalance) > 0 ? [{ accountType: 'CDs', financialInstitution: '', cashOrMarketValue: Number(formData.cdsBalance) }] : []),
+            ].filter(Boolean),
+          },
+          liabilities: {
+            items: Array.isArray(formData.creditAccounts) && formData.creditAccounts.length > 0
+              ? (formData.creditAccounts as Array<{ creditorName?: string; liabilityType?: string; monthlyPayment?: number; unpaidBalance?: number }>).map((item) => ({
+                  liabilityType: item.liabilityType || 'Other',
+                  creditorName: item.creditorName || '',
+                  monthlyPayment: Number(item.monthlyPayment) || 0,
+                  unpaidBalance: Number(item.unpaidBalance) || 0,
+                }))
+              : [],
           },
           propertyInfo: {
           propertyAddress: formData.propertyAddress || '456 Property St',
+          unit: formData.propertyUnit ? String(formData.propertyUnit).trim() : undefined,
           propertyCity: formData.propertyCity || 'Los Angeles',
           propertyState: formData.propertyState || 'CA',
           propertyZipCode: formData.propertyZipCode || '90001',
-          propertyType: 'single_family',
+          propertyType: (formData.propertyType || 'single_family') as 'single_family' | 'condo' | 'townhouse' | 'multi_family' | 'cooperative' | 'manufactured' | 'other',
+          numberOfUnits: Number(formData.numberOfUnits) || 1,
+          occupancyType: (formData.propertyUse || 'primary_residence') as 'primary_residence' | 'second_home' | 'investment_property',
             propertyValue: Number(formData.purchasePrice || formData.propertyValue) || 500000,
             purchasePrice: Number(formData.purchasePrice || formData.propertyValue) || 500000,
             appraisedValue: Number(formData.appraisedValue || formData.purchasePrice || formData.propertyValue) || 500000,
             loanAmount: Number(formData.loanAmount) || 400000,
-            loanPurpose: formData.loanPurpose || 'purchase',
-          downPaymentAmount: Number(formData.purchasePrice || formData.propertyValue || 500000) - Number(formData.loanAmount || 400000),
-          downPaymentPercentage: ((Number(formData.purchasePrice || formData.propertyValue || 500000) - Number(formData.loanAmount || 400000)) / Number(formData.purchasePrice || formData.propertyValue || 500000)) * 100,
-          },
-          assets: {
-            bankAccounts: [],
-          },
-          liabilities: {
-            creditCards: [],
-            loans: [],
+            loanPurpose: (formData.loanPurpose || 'purchase') as 'purchase' | 'refinance' | 'other',
+          refinancePurpose: formData.refinancePurpose ? String(formData.refinancePurpose).trim() : undefined,
+          downPaymentAmount: Number(formData.downPaymentAmount || (Number(formData.purchasePrice || formData.propertyValue || 500000) - Number(formData.loanAmount || 400000))),
+          downPaymentPercentage: Number(formData.downPaymentPercentage) || ((Number(formData.purchasePrice || formData.propertyValue || 500000) - Number(formData.loanAmount || 400000)) / Number(formData.purchasePrice || formData.propertyValue || 500000)) * 100,
           },
           declarations: {
             willOccupyAsProperty: formData.intendToOccupy !== false,
@@ -384,7 +440,7 @@ export default function LoanApplicationPage() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-slate-600 mx-auto mb-4"></div>
           <p className="text-gray-600">Loading...</p>
         </div>
       </div>
@@ -397,7 +453,7 @@ export default function LoanApplicationPage() {
 
   if (showWelcome) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-700 via-gray-600 to-gray-800">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
         {/* Enhanced Logout Animation */}
         {isLoggingOut && (
           <div className="fixed inset-0 z-[9999] flex items-center justify-center pointer-events-none">
@@ -407,9 +463,9 @@ export default function LoanApplicationPage() {
                 {logoutStage === 'signing-out' && (
                   <>
                     <div className="relative">
-                      <Loader2 className="h-12 w-12 md:h-16 md:w-16 text-teal-600 animate-spin" />
+                      <Loader2 className="h-12 w-12 md:h-16 md:w-16 text-slate-600 animate-spin" />
                       <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="h-8 w-8 md:h-10 md:w-10 border-4 border-teal-200 border-t-teal-600 rounded-full animate-spin"></div>
+                        <div className="h-8 w-8 md:h-10 md:w-10 border-4 border-slate-200 border-t-slate-600 rounded-full animate-spin"></div>
                       </div>
                     </div>
                     <div className="text-center">
@@ -422,9 +478,9 @@ export default function LoanApplicationPage() {
                 {logoutStage === 'clearing' && (
                   <>
                     <div className="relative">
-                      <Loader2 className="h-12 w-12 md:h-16 md:w-16 text-blue-600 animate-spin" />
+                      <Loader2 className="h-12 w-12 md:h-16 md:w-16 text-slate-400 animate-spin" />
                       <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="h-8 w-8 md:h-10 md:w-10 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+                        <div className="h-8 w-8 md:h-10 md:w-10 border-4 border-slate-300 border-t-slate-500 rounded-full animate-spin"></div>
                       </div>
                     </div>
                     <div className="text-center">
@@ -466,7 +522,7 @@ export default function LoanApplicationPage() {
               </button>
 
               {/* Header with Gradient */}
-              <div className="bg-gradient-to-r from-teal-500 via-teal-500 to-teal-600 p-8 md:p-10 text-center relative overflow-hidden">
+              <div className="bg-gradient-to-r from-slate-700 via-slate-800 to-slate-900 p-8 md:p-10 text-center relative overflow-hidden">
                 {/* Animated Background Elements */}
                 <div className="absolute inset-0 opacity-10">
                   <div className="absolute top-0 left-0 w-64 h-64 bg-white rounded-full -translate-x-1/2 -translate-y-1/2 animate-pulse"></div>
@@ -475,7 +531,7 @@ export default function LoanApplicationPage() {
                 
                 <div className="relative z-10">
                   <div className="w-20 h-20 md:w-24 md:h-24 bg-white rounded-full mx-auto mb-6 flex items-center justify-center shadow-lg">
-                    <Sparkles className="w-10 h-10 md:w-12 md:h-12 text-teal-600" />
+                    <Sparkles className="w-10 h-10 md:w-12 md:h-12 text-slate-600" />
                   </div>
                   <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">
                     Welcome to Your Mortgage Application
@@ -489,9 +545,9 @@ export default function LoanApplicationPage() {
               {/* Content */}
               <div className="p-6 md:p-8 space-y-6 max-h-[60vh] overflow-y-auto">
                 {/* Why Section */}
-                <div className="bg-gradient-to-r from-teal-50 to-teal-100 border-2 border-teal-200 rounded-xl p-6">
+                <div className="bg-gradient-to-r from-slate-50 to-slate-100 border-2 border-slate-200 rounded-xl p-6">
                   <div className="flex items-start gap-4">
-                    <div className="bg-teal-500 p-3 rounded-lg flex-shrink-0">
+                    <div className="bg-slate-600 p-3 rounded-lg flex-shrink-0">
                       <Info className="w-6 h-6 text-white" />
                     </div>
                     <div>
@@ -505,19 +561,19 @@ export default function LoanApplicationPage() {
                       </p>
                       <ul className="space-y-3 text-gray-700">
                         <li className="flex items-start gap-3">
-                          <CheckCircle className="w-5 h-5 text-teal-600 flex-shrink-0 mt-0.5" />
+                          <CheckCircle className="w-5 h-5 text-slate-600 flex-shrink-0 mt-0.5" />
                           <span><strong>Assess Your Eligibility:</strong> Determine the loan amount you qualify for based on your income, credit, and financial profile</span>
                         </li>
                         <li className="flex items-start gap-3">
-                          <CheckCircle className="w-5 h-5 text-teal-600 flex-shrink-0 mt-0.5" />
+                          <CheckCircle className="w-5 h-5 text-slate-600 flex-shrink-0 mt-0.5" />
                           <span><strong>Get Competitive Rates:</strong> Match you with the best mortgage rates available for your situation</span>
                         </li>
                         <li className="flex items-start gap-3">
-                          <CheckCircle className="w-5 h-5 text-teal-600 flex-shrink-0 mt-0.5" />
+                          <CheckCircle className="w-5 h-5 text-slate-600 flex-shrink-0 mt-0.5" />
                           <span><strong>Streamline the Process:</strong> Pre-approve your application so you can shop for homes with confidence</span>
                         </li>
                         <li className="flex items-start gap-3">
-                          <CheckCircle className="w-5 h-5 text-teal-600 flex-shrink-0 mt-0.5" />
+                          <CheckCircle className="w-5 h-5 text-slate-600 flex-shrink-0 mt-0.5" />
                           <span><strong>Ensure Compliance:</strong> Meet all regulatory requirements for mortgage lending (URLA 2019 standard)</span>
                         </li>
                       </ul>
@@ -526,26 +582,26 @@ export default function LoanApplicationPage() {
                 </div>
 
                 {/* What Happens Next */}
-                <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-6">
-                  <h3 className="text-lg font-bold text-blue-900 mb-3 flex items-center gap-2">
-                    <ArrowRight className="w-5 h-5" />
+                <div className="bg-slate-50 border-2 border-slate-200 rounded-xl p-6">
+                  <h3 className="text-lg font-bold text-slate-900 mb-3 flex items-center gap-2">
+                    <ArrowRight className="w-5 h-5 text-slate-600" />
                     What Happens After You Submit
                 </h3>
-                  <ul className="space-y-2 text-blue-800 text-sm">
+                  <ul className="space-y-2 text-slate-800 text-sm">
                     <li className="flex items-start gap-2">
-                      <span className="text-blue-600 mt-1">•</span>
+                      <span className="text-slate-600 mt-1">•</span>
                       <span>Our team reviews your application within <strong>24-48 hours</strong></span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="text-blue-600 mt-1">•</span>
+                      <span className="text-slate-600 mt-1">•</span>
                       <span>You'll receive email updates and may be contacted for additional documentation</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="text-blue-600 mt-1">•</span>
+                      <span className="text-slate-600 mt-1">•</span>
                       <span>Once approved, you'll receive a pre-approval letter to use when making offers</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="text-blue-600 mt-1">•</span>
+                      <span className="text-slate-600 mt-1">•</span>
                       <span>Track your application status in real-time from your dashboard</span>
                     </li>
                   </ul>
@@ -563,7 +619,7 @@ export default function LoanApplicationPage() {
               <div className="bg-gray-50 p-6 md:p-8 border-t border-gray-200">
                 <button
                   onClick={handleCloseIntroModal}
-                  className="w-full bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white font-bold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 text-lg"
+                  className="w-full bg-gradient-to-r from-slate-600 to-slate-700 hover:from-slate-700 hover:to-slate-800 text-white font-bold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 text-lg"
                 >
                   Got It, Let's Get Started!
                   <ArrowRight className="w-5 h-5" />
@@ -615,7 +671,7 @@ export default function LoanApplicationPage() {
                   <div className="text-xs text-gray-500">{session.user.email}</div>
                 </div>
                 
-                <span className="px-3 py-1 rounded-full text-xs font-semibold capitalize bg-teal-100 text-teal-800">
+                <span className="px-3 py-1 rounded-full text-xs font-semibold capitalize bg-slate-100 text-slate-800">
                   {session.user.role}
                 </span>
 
@@ -649,7 +705,7 @@ export default function LoanApplicationPage() {
           <div className="bg-white rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden">
             <div className="bg-gradient-to-r from-teal-600 to-teal-600 p-6 sm:p-8 md:p-12 text-white text-center">
               <div className="w-16 h-16 sm:w-20 sm:h-20 bg-white rounded-full mx-auto mb-4 sm:mb-6 flex items-center justify-center">
-                <FileText className="w-8 h-8 sm:w-10 sm:h-10 text-teal-600" />
+                <FileText className="w-8 h-8 sm:w-10 sm:h-10 text-slate-600" />
               </div>
               <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">
                 Home Mortgage Application
@@ -670,34 +726,34 @@ export default function LoanApplicationPage() {
                 </p>
               </div>
 
-              <div className="bg-teal-50 border-2 border-teal-200 rounded-xl p-4 sm:p-6 mb-6 sm:mb-8">
-                <h3 className="font-bold text-teal-900 mb-3 flex items-center gap-2 text-sm sm:text-base">
+              <div className="bg-slate-50 border-2 border-slate-200 rounded-xl p-4 sm:p-6 mb-6 sm:mb-8">
+                <h3 className="font-bold text-slate-900 mb-3 flex items-center gap-2 text-sm sm:text-base">
                   <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
                   What you&apos;ll need for your mortgage:
                 </h3>
-                <ul className="space-y-2 text-teal-800 text-xs sm:text-sm">
+                <ul className="space-y-2 text-slate-800 text-xs sm:text-sm">
                   <li className="flex items-start gap-2">
-                    <span className="text-teal-600 mt-1 flex-shrink-0">•</span>
+                    <span className="text-slate-600 mt-1 flex-shrink-0">•</span>
                     <span>Personal identification and contact information</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-teal-600 mt-1 flex-shrink-0">•</span>
+                    <span className="text-slate-600 mt-1 flex-shrink-0">•</span>
                     <span>Current and previous employment details with income verification</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-teal-600 mt-1 flex-shrink-0">•</span>
+                    <span className="text-slate-600 mt-1 flex-shrink-0">•</span>
                     <span>Financial information (bank accounts, assets, monthly obligations)</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-teal-600 mt-1 flex-shrink-0">•</span>
+                    <span className="text-slate-600 mt-1 flex-shrink-0">•</span>
                     <span>Property details and desired loan amount</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-teal-600 mt-1 flex-shrink-0">•</span>
+                    <span className="text-slate-600 mt-1 flex-shrink-0">•</span>
                     <span>Financial declarations and credit history</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-teal-600 mt-1 flex-shrink-0">•</span>
+                    <span className="text-slate-600 mt-1 flex-shrink-0">•</span>
                     <span>Supporting documents (W-2s, pay stubs, bank statements)</span>
                   </li>
                 </ul>
@@ -705,22 +761,22 @@ export default function LoanApplicationPage() {
 
               <div className="grid grid-cols-3 gap-3 sm:gap-4 mb-6 sm:mb-8">
                 <div className="text-center p-3 sm:p-4 bg-gray-50 rounded-xl">
-                  <div className="text-2xl sm:text-3xl font-bold text-teal-600 mb-1">13</div>
+                  <div className="text-2xl sm:text-3xl font-bold text-slate-600 mb-1">13</div>
                   <div className="text-xs sm:text-sm text-gray-600">Steps</div>
                 </div>
                 <div className="text-center p-3 sm:p-4 bg-gray-50 rounded-xl">
-                  <div className="text-2xl sm:text-3xl font-bold text-teal-600 mb-1">30-45</div>
+                  <div className="text-2xl sm:text-3xl font-bold text-slate-600 mb-1">30-45</div>
                   <div className="text-xs sm:text-sm text-gray-600">Minutes</div>
                 </div>
                 <div className="text-center p-3 sm:p-4 bg-gray-50 rounded-xl">
-                  <div className="text-2xl sm:text-3xl font-bold text-teal-600 mb-1">100%</div>
+                  <div className="text-2xl sm:text-3xl font-bold text-slate-600 mb-1">100%</div>
                   <div className="text-xs sm:text-sm text-gray-600">Complete</div>
                 </div>
               </div>
 
               <button
                 onClick={() => setShowWelcome(false)}
-                className="w-full bg-gradient-to-r from-teal-600 to-teal-600 hover:from-teal-700 hover:to-teal-700 text-white font-bold py-3 sm:py-4 px-4 sm:px-6 rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 text-sm sm:text-base"
+                className="w-full bg-gradient-to-r from-slate-600 to-slate-700 hover:from-slate-700 hover:to-slate-800 text-white font-bold py-3 sm:py-4 px-4 sm:px-6 rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 text-sm sm:text-base"
               >
                 Start Mortgage Application
                 <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -751,9 +807,9 @@ export default function LoanApplicationPage() {
               {logoutStage === 'signing-out' && (
                 <>
                   <div className="relative">
-                    <Loader2 className="h-12 w-12 md:h-16 md:w-16 text-teal-600 animate-spin" />
+                    <Loader2 className="h-12 w-12 md:h-16 md:w-16 text-slate-600 animate-spin" />
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="h-8 w-8 md:h-10 md:w-10 border-4 border-teal-200 border-t-teal-600 rounded-full animate-spin"></div>
+                      <div className="h-8 w-8 md:h-10 md:w-10 border-4 border-slate-200 border-t-slate-600 rounded-full animate-spin"></div>
                     </div>
                   </div>
                   <div className="text-center">
@@ -766,9 +822,9 @@ export default function LoanApplicationPage() {
               {logoutStage === 'clearing' && (
                 <>
                   <div className="relative">
-                    <Loader2 className="h-12 w-12 md:h-16 md:w-16 text-blue-600 animate-spin" />
+                    <Loader2 className="h-12 w-12 md:h-16 md:w-16 text-slate-400 animate-spin" />
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="h-8 w-8 md:h-10 md:w-10 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+                      <div className="h-8 w-8 md:h-10 md:w-10 border-4 border-slate-300 border-t-slate-500 rounded-full animate-spin"></div>
                     </div>
                   </div>
                   <div className="text-center">
@@ -810,7 +866,7 @@ export default function LoanApplicationPage() {
             </button>
 
             {/* Header with Gradient */}
-            <div className="bg-gradient-to-r from-teal-500 via-teal-500 to-teal-600 p-8 md:p-10 text-center relative overflow-hidden">
+            <div className="bg-gradient-to-r from-slate-700 via-slate-800 to-slate-900 p-8 md:p-10 text-center relative overflow-hidden">
               {/* Animated Background Elements */}
               <div className="absolute inset-0 opacity-10">
                 <div className="absolute top-0 left-0 w-64 h-64 bg-white rounded-full -translate-x-1/2 -translate-y-1/2 animate-pulse"></div>
@@ -819,7 +875,7 @@ export default function LoanApplicationPage() {
               
               <div className="relative z-10">
                 <div className="w-20 h-20 md:w-24 md:h-24 bg-white rounded-full mx-auto mb-6 flex items-center justify-center shadow-lg">
-                  <Sparkles className="w-10 h-10 md:w-12 md:h-12 text-teal-600" />
+                  <Sparkles className="w-10 h-10 md:w-12 md:h-12 text-slate-600" />
                 </div>
                 <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">
                   Welcome to Your Mortgage Application
@@ -833,9 +889,9 @@ export default function LoanApplicationPage() {
             {/* Content */}
             <div className="p-6 md:p-8 space-y-6 max-h-[60vh] overflow-y-auto">
               {/* Why Section */}
-              <div className="bg-gradient-to-r from-teal-50 to-teal-100 border-2 border-teal-200 rounded-xl p-6">
+              <div className="bg-gradient-to-r from-slate-50 to-slate-100 border-2 border-slate-200 rounded-xl p-6">
                 <div className="flex items-start gap-4">
-                  <div className="bg-teal-500 p-3 rounded-lg flex-shrink-0">
+                  <div className="bg-slate-600 p-3 rounded-lg flex-shrink-0">
                     <Info className="w-6 h-6 text-white" />
                   </div>
                   <div>
@@ -849,19 +905,19 @@ export default function LoanApplicationPage() {
                     </p>
                     <ul className="space-y-3 text-gray-700">
                       <li className="flex items-start gap-3">
-                        <CheckCircle className="w-5 h-5 text-teal-600 flex-shrink-0 mt-0.5" />
+                        <CheckCircle className="w-5 h-5 text-slate-600 flex-shrink-0 mt-0.5" />
                         <span><strong>Assess Your Eligibility:</strong> Determine the loan amount you qualify for based on your income, credit, and financial profile</span>
                       </li>
                       <li className="flex items-start gap-3">
-                        <CheckCircle className="w-5 h-5 text-teal-600 flex-shrink-0 mt-0.5" />
+                        <CheckCircle className="w-5 h-5 text-slate-600 flex-shrink-0 mt-0.5" />
                         <span><strong>Get Competitive Rates:</strong> Match you with the best mortgage rates available for your situation</span>
                       </li>
                       <li className="flex items-start gap-3">
-                        <CheckCircle className="w-5 h-5 text-teal-600 flex-shrink-0 mt-0.5" />
+                        <CheckCircle className="w-5 h-5 text-slate-600 flex-shrink-0 mt-0.5" />
                         <span><strong>Streamline the Process:</strong> Pre-approve your application so you can shop for homes with confidence</span>
                       </li>
                       <li className="flex items-start gap-3">
-                        <CheckCircle className="w-5 h-5 text-teal-600 flex-shrink-0 mt-0.5" />
+                        <CheckCircle className="w-5 h-5 text-slate-600 flex-shrink-0 mt-0.5" />
                         <span><strong>Ensure Compliance:</strong> Meet all regulatory requirements for mortgage lending (URLA 2019 standard)</span>
                       </li>
                     </ul>
@@ -870,26 +926,26 @@ export default function LoanApplicationPage() {
               </div>
 
               {/* What Happens Next */}
-              <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-6">
-                <h3 className="text-lg font-bold text-blue-900 mb-3 flex items-center gap-2">
+              <div className="bg-slate-50 border-2 border-slate-200 rounded-xl p-6">
+                <h3 className="text-lg font-bold text-slate-900 mb-3 flex items-center gap-2">
                   <ArrowRight className="w-5 h-5" />
                   What Happens After You Submit
                 </h3>
-                <ul className="space-y-2 text-blue-800 text-sm">
+                <ul className="space-y-2 text-slate-800 text-sm">
                   <li className="flex items-start gap-2">
-                    <span className="text-blue-600 mt-1">•</span>
+                    <span className="text-slate-600 mt-1">•</span>
                     <span>Our team reviews your application within <strong>24-48 hours</strong></span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-blue-600 mt-1">•</span>
+                    <span className="text-slate-600 mt-1">•</span>
                     <span>You'll receive email updates and may be contacted for additional documentation</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-blue-600 mt-1">•</span>
+                    <span className="text-slate-600 mt-1">•</span>
                     <span>Once approved, you'll receive a pre-approval letter to use when making offers</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-blue-600 mt-1">•</span>
+                    <span className="text-slate-600 mt-1">•</span>
                     <span>Track your application status in real-time from your dashboard</span>
                   </li>
                 </ul>
@@ -907,7 +963,7 @@ export default function LoanApplicationPage() {
             <div className="bg-gray-50 p-6 md:p-8 border-t border-gray-200">
               <button
                 onClick={handleCloseIntroModal}
-                className="w-full bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white font-bold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 text-lg"
+                className="w-full bg-gradient-to-r from-slate-600 to-slate-700 hover:from-slate-700 hover:to-slate-800 text-white font-bold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 text-lg"
               >
                 Got It, Let's Get Started!
                 <ArrowRight className="w-5 h-5" />
@@ -999,7 +1055,7 @@ export default function LoanApplicationPage() {
         <div className="fixed inset-0 z-[100] bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center p-4 animate-fadeIn">
           <div className="bg-white rounded-3xl shadow-2xl max-w-2xl w-full mx-4 overflow-hidden animate-scaleIn">
             {/* Success Header with Animation */}
-            <div className="bg-gradient-to-r from-teal-500 via-teal-500 to-teal-600 p-8 md:p-12 text-center relative overflow-hidden">
+            <div className="bg-gradient-to-r from-slate-700 via-slate-800 to-slate-900 p-8 md:p-12 text-center relative overflow-hidden">
               {/* Animated Background Elements */}
               <div className="absolute inset-0 opacity-10">
                 <div className="absolute top-0 left-0 w-64 h-64 bg-white rounded-full -translate-x-1/2 -translate-y-1/2 animate-pulse"></div>
@@ -1012,7 +1068,7 @@ export default function LoanApplicationPage() {
                   <div className="absolute inset-0 bg-white rounded-full animate-scaleIn opacity-20"></div>
                   <div className="absolute inset-0 bg-white rounded-full animate-scaleIn" style={{animationDelay: '0.2s'}}></div>
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <CheckCircle2 className="w-16 h-16 md:w-20 md:h-20 text-teal-600 animate-scaleIn" strokeWidth={3} style={{animationDelay: '0.3s'}} />
+                    <CheckCircle2 className="w-16 h-16 md:w-20 md:h-20 text-slate-600 animate-scaleIn" strokeWidth={3} style={{animationDelay: '0.3s'}} />
                   </div>
                 </div>
                 
@@ -1042,12 +1098,12 @@ export default function LoanApplicationPage() {
                 </div>
               )}
               {/* Email Notification */}
-              <div className="bg-teal-50 border-2 border-teal-200 rounded-xl p-5 animate-slideUp" style={{animationDelay: '0.2s'}}>
+              <div className="bg-slate-50 border-2 border-slate-200 rounded-xl p-5 animate-slideUp" style={{animationDelay: '0.2s'}}>
                 <div className="flex items-start gap-3">
-                  <Mail className="w-6 h-6 text-teal-600 flex-shrink-0 mt-0.5" />
+                  <Mail className="w-6 h-6 text-slate-600 flex-shrink-0 mt-0.5" />
                   <div>
-                    <h3 className="font-bold text-teal-900 mb-1">Check Your Email</h3>
-                    <p className="text-sm text-teal-800">
+                    <h3 className="font-bold text-slate-900 mb-1">Check Your Email</h3>
+                    <p className="text-sm text-slate-800">
                       We've sent a confirmation email to <strong>{successData.email}</strong>. 
                       Please check your inbox (and spam folder) for updates and next steps.
                     </p>
@@ -1059,7 +1115,7 @@ export default function LoanApplicationPage() {
               <div className="space-y-4 animate-slideUp" style={{animationDelay: '0.3s'}}>
                 <div className="border-b border-gray-200 pb-3">
                   <h3 className="text-lg font-bold text-gray-900 mb-1">Application ID</h3>
-                  <p className="text-2xl font-mono font-bold text-teal-600">
+                  <p className="text-2xl font-mono font-bold text-slate-600">
                     {successData.applicationId.slice(-8) || 'Pending'}
                   </p>
                   <p className="text-sm text-gray-500 mt-1">
@@ -1103,7 +1159,7 @@ export default function LoanApplicationPage() {
                       </div>
                       <div>
                         <p className="text-xs text-gray-500 mb-1">Loan Amount</p>
-                        <p className="text-lg font-bold text-teal-600">
+                        <p className="text-lg font-bold text-slate-600">
                           ${successData.loanAmount.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
                         </p>
                       </div>
@@ -1127,26 +1183,26 @@ export default function LoanApplicationPage() {
                 </div>
 
                 {/* What's Next */}
-                <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-5">
-                  <h3 className="font-bold text-blue-900 mb-3 flex items-center gap-2">
+                <div className="bg-slate-50 border-2 border-slate-200 rounded-xl p-5">
+                  <h3 className="font-bold text-slate-900 mb-3 flex items-center gap-2">
                     <ArrowRight className="w-5 h-5" />
                     What's Next?
                   </h3>
-                  <ul className="space-y-2 text-sm text-blue-800">
+                  <ul className="space-y-2 text-sm text-slate-800">
                     <li className="flex items-start gap-2">
-                      <CheckCircle className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" />
+                      <CheckCircle className="w-4 h-4 text-slate-600 flex-shrink-0 mt-0.5" />
                       <span>Our team will review your application within <strong>24-48 hours</strong></span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <CheckCircle className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" />
+                      <CheckCircle className="w-4 h-4 text-slate-600 flex-shrink-0 mt-0.5" />
                       <span>You'll receive email updates at <strong>{successData.email}</strong></span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <CheckCircle className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" />
+                      <CheckCircle className="w-4 h-4 text-slate-600 flex-shrink-0 mt-0.5" />
                       <span>Check your dashboard for real-time application status</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <CheckCircle className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" />
+                      <CheckCircle className="w-4 h-4 text-slate-600 flex-shrink-0 mt-0.5" />
                       <span>We may contact you if additional information is needed</span>
                     </li>
                   </ul>
@@ -1161,7 +1217,7 @@ export default function LoanApplicationPage() {
                   setShowSuccess(false);
                   router.push('/customer/dashboard');
                 }}
-                className="flex-1 bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2"
+                className="flex-1 bg-gradient-to-r from-slate-600 to-slate-700 hover:from-slate-700 hover:to-slate-800 text-white font-bold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2"
               >
                 <Home className="w-5 h-5" />
                 Go to Dashboard
