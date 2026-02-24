@@ -110,10 +110,14 @@ export default function ApplicationView({ params }: { params: Promise<{ id: stri
   const [activeTab, setActiveTab] = useState<'split' | 'documents' | 'info' | 'arive'>('split');
   const [selectedDocument, setSelectedDocument] = useState<number>(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [isFinancialExpanded, setIsFinancialExpanded] = useState(false);
-  const [isBorrowerInfoExpanded, setIsBorrowerInfoExpanded] = useState(true);
-  const [isCurrentAddressExpanded, setIsCurrentAddressExpanded] = useState(true);
-  const [isEmploymentExpanded, setIsEmploymentExpanded] = useState(true);
+  // All Application Info sections collapsible; start collapsed so employee can expand as needed
+  const [sectionsExpanded, setSectionsExpanded] = useState<Record<string, boolean>>({
+    borrower: false, currentAddress: false, mailing: false, formerAddresses: false,
+    employment: false, additionalEmployment: false, financial: false, property: false,
+    assets: false, liabilities: false, declarations: false, creditCard: false, verification: false,
+    financialAnalysis: false,
+  });
+  const toggleSection = (key: string) => setSectionsExpanded(prev => ({ ...prev, [key]: !prev[key] }));
   const [verificationChecklist, setVerificationChecklist] = useState({
     identityDocuments: false,
     incomeVerification: false,
@@ -814,11 +818,11 @@ export default function ApplicationView({ params }: { params: Promise<{ id: stri
             </div>
             {/* Borrower – always first so you see who applied while viewing the doc */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden border-l-4 border-l-teal-500">
-              <button onClick={() => setIsBorrowerInfoExpanded(!isBorrowerInfoExpanded)} className="w-full flex items-center justify-between px-4 py-3.5 border-b border-gray-200 bg-gray-50 hover:bg-gray-100 transition text-left">
+              <button onClick={() => toggleSection('borrower')} className="w-full flex items-center justify-between px-4 py-3.5 border-b border-gray-200 bg-gray-50 hover:bg-gray-100 transition text-left">
                 <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2 uppercase tracking-wide"><User className="w-5 h-5 text-teal-600" /> Borrower information</h3>
-                {isBorrowerInfoExpanded ? <ChevronUp className="w-5 h-5 text-gray-500" /> : <ChevronDown className="w-5 h-5 text-gray-500" />}
+                {sectionsExpanded.borrower ? <ChevronUp className="w-5 h-5 text-gray-500" /> : <ChevronDown className="w-5 h-5 text-gray-500" />}
               </button>
-              {isBorrowerInfoExpanded && (
+              {sectionsExpanded.borrower && (
                 <dl className="px-4 py-4 md:px-5 md:py-5 min-h-[120px] text-gray-900">
                   <InfoRow label="Name" value={`${fmtVal(application.borrowerInfo?.firstName)} ${fmtVal(application.borrowerInfo?.middleName)} ${fmtVal(application.borrowerInfo?.lastName)} ${fmtVal(application.borrowerInfo?.suffix)}`.replace(/\s+/g, ' ').trim()} />
                   <InfoRow label="Email" value={fmtVal(application.borrowerInfo?.email)} />
@@ -844,11 +848,11 @@ export default function ApplicationView({ params }: { params: Promise<{ id: stri
 
             {/* Current address */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden border-l-4 border-l-blue-500">
-              <button onClick={() => setIsCurrentAddressExpanded(!isCurrentAddressExpanded)} className="w-full flex items-center justify-between px-4 py-3.5 border-b border-gray-200 bg-gray-50 hover:bg-gray-100 transition text-left">
+              <button onClick={() => toggleSection('currentAddress')} className="w-full flex items-center justify-between px-4 py-3.5 border-b border-gray-200 bg-gray-50 hover:bg-gray-100 transition text-left">
                 <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2 uppercase tracking-wide"><Home className="w-5 h-5 text-blue-600" /> Current address</h3>
-                {isCurrentAddressExpanded ? <ChevronUp className="w-5 h-5 text-gray-500" /> : <ChevronDown className="w-5 h-5 text-gray-500" />}
+                {sectionsExpanded.currentAddress ? <ChevronUp className="w-5 h-5 text-gray-500" /> : <ChevronDown className="w-5 h-5 text-gray-500" />}
               </button>
-              {isCurrentAddressExpanded && (
+              {sectionsExpanded.currentAddress && (
                 <dl className="px-4 py-4 md:px-5 md:py-5 min-h-[120px] text-gray-900">
                   <InfoRow label="Street" value={fmtVal(application.currentAddress?.street)} />
                   <InfoRow label="Unit" value={fmtVal(application.currentAddress?.unit)} />
@@ -866,9 +870,11 @@ export default function ApplicationView({ params }: { params: Promise<{ id: stri
             {/* Mailing address (if different) */}
             {application.mailingAddress && (application.mailingAddress as { street?: string }).street && (
               <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden border-l-4 border-l-slate-400">
-                <div className="px-4 py-3.5 border-b border-gray-200 bg-gray-50">
+                <button onClick={() => toggleSection('mailing')} className="w-full flex items-center justify-between px-4 py-3.5 border-b border-gray-200 bg-gray-50 hover:bg-gray-100 transition text-left">
                   <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2 uppercase tracking-wide"><Mail className="w-5 h-5 text-slate-600" /> Mailing address</h3>
-                </div>
+                  {sectionsExpanded.mailing ? <ChevronUp className="w-5 h-5 text-gray-500" /> : <ChevronDown className="w-5 h-5 text-gray-500" />}
+                </button>
+                {sectionsExpanded.mailing && (
                 <dl className="px-4 py-4 md:px-5 md:py-5 text-gray-900">
                   <InfoRow label="Street" value={fmtVal((application.mailingAddress as { street?: string }).street)} />
                   <InfoRow label="Unit" value={fmtVal((application.mailingAddress as { unit?: string }).unit)} />
@@ -876,15 +882,18 @@ export default function ApplicationView({ params }: { params: Promise<{ id: stri
                   <InfoRow label="State" value={fmtVal((application.mailingAddress as { state?: string }).state)} />
                   <InfoRow label="ZIP" value={fmtVal((application.mailingAddress as { zipCode?: string }).zipCode)} />
                 </dl>
+                )}
               </div>
             )}
 
             {/* Former addresses */}
             {application.formerAddresses && Array.isArray(application.formerAddresses) && application.formerAddresses.length > 0 && (
               <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden border-l-4 border-l-slate-400">
-                <div className="px-4 py-3.5 border-b border-gray-200 bg-gray-50">
+                <button onClick={() => toggleSection('formerAddresses')} className="w-full flex items-center justify-between px-4 py-3.5 border-b border-gray-200 bg-gray-50 hover:bg-gray-100 transition text-left">
                   <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2 uppercase tracking-wide"><Home className="w-5 h-5 text-slate-600" /> Former addresses</h3>
-                </div>
+                  {sectionsExpanded.formerAddresses ? <ChevronUp className="w-5 h-5 text-gray-500" /> : <ChevronDown className="w-5 h-5 text-gray-500" />}
+                </button>
+                {sectionsExpanded.formerAddresses && (
                 <div className="px-4 py-4 md:px-5 md:py-5 space-y-4 text-gray-900">
                   {application.formerAddresses.map((addr: Record<string, unknown>, i: number) => (
                     <div key={i} className="border-b border-gray-100 last:border-0 pb-4 last:pb-0">
@@ -898,16 +907,17 @@ export default function ApplicationView({ params }: { params: Promise<{ id: stri
                     </div>
                   ))}
                 </div>
+                )}
               </div>
             )}
 
             {/* Employment */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden border-l-4 border-l-amber-500">
-              <button onClick={() => setIsEmploymentExpanded(!isEmploymentExpanded)} className="w-full flex items-center justify-between px-4 py-3.5 border-b border-gray-200 bg-gray-50 hover:bg-gray-100 transition text-left">
+              <button onClick={() => toggleSection('employment')} className="w-full flex items-center justify-between px-4 py-3.5 border-b border-gray-200 bg-gray-50 hover:bg-gray-100 transition text-left">
                 <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2 uppercase tracking-wide"><Briefcase className="w-5 h-5 text-amber-600" /> Employment</h3>
-                {isEmploymentExpanded ? <ChevronUp className="w-5 h-5 text-gray-500" /> : <ChevronDown className="w-5 h-5 text-gray-500" />}
+                {sectionsExpanded.employment ? <ChevronUp className="w-5 h-5 text-gray-500" /> : <ChevronDown className="w-5 h-5 text-gray-500" />}
               </button>
-              {isEmploymentExpanded && (
+              {sectionsExpanded.employment && (
                 <dl className="px-4 py-4 md:px-5 md:py-5 min-h-[120px] text-gray-900">
                   <InfoRow label="Status" value={fmtVal(application.employment?.employmentStatus)} />
                   <InfoRow label="Employer" value={fmtVal(application.employment?.employerName)} />
@@ -930,9 +940,11 @@ export default function ApplicationView({ params }: { params: Promise<{ id: stri
             {/* Additional employment */}
             {application.additionalEmployment && Array.isArray(application.additionalEmployment) && application.additionalEmployment.length > 0 && (
               <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden border-l-4 border-l-amber-400">
-                <div className="px-4 py-3.5 border-b border-gray-200 bg-gray-50">
+                <button onClick={() => toggleSection('additionalEmployment')} className="w-full flex items-center justify-between px-4 py-3.5 border-b border-gray-200 bg-gray-50 hover:bg-gray-100 transition text-left">
                   <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2 uppercase tracking-wide"><Briefcase className="w-5 h-5 text-amber-600" /> Additional employment</h3>
-                </div>
+                  {sectionsExpanded.additionalEmployment ? <ChevronUp className="w-5 h-5 text-gray-500" /> : <ChevronDown className="w-5 h-5 text-gray-500" />}
+                </button>
+                {sectionsExpanded.additionalEmployment && (
                 <div className="px-4 py-4 md:px-5 md:py-5 space-y-4 text-gray-900">
                   {application.additionalEmployment.map((job: Record<string, unknown>, i: number) => (
                     <div key={i} className="border-b border-gray-100 last:border-0 pb-4 last:pb-0">
@@ -946,14 +958,17 @@ export default function ApplicationView({ params }: { params: Promise<{ id: stri
                     </div>
                   ))}
                 </div>
+                )}
               </div>
             )}
 
             {/* Financial information */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden min-h-[140px] border-l-4 border-l-emerald-500">
-              <div className="px-4 py-3.5 border-b border-gray-200 bg-gray-50">
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden border-l-4 border-l-emerald-500">
+              <button onClick={() => toggleSection('financial')} className="w-full flex items-center justify-between px-4 py-3.5 border-b border-gray-200 bg-gray-50 hover:bg-gray-100 transition text-left">
                 <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2 uppercase tracking-wide"><DollarSign className="w-5 h-5 text-emerald-600" /> Financial information</h3>
-              </div>
+                {sectionsExpanded.financial ? <ChevronUp className="w-5 h-5 text-gray-500" /> : <ChevronDown className="w-5 h-5 text-gray-500" />}
+              </button>
+              {sectionsExpanded.financial && (
               <dl className="px-4 py-4 md:px-5 md:py-5 text-gray-900">
                 <InfoRow label="Gross monthly income" value={fmtDollar(application.financialInfo?.grossMonthlyIncome)} />
                 <InfoRow label="Other income" value={fmtDollar(application.financialInfo?.otherIncome)} />
@@ -963,13 +978,16 @@ export default function ApplicationView({ params }: { params: Promise<{ id: stri
                 <InfoRow label="Total assets" value={fmtDollar(application.financialInfo?.totalAssets)} />
                 <InfoRow label="Total liabilities" value={fmtDollar(application.financialInfo?.totalLiabilities)} />
               </dl>
+              )}
             </div>
 
             {/* Property & loan */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden border-l-4 border-l-indigo-500">
-              <div className="px-4 py-3.5 border-b border-gray-200 bg-gray-50">
+              <button onClick={() => toggleSection('property')} className="w-full flex items-center justify-between px-4 py-3.5 border-b border-gray-200 bg-gray-50 hover:bg-gray-100 transition text-left">
                 <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2 uppercase tracking-wide"><Home className="w-5 h-5 text-indigo-600" /> Property & loan</h3>
-              </div>
+                {sectionsExpanded.property ? <ChevronUp className="w-5 h-5 text-gray-500" /> : <ChevronDown className="w-5 h-5 text-gray-500" />}
+              </button>
+              {sectionsExpanded.property && (
               <dl className="px-4 py-4 md:px-5 md:py-5 text-gray-900">
                 <InfoRow label="Address" value={[application.propertyInfo?.propertyAddress, application.propertyInfo?.unit, application.propertyInfo?.propertyCity, application.propertyInfo?.propertyState, application.propertyInfo?.propertyZipCode].filter(Boolean).map(String).join(', ')} />
                 <InfoRow label="Property type" value={fmtVal(application.propertyInfo?.propertyType)} />
@@ -982,28 +1000,34 @@ export default function ApplicationView({ params }: { params: Promise<{ id: stri
                 <InfoRow label="Down payment" value={fmtDollar(application.propertyInfo?.downPaymentAmount)} />
                 <InfoRow label="Down payment %" value={application.propertyInfo?.downPaymentPercentage != null ? `${Number(application.propertyInfo.downPaymentPercentage).toFixed(2)}%` : '—'} />
               </dl>
+              )}
             </div>
 
             {/* Assets (bank accounts from application) */}
             {application.assets?.bankAccounts && Array.isArray(application.assets.bankAccounts) && application.assets.bankAccounts.length > 0 && (
               <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden border-l-4 border-l-emerald-400">
-                <div className="px-4 py-3.5 border-b border-gray-200 bg-gray-50">
+                <button onClick={() => toggleSection('assets')} className="w-full flex items-center justify-between px-4 py-3.5 border-b border-gray-200 bg-gray-50 hover:bg-gray-100 transition text-left">
                   <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2 uppercase tracking-wide"><DollarSign className="w-5 h-5 text-emerald-600" /> Assets (bank accounts)</h3>
-                </div>
+                  {sectionsExpanded.assets ? <ChevronUp className="w-5 h-5 text-gray-500" /> : <ChevronDown className="w-5 h-5 text-gray-500" />}
+                </button>
+                {sectionsExpanded.assets && (
                 <dl className="px-4 py-4 md:px-5 md:py-5 text-gray-900">
                   {application.assets.bankAccounts.map((acct: Record<string, unknown>, i: number) => (
                     <InfoRow key={i} label={String(acct.accountType || 'Account')} value={fmtDollar(acct.cashOrMarketValue)} />
                   ))}
                 </dl>
+                )}
               </div>
             )}
 
             {/* Liabilities (items from application) */}
             {application.liabilities?.items && Array.isArray(application.liabilities.items) && application.liabilities.items.length > 0 && (
               <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden border-l-4 border-l-rose-400">
-                <div className="px-4 py-3.5 border-b border-gray-200 bg-gray-50">
+                <button onClick={() => toggleSection('liabilities')} className="w-full flex items-center justify-between px-4 py-3.5 border-b border-gray-200 bg-gray-50 hover:bg-gray-100 transition text-left">
                   <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2 uppercase tracking-wide"><DollarSign className="w-5 h-5 text-rose-600" /> Liabilities</h3>
-                </div>
+                  {sectionsExpanded.liabilities ? <ChevronUp className="w-5 h-5 text-gray-500" /> : <ChevronDown className="w-5 h-5 text-gray-500" />}
+                </button>
+                {sectionsExpanded.liabilities && (
                 <div className="px-4 py-4 md:px-5 md:py-5 space-y-3 text-gray-900">
                   {application.liabilities.items.map((item: Record<string, unknown>, i: number) => (
                     <div key={i} className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
@@ -1014,14 +1038,17 @@ export default function ApplicationView({ params }: { params: Promise<{ id: stri
                     </div>
                   ))}
                 </div>
+                )}
               </div>
             )}
 
             {/* Declarations */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden border-l-4 border-l-violet-500">
-              <div className="px-4 py-3.5 border-b border-gray-200 bg-gray-50">
+              <button onClick={() => toggleSection('declarations')} className="w-full flex items-center justify-between px-4 py-3.5 border-b border-gray-200 bg-gray-50 hover:bg-gray-100 transition text-left">
                 <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2 uppercase tracking-wide"><FileText className="w-5 h-5 text-violet-600" /> Declarations</h3>
-              </div>
+                {sectionsExpanded.declarations ? <ChevronUp className="w-5 h-5 text-gray-500" /> : <ChevronDown className="w-5 h-5 text-gray-500" />}
+              </button>
+              {sectionsExpanded.declarations && (
               <dl className="px-4 py-4 md:px-5 md:py-5 grid sm:grid-cols-2 gap-x-6 text-gray-900">
                 <div>
                   <InfoRow label="U.S. citizen" value={fmtVal(application.declarations?.usCitizen)} />
@@ -1045,15 +1072,20 @@ export default function ApplicationView({ params }: { params: Promise<{ id: stri
                   <InfoRow label="Co-signer or guarantor" value={fmtVal(application.declarations?.cosignerOrGuarantor)} />
                 </div>
               </dl>
+              )}
             </div>
 
             {/* Credit Card & Authorization */}
             {(application.creditCardAuthorization && (application.creditCardAuthorization.authorizationAgreed || application.creditCardAuthorization.authBorrower1Name || application.creditCardAuthorization.cardType)) && (
               <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden border-l-4 border-l-teal-500">
-                <div className="px-4 py-3.5 border-b border-gray-200 bg-teal-50">
-                  <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2 uppercase tracking-wide"><CheckCircle className="w-5 h-5 text-teal-600" /> Credit card & authorization</h3>
-                  <p className="text-xs text-gray-600 mt-1">Borrower authorized credit check and card charges for application fees.</p>
-                </div>
+                <button onClick={() => toggleSection('creditCard')} className="w-full flex items-center justify-between px-4 py-3.5 border-b border-gray-200 bg-teal-50 hover:bg-teal-100/50 transition text-left">
+                  <div>
+                    <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2 uppercase tracking-wide"><CheckCircle className="w-5 h-5 text-teal-600" /> Credit card & authorization</h3>
+                    <p className="text-xs text-gray-600 mt-1">Borrower authorized credit check and card charges for application fees.</p>
+                  </div>
+                  {sectionsExpanded.creditCard ? <ChevronUp className="w-5 h-5 text-gray-500 flex-shrink-0" /> : <ChevronDown className="w-5 h-5 text-gray-500 flex-shrink-0" />}
+                </button>
+                {sectionsExpanded.creditCard && (
                 <dl className="px-4 py-4 md:px-5 md:py-5 text-gray-900">
                   <InfoRow label="Authorization agreed" value={fmtVal(application.creditCardAuthorization?.authorizationAgreed)} />
                   <InfoRow label="Borrower 1" value={fmtVal(application.creditCardAuthorization?.authBorrower1Name)} />
@@ -1063,18 +1095,23 @@ export default function ApplicationView({ params }: { params: Promise<{ id: stri
                   <InfoRow label="Name on card" value={fmtVal(application.creditCardAuthorization?.nameOnCard)} />
                   <InfoRow label="Signature / date" value={[application.creditCardAuthorization?.authSignature1, application.creditCardAuthorization?.authDate1].filter(Boolean).map(String).join(' · ')} />
                 </dl>
+                )}
               </div>
             )}
 
             {/* Verification & decision – prominent card with Approve / Reject */}
             <div className="bg-white rounded-xl shadow-md border-2 border-gray-200 overflow-hidden border-l-4 border-l-teal-600">
-              <div className="px-4 py-3.5 border-b border-gray-200 bg-teal-50">
-                <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2 uppercase tracking-wide">
-                  <CheckCircle className="w-5 h-5 text-teal-600" />
-                  Verification & decision
-                </h3>
-                <p className="text-xs text-gray-600 mt-1">Review checklist and approve or reject this application.</p>
-              </div>
+              <button onClick={() => toggleSection('verification')} className="w-full flex items-center justify-between px-4 py-3.5 border-b border-gray-200 bg-teal-50 hover:bg-teal-100/50 transition text-left">
+                <div>
+                  <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2 uppercase tracking-wide">
+                    <CheckCircle className="w-5 h-5 text-teal-600" />
+                    Verification & decision
+                  </h3>
+                  <p className="text-xs text-gray-600 mt-1">Review checklist and approve or reject this application.</p>
+                </div>
+                {sectionsExpanded.verification ? <ChevronUp className="w-5 h-5 text-gray-500 flex-shrink-0" /> : <ChevronDown className="w-5 h-5 text-gray-500 flex-shrink-0" />}
+              </button>
+              {sectionsExpanded.verification && (
               <div className="p-4 md:p-5 space-y-5">
                 <div>
                   <h4 className="text-sm font-semibold text-gray-900 mb-3">Checklist</h4>
@@ -1214,6 +1251,7 @@ export default function ApplicationView({ params }: { params: Promise<{ id: stri
                   )}
                 </div>
               </div>
+              )}
             </div>
 
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 md:p-5">
@@ -1250,16 +1288,16 @@ LOANATICKS - Home Mortgage Solutions`}
 
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
               <button
-                onClick={() => setIsFinancialExpanded(!isFinancialExpanded)}
+                onClick={() => toggleSection('financialAnalysis')}
                 className="w-full flex items-center justify-between px-4 py-3 border-b border-gray-200 bg-gray-50 hover:bg-gray-100 transition text-left"
               >
                 <h3 className="text-base font-semibold text-gray-900 flex items-center gap-2">
                   <Calculator className="w-5 h-5 text-gray-600" />
                   Financial analysis
                 </h3>
-                {isFinancialExpanded ? <ChevronUp className="w-5 h-5 text-gray-500" /> : <ChevronDown className="w-5 h-5 text-gray-500" />}
+                {sectionsExpanded.financialAnalysis ? <ChevronUp className="w-5 h-5 text-gray-500" /> : <ChevronDown className="w-5 h-5 text-gray-500" />}
               </button>
-              {isFinancialExpanded && (
+              {sectionsExpanded.financialAnalysis && (
                 <div className="p-4 space-y-4">
                   <div className="rounded-lg border border-gray-200 p-3 bg-gray-50">
                     <div className="flex justify-between items-center mb-1">
@@ -1374,18 +1412,23 @@ LOANATICKS - Home Mortgage Solutions`}
                   Same 60 columns as the Excel (Lead) download. Scroll horizontally to see all. Use the download below to open in Excel or import into ARIVE.
                 </p>
                 <div className="overflow-x-auto max-w-full">
-                  <table className="w-full text-sm border-collapse table-fixed" style={{ minWidth: 'max-content' }}>
+                  <table className="text-sm border-collapse w-max min-w-full">
+                    <colgroup>
+                      {LEAD_HEADERS.map((_, i) => (
+                        <col key={i} style={{ minWidth: 140 }} />
+                      ))}
+                    </colgroup>
                     <thead>
                       <tr className="bg-gray-100 text-left">
                         {LEAD_HEADERS.map((h, i) => (
-                          <th key={i} className="p-2 border border-gray-200 font-semibold text-gray-700 whitespace-nowrap min-w-[100px]">{h}</th>
+                          <th key={i} className="p-2 border border-gray-200 font-semibold text-gray-700 whitespace-nowrap">{h}</th>
                         ))}
                       </tr>
                     </thead>
                     <tbody>
                       <tr className="bg-white">
                         {buildLeadRow(application as unknown as Record<string, any>, session?.user?.email ?? '').map((cell, i) => (
-                          <td key={i} className="p-2 border border-gray-200 text-gray-900 whitespace-nowrap min-w-[100px]">{cell || '—'}</td>
+                          <td key={i} className="p-2 border border-gray-200 text-gray-900 whitespace-nowrap">{cell || '—'}</td>
                         ))}
                       </tr>
                     </tbody>

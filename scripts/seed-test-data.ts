@@ -825,6 +825,11 @@ async function seedTestData() {
           isNonActivatedReservist: false,
           isSurvivingSpouse: false,
         },
+        documents: [
+          { name: 'Government ID - Driver License.pdf', size: 245678, type: 'application/pdf', uploadedAt: new Date(), url: '' },
+          { name: 'Pay Stub - January 2025.pdf', size: 189234, type: 'application/pdf', uploadedAt: new Date(), url: '' },
+          { name: 'Pay Stub - February 2025.pdf', size: 192456, type: 'application/pdf', uploadedAt: new Date(), url: '' },
+        ],
         statusHistory: [{
           status: 'submitted',
           changedBy: urlaTestCustomer._id.toString(),
