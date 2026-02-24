@@ -1,5 +1,5 @@
 // Service Worker for LOANATICKS PWA
-const CACHE_NAME = 'loanticks-v2';
+const CACHE_NAME = 'loanticks-v3';
 const urlsToCache = [
   '/',
   '/login',
@@ -44,7 +44,14 @@ self.addEventListener('activate', (event) => {
 // Fetch event - serve from cache, fallback to network
 self.addEventListener('fetch', (event) => {
   const request = event.request;
-  
+
+  // Do not intercept navigation requests (page loads). Let the browser handle
+  // the main document and redirects (e.g. www -> non-www) to avoid "redirect
+  // mode is not follow" network errors that can make the site show as invalid.
+  if (request.mode === 'navigate') {
+    return;
+  }
+
   // Skip caching for API routes and external resources
   if (
     request.url.includes('/api/') ||
@@ -52,20 +59,6 @@ self.addEventListener('fetch', (event) => {
     request.url.startsWith('chrome-extension://') ||
     request.url.startsWith('moz-extension://')
   ) {
-    return;
-  }
-
-  // For navigation requests (page loads), always allow redirects
-  // This fixes the www.loanaticks.com -> loanaticks.com redirect issue
-  if (request.mode === 'navigate') {
-    event.respondWith(
-      fetch(request, {
-        redirect: 'follow',
-      }).catch(() => {
-        // If fetch fails, try cache
-        return caches.match('/');
-      })
-    );
     return;
   }
 
