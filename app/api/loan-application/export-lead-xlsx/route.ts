@@ -4,7 +4,6 @@ export const dynamic = 'force-dynamic';
 import { auth } from '@/lib/auth';
 import connectDB from '@/lib/mongodb';
 import LoanApplication from '@/models/LoanApplication';
-import * as XLSX from 'xlsx';
 
 function fmtDate(d: unknown): string {
   if (!d) return '';
@@ -75,6 +74,7 @@ export async function GET(request: NextRequest) {
       ],
     ];
 
+    const XLSX = await import('xlsx');
     const ws = XLSX.utils.aoa_to_sheet(rows);
     ws['!cols'] = [
       { wch: 14 },

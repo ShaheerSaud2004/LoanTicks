@@ -4,18 +4,18 @@ export const dynamic = 'force-dynamic';
 import { auth } from '@/lib/auth';
 import connectDB from '@/lib/mongodb';
 import LoanApplication from '@/models/LoanApplication';
-import * as XLSX from 'xlsx';
 import path from 'path';
 import { mkdir, readFile, writeFile } from 'fs/promises';
 
 async function appendApprovedLeadToSheet(application: any) {
   try {
+    const XLSX = await import('xlsx');
     const leadsDir = path.join(process.cwd(), 'private', 'leads');
     await mkdir(leadsDir, { recursive: true });
     const filePath = path.join(leadsDir, 'LeadSample.xlsx');
 
-    let wb: XLSX.WorkBook;
-    let ws: XLSX.WorkSheet | undefined;
+    let wb: import('xlsx').WorkBook;
+    let ws: import('xlsx').WorkSheet | undefined;
     let rows: any[][] = [];
 
     try {
