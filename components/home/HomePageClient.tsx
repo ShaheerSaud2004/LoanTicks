@@ -61,14 +61,8 @@ export default function HomePageClient() {
       <header className="sticky top-0 z-30 bg-white border-b border-slate-200 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
-            <Link href="/" className="flex items-center gap-4">
-              <div className="h-10 sm:h-12 flex items-center flex-shrink-0">
-                <img src="/logo.jpg" alt="LOANATICKS" className="h-full w-auto object-contain" />
-              </div>
-              <div className="flex flex-col">
-                <span className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">LOANATICKS</span>
-                <span className="text-xs sm:text-sm text-slate-500 font-medium mt-0.5">Expert Loan Advisor</span>
-              </div>
+            <Link href="/" className="flex items-center flex-shrink-0">
+              <img src="/logo.jpg" alt="LOANATICKS" className="h-10 sm:h-12 w-auto object-contain" />
             </Link>
             <button
               type="button"

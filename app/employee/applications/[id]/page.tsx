@@ -785,7 +785,7 @@ export default function ApplicationView({ params }: { params: Promise<{ id: stri
 
           {/* Application Info Panel – split screen: doc left, submitted info right (borrower at top) */}
           {(activeTab === 'split' || activeTab === 'info') && (
-            <div className={`space-y-5 flex flex-col ${activeTab === 'split' ? 'lg:max-h-[calc(100vh-11rem)] lg:overflow-y-auto lg:min-h-0' : ''}`}>
+            <div className={`space-y-5 flex flex-col min-w-0 lg:min-w-[360px] ${activeTab === 'split' ? 'lg:max-h-[calc(100vh-11rem)] lg:overflow-y-auto lg:min-h-[400px]' : ''}`}>
               {/* Submitted info first (for doc + info split view): Borrower at top */}
             {/* Borrower – always first so you see who applied while viewing the doc */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
@@ -794,7 +794,7 @@ export default function ApplicationView({ params }: { params: Promise<{ id: stri
                 {isBorrowerInfoExpanded ? <ChevronUp className="w-5 h-5 text-gray-500" /> : <ChevronDown className="w-5 h-5 text-gray-500" />}
               </button>
               {isBorrowerInfoExpanded && (
-                <dl className="p-4 md:p-5">
+                <dl className="p-4 md:p-5 min-h-[120px]">
                   <InfoRow label="Name" value={`${fmtVal(application.borrowerInfo?.firstName)} ${fmtVal(application.borrowerInfo?.middleName)} ${fmtVal(application.borrowerInfo?.lastName)}`.replace(/\s+/g, ' ').trim()} />
                   <InfoRow label="Email" value={fmtVal(application.borrowerInfo?.email)} />
                   <InfoRow label="Phone" value={fmtVal(application.borrowerInfo?.phone)} />
@@ -816,7 +816,7 @@ export default function ApplicationView({ params }: { params: Promise<{ id: stri
                 {isCurrentAddressExpanded ? <ChevronUp className="w-5 h-5 text-gray-500" /> : <ChevronDown className="w-5 h-5 text-gray-500" />}
               </button>
               {isCurrentAddressExpanded && (
-                <dl className="p-4 md:p-5">
+                <dl className="p-4 md:p-5 min-h-[120px]">
                   <InfoRow label="Street" value={fmtVal(application.currentAddress?.street)} />
                   <InfoRow label="Unit" value={fmtVal(application.currentAddress?.unit)} />
                   <InfoRow label="City" value={fmtVal(application.currentAddress?.city)} />
@@ -836,7 +836,7 @@ export default function ApplicationView({ params }: { params: Promise<{ id: stri
                 {isEmploymentExpanded ? <ChevronUp className="w-5 h-5 text-gray-500" /> : <ChevronDown className="w-5 h-5 text-gray-500" />}
               </button>
               {isEmploymentExpanded && (
-                <dl className="p-4 md:p-5">
+                <dl className="p-4 md:p-5 min-h-[120px]">
                   <InfoRow label="Status" value={fmtVal(application.employment?.employmentStatus)} />
                   <InfoRow label="Employer" value={fmtVal(application.employment?.employerName)} />
                   <InfoRow label="Phone" value={fmtVal(application.employment?.phone || application.employment?.employerPhone)} />
@@ -848,7 +848,7 @@ export default function ApplicationView({ params }: { params: Promise<{ id: stri
             </div>
 
             {/* Financial information */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden min-h-[140px]">
               <div className="px-4 py-3 border-b border-gray-200 bg-gray-50">
                 <h3 className="text-base font-semibold text-gray-900 flex items-center gap-2"><DollarSign className="w-5 h-5 text-gray-600" /> Financial information</h3>
               </div>
@@ -1008,21 +1008,33 @@ export default function ApplicationView({ params }: { params: Promise<{ id: stri
                         Send ARIVE link via email
                       </button>
                       <p className="text-xs text-gray-500 mt-3 mb-2">Or upload their info to ARIVE yourself:</p>
-                      <a
-                        href={`/api/loan-application/export-arive-xml?id=${application._id}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 px-3 py-2 bg-white border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50"
-                      >
-                        <FileText className="w-4 h-4" />
-                        Download XML for ARIVE (3.4)
-                      </a>
-                      <p className="text-xs text-gray-500 mt-2">Import this file in ARIVE: + Loan → Import 3.4 file.</p>
+                      <div className="flex flex-wrap gap-2">
+                        <a
+                          href={`/api/loan-application/export-arive-xml?id=${application._id}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 px-3 py-2 bg-white border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50"
+                        >
+                          <FileText className="w-4 h-4" />
+                          Download XML for ARIVE (3.4)
+                        </a>
+                        <a
+                          href={`/api/loan-application/export-lead-xlsx?id=${application._id}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 px-3 py-2 bg-white border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50"
+                        >
+                          <Download className="w-4 h-4" />
+                          Download Excel (Lead format)
+                        </a>
+                      </div>
+                      <p className="text-xs text-gray-500 mt-2">Import XML in ARIVE: + Loan → Import 3.4 file. Drop the Excel into your other platform.</p>
                     </div>
                   )}
                 </div>
                 <div className="pt-4 border-t border-gray-200">
                   <h4 className="text-sm font-medium text-gray-700 mb-2">Document verification (OCR)</h4>
+                  <p className="text-xs text-gray-500 mb-2">Uploaded documents are stored securely (MongoDB). Run OCR to compare document text with the application data below.</p>
                   <button
                     onClick={runOCR}
                     disabled={isRunningOCR || !application?.documents || application.documents.length === 0}
@@ -1163,32 +1175,6 @@ LOANATICKS - Home Mortgage Solutions`}
                 </p>
           </div>
 
-              {/* Instructions */}
-              <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
-                <h4 className="font-semibold text-blue-900 mb-2 flex items-center gap-2">
-                  <FileText className="w-5 h-5" />
-                  How to Use ARIVE POS
-                </h4>
-                <ul className="space-y-2 text-sm text-blue-800">
-                  <li className="flex items-start gap-2">
-                    <span className="font-bold mt-0.5">1.</span>
-                    <span>The iframe below displays ARIVE&apos;s Borrower Portal where borrowers complete their loan application</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="font-bold mt-0.5">2.</span>
-                    <span>You can invite borrowers by copying your unique POS URL or sending direct invitations</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="font-bold mt-0.5">3.</span>
-                    <span>Borrowers can complete the full 1003 application or just upload documents</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="font-bold mt-0.5">4.</span>
-                    <span>All submissions sync automatically with ARIVE&apos;s system</span>
-                  </li>
-                </ul>
-                    </div>
-
               {/* ARIVE Iframe Container */}
               <div className="bg-white rounded-xl shadow-lg overflow-hidden">
                 <div className="bg-gradient-to-r from-green-600 to-emerald-600 px-4 py-3 flex items-center justify-between">
@@ -1316,24 +1302,35 @@ LOANATICKS - Home Mortgage Solutions`}
                 </div>
               )}
 
-              {/* Download XML for ARIVE import */}
+              {/* Download XML / Excel for ARIVE import */}
               <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
                 <h4 className="font-bold text-gray-900 mb-2 flex items-center gap-2">
                   <FileText className="w-5 h-5 text-teal-600" />
                   Upload to ARIVE (no borrower re-entry)
                 </h4>
                 <p className="text-sm text-gray-600 mb-3">
-                  Download a MISMO 3.4 XML file with this application&apos;s borrower and loan data. In ARIVE, use <strong>+ Loan → Import 3.4 file</strong> to create the loan so the borrower doesn&apos;t have to enter everything again.
+                  Download borrower and loan data to import into ARIVE or another platform. XML: use <strong>+ Loan → Import 3.4 file</strong> in ARIVE. Excel: use the Lead-format sheet in your workflow.
                 </p>
-                <a
-                  href={`/api/loan-application/export-arive-xml?id=${application._id}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-3 bg-teal-600 text-white font-semibold rounded-lg hover:bg-teal-700"
-                >
-                  <Download className="w-5 h-5" />
-                  Download XML for ARIVE (3.4)
-                </a>
+                <div className="flex flex-wrap gap-3">
+                  <a
+                    href={`/api/loan-application/export-arive-xml?id=${application._id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-4 py-3 bg-teal-600 text-white font-semibold rounded-lg hover:bg-teal-700"
+                  >
+                    <Download className="w-5 h-5" />
+                    Download XML for ARIVE (3.4)
+                  </a>
+                  <a
+                    href={`/api/loan-application/export-lead-xlsx?id=${application._id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-4 py-3 bg-gray-700 text-white font-semibold rounded-lg hover:bg-gray-800"
+                  >
+                    <Download className="w-5 h-5" />
+                    Download Excel (Lead format)
+                  </a>
+                </div>
               </div>
 
               {/* Configuration Status */}

@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
 import { 
   Mail, 
   Phone, 
@@ -19,11 +18,8 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
           {/* Company Info */}
           <div className="space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="h-10 sm:h-12 flex items-center flex-shrink-0">
-                <img src="/logo.jpg" alt="LOANATICKS" className="h-full w-auto object-contain" />
-              </div>
-              <h3 className="text-2xl font-bold text-white tracking-tight">LOANATICKS</h3>
+            <div className="flex items-center flex-shrink-0">
+              <img src="/logo.jpg" alt="LOANATICKS" className="h-10 sm:h-12 w-auto object-contain" />
             </div>
             <p className="text-sm text-gray-400 leading-relaxed">
               Your trusted partner for home mortgage solutions. We provide competitive rates, 
@@ -193,7 +189,7 @@ export default function Footer() {
         {/* Equal Housing Opportunity & Fair Lending (federal compliance) */}
         <div className="mt-8 pt-6 border-t border-gray-700">
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mb-4">
-            <Image
+            <img
               src="/equal-housing-opportunity-logo-1200w.png"
               alt="Equal Housing Opportunity"
               width={120}

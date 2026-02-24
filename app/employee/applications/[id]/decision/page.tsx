@@ -90,11 +90,12 @@ export default function ApplicationDecision({ params }: { params: Promise<{ id: 
         alert(`Application ${decision} successfully!`);
         router.push(`/employee/applications/${resolvedParams.id}`);
       } else {
-        alert('Failed to submit decision');
+        const data = await response.json().catch(() => ({}));
+        alert(data?.error || 'Failed to submit decision');
       }
     } catch (error) {
       console.error('Error submitting decision:', error);
-      alert('Error submitting decision');
+      alert(error instanceof Error ? error.message : 'Error submitting decision');
     } finally {
       setSaving(false);
       setShowConfirm(false);
@@ -212,7 +213,7 @@ export default function ApplicationDecision({ params }: { params: Promise<{ id: 
           </div>
 
           {/* Decision Panel */}
-          <div className="space-y-6">
+          <div className="space-y-6 min-w-0 lg:min-w-[320px]">
             <div className="bg-white rounded-2xl shadow-sm p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-6">Make Decision</h3>
               
@@ -243,9 +244,9 @@ export default function ApplicationDecision({ params }: { params: Promise<{ id: 
                             decision === 'approved' ? 'text-white' : 'text-green-600'
                           }`} />
                         </div>
-                        <div className="flex-1 min-w-0">
+                        <div className="flex-1 min-w-0 overflow-hidden">
                           <p className="font-bold text-lg text-gray-900 mb-1">Approve Application</p>
-                          <p className="text-sm text-gray-600 break-words">Approve this mortgage loan application and proceed with funding.</p>
+                          <p className="text-sm text-gray-600">Approve this mortgage loan application and proceed with funding.</p>
                         </div>
                       </div>
                     </div>
@@ -280,9 +281,9 @@ export default function ApplicationDecision({ params }: { params: Promise<{ id: 
                             decision === 'rejected' ? 'text-white' : 'text-red-600'
                           }`} />
                         </div>
-                        <div className="flex-1 min-w-0">
+                        <div className="flex-1 min-w-0 overflow-hidden">
                           <p className="font-bold text-lg text-gray-900 mb-1">Reject Application</p>
-                          <p className="text-sm text-gray-600 break-words">Reject this mortgage loan application with detailed reasoning.</p>
+                          <p className="text-sm text-gray-600">Reject this mortgage loan application with detailed reasoning.</p>
                         </div>
                       </div>
                     </div>
@@ -303,7 +304,7 @@ export default function ApplicationDecision({ params }: { params: Promise<{ id: 
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
                     placeholder="Provide detailed reasoning for your decision..."
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition resize-none"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none transition resize-none text-gray-900 bg-white placeholder:text-gray-500"
                     rows={4}
                     required
                   />

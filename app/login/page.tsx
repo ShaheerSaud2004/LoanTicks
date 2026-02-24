@@ -138,11 +138,7 @@ export default function LoginPage() {
         <div className="w-full max-w-md mx-auto flex flex-col items-center gap-10">
           {/* Logo only */}
           <div className="text-white text-center">
-            <div className="flex justify-center mb-3">
-              <img src="/logo.jpg" alt="LOANATICKS" className="h-14 lg:h-16 w-auto object-contain" />
-            </div>
-            <h1 className="text-3xl lg:text-4xl font-semibold tracking-tight mb-1">LOANATICKS</h1>
-            <p className="text-slate-300 text-sm lg:text-base font-medium">Expert Loan Advisor</p>
+            <img src="/logo.jpg" alt="LOANATICKS" className="h-14 lg:h-16 w-auto object-contain" />
           </div>
 
           {/* Login Card */}
