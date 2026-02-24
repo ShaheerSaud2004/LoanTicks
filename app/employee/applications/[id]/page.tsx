@@ -125,6 +125,7 @@ export default function ApplicationView({ params }: { params: Promise<{ id: stri
     financialDetails: false,
   });
   const [approvalStatus, setApprovalStatus] = useState<'pending' | 'approved' | 'rejected'>('pending');
+  const [isSavingDecision, setIsSavingDecision] = useState(false);
   const [isRunningOCR, setIsRunningOCR] = useState(false);
   const [ocrResults, setOcrResults] = useState<{
     documentName: string;
@@ -205,8 +206,9 @@ export default function ApplicationView({ params }: { params: Promise<{ id: stri
     }
   };
 
-  // Save approval status to database
+  // Save approval status to database (used by header and Verification section)
   const saveApprovalStatus = async (status: 'pending' | 'approved' | 'rejected') => {
+    setIsSavingDecision(true);
     try {
       const response = await fetch('/api/loan-application', {
         method: 'PATCH',
@@ -222,11 +224,13 @@ export default function ApplicationView({ params }: { params: Promise<{ id: stri
       if (!response.ok) {
         console.error('Failed to save approval status');
       } else {
-        // Refresh application data
+        setApprovalStatus(status);
         await fetchApplication();
       }
     } catch (error) {
       console.error('Error saving approval status:', error);
+    } finally {
+      setIsSavingDecision(false);
     }
   };
 
@@ -568,6 +572,34 @@ export default function ApplicationView({ params }: { params: Promise<{ id: stri
                 <Printer className="w-4 h-4" />
                 Print application
               </a>
+              {/* Approve / Reject – saves to database via saveApprovalStatus */}
+              <div className="flex items-center gap-2 flex-wrap">
+                <button
+                  onClick={async () => { await saveApprovalStatus('approved'); }}
+                  disabled={isSavingDecision}
+                  className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl font-semibold text-sm transition disabled:opacity-60 ${
+                    approvalStatus === 'approved' ? 'bg-teal-600 text-white ring-2 ring-teal-300' : 'bg-white border border-gray-300 text-gray-700 hover:bg-teal-50 hover:border-teal-300'
+                  }`}
+                >
+                  {isSavingDecision ? <Loader className="w-4 h-4 animate-spin" /> : <ThumbsUp className="w-4 h-4" />} Approve
+                </button>
+                <button
+                  onClick={async () => { await saveApprovalStatus('rejected'); }}
+                  disabled={isSavingDecision}
+                  className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl font-semibold text-sm transition disabled:opacity-60 ${
+                    approvalStatus === 'rejected' ? 'bg-red-600 text-white ring-2 ring-red-300' : 'bg-white border border-gray-300 text-gray-700 hover:bg-red-50 hover:border-red-300'
+                  }`}
+                >
+                  {isSavingDecision ? <Loader className="w-4 h-4 animate-spin" /> : <ThumbsDown className="w-4 h-4" />} Reject
+                </button>
+                {approvalStatus !== 'pending' && (
+                  <span className={`px-3 py-1.5 rounded-full text-sm font-semibold ${
+                    approvalStatus === 'approved' ? 'bg-teal-100 text-teal-800' : 'bg-red-100 text-red-800'
+                  }`}>
+                    {approvalStatus.toUpperCase()}
+                  </span>
+                )}
+              </div>
               {getStatusBadge(application.status)}
               {application.decision && (
                 <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
