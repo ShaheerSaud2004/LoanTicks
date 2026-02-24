@@ -206,17 +206,19 @@ export default function ApplicationView({ params }: { params: Promise<{ id: stri
     }
   };
 
-  // Save approval status to database (used by header and Verification section)
+  // Save approval status to database via employee API (used by header and Verification section)
   const saveApprovalStatus = async (status: 'pending' | 'approved' | 'rejected') => {
     setIsSavingDecision(true);
     try {
-      const response = await fetch('/api/loan-application', {
+      const decisionStatus = status === 'approved' ? 'approved' : status === 'rejected' ? 'rejected' : 'under_review';
+      const response = await fetch('/api/employee/applications', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           applicationId: resolvedParams.id,
+          action: 'decision',
           decision: status,
-          status: status === 'approved' ? 'approved' : status === 'rejected' ? 'rejected' : 'under_review',
+          status: decisionStatus,
           decisionNotes: status !== 'pending' ? `Application ${status} by ${session?.user?.email}` : undefined,
         }),
       });
@@ -572,13 +574,13 @@ export default function ApplicationView({ params }: { params: Promise<{ id: stri
                 <Printer className="w-4 h-4" />
                 Print application
               </a>
-              {/* Approve / Reject – saves to database via saveApprovalStatus */}
+              {/* Approve / Reject – saves to DB via saveApprovalStatus (employee API) */}
               <div className="flex items-center gap-2 flex-wrap">
                 <button
                   onClick={async () => { await saveApprovalStatus('approved'); }}
                   disabled={isSavingDecision}
-                  className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl font-semibold text-sm transition disabled:opacity-60 ${
-                    approvalStatus === 'approved' ? 'bg-teal-600 text-white ring-2 ring-teal-300' : 'bg-white border border-gray-300 text-gray-700 hover:bg-teal-50 hover:border-teal-300'
+                  className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-sm transition disabled:opacity-60 ${
+                    approvalStatus === 'approved' ? 'bg-green-600 text-white ring-2 ring-green-300' : 'bg-white border-2 border-green-400 text-green-700 hover:bg-green-50'
                   }`}
                 >
                   {isSavingDecision ? <Loader className="w-4 h-4 animate-spin" /> : <ThumbsUp className="w-4 h-4" />} Approve
@@ -586,17 +588,17 @@ export default function ApplicationView({ params }: { params: Promise<{ id: stri
                 <button
                   onClick={async () => { await saveApprovalStatus('rejected'); }}
                   disabled={isSavingDecision}
-                  className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl font-semibold text-sm transition disabled:opacity-60 ${
-                    approvalStatus === 'rejected' ? 'bg-red-600 text-white ring-2 ring-red-300' : 'bg-white border border-gray-300 text-gray-700 hover:bg-red-50 hover:border-red-300'
+                  className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-sm transition disabled:opacity-60 ${
+                    approvalStatus === 'rejected' ? 'bg-red-600 text-white ring-2 ring-red-300' : 'bg-white border-2 border-red-400 text-red-700 hover:bg-red-50'
                   }`}
                 >
                   {isSavingDecision ? <Loader className="w-4 h-4 animate-spin" /> : <ThumbsDown className="w-4 h-4" />} Reject
                 </button>
                 {approvalStatus !== 'pending' && (
-                  <span className={`px-3 py-1.5 rounded-full text-sm font-semibold ${
-                    approvalStatus === 'approved' ? 'bg-teal-100 text-teal-800' : 'bg-red-100 text-red-800'
+                  <span className={`px-3 py-1.5 rounded-full text-sm font-bold uppercase ${
+                    approvalStatus === 'approved' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
                   }`}>
-                    {approvalStatus.toUpperCase()}
+                    {approvalStatus === 'approved' ? 'APPROVED' : 'REJECTED'}
                   </span>
                 )}
               </div>
