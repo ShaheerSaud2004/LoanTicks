@@ -243,11 +243,6 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Application not found' }, { status: 404 });
     }
 
-    const appUserId = (application.userId as any)?.toString?.() || application.userId;
-    if (session.user.role === 'customer' && appUserId !== session.user.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
     let ssnPlain = '';
     try {
       const raw = (application.borrowerInfo as any)?.ssn;
