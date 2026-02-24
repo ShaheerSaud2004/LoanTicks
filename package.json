@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build --turbopack",
+    "build": "next build",
     "build:vercel": "npm run test:ci && next build --turbopack",
     "start": "next start",
     "lint": "eslint .",
@@ -36,6 +36,7 @@
     "react-dom": "^19.2.3",
     "react-hook-form": "^7.65.0",
     "tesseract.js": "^7.0.0",
+    "xlsx": "^0.18.5",
     "zod": "^4.1.12"
   },
   "devDependencies": {

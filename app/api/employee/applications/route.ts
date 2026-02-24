@@ -14,8 +14,8 @@ async function appendApprovedLeadToSheet(application: any) {
     await mkdir(leadsDir, { recursive: true });
     const filePath = path.join(leadsDir, 'LeadSample.xlsx');
 
-    let wb: import('xlsx').WorkBook;
-    let ws: import('xlsx').WorkSheet | undefined;
+    let wb: any;
+    let ws: any;
     let rows: any[][] = [];
 
     try {
