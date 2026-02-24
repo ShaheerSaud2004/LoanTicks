@@ -153,10 +153,8 @@ export default function ApplicationView({ params }: { params: Promise<{ id: stri
           });
         }
         
-        // Load saved approval status
-        if (data.application.decision) {
-          setApprovalStatus(data.application.decision as 'pending' | 'approved' | 'rejected');
-        }
+        // Sync approval/decision from database so header Approve/Reject reflects saved state
+        setApprovalStatus((data.application.decision === 'approved' || data.application.decision === 'rejected' ? data.application.decision : 'pending') as 'pending' | 'approved' | 'rejected');
       } else {
         console.error('Failed to fetch application:', data.error || 'No application data');
         alert(`Could not load application: ${data.error || 'Application not found'}`);
@@ -574,8 +572,9 @@ export default function ApplicationView({ params }: { params: Promise<{ id: stri
                 <Printer className="w-4 h-4" />
                 Print application
               </a>
-              {/* Approve / Reject – saves to DB via saveApprovalStatus (employee API) */}
-              <div className="flex items-center gap-2 flex-wrap">
+              {/* Approve / Reject – saves to DB (PATCH /api/employee/applications); status + decision persisted */}
+              <div className="flex items-center gap-2 flex-wrap rounded-xl border-2 border-gray-200 bg-gray-50/80 px-3 py-2">
+                <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide mr-1">Decision</span>
                 <button
                   onClick={async () => { await saveApprovalStatus('approved'); }}
                   disabled={isSavingDecision}
@@ -594,24 +593,15 @@ export default function ApplicationView({ params }: { params: Promise<{ id: stri
                 >
                   {isSavingDecision ? <Loader className="w-4 h-4 animate-spin" /> : <ThumbsDown className="w-4 h-4" />} Reject
                 </button>
-                {approvalStatus !== 'pending' && (
-                  <span className={`px-3 py-1.5 rounded-full text-sm font-bold uppercase ${
-                    approvalStatus === 'approved' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                  }`}>
-                    {approvalStatus === 'approved' ? 'APPROVED' : 'REJECTED'}
-                  </span>
-                )}
-              </div>
-              {getStatusBadge(application.status)}
-              {application.decision && (
-                <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                  application.decision === 'approved' ? 'bg-green-100 text-green-800' :
-                  application.decision === 'rejected' ? 'bg-red-100 text-red-800' :
+                <span className={`px-3 py-1.5 rounded-full text-sm font-bold uppercase ${
+                  (application.decision === 'approved' || approvalStatus === 'approved') ? 'bg-green-100 text-green-800' :
+                  (application.decision === 'rejected' || approvalStatus === 'rejected') ? 'bg-red-100 text-red-800' :
                   'bg-yellow-100 text-yellow-800'
                 }`}>
-                  {application.decision.toUpperCase()}
+                  {(application.decision === 'approved' || approvalStatus === 'approved') ? 'APPROVED' : (application.decision === 'rejected' || approvalStatus === 'rejected') ? 'REJECTED' : 'PENDING'}
                 </span>
-              )}
+              </div>
+              {getStatusBadge(application.status)}
             </div>
           </div>
         </div>
