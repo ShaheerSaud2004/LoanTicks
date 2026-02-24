@@ -1,7 +1,115 @@
 import { NextRequest, NextResponse } from 'next/server';
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
 import { auth } from '@/lib/auth';
 import connectDB from '@/lib/mongodb';
 import LoanApplication from '@/models/LoanApplication';
+import * as XLSX from 'xlsx';
+import path from 'path';
+import { mkdir, readFile, writeFile } from 'fs/promises';
+
+async function appendApprovedLeadToSheet(application: any) {
+  try {
+    const leadsDir = path.join(process.cwd(), 'private', 'leads');
+    await mkdir(leadsDir, { recursive: true });
+    const filePath = path.join(leadsDir, 'LeadSample.xlsx');
+
+    let wb: XLSX.WorkBook;
+    let ws: XLSX.WorkSheet | undefined;
+    let rows: any[][] = [];
+
+    try {
+      const buf = await readFile(filePath);
+      wb = XLSX.read(buf, { type: 'buffer' });
+      ws = wb.Sheets['LeadSample'] || wb.Sheets[wb.SheetNames[0]];
+      if (ws) {
+        rows = XLSX.utils.sheet_to_json(ws, { header: 1 }) as any[][];
+      }
+    } catch {
+      wb = XLSX.utils.book_new();
+    }
+
+    if (!rows || rows.length === 0) {
+      rows = [[
+        'First Name',
+        'Middle Name',
+        'Last Name',
+        'Email',
+        'Phone',
+        'Cell',
+        'Property Address',
+        'Property City',
+        'Property State',
+        'Property ZIP',
+        'Loan Amount',
+        'Property Value',
+        'Status',
+        'Decision',
+        'Submitted At',
+        'Application ID',
+      ]];
+    }
+
+    const b: any = application.borrowerInfo || {};
+    const prop: any = application.propertyInfo || {};
+
+    const submittedAt = application.submittedAt || application.createdAt;
+    const submittedStr = submittedAt instanceof Date
+      ? submittedAt.toISOString()
+      : typeof submittedAt === 'string'
+        ? submittedAt
+        : '';
+
+    const newRow = [
+      b.firstName || '',
+      b.middleName || '',
+      b.lastName || '',
+      b.email || '',
+      b.phone || '',
+      b.cellPhone || '',
+      prop.propertyAddress || '',
+      prop.propertyCity || '',
+      prop.propertyState || '',
+      prop.propertyZipCode || '',
+      typeof prop.loanAmount === 'number' ? prop.loanAmount : Number(prop.loanAmount || 0),
+      typeof prop.propertyValue === 'number' ? prop.propertyValue : Number(prop.propertyValue || 0),
+      application.status || '',
+      application.decision || '',
+      submittedStr,
+      String(application._id),
+    ];
+
+    rows.push(newRow);
+
+    const newWs = XLSX.utils.aoa_to_sheet(rows);
+    (newWs as any)['!cols'] = [
+      { wch: 14 },
+      { wch: 14 },
+      { wch: 18 },
+      { wch: 28 },
+      { wch: 16 },
+      { wch: 16 },
+      { wch: 28 },
+      { wch: 18 },
+      { wch: 10 },
+      { wch: 10 },
+      { wch: 12 },
+      { wch: 13 },
+      { wch: 14 },
+      { wch: 12 },
+      { wch: 24 },
+      { wch: 28 },
+    ];
+    (newWs as any)['!autofilter'] = { ref: 'A1:P1' };
+
+    XLSX.utils.book_append_sheet(wb, newWs, 'LeadSample');
+
+    const out = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' }) as Buffer;
+    await writeFile(filePath, out);
+  } catch (err) {
+    console.error('Error appending approved lead to XLSX:', err);
+  }
+}
 
 export async function GET(request: NextRequest) {
   try {
@@ -103,6 +211,9 @@ export async function PATCH(request: NextRequest) {
           return NextResponse.json({ error: 'Decision and notes are required' }, { status: 400 });
         }
 
+        const wasPreviouslyApproved =
+          application.decision === 'approved' || application.status === 'approved';
+
         application.decision = updateData.decision;
         application.decisionNotes = updateData.decisionNotes;
         application.reviewedBy = session.user.id;
@@ -116,6 +227,11 @@ export async function PATCH(request: NextRequest) {
           changedAt: new Date(),
           notes: updateData.decisionNotes
         });
+
+        // If this is a fresh approval, append to lead XLSX sheet
+        if (updateData.decision === 'approved' && !wasPreviouslyApproved) {
+          await appendApprovedLeadToSheet(application);
+        }
         break;
 
       case 'update_status':

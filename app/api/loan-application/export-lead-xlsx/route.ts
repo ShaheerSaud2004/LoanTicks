@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
 import { auth } from '@/lib/auth';
 import connectDB from '@/lib/mongodb';
 import LoanApplication from '@/models/LoanApplication';
@@ -100,7 +102,7 @@ export async function GET(request: NextRequest) {
     const buffer = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' }) as Buffer;
     const filename = `LeadSample-${String(applicationId).slice(-8)}.xlsx`;
 
-    return new NextResponse(buffer, {
+    return new NextResponse(buffer as any, {
       status: 200,
       headers: {
         'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
