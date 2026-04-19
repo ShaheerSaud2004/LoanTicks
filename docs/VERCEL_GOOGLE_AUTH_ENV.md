@@ -1,46 +1,33 @@
 # Vercel Environment Variables for Google OAuth
 
-Based on your Google Cloud Console setup, add these environment variables in Vercel:
+Add these in Vercel → Project → Settings → Environment Variables (Production, Preview, and Development as needed). **Never commit real client IDs or secrets to the repository.**
 
-## Required Environment Variables
+## Required (Google sign-in)
 
-### 1. Google OAuth Client ID
-**Variable Name:** `GOOGLE_CLIENT_ID`  
-**Value:** `33527178411-enkioea0soptbbm3ms74ib3ks0u474i9.apps.googleusercontent.com`
+| Variable | Description |
+|----------|-------------|
+| `GOOGLE_CLIENT_ID` | OAuth 2.0 Client ID from Google Cloud Console |
+| `GOOGLE_CLIENT_SECRET` | OAuth 2.0 Client Secret from Google Cloud Console |
 
-### 2. Google OAuth Client Secret
-**Variable Name:** `GOOGLE_CLIENT_SECRET`  
-**Value:** `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`
+## How to add
 
-## How to Add in Vercel
+1. Open your [Vercel project](https://vercel.com/dashboard).
+2. **Settings** → **Environment Variables** → **Add New**.
+3. Paste the name and value, select environments, save.
+4. **Redeploy** the project so new values are available at runtime.
 
-1. Go to your Vercel project dashboard
-2. Navigate to **Settings** > **Environment Variables**
-3. Click **"Add New"**
-4. Add each variable:
-   - **Name:** `GOOGLE_CLIENT_ID`
-   - **Value:** `33527178411-enkioea0soptbbm3ms74ib3ks0u474i9.apps.googleusercontent.com`
-   - **Environment:** Select all (Production, Preview, Development)
-   - Click **"Save"**
+## Security
 
-5. Repeat for the secret:
-   - **Name:** `GOOGLE_CLIENT_SECRET`
-   - **Value:** `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`
-   - **Environment:** Select all (Production, Preview, Development)
-   - Click **"Save"**
+- Store secrets only in Vercel (or a secrets manager), not in git or chat logs.
+- If a secret was ever committed to a repo, **rotate it** in Google Cloud and update Vercel.
 
-## Important Notes
+## Optional: GitHub sign-in
 
-⚠️ **Security Warning:**
-- The Client Secret is sensitive - never commit it to git
-- Vercel encrypts these values automatically
-- Only add them in Vercel's dashboard, not in your code
+If you enable GitHub OAuth in the app, add either the Auth.js-style names or the explicit names (the code accepts both):
 
-## Verification
+| Variable | Alternative |
+|----------|-------------|
+| `AUTH_GITHUB_ID` | `GITHUB_ID` |
+| `AUTH_GITHUB_SECRET` | `GITHUB_SECRET` |
 
-Your Google Cloud Console shows these are already configured:
-- ✅ Authorized JavaScript origins include your domains
-- ✅ Authorized redirect URIs are set correctly
-- ✅ Client secret is enabled
-
-After adding these to Vercel, redeploy your application for the changes to take effect.
+Callback URL in GitHub OAuth App settings: `https://www.loanaticks.com/api/auth/callback/github` (and preview URLs if you use them).

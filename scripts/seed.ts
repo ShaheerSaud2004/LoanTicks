@@ -26,7 +26,7 @@ const demoUsers = [
   {
     name: 'Customer User',
     email: 'customer@loanaticks.com',
-    password: 'fo',
+    password: 'Customer123!@#',
     role: 'customer',
     phone: '+1-555-0103',
   },

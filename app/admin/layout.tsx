@@ -1,7 +1,7 @@
 import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 
-export default async function EmployeeLayout({
+export default async function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -12,7 +12,7 @@ export default async function EmployeeLayout({
     redirect('/login');
   }
 
-  if (session.user.role !== 'employee') {
+  if (session.user.role !== 'admin') {
     redirect('/login');
   }
 

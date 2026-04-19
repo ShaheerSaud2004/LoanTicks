@@ -19,6 +19,30 @@ export default async function CustomerDashboard() {
     redirect('/login');
   }
 
+  if (session.user.role === 'customer' && !session.user.isApproved) {
+    return (
+      <CustomerDashboardClient userRole={session.user.role}>
+        <DashboardLayout
+          userName={session.user.name || 'Customer'}
+          userRole={session.user.role}
+          userEmail={session.user.email || ''}
+        >
+          <div className="max-w-2xl rounded-2xl border border-yellow-200 bg-yellow-50 p-6 md:p-8 text-slate-900 shadow-sm">
+            <h1 className="text-xl md:text-2xl font-semibold mb-3">You are signed in</h1>
+            <p className="text-slate-700 leading-relaxed mb-4">
+              Your account is active but still needs administrator verification before you can start a loan
+              application or use full dashboard features.
+            </p>
+            <p className="text-sm text-slate-600">
+              Check back after you receive approval—we refresh your access from the server, so you can keep
+              using the same sign-in (email and password, Google, or GitHub).
+            </p>
+          </div>
+        </DashboardLayout>
+      </CustomerDashboardClient>
+    );
+  }
+
   // Fetch real loan applications
   let recentApplications = [];
   

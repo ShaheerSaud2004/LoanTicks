@@ -3,6 +3,7 @@ import connectDB from '@/lib/mongodb';
 import User from '@/models/User';
 import { sanitizeObject } from '@/lib/inputSanitizer';
 import { applicationRateLimiter } from '@/lib/rateLimiter';
+import { isCustomerAutoApproveEnabled } from '@/lib/customerAutoApprove';
 
 export async function POST(request: NextRequest) {
   // Apply rate limiting
@@ -70,7 +71,7 @@ export async function POST(request: NextRequest) {
       phone: sanitizedData.phone,
       role: 'customer', // Sign up is ONLY for customers - admins/employees are created by admin
       provider: 'credentials',
-      isApproved: false, // Requires admin approval
+      isApproved: isCustomerAutoApproveEnabled(),
     });
 
     await newUser.save();

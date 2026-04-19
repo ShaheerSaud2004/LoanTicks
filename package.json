@@ -17,7 +17,9 @@
     "pdf-from-html": "node scripts/pdf-from-html.js",
     "test": "jest --coverage",
     "test:watch": "jest --watch",
-    "test:ci": "jest --ci --coverage --maxWorkers=2"
+    "test:ci": "jest --ci --coverage --maxWorkers=2",
+    "smoke:prod": "node scripts/prod-smoke-browser.mjs",
+    "smoke:prod:ui": "SMOKE_SKIP_GOOGLE_OAUTH=1 node scripts/prod-smoke-browser.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

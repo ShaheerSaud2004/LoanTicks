@@ -3,6 +3,8 @@ import '@/lib/ensureAuthEnv';
 import NextAuth, { DefaultSession } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
+import GitHubProvider from 'next-auth/providers/github';
+import { isCustomerAutoApproveEnabled } from '@/lib/customerAutoApprove';
 
 export type UserRole = 'admin' | 'employee' | 'customer';
 
@@ -13,11 +15,14 @@ declare module 'next-auth' {
       role: UserRole;
       email: string;
       name: string;
+      /** Mirrors MongoDB; refreshed from DB on each session read. */
+      isApproved: boolean;
     } & DefaultSession['user'];
   }
 
   interface User {
     role: UserRole;
+    isApproved?: boolean;
   }
 }
 
@@ -43,14 +48,119 @@ if (process.env.NODE_ENV === 'production') {
   }
 }
 
+/** Absolute or site-relative URL for custom auth error messages (OAuth denials). */
+function authErrorUrl(errorCode: string): string {
+  const base = (process.env.AUTH_URL || process.env.NEXTAUTH_URL || '').replace(/\/$/, '');
+  const qs = new URLSearchParams({ error: errorCode }).toString();
+  return base ? `${base}/auth/error?${qs}` : `/auth/error?${qs}`;
+}
+
+async function authorizeOAuthUser(
+  oauthProvider: 'google' | 'github',
+  user: { email?: string | null; name?: string | null },
+  providerAccountId: string
+): Promise<true | string> {
+  if (!user.email) {
+    return authErrorUrl('OAuthEmailRequired');
+  }
+
+  try {
+    const connectDB = (await import('@/lib/mongodb')).default;
+    const User = (await import('@/models/User')).default;
+
+    await connectDB();
+
+    const emailLower = user.email.toLowerCase();
+    let dbUser = await User.findOne({
+      $or: [{ email: emailLower }, { providerId: providerAccountId }],
+    });
+
+    if (!dbUser) {
+      const displayName =
+        (typeof user.name === 'string' && user.name.trim()) ||
+        emailLower.split('@')[0] ||
+        'Customer';
+      const doc = new User({
+        name: displayName,
+        email: emailLower,
+        role: 'customer',
+        provider: oauthProvider,
+        providerId: providerAccountId,
+        isApproved: isCustomerAutoApproveEnabled(),
+      });
+      try {
+        await doc.save();
+        return true;
+      } catch (err: unknown) {
+        const dup =
+          typeof err === 'object' &&
+          err !== null &&
+          'code' in err &&
+          (err as { code: number }).code === 11000;
+        if (dup) {
+          dbUser = await User.findOne({
+            $or: [{ email: emailLower }, { providerId: providerAccountId }],
+          });
+          if (!dbUser) {
+            return authErrorUrl('OAuthDatabaseError');
+          }
+        } else {
+          console.error(`${oauthProvider} OAuth create user:`, err);
+          return authErrorUrl('OAuthDatabaseError');
+        }
+      }
+    }
+
+    if (dbUser) {
+      dbUser.provider = oauthProvider;
+      dbUser.providerId = providerAccountId;
+      if (!dbUser.name?.trim() && user.name?.trim()) {
+        dbUser.name = user.name.trim();
+      }
+      await dbUser.save();
+    }
+
+    return true;
+  } catch (error) {
+    console.error(`${oauthProvider} OAuth error:`, error);
+    return authErrorUrl('OAuthDatabaseError');
+  }
+}
+
+const googleClientId = process.env.GOOGLE_CLIENT_ID?.trim();
+const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET?.trim();
+const githubClientId = (
+  process.env.AUTH_GITHUB_ID ||
+  process.env.GITHUB_ID ||
+  ''
+).trim();
+const githubClientSecret = (
+  process.env.AUTH_GITHUB_SECRET ||
+  process.env.GITHUB_SECRET ||
+  ''
+).trim();
+
 export const { handlers, signIn, signOut, auth } = NextAuth({
   secret: authSecret,
   providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID || '',
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
-      allowDangerousEmailAccountLinking: true, // Allow linking accounts with same email
-    }),
+    ...(googleClientId && googleClientSecret
+      ? [
+          GoogleProvider({
+            clientId: googleClientId,
+            clientSecret: googleClientSecret,
+            allowDangerousEmailAccountLinking: true,
+          }),
+        ]
+      : []),
+    ...(githubClientId && githubClientSecret
+      ? [
+          GitHubProvider({
+            clientId: githubClientId,
+            clientSecret: githubClientSecret,
+            allowDangerousEmailAccountLinking: true,
+          }),
+        ]
+      : []),
     CredentialsProvider({
       name: 'Credentials',
       credentials: {
@@ -103,12 +213,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             throw new Error('Invalid email or password');
           }
 
-          // Check if user is approved (only for non-admin users)
-          if (user.role !== 'admin' && !user.isApproved) {
-            throw new Error('Your account is pending admin approval. Please wait for approval before signing in.');
-          }
-
-          // Only log success in development, never in production
+          // Pending approval: still sign in; staff dashboards gate on isApproved.
           if (process.env.NODE_ENV === 'development') {
             console.log('✓ Login successful');
           }
@@ -118,6 +223,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             email: user.email,
             name: user.name,
             role: user.role,
+            isApproved: user.isApproved,
           };
         } catch (error) {
           console.error('Authorization error:', error);
@@ -131,50 +237,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   callbacks: {
-    async signIn({ user, account, profile: _profile }) {
-      // Handle Google OAuth sign-in
-      if (account?.provider === 'google') {
-        try {
-          const connectDB = (await import('@/lib/mongodb')).default;
-          const User = (await import('@/models/User')).default;
-          
-          await connectDB();
-          
-          // Check if user exists
-          const existingUser = await User.findOne({ 
-            $or: [
-              { email: user.email?.toLowerCase() },
-              { providerId: account.providerAccountId }
-            ]
-          });
-          
-          if (existingUser) {
-            // Update existing user with Google provider info
-            existingUser.provider = 'google';
-            existingUser.providerId = account.providerAccountId;
-            if (!existingUser.name && user.name) {
-              existingUser.name = user.name;
-            }
-            await existingUser.save();
-            
-            // Check approval status
-            if (existingUser.role !== 'admin' && !existingUser.isApproved) {
-              // Block sign-in - NextAuth will redirect to error page with AccessDenied
-              // Error page will show pending approval message
-              return false;
-            }
-            // User exists and is approved - allow sign in
-            return true;
-          } else {
-            // User doesn't exist - don't auto-create, block sign-in
-            // NextAuth will redirect to error page with AccessDenied
-            // Error page will show "account not found, please sign up" message
-            return false;
-          }
-        } catch (error) {
-          console.error('Google OAuth error:', error);
-          return false;
+    async signIn({ user, account }) {
+      const provider = account?.provider;
+      if (provider === 'google' || provider === 'github') {
+        const providerAccountId = account?.providerAccountId;
+        if (!providerAccountId) {
+          return authErrorUrl('OAuthConfiguration');
         }
+        return authorizeOAuthUser(provider, user, providerAccountId);
       }
       return true;
     },
@@ -183,9 +253,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.role = user.role;
         token.id = user.id;
       }
-      
-      // For Google OAuth, fetch user from DB to get latest approval status
-      if (account?.provider === 'google' && user?.email) {
+
+      if (
+        (account?.provider === 'google' || account?.provider === 'github') &&
+        user?.email
+      ) {
         try {
           const connectDB = (await import('@/lib/mongodb')).default;
           const User = (await import('@/models/User')).default;
@@ -199,14 +271,37 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           console.error('Error fetching user in JWT callback:', error);
         }
       }
-      
+
       return token;
     },
     async session({ session, token }) {
-      if (session.user && token.role && token.id) {
+      if (!session.user || !token.id) {
+        return session;
+      }
+
+      try {
+        const connectDB = (await import('@/lib/mongodb')).default;
+        const User = (await import('@/models/User')).default;
+        await connectDB();
+        const dbUser = await User.findById(token.id).select('role isApproved name email').lean();
+        if (dbUser) {
+          session.user.id = String(dbUser._id);
+          session.user.role = dbUser.role as UserRole;
+          session.user.email = dbUser.email;
+          session.user.name = dbUser.name;
+          session.user.isApproved = Boolean(dbUser.isApproved);
+        } else {
+          session.user.role = token.role as UserRole;
+          session.user.id = token.id as string;
+          session.user.isApproved = false;
+        }
+      } catch (error) {
+        console.error('Session hydrate error:', error);
         session.user.role = token.role as UserRole;
         session.user.id = token.id as string;
+        session.user.isApproved = false;
       }
+
       return session;
     },
   },

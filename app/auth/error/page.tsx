@@ -49,6 +49,28 @@ function ErrorContent() {
             href: "/login",
           },
         };
+      case 'OAuthEmailRequired':
+        return {
+          title: "Email Required",
+          message:
+            "Your OAuth account did not return a verified email. Add a public email on your provider profile or grant email permission, then try again.",
+          icon: <AlertCircle className="w-16 h-16 text-yellow-500" />,
+          primaryAction: { text: "Back to Login", href: "/login" },
+        };
+      case 'OAuthDatabaseError':
+        return {
+          title: "Sign-In Unavailable",
+          message: "We could not reach the account database. Please try again in a few minutes.",
+          icon: <AlertCircle className="w-16 h-16 text-red-500" />,
+          primaryAction: { text: "Back to Login", href: "/login" },
+        };
+      case 'OAuthConfiguration':
+        return {
+          title: "Configuration Error",
+          message: "Sign-in with this provider is not configured correctly. Please contact support.",
+          icon: <AlertCircle className="w-16 h-16 text-red-500" />,
+          primaryAction: { text: "Back to Login", href: "/login" },
+        };
       default:
         return {
           title: "Authentication Error",

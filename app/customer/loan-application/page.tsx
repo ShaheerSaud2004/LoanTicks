@@ -41,6 +41,13 @@ export default function LoanApplicationPage() {
     }
   }, [status, router]);
 
+  useEffect(() => {
+    if (status !== 'authenticated' || !session?.user) return;
+    if (session.user.isApproved === false) {
+      router.replace('/customer/dashboard');
+    }
+  }, [status, session, router]);
+
   // Check if user has seen the intro modal before
   useEffect(() => {
     if (status === 'authenticated' && session) {

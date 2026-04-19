@@ -1,68 +1,42 @@
 # Google OAuth: Which Domain to Use?
 
-## Answer: Add BOTH Domains! ✅
+## Use one canonical site URL
 
-You should add **both** redirect URIs in Google Cloud Console so both domains work:
+Set **`NEXTAUTH_URL`** (and optionally **`AUTH_URL`**) in Vercel to the **exact** origin users use in the browser, for example:
 
-1. **Vercel domain:** `https://loanticks.vercel.app/api/auth/callback/google`
-2. **Custom domain:** `https://loanaticks.com/api/auth/callback/google`
-
-## Setup Instructions
-
-### Step 1: Set NEXTAUTH_URL in Vercel
-
-Set `NEXTAUTH_URL` to your **primary domain** (custom domain):
-
-```
-NEXTAUTH_URL=https://loanaticks.com
+```bash
+NEXTAUTH_URL=https://www.loanaticks.com
+AUTH_URL=https://www.loanaticks.com
 ```
 
-**Why?** This is your main domain, so use it as the primary.
+Your middleware redirects `loanaticks.com` → `www.loanaticks.com`, so the canonical production URL should include **`www`** to match cookies and OAuth redirects.
 
-### Step 2: Add BOTH Redirect URIs in Google Cloud Console
+## Google Cloud Console: Authorized redirect URIs
 
-1. Go to [Google Cloud Console](https://console.cloud.google.com/)
-2. **APIs & Services** → **Credentials**
-3. Click your OAuth Client ID
-4. In **"Authorized redirect URIs"**, add **ALL** of these:
+Add every origin where users can sign in (each becomes `{origin}/api/auth/callback/google`):
 
 ```
 http://localhost:3000/api/auth/callback/google
-https://loanticks.vercel.app/api/auth/callback/google
+https://<your-vercel-project>.vercel.app/api/auth/callback/google
+https://www.loanaticks.com/api/auth/callback/google
 https://loanaticks.com/api/auth/callback/google
 ```
 
-### Step 3: Why Both?
+The list must include the origin implied by `NEXTAUTH_URL`, or Google will return **`redirect_uri_mismatch`**.
 
-- **Vercel domain** (`loanticks.vercel.app`): Works for preview deployments and testing
-- **Custom domain** (`loanaticks.com`): Your production domain
-- **Localhost**: For local development
+## Vercel variables (example placeholders only)
 
-## How It Works
-
-With `trustHost: true` in your NextAuth config:
-- ✅ Both domains will work
-- ✅ NextAuth automatically detects which domain is being used
-- ✅ Google OAuth will work on whichever domain the user visits
-
-## Recommended Setup
-
-**Vercel Environment Variables:**
-```
-NEXTAUTH_URL=https://loanaticks.com  (Primary - your custom domain)
-GOOGLE_CLIENT_ID=33527178411-enkioea0soptbbm3ms74ib3ks0u474i9.apps.googleusercontent.com
-GOOGLE_CLIENT_SECRET=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
+```bash
+NEXTAUTH_URL=https://www.loanaticks.com
+GOOGLE_CLIENT_ID=<from Google Cloud Console>
+GOOGLE_CLIENT_SECRET=<from Google Cloud Console>
+NEXTAUTH_SECRET=<long random string, 32+ characters>
+MONGODB_URI=<your MongoDB connection string>
 ```
 
-**Google Cloud Console - Authorized redirect URIs:**
-```
-http://localhost:3000/api/auth/callback/google
-https://loanticks.vercel.app/api/auth/callback/google
-https://loanaticks.com/api/auth/callback/google
-```
+Never commit real `GOOGLE_CLIENT_*` or `NEXTAUTH_SECRET` values to git.
 
 ## Summary
 
-- **NEXTAUTH_URL**: Set to `https://loanaticks.com` (your custom domain)
-- **Google Console**: Add redirect URIs for **both** domains
-- **Result**: Both domains will work for Google OAuth! ✅
+- **`NEXTAUTH_URL`**: Must match the live site origin (recommended: `https://www.loanaticks.com`).
+- **Google Console**: Register redirect URIs for localhost, Vercel preview/production, and both apex and `www` if you use them.

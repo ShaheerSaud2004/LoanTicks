@@ -13,7 +13,7 @@ export interface IUser extends Document {
   isApproved: boolean; // Admin approval status
   approvedBy?: string; // Admin user ID who approved
   approvedAt?: Date; // When approved
-  provider?: 'credentials' | 'google'; // Auth provider
+  provider?: 'credentials' | 'google' | 'github'; // Auth provider
   providerId?: string; // OAuth provider user ID
   createdAt: Date;
   updatedAt: Date;
@@ -67,7 +67,7 @@ const UserSchema = new Schema<IUser>(
     },
     provider: {
       type: String,
-      enum: ['credentials', 'google'],
+      enum: ['credentials', 'google', 'github'],
       default: 'credentials',
     },
     providerId: {

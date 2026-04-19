@@ -10,6 +10,7 @@ const nextConfig: NextConfig = {
   // URL can trigger auth errors because the client calls the wrong origin.
   env: {
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
+    AUTH_URL: process.env.AUTH_URL,
   },
 };
 

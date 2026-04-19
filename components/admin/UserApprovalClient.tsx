@@ -193,7 +193,11 @@ export default function UserApprovalClient({ pendingUsers, approvedUsers, userNa
                       </div>
                       {user.provider && (
                         <span className="px-2 py-1 bg-slate-100 rounded text-xs font-medium">
-                          {user.provider === 'google' ? 'Google' : 'Email'}
+                          {user.provider === 'google'
+                            ? 'Google'
+                            : user.provider === 'github'
+                              ? 'GitHub'
+                              : 'Email'}
                         </span>
                       )}
                       <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs font-medium">

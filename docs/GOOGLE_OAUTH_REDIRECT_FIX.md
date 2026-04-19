@@ -16,7 +16,7 @@ Error: `redirect_uri_mismatch` means the redirect URI in Google Cloud Console do
 
 1. Go to [Google Cloud Console](https://console.cloud.google.com/)
 2. Navigate to **APIs & Services** > **Credentials**
-3. Click on your OAuth 2.0 Client ID: `33527178411-enkioea0soptbbm3ms74ib3ks0u474i9`
+3. Click your OAuth 2.0 Client ID (Web application)
 4. Scroll to **"Authorized redirect URIs"**
 5. **DELETE all existing redirect URIs**
 6. **Add these EXACT URIs** (replace with your actual domain):
@@ -25,6 +25,7 @@ Error: `redirect_uri_mismatch` means the redirect URI in Google Cloud Console do
 http://localhost:3000/api/auth/callback/google
 https://loanticks.vercel.app/api/auth/callback/google
 https://loanaticks.com/api/auth/callback/google
+https://www.loanaticks.com/api/auth/callback/google
 ```
 
 **CRITICAL - Must be EXACT:**

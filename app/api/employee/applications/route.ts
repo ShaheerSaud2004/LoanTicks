@@ -8,6 +8,7 @@ import path from 'path';
 import { mkdir, readFile, writeFile } from 'fs/promises';
 
 import { LEAD_HEADERS, buildLeadRow } from '@/lib/leadColumns';
+import { rejectUnapprovedStaff } from '@/lib/rejectUnapprovedStaff';
 
 async function appendApprovedLeadToSheet(application: any, ownerEmail: string) {
   try {
@@ -44,10 +45,13 @@ async function appendApprovedLeadToSheet(application: any, ownerEmail: string) {
 export async function GET(request: NextRequest) {
   try {
     const session = await auth();
-    
+
     if (!session || session.user.role !== 'employee') {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
+
+    const staffPending = rejectUnapprovedStaff(session);
+    if (staffPending) return staffPending;
 
     await connectDB();
 
@@ -99,10 +103,13 @@ export async function GET(request: NextRequest) {
 export async function PATCH(request: NextRequest) {
   try {
     const session = await auth();
-    
+
     if (!session || (session.user.role !== 'employee' && session.user.role !== 'admin')) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
+
+    const staffPendingPatch = rejectUnapprovedStaff(session);
+    if (staffPendingPatch) return staffPendingPatch;
 
     await connectDB();
 
@@ -239,10 +246,13 @@ export async function PATCH(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const session = await auth();
-    
+
     if (!session || session.user.role !== 'employee') {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
+
+    const staffPendingPost = rejectUnapprovedStaff(session);
+    if (staffPendingPost) return staffPendingPost;
 
     await connectDB();
 
