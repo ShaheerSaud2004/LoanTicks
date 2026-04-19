@@ -33,13 +33,13 @@ declare module 'next-auth' {
   }
 }
 
-// Read secret after ensureAuthEnv so AUTH_SECRET is set from NEXTAUTH_SECRET if needed
-const authSecret = (process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET)?.trim() || undefined;
+// Read secret after ensureAuthEnv (warnings only; actual secret is read per-request in NextAuth() below).
 if (process.env.NODE_ENV === 'production') {
+  const s = (process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET)?.trim();
   if (!process.env.NEXTAUTH_URL) {
     console.warn('⚠️  NEXTAUTH_URL should be set to your production URL (e.g. https://www.loanaticks.com).');
   }
-  if (!authSecret || authSecret.length < 32) {
+  if (!s || s.length < 32) {
     console.warn(
       '⚠️  AUTH_SECRET or NEXTAUTH_SECRET must be set in production (32+ chars). ' +
       'Set in Vercel → Settings → Environment Variables for Production, then redeploy. ' +
@@ -127,20 +127,26 @@ async function authorizeOAuthUser(
   }
 }
 
-const googleClientId = process.env.GOOGLE_CLIENT_ID?.trim();
-const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET?.trim();
-const githubClientId = (
-  process.env.AUTH_GITHUB_ID ||
-  process.env.GITHUB_ID ||
-  ''
-).trim();
-const githubClientSecret = (
-  process.env.AUTH_GITHUB_SECRET ||
-  process.env.GITHUB_SECRET ||
-  ''
-).trim();
+/**
+ * Lazy config: read OAuth env vars on each request so Vercel runtime secrets are visible.
+ * If we read GOOGLE_* only at module load, `next build` often has no secrets and Google is omitted from the bundle.
+ */
+export const { handlers, signIn, signOut, auth } = NextAuth(() => {
+  const googleClientId = process.env.GOOGLE_CLIENT_ID?.trim();
+  const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET?.trim();
+  const githubClientId = (
+    process.env.AUTH_GITHUB_ID ||
+    process.env.GITHUB_ID ||
+    ''
+  ).trim();
+  const githubClientSecret = (
+    process.env.AUTH_GITHUB_SECRET ||
+    process.env.GITHUB_SECRET ||
+    ''
+  ).trim();
+  const authSecret = (process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET)?.trim() || undefined;
 
-export const { handlers, signIn, signOut, auth } = NextAuth({
+  return {
   secret: authSecret,
   providers: [
     ...(googleClientId && googleClientSecret
@@ -314,6 +320,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   trustHost: true,
   debug: process.env.NODE_ENV === 'development',
+  };
 });
 
 
