@@ -9,6 +9,7 @@
     "start": "next start",
     "lint": "eslint .",
     "seed": "tsx scripts/seed.ts",
+    "upsert:user": "tsx scripts/upsert-user.ts",
     "seed:test": "tsx scripts/seed-test-data.ts",
     "seed:demo": "tsx scripts/seed-demo-application.ts",
     "add:test-doc": "tsx scripts/add-test-document.ts",
