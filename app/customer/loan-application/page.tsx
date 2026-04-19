@@ -123,34 +123,7 @@ export default function LoanApplicationPage() {
 
       const phone =
         String(formData.cellPhone || formData.homePhone || '').trim() || '';
-      const purchaseOrValue = Number(
-        formData.purchasePrice || formData.propertyValue || 0
-      );
-      const missing: string[] = [];
-      if (!String(formData.firstName || '').trim()) missing.push('first name');
-      if (!String(formData.lastName || '').trim()) missing.push('last name');
-      if (!String(formData.email || '').trim()) missing.push('email');
-      if (!phone) missing.push('phone number');
-      if (!String(formData.dateOfBirth || '').trim()) missing.push('date of birth');
-      if (!String(formData.ssn || '').trim()) missing.push('Social Security number');
-      if (!String(formData.currentStreet || '').trim()) missing.push('current street address');
-      if (!String(formData.currentCity || '').trim()) missing.push('current city');
-      if (!String(formData.currentState || '').trim()) missing.push('current state');
-      if (!String(formData.currentZipCode || '').trim()) missing.push('current ZIP code');
-      if (!String(formData.propertyAddress || '').trim()) missing.push('property street address');
-      if (!String(formData.propertyCity || '').trim()) missing.push('property city');
-      if (!String(formData.propertyState || '').trim()) missing.push('property state');
-      if (!String(formData.propertyZipCode || '').trim()) missing.push('property ZIP code');
-      if (!purchaseOrValue || purchaseOrValue <= 0) missing.push('purchase price or property value');
-      if (!Number(formData.loanAmount || 0)) missing.push('loan amount');
-      if (!formData.creditPullConsent) missing.push('credit pull consent');
-      if (missing.length > 0) {
-        alert(
-          `Please complete the following before submitting:\n\n• ${missing.join('\n• ')}\n\nIncomplete applications cannot be processed.`
-        );
-        setSaving(false);
-        return;
-      }
+      // Required-field checks run in URLA2019ComprehensiveForm.validateForm() before onSubmit is called.
 
       // Transform the comprehensive form data to match the API structure – store all fields for employees/admins
       const applicationData = {
@@ -179,11 +152,11 @@ export default function LoanApplicationPage() {
           preferredContactMethod: formData.preferredContactMethod || 'phone',
           },
           currentAddress: {
-          street: formData.currentStreet || '123 Main St',
+          street: String(formData.currentStreet || '').trim(),
           unit: formData.currentUnit ? String(formData.currentUnit).trim() : '',
-          city: formData.currentCity || 'Los Angeles',
-          state: formData.currentState || 'CA',
-          zipCode: formData.currentZipCode || '90001',
+          city: String(formData.currentCity || '').trim(),
+          state: String(formData.currentState || '').trim(),
+          zipCode: String(formData.currentZipCode || '').trim(),
           residencyType: formData.currentHousing || 'own',
           monthlyPayment: Number(formData.currentMonthlyPayment) || 0,
           yearsAtAddress: Number(formData.yearsAtCurrentAddress) || 1,

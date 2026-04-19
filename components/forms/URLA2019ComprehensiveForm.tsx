@@ -374,11 +374,13 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
 
   const validateForm = (): { isValid: boolean; missingFields: string[] } => {
     const missingFields: string[] = [];
+    const ssnDigits = (formData.ssn || '').replace(/\D/g, '');
 
     // Section 1: Borrower Information
     if (!formData.firstName?.trim()) missingFields.push('First Name');
     if (!formData.lastName?.trim()) missingFields.push('Last Name');
     if (!formData.ssn?.trim()) missingFields.push('Social Security Number');
+    else if (ssnDigits.length !== 9) missingFields.push('Social Security Number (enter all 9 digits, e.g. XXX-XX-XXXX)');
     if (!formData.dateOfBirth) missingFields.push('Date of Birth');
     if (!formData.creditType) missingFields.push('Credit Type');
     if (!formData.maritalStatus) missingFields.push('Marital Status');
@@ -409,11 +411,22 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
 
     // Section 5: Employment
     if (!formData.employmentStatus) missingFields.push('Employment Status');
-    if (formData.employmentStatus === 'employed') {
-      if (!formData.employerName?.trim()) missingFields.push('Employer Name');
+    if (formData.employmentStatus === 'employed' || formData.employmentStatus === 'self_employed') {
+      if (!formData.employerName?.trim()) {
+        missingFields.push(
+          formData.employmentStatus === 'self_employed'
+            ? 'Business / self-employment name'
+            : 'Employer Name'
+        );
+      }
       if (!formData.position?.trim()) missingFields.push('Position/Title');
       if (!formData.yearsEmployed?.trim()) missingFields.push('Years in Line of Work');
       if (!formData.monthlyIncome?.trim() && !formData.totalMonthlyIncome?.trim()) missingFields.push('Monthly Income');
+    }
+    if (formData.employmentStatus === 'retired' || formData.employmentStatus === 'other') {
+      if (!formData.monthlyIncome?.trim() && !formData.totalMonthlyIncome?.trim() && !formData.grossMonthlyIncome?.trim()) {
+        missingFields.push('Monthly Income (from retirement, benefits, or other sources)');
+      }
     }
     
     // Previous Employment (if less than 2 years at current)
@@ -437,8 +450,8 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
     // Section 8: Liabilities
     // Not strictly required, but should be filled if they exist
 
-    // Section 9: Property Information
-    // Street address is optional; city, state, ZIP are required
+    // Section 9: Property Information (subject property — street required for URLA)
+    if (!formData.propertyAddress?.trim()) missingFields.push('Property Street Address');
     if (!formData.propertyCity?.trim()) missingFields.push('Property City');
     if (!formData.propertyState?.trim()) missingFields.push('Property State');
     if (!formData.propertyZipCode?.trim()) missingFields.push('Property ZIP Code');
@@ -475,7 +488,9 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
     
     if (!validation.isValid) {
       setMissingFields(validation.missingFields);
-      setValidationError('Hold up! Please make sure you fill out the stuff!');
+      setValidationError(
+        'This application cannot be submitted until all required fields are complete. Review the list below, go back to the relevant steps, and fill in anything missing.'
+      );
       return;
     }
 
