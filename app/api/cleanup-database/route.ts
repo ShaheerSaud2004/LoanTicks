@@ -1,57 +1,58 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
-import User from '@/models/User';
-import LoanApplication from '@/models/LoanApplication';
+import { auth } from '@/lib/auth';
+import { cleanupDemoUsersAndRelatedData } from '@/lib/cleanupDemoData';
 
-export async function POST() {
+/**
+ * Admin-only: remove known demo/test users and *their* loan applications + chatbot rows.
+ * Pass JSON body `{ "includeSeedAccounts": true }` to also remove admin@ / employee@ / customer@ seed users.
+ */
+export async function POST(request: NextRequest) {
   try {
+    const session = await auth();
+    if (!session?.user || session.user.role !== 'admin') {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const secret = process.env.CLEANUP_DATABASE_SECRET?.trim();
+    if (secret) {
+      const header = request.headers.get('x-cleanup-secret')?.trim();
+      if (header !== secret) {
+        return NextResponse.json(
+          { error: 'Forbidden', message: 'Invalid or missing x-cleanup-secret header.' },
+          { status: 403 }
+        );
+      }
+    }
+
+    let includeSeedAccounts = false;
+    try {
+      const body = (await request.json()) as { includeSeedAccounts?: boolean };
+      includeSeedAccounts = body.includeSeedAccounts === true;
+    } catch {
+      // no body is fine
+    }
+
     await connectDB();
 
-    // Delete all test/demo users (keep only real users)
-    const testEmails = [
-      'testcustomer@example.com',
-      'testemployee@loanticks.com',
-      'sarah.customer@loanticks.com',
-      'michael.customer@loanticks.com',
-      'emily.customer@loanticks.com',
-      'david.customer@loanticks.com',
-      'john.employee@loanticks.com',
-      'lisa.employee@loanticks.com',
-      'admin.demo@loanticks.com',
-      'john.smith@loanticks.com',
-      'sarah.johnson@loanticks.com',
-      'mike.davis@loanticks.com',
-      'admin@loanaticks.com',
-      'employee@loanaticks.com',
-      'customer@loanaticks.com',
-    ];
-
-    const deletedUsers = await User.deleteMany({
-      email: { $in: testEmails }
-    });
-
-    // Delete all loan applications
-    const deletedApplications = await LoanApplication.deleteMany({});
-
-    // Optionally clear waitlist (comment out if you want to keep waitlist entries)
-    // const deletedWaitlist = await Waitlist.deleteMany({});
+    const result = await cleanupDemoUsersAndRelatedData({ includeSeedAccounts });
 
     return NextResponse.json({
       success: true,
-      message: 'Database cleaned successfully',
+      message: 'Demo/test data cleaned (scoped to known emails only).',
       deleted: {
-        users: deletedUsers.deletedCount,
-        applications: deletedApplications.deletedCount,
-        // waitlist: deletedWaitlist.deletedCount,
-      }
+        users: result.deletedUsers,
+        applications: result.deletedApplications,
+        chatbotConversations: result.deletedChatbotConversations,
+      },
+      removedEmails: result.removedEmails,
     });
-
   } catch (error) {
     console.error('Error cleaning database:', error);
     return NextResponse.json(
-      { 
+      {
         error: 'Failed to clean database',
-        details: error instanceof Error ? error.message : 'Unknown error'
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 }
     );

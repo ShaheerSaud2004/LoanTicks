@@ -114,63 +114,60 @@ export default function LoanApplicationPage() {
     setDocumentsUploadedCount(0);
     try {
       const documents = formData.uploadedDocuments as File[];
-      console.log('Submitting loan application...', {
-        ...formData,
-        documentCount: documents ? documents.length : 0,
-        documentNames: documents ? documents.map((f: File) => f.name) : []
-      });
-      
-      // Auto-fill with random data if form is mostly empty
-      const isEmptyForm = !formData.firstName || !formData.lastName || !formData.email;
-      
-      if (isEmptyForm) {
-        const randomNames = ['John', 'Sarah', 'Michael', 'Jennifer', 'Robert', 'Emily', 'David', 'Jessica'];
-        const randomLastNames = ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia', 'Miller', 'Davis'];
-        const randomCities = ['Los Angeles', 'San Francisco', 'San Diego', 'Sacramento', 'San Jose'];
-        const randomStates = ['CA', 'TX', 'FL', 'NY', 'IL'];
-        
-        const randomFirst = randomNames[Math.floor(Math.random() * randomNames.length)];
-        const randomLast = randomLastNames[Math.floor(Math.random() * randomLastNames.length)];
-        
-        formData.firstName = formData.firstName || randomFirst;
-        formData.lastName = formData.lastName || randomLast;
-        formData.email = formData.email || `${randomFirst.toLowerCase()}.${randomLast.toLowerCase()}@example.com`;
-        formData.cellPhone = formData.cellPhone || `(555) ${Math.floor(Math.random() * 900 + 100)}-${Math.floor(Math.random() * 9000 + 1000)}`;
-        formData.ssn = formData.ssn || `${Math.floor(Math.random() * 900 + 100)}-${Math.floor(Math.random() * 90 + 10)}-${Math.floor(Math.random() * 9000 + 1000)}`;
-        formData.dateOfBirth = formData.dateOfBirth || '1985-06-15';
-        formData.creditScore = formData.creditScore || Math.floor(Math.random() * (850 - 580) + 580);
-        formData.currentStreet = formData.currentStreet || `${Math.floor(Math.random() * 9999 + 1)} Main Street`;
-        formData.currentCity = formData.currentCity || randomCities[Math.floor(Math.random() * randomCities.length)];
-        formData.currentState = formData.currentState || randomStates[Math.floor(Math.random() * randomStates.length)];
-        formData.currentZipCode = formData.currentZipCode || `${Math.floor(Math.random() * 90000 + 10000)}`;
-        formData.employerName = formData.employerName || 'Sample Corporation';
-        formData.position = formData.position || 'Professional';
-        formData.totalMonthlyIncome = formData.totalMonthlyIncome || Math.floor(Math.random() * 10000 + 5000);
-        formData.propertyAddress = formData.propertyAddress || `${Math.floor(Math.random() * 9999 + 1)} Property Lane`;
-        formData.propertyCity = formData.propertyCity || randomCities[Math.floor(Math.random() * randomCities.length)];
-        formData.propertyState = formData.propertyState || randomStates[Math.floor(Math.random() * randomStates.length)];
-        formData.propertyZipCode = formData.propertyZipCode || `${Math.floor(Math.random() * 90000 + 10000)}`;
-        formData.propertyValue = formData.propertyValue || Math.floor(Math.random() * 500000 + 300000);
-        formData.loanAmount = formData.loanAmount || Math.floor(Number(formData.propertyValue) * 0.8);
-        formData.loanPurpose = formData.loanPurpose || 'purchase';
+      if (process.env.NODE_ENV === 'development') {
+        console.log('Submitting loan application…', {
+          documentCount: documents?.length ?? 0,
+          documentNames: documents?.map((f: File) => f.name) ?? [],
+        });
       }
-      
+
+      const phone =
+        String(formData.cellPhone || formData.homePhone || '').trim() || '';
+      const purchaseOrValue = Number(
+        formData.purchasePrice || formData.propertyValue || 0
+      );
+      const missing: string[] = [];
+      if (!String(formData.firstName || '').trim()) missing.push('first name');
+      if (!String(formData.lastName || '').trim()) missing.push('last name');
+      if (!String(formData.email || '').trim()) missing.push('email');
+      if (!phone) missing.push('phone number');
+      if (!String(formData.dateOfBirth || '').trim()) missing.push('date of birth');
+      if (!String(formData.ssn || '').trim()) missing.push('Social Security number');
+      if (!String(formData.currentStreet || '').trim()) missing.push('current street address');
+      if (!String(formData.currentCity || '').trim()) missing.push('current city');
+      if (!String(formData.currentState || '').trim()) missing.push('current state');
+      if (!String(formData.currentZipCode || '').trim()) missing.push('current ZIP code');
+      if (!String(formData.propertyAddress || '').trim()) missing.push('property street address');
+      if (!String(formData.propertyCity || '').trim()) missing.push('property city');
+      if (!String(formData.propertyState || '').trim()) missing.push('property state');
+      if (!String(formData.propertyZipCode || '').trim()) missing.push('property ZIP code');
+      if (!purchaseOrValue || purchaseOrValue <= 0) missing.push('purchase price or property value');
+      if (!Number(formData.loanAmount || 0)) missing.push('loan amount');
+      if (!formData.creditPullConsent) missing.push('credit pull consent');
+      if (missing.length > 0) {
+        alert(
+          `Please complete the following before submitting:\n\n• ${missing.join('\n• ')}\n\nIncomplete applications cannot be processed.`
+        );
+        setSaving(false);
+        return;
+      }
+
       // Transform the comprehensive form data to match the API structure – store all fields for employees/admins
       const applicationData = {
           status: 'submitted',
           borrowerInfo: {
-          firstName: formData.firstName || 'Test',
-            middleName: formData.middleName || '',
-          lastName: formData.lastName || 'User',
+          firstName: String(formData.firstName).trim(),
+            middleName: formData.middleName ? String(formData.middleName).trim() : '',
+          lastName: String(formData.lastName).trim(),
           suffix: formData.suffix || '',
-          email: formData.email || 'test@example.com',
-          phone: String(formData.cellPhone || formData.homePhone || '').trim() || '(555) 000-0000',
+          email: String(formData.email).trim().toLowerCase(),
+          phone,
           workPhone: formData.workPhone ? String(formData.workPhone).trim() : undefined,
           cellPhone: formData.cellPhone ? String(formData.cellPhone).trim() : undefined,
           alternatePhone: formData.alternatePhone ? String(formData.alternatePhone).trim() : undefined,
           creditPullConsent: !!formData.creditPullConsent,
             dateOfBirth: formData.dateOfBirth ? new Date(formData.dateOfBirth as string) : new Date('1990-01-01'),
-          ssn: formData.ssn || '000-00-0000',
+          ssn: String(formData.ssn).trim(),
             maritalStatus: formData.maritalStatus || 'unmarried',
             dependents: Number(formData.dependents) || 0,
           dependentAges: formData.dependentAges ? String(formData.dependentAges).trim() : undefined,

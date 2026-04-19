@@ -1,51 +1,25 @@
 #!/usr/bin/env node
 
 /**
- * Database Cleanup Script
- * 
- * This script cleans up all test/demo data from the database.
- * Run with: node scripts/cleanup-db.js
- * 
- * Or use the API endpoint: POST /api/cleanup-database
+ * Legacy helper: POST /api/cleanup-database now requires an **admin** session
+ * (and optional header `x-cleanup-secret` if CLEANUP_DATABASE_SECRET is set).
+ *
+ * Prefer direct DB cleanup from your machine:
+ *   CLEANUP_CONFIRM=YES npx tsx scripts/cleanup-test-data.ts
+ *
+ * Optional: INCLUDE_SEED_ACCOUNTS=true to also remove seed users (admin@ / employee@ / customer@).
  */
 
-const fetch = require('node-fetch');
+console.log(`
+Database cleanup (demo/test users only)
 
-async function cleanupDatabase() {
-  const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
-  const url = `${baseUrl}/api/cleanup-database`;
+1) CLI (uses MONGODB_URI from .env.local):
+   CLEANUP_CONFIRM=YES npm run cleanup:test-data
 
-  try {
-    console.log('🧹 Starting database cleanup...');
-    console.log(`📡 Calling: ${url}\n`);
+2) HTTP (must be logged in as admin in the browser; same-origin fetch from /admin):
+   POST /api/cleanup-database
+   Body (optional): { "includeSeedAccounts": true }
+   Header (if set in Vercel): x-cleanup-secret: <CLEANUP_DATABASE_SECRET>
+`);
 
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-
-    const data = await response.json();
-
-    if (response.ok) {
-      console.log('✅ Database cleaned successfully!\n');
-      console.log('Deleted:');
-      console.log(`  - Users: ${data.deleted.users}`);
-      console.log(`  - Applications: ${data.deleted.applications}`);
-      console.log('\n✨ Database is now clean and ready for your test data!');
-    } else {
-      console.error('❌ Error cleaning database:', data.error);
-      if (data.details) {
-        console.error('Details:', data.details);
-      }
-      process.exit(1);
-    }
-  } catch (error) {
-    console.error('❌ Failed to connect to server:', error.message);
-    console.error('\n💡 Make sure the dev server is running: npm run dev');
-    process.exit(1);
-  }
-}
-
-cleanupDatabase();
+process.exit(0);
