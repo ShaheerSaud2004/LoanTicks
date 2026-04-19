@@ -12,11 +12,11 @@ describe('PWAInstaller', () => {
         matches: false,
         media: query,
         onchange: null,
-        addListener: vi.fn(),
-        removeListener: vi.fn(),
-        addEventListener: vi.fn(),
-        removeEventListener: vi.fn(),
-        dispatchEvent: vi.fn(),
+        addListener: jest.fn(),
+        removeListener: jest.fn(),
+        addEventListener: jest.fn(),
+        removeEventListener: jest.fn(),
+        dispatchEvent: jest.fn(),
       })),
     });
   });
@@ -39,9 +39,9 @@ describe('PWAInstaller', () => {
   });
 
   it('should show install prompt when beforeinstallprompt event fires', async () => {
-    const mockPrompt = vi.fn().mockResolvedValue({ outcome: 'accepted' });
+    const mockPrompt = jest.fn().mockResolvedValue({ outcome: 'accepted' });
     const mockEvent = {
-      preventDefault: vi.fn(),
+      preventDefault: jest.fn(),
       prompt: mockPrompt,
       userChoice: Promise.resolve({ outcome: 'accepted' }),
     };
@@ -61,7 +61,7 @@ describe('PWAInstaller', () => {
   it('should call prompt when install button is clicked', async () => {
     const mockPrompt = jest.fn().mockResolvedValue({ outcome: 'accepted' });
     const mockEvent = {
-      preventDefault: vi.fn(),
+      preventDefault: jest.fn(),
       prompt: mockPrompt,
       userChoice: Promise.resolve({ outcome: 'accepted' }),
     };
@@ -74,9 +74,11 @@ describe('PWAInstaller', () => {
     window.dispatchEvent(event);
 
     await waitFor(() => {
-      const installButton = screen.getByText(/Install/i);
-      fireEvent.click(installButton);
+      expect(
+        screen.getByRole('button', { name: /^Install$/i })
+      ).toBeInTheDocument();
     });
+    fireEvent.click(screen.getByRole('button', { name: /^Install$/i }));
 
     expect(mockPrompt).toHaveBeenCalled();
   });

@@ -429,8 +429,12 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
       }
     }
     
-    // Previous Employment (if less than 2 years at current)
-    if (parseInt(String(formData.yearsEmployed || '0'), 10) < 2) {
+    // Previous Employment (URLA: only when employed/self-employed and <2 years in line of work)
+    const needsPriorEmployment =
+      (formData.employmentStatus === 'employed' ||
+        formData.employmentStatus === 'self_employed') &&
+      parseInt(String(formData.yearsEmployed || '0'), 10) < 2;
+    if (needsPriorEmployment) {
       if (!formData.previousEmployerName?.trim()) missingFields.push('Previous Employer Name');
       if (!formData.previousPosition?.trim()) missingFields.push('Previous Position');
       if (!formData.previousYearsEmployed?.trim()) missingFields.push('Years at Previous Job');
@@ -1370,7 +1374,19 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
         );
 
       case 4: // Current Employment
-        return (
+        {
+          const isW2Style =
+            formData.employmentStatus === 'employed' ||
+            formData.employmentStatus === 'self_employed';
+          const intro =
+            formData.employmentStatus === 'self_employed'
+              ? 'Provide your self-employment details. Use your business legal name where the form asks for employer. If you have been self-employed in this line of work for less than 2 years, you will provide prior employment in the next step.'
+              : formData.employmentStatus === 'retired'
+                ? 'You indicated you are retired. Enter your ongoing monthly income from retirement accounts, pensions, Social Security, or other sources in the Income section (next steps). Employer fields do not apply.'
+                : formData.employmentStatus === 'other'
+                  ? 'You indicated “other” (not employed in a traditional job). Describe your situation in Additional Information if needed, and enter your monthly income from all sources in the Income section.'
+                  : 'Provide complete details about your current employment. This information is used to verify your income and employment stability. If you have been at your current job for less than 2 years, you will need to provide previous employment information in the next section.';
+          return (
           <div className="space-y-6">
             <div className="bg-gradient-to-r from-teal-50 to-teal-50 border-2 border-teal-300 rounded-2xl p-6 sm:p-8">
               <h3 className="font-bold text-teal-900 mb-3 text-xl sm:text-2xl flex items-center gap-3">
@@ -1378,79 +1394,133 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
                 Section 5a: Current Employment
               </h3>
               <p className="text-teal-800 text-base sm:text-lg leading-relaxed">
-                Provide complete details about your current employment. This information is used to verify your income and employment stability. If you have been at your current job for less than 2 years, you will need to provide previous employment information in the next section.
+                {intro}
               </p>
             </div>
             <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 space-y-6">
+              <div>
+                <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2" htmlFor="employmentStatus">
+                  Employment status *
+                </label>
+                <p className="text-sm text-gray-600 mb-2">
+                  Select the option that best matches how you earn income today (matches URLA employment type).
+                </p>
+                <select
+                  id="employmentStatus"
+                  value={formData.employmentStatus}
+                  onChange={(e) =>
+                    handleInputChange(
+                      'employmentStatus',
+                      e.target.value as 'employed' | 'self_employed' | 'retired' | 'other'
+                    )
+                  }
+                  className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900 cursor-pointer touch-manipulation min-h-[56px] bg-white"
+                >
+                  <option value="employed">Employed (W-2 or similar)</option>
+                  <option value="self_employed">Self-employed</option>
+                  <option value="retired">Retired</option>
+                  <option value="other">Other (not employed in a traditional job)</option>
+                </select>
+              </div>
+
+            {isW2Style ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
-                  Employer Name *
+                  {formData.employmentStatus === 'self_employed' ? 'Business name *' : 'Employer name *'}
                   <span className="group relative inline-block">
                     <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
                     <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 invisible group-hover:visible shadow-lg">
-                      Enter the full legal name of your current employer as it appears on your pay stubs and W-2 forms. If self-employed, enter your business name or "Self-Employed".
+                      {formData.employmentStatus === 'self_employed'
+                        ? 'Legal business name or your name as shown on tax returns for self-employment.'
+                        : 'Full legal name of your employer as on pay stubs and W-2 forms.'}
                     </span>
                   </span>
                 </label>
-                <p className="text-sm text-gray-600 mb-2">Enter your current employer's full legal name.</p>
+                <p className="text-sm text-gray-600 mb-2">
+                  {formData.employmentStatus === 'self_employed'
+                    ? 'Your business or professional entity name.'
+                    : "Your current employer's full legal name."}
+                </p>
                 <input type="text" value={formData.employerName} onChange={(e) => handleInputChange('employerName', e.target.value)} className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900" required />
               </div>
               <div>
                 <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
-                  Position/Title *
+                  Position / title *
                   <span className="group relative inline-block">
                     <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
                     <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 invisible group-hover:visible shadow-lg">
-                      Enter your current job title or position (e.g., Software Engineer, Sales Manager, Teacher). This should match what appears on your pay stubs and employment verification.
+                      Job title or role (e.g., Software Engineer). For self-employed, your role in the business (e.g., Owner, Principal).
                     </span>
                   </span>
                 </label>
-                <p className="text-sm text-gray-600 mb-2">Enter your current job title or position.</p>
+                <p className="text-sm text-gray-600 mb-2">Your current job title or position.</p>
                 <input type="text" value={formData.position} onChange={(e) => handleInputChange('position', e.target.value)} className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900" required />
               </div>
               <div>
                 <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
-                  Years in Line of Work *
+                  Years in line of work *
                   <span className="group relative inline-block">
                     <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
                     <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 invisible group-hover:visible shadow-lg">
-                      Enter the total number of years you have worked in your current profession or line of work (not just at your current employer). This demonstrates career stability. If less than 2 years, you'll need to provide previous employment details.
+                      Total years in this profession or line of work (not only at your current employer). If less than 2 years, you will provide previous employment next.
                     </span>
                   </span>
                 </label>
-                <p className="text-sm text-gray-600 mb-2">How many years have you worked in this profession?</p>
+                <p className="text-sm text-gray-600 mb-2">How many years in this line of work?</p>
                 <input type="number" value={formData.yearsEmployed} onChange={(e) => handleInputChange('yearsEmployed', e.target.value)} min="0" className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900" required />
               </div>
               <div>
                 <label className="block text-base sm:text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
-                  Work Phone
+                  Work phone
                   <span className="group relative inline-block">
                     <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
                     <span className="absolute left-0 bottom-full mb-2 w-72 p-3 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 invisible group-hover:visible shadow-lg">
-                      Enter your work phone number including area code (e.g., 555-123-4567). This is used for employment verification. If you don't have a work phone, you can leave this blank.
+                      Work phone for verification. Optional if not applicable.
                     </span>
                   </span>
                 </label>
-                <p className="text-sm text-gray-600 mb-2">Enter your work phone number (optional).</p>
+                <p className="text-sm text-gray-600 mb-2">Optional.</p>
                 <input type="tel" value={formData.workPhone} onChange={(e) => handleInputChange('workPhone', e.target.value)} placeholder="555-123-4567" className="w-full px-5 py-4 text-base sm:text-lg border-2 border-gray-300 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 focus:outline-none transition text-gray-900" />
               </div>
               </div>
+            ) : (
+              <div className="rounded-xl border border-teal-200 bg-teal-50/80 p-5 text-teal-900 text-sm sm:text-base leading-relaxed">
+                Continue to <strong>Income</strong> to enter monthly amounts from retirement, benefits, investments, or other sources. Upload supporting documents (e.g., award letters, bank statements, tax returns) when you reach the documents step.
+              </div>
+            )}
             </div>
           </div>
         );
+        }
 
-      case 5: // Previous Employment  
+      case 5: // Previous Employment
+        {
+          const employedOrSelfPrior =
+            formData.employmentStatus === 'employed' ||
+            formData.employmentStatus === 'self_employed';
+          const yearsInLinePrior = parseInt(String(formData.yearsEmployed || '0'), 10);
         return (
           <div className="space-y-6">
             <div className="bg-teal-50 border-2 border-teal-200 rounded-xl p-4">
               <h3 className="font-bold text-teal-900 mb-2">Section 5b: Previous Employment</h3>
-              <p className="text-teal-800 text-sm">If less than 2 years at current job, provide previous employment</p>
+              <p className="text-teal-800 text-sm">
+                {employedOrSelfPrior
+                  ? 'If you have been in this line of work for less than 2 years, provide your prior employer.'
+                  : 'Prior employer details apply when you are employed or self-employed with less than 2 years in your current line of work.'}
+              </p>
             </div>
-            {parseInt(formData.yearsEmployed) >= 2 ? (
+            {!employedOrSelfPrior ? (
+              <div className="text-center py-8 px-4">
+                <CheckCircle className="w-12 h-12 text-teal-600 mx-auto mb-4" />
+                <p className="text-gray-700 max-w-lg mx-auto">
+                  No prior employment section is required for your selected employment status. Use the Income and Documents steps for retirement or other income sources.
+                </p>
+              </div>
+            ) : yearsInLinePrior >= 2 ? (
               <div className="text-center py-8">
                 <CheckCircle className="w-12 h-12 text-teal-600 mx-auto mb-4" />
-                <p className="text-gray-600">No previous employment needed (2+ years at current job)</p>
+                <p className="text-gray-600">No previous employment needed (2+ years in this line of work)</p>
               </div>
             ) : (
               <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 space-y-6">
@@ -1523,6 +1593,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
             )}
           </div>
         );
+        }
 
       case 6: // Income Details
         return (

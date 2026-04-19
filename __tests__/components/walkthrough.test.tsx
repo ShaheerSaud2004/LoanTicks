@@ -39,6 +39,15 @@ const mockElement = {
 describe('DashboardWalkthrough', () => {
   const mockOnComplete = jest.fn();
 
+  /** Next is disabled briefly while the walkthrough scroll animation runs. */
+  async function clickNextWhenReady() {
+    await waitFor(() => {
+      const next = screen.getByRole('button', { name: /^Next$/i });
+      expect(next).not.toBeDisabled();
+    });
+    fireEvent.click(screen.getByRole('button', { name: /^Next$/i }));
+  }
+
   beforeEach(() => {
     localStorageMock.clear();
     jest.clearAllMocks();
@@ -125,7 +134,7 @@ describe('DashboardWalkthrough', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/Step 1 of 5/i)).toBeInTheDocument();
+      expect(document.body.textContent).toMatch(/Step\s*1\s*of\s*5/);
     });
   });
 
@@ -140,11 +149,10 @@ describe('DashboardWalkthrough', () => {
       expect(screen.getByText(/Welcome to Your Dashboard/i)).toBeInTheDocument();
     });
 
-    const nextButton = screen.getByText(/Next/i);
-    fireEvent.click(nextButton);
+    await clickNextWhenReady();
 
     await waitFor(() => {
-      expect(screen.getByText(/Step 2 of 5/i)).toBeInTheDocument();
+      expect(document.body.textContent).toMatch(/Step\s*2\s*of\s*5/);
     });
   });
 
@@ -155,19 +163,16 @@ describe('DashboardWalkthrough', () => {
       <DashboardWalkthrough role="customer" onComplete={mockOnComplete} />
     );
 
-    await waitFor(() => {
-      const nextButton = screen.getByText(/Next/i);
-      fireEvent.click(nextButton);
-    });
+    await clickNextWhenReady();
 
     await waitFor(() => {
-      const prevButton = screen.getByText(/Previous/i);
+      const prevButton = screen.getByRole('button', { name: /Previous/i });
       expect(prevButton).not.toBeDisabled();
       fireEvent.click(prevButton);
     });
 
     await waitFor(() => {
-      expect(screen.getByText(/Step 1 of 5/i)).toBeInTheDocument();
+      expect(document.body.textContent).toMatch(/Step\s*1\s*of\s*5/);
     });
   });
 
@@ -179,7 +184,7 @@ describe('DashboardWalkthrough', () => {
     );
 
     await waitFor(() => {
-      const prevButton = screen.getByText(/Previous/i);
+      const prevButton = screen.getByRole('button', { name: /Previous/i });
       expect(prevButton).toBeDisabled();
     });
   });
@@ -191,16 +196,13 @@ describe('DashboardWalkthrough', () => {
       <DashboardWalkthrough role="customer" onComplete={mockOnComplete} />
     );
 
-    // Navigate to last step
-    await waitFor(() => {
-      const nextButton = screen.getByText(/Next/i);
-      for (let i = 0; i < 4; i++) {
-        fireEvent.click(nextButton);
-      }
-    });
+    for (let i = 0; i < 4; i++) {
+      // eslint-disable-next-line no-await-in-loop
+      await clickNextWhenReady();
+    }
 
     await waitFor(() => {
-      expect(screen.getByText(/Got it!/i)).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /Got it!/i })).toBeInTheDocument();
     });
   });
 
@@ -211,20 +213,24 @@ describe('DashboardWalkthrough', () => {
       <DashboardWalkthrough role="customer" onComplete={mockOnComplete} />
     );
 
-    // Navigate to last step
-    await waitFor(() => {
-      const nextButton = screen.getByText(/Next/i);
-      for (let i = 0; i < 4; i++) {
-        fireEvent.click(nextButton);
-      }
-    });
+    for (let i = 0; i < 4; i++) {
+      // eslint-disable-next-line no-await-in-loop
+      await clickNextWhenReady();
+    }
 
     await waitFor(() => {
-      const gotItButton = screen.getByText(/Got it!/i);
-      fireEvent.click(gotItButton);
+      const gotIt = screen.getByRole('button', { name: /Got it!/i });
+      expect(gotIt).toBeInTheDocument();
+      expect(gotIt).not.toBeDisabled();
     });
+    fireEvent.click(screen.getByRole('button', { name: /Got it!/i }));
 
-    expect(localStorageMock.getItem('walkthrough_customer_completed')).toBe('true');
+    await waitFor(
+      () => {
+        expect(localStorageMock.getItem('walkthrough_customer_completed')).toBe('true');
+      },
+      { timeout: 4000 }
+    );
     expect(mockOnComplete).toHaveBeenCalled();
   });
 
@@ -252,8 +258,8 @@ describe('DashboardWalkthrough', () => {
     );
 
     await waitFor(() => {
-      const progressBar = document.querySelector('[class*="bg-yellow-500"]');
-      expect(progressBar).toBeInTheDocument();
+      const bars = document.querySelectorAll('.bg-yellow-500.h-2.rounded-full');
+      expect(bars.length).toBeGreaterThan(0);
     });
   });
 });
