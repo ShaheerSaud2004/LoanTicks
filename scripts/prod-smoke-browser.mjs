@@ -7,6 +7,13 @@
  * Optional credential E2E (do not commit secrets — pass via env):
  *   SMOKE_TEST_EMAIL=you@gmail.com SMOKE_TEST_PASSWORD='...' node scripts/prod-smoke-browser.mjs
  *
+ * Local DB after `npm run seed` (same users must exist in the target DB):
+ *   customer@loanaticks.com / Customer123!@#
+ *   employee@loanaticks.com / Employee123!@#
+ *   admin@loanaticks.com / Admin123!@#$
+ *
+ * Against local dev: SMOKE_BASE_URL=http://localhost:3000 SMOKE_TEST_EMAIL=... npm run smoke:prod
+ *
  * Optional link crawl (same-origin paths from home + static checklist):
  *   SMOKE_LINK_CRAWL=1 node scripts/prod-smoke-browser.mjs
  */
@@ -216,14 +223,13 @@ async function credentialLoginFlow(page, email, password, results) {
 
   if (!session?.user) {
     const onLogin = finalUrl.includes('/login');
-    results.push({
-      credentialLoginNote: onLogin
-        ? 'No session while still on /login: wrong password, user missing in MongoDB, or UI error text not detected. Seed users (`npm run seed` with prod MONGODB_URI) or create this account in Atlas.'
-        : loginError === 'CredentialsSignin'
-          ? 'Invalid email/password or account missing in this database.'
-          : 'Session empty — see loginQueryError on credentialLogin.',
-    });
-    return;
+    const hint = onLogin
+      ? 'No session while still on /login: wrong password, user missing in MongoDB, or UI error text not detected. Seed users (`npm run seed` with prod MONGODB_URI) or create this account in Atlas.'
+      : loginError === 'CredentialsSignin'
+        ? 'Invalid email/password or account missing in this database.'
+        : 'Session empty — see loginQueryError on credentialLogin.';
+    results.push({ credentialLoginNote: hint });
+    throw new Error(`Credential smoke failed for ${email}: ${hint}`);
   }
 
   const { role } = session.user;
