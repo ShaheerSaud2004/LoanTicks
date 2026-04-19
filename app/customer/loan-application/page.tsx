@@ -649,7 +649,7 @@ export default function LoanApplicationPage() {
                   onClick={() => router.push('/customer/dashboard')}
                   className="h-10 sm:h-12 flex items-center cursor-pointer"
                 >
-                  <img src="/logo.jpg" alt="LOANATICKS" className="h-full w-auto object-contain" />
+                  <img src="/logo.svg" alt="LOANATICKS" className="h-full w-auto object-contain" />
                 </button>
                 
                 {/* Navigation Menu */}
@@ -994,7 +994,7 @@ export default function LoanApplicationPage() {
                 onClick={() => router.push('/customer/dashboard')}
                 className="h-10 sm:h-12 flex items-center cursor-pointer"
               >
-                <img src="/logo.jpg" alt="LOANATICKS" className="h-full w-auto object-contain" />
+                <img src="/logo.svg" alt="LOANATICKS" className="h-full w-auto object-contain" />
               </button>
               
               {/* Navigation Menu */}

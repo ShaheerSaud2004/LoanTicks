@@ -5,7 +5,7 @@ const urlsToCache = [
   '/login',
   '/customer/dashboard',
   '/customer/loan-application',
-  '/logo.jpg',
+  '/logo.svg',
   '/manifest.json'
 ];
 

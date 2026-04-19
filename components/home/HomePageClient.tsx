@@ -62,7 +62,7 @@ export default function HomePageClient() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
             <Link href="/" className="flex items-center flex-shrink-0">
-              <img src="/logo.jpg" alt="LOANATICKS" className="h-10 sm:h-12 w-auto object-contain" />
+              <img src="/logo.svg" alt="LOANATICKS" className="h-10 sm:h-12 w-auto object-contain" />
             </Link>
             <button
               type="button"
@@ -148,7 +148,7 @@ export default function HomePageClient() {
           </p>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { value: '24–48 hrs', label: 'Typical application review' },
+              { value: '24-48 hrs', label: 'Typical application review' },
               { value: 'NMLS #2724157', label: 'Licensed in State of TX' },
               { value: 'Secure', label: 'Encrypted application & docs' },
               { value: 'Dedicated', label: 'Personal loan officer support' },
@@ -172,7 +172,7 @@ export default function HomePageClient() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
               { title: 'Apply in minutes', desc: 'One simple application. We guide you step by step and tell you exactly what we need.' },
-              { title: 'Fast review', desc: 'We typically review your application within 24–48 hours and keep you updated by email.' },
+              { title: 'Fast review', desc: 'We typically review your application within 24-48 hours and keep you updated by email.' },
               { title: 'No surprises', desc: 'Transparent rates, no hidden fees, and a dedicated point of contact so you always know where you stand.' },
             ].map((item, i) => (
               <div key={i} className="bg-white rounded-xl p-6 shadow-sm border border-slate-200">

@@ -2474,7 +2474,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
           {/* Logo Header */}
           <div className="flex justify-center mb-6">
             <div className="h-14 sm:h-16 flex items-center">
-              <img src="/logo.jpg" alt="LOANATICKS" className="h-full w-auto object-contain" />
+              <img src="/logo.svg" alt="LOANATICKS" className="h-full w-auto object-contain" />
             </div>
           </div>
         

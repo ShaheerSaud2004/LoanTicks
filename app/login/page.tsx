@@ -145,7 +145,7 @@ export default function LoginPage() {
         <div className="w-full max-w-md mx-auto flex flex-col items-center gap-10">
           {/* Logo only */}
           <div className="text-white text-center">
-            <img src="/logo.jpg" alt="LOANATICKS" className="h-14 lg:h-16 w-auto object-contain" />
+            <img src="/logo.svg" alt="LOANATICKS" className="h-14 lg:h-16 w-auto object-contain" />
           </div>
 
           {/* Login Card */}
@@ -258,7 +258,7 @@ export default function LoginPage() {
             {/* Sign Up Link */}
             <div className="text-center mt-6">
               <p className="text-sm text-slate-600">
-                Don't have an account?{' '}
+                {"Don't have an account? "}
                 <a href="/signup" className="font-semibold text-slate-900 hover:text-yellow-600 transition-colors">
                   Sign up
                 </a>

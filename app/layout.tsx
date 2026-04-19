@@ -17,8 +17,8 @@ export const metadata: Metadata = {
     title: "loanaticks",
   },
   icons: {
-    icon: "/logo.jpg",
-    apple: "/logo.jpg",
+    icon: "/logo.svg",
+    apple: "/logo.svg",
   },
 };
 
@@ -38,8 +38,12 @@ export default async function RootLayout({
   const session = await auth();
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
+        <meta
+          name="format-detection"
+          content="telephone=no,date=no,address=no,email=no"
+        />
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#EAB308" />
         <meta name="apple-mobile-web-app-capable" content="yes" />

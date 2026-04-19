@@ -1,6 +1,7 @@
 // Run first so AUTH_SECRET is set from NEXTAUTH_SECRET before we read env
 import '@/lib/ensureAuthEnv';
 import NextAuth, { DefaultSession } from 'next-auth';
+import { CredentialsSignin } from '@auth/core/errors';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
 import GitHubProvider from 'next-auth/providers/github';
@@ -175,7 +176,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth(() => {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
-          throw new Error('Please enter your email and password');
+          throw new CredentialsSignin();
         }
 
         try {
@@ -204,7 +205,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth(() => {
             if (process.env.NODE_ENV === 'development') {
               console.error('User not found');
             }
-            throw new Error('Invalid email or password');
+            throw new CredentialsSignin();
           }
 
           const isPasswordValid = await user.comparePassword(
@@ -216,7 +217,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth(() => {
             if (process.env.NODE_ENV === 'development') {
               console.error('Invalid password');
             }
-            throw new Error('Invalid email or password');
+            throw new CredentialsSignin();
           }
 
           // Pending approval: still sign in; staff dashboards gate on isApproved.
@@ -232,12 +233,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth(() => {
             isApproved: user.isApproved,
           };
         } catch (error) {
-          console.error('Authorization error:', error);
-          // Re-throw the original error if it's already a user-friendly message
-          if (error instanceof Error && error.message.includes('Invalid email or password')) {
+          if (error instanceof CredentialsSignin) {
             throw error;
           }
-          throw new Error('Authentication failed. Please try again.');
+          console.error('Authorization error:', error);
+          throw new CredentialsSignin();
         }
       },
     }),

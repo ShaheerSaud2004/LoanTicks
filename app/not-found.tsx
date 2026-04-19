@@ -8,7 +8,7 @@ export default function NotFound() {
         <div className="max-w-md w-full text-center">
           <div className="flex justify-center mb-6">
             <div className="h-16 flex items-center">
-              <img src="/logo.jpg" alt="LOANATICKS" className="h-full w-auto object-contain" />
+              <img src="/logo.svg" alt="LOANATICKS" className="h-full w-auto object-contain" />
             </div>
           </div>
           <h1 className="text-6xl font-bold text-slate-200 mb-2">404</h1>

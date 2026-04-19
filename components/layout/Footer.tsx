@@ -19,7 +19,7 @@ export default function Footer() {
           {/* Company Info */}
           <div className="space-y-4">
             <div className="flex items-center flex-shrink-0">
-              <img src="/logo.jpg" alt="LOANATICKS" className="h-10 sm:h-12 w-auto object-contain" />
+              <img src="/logo.svg" alt="LOANATICKS" className="h-10 sm:h-12 w-auto object-contain" />
             </div>
             <p className="text-sm text-gray-400 leading-relaxed">
               Your trusted partner for home mortgage solutions. We provide competitive rates, 
@@ -189,13 +189,27 @@ export default function Footer() {
         {/* Equal Housing Opportunity & Fair Lending (federal compliance) */}
         <div className="mt-8 pt-6 border-t border-gray-700">
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mb-4">
-            <img
-              src="/equal-housing-opportunity-logo-1200w.png"
-              alt="Equal Housing Opportunity"
-              width={120}
-              height={80}
-              className="object-contain flex-shrink-0"
-            />
+            <span
+              className="inline-flex flex-shrink-0 items-center justify-center w-[120px] h-20 text-yellow-500"
+              suppressHydrationWarning
+            >
+              <svg viewBox="0 0 120 80" className="h-20 w-[120px]" fill="none" role="img" aria-label="Equal Housing Opportunity">
+                <title>Equal Housing Opportunity</title>
+                <rect x="4" y="4" width="112" height="72" rx="6" stroke="currentColor" strokeWidth="3" />
+                <path
+                  d="M24 52h72M60 44v16"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                  strokeLinecap="round"
+                />
+                <path
+                  d="M40 36h40M40 28h40"
+                  stroke="currentColor"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </span>
             <div className="text-center sm:text-left">
               <p className="text-sm text-gray-400 mb-2">
                 <strong className="text-gray-300">Equal Housing Opportunity.</strong> We are pledged to the letter and spirit of U.S. policy for the achievement of equal housing opportunity. We do not discriminate on the basis of race, color, religion, sex, handicap, familial status, or national origin.
@@ -211,7 +225,7 @@ export default function Footer() {
         <div className="mt-8 pt-6 border-t border-gray-700">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-sm text-gray-400 text-center md:text-left">
-              © 2025 LOANATICKS. All rights reserved.
+              © 2026 LOANATICKS. All rights reserved.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 text-sm text-gray-400">
               <span className="flex items-center gap-2">

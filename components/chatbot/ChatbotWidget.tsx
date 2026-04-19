@@ -151,7 +151,7 @@ export default function ChatbotWidget({ currentStep }: ChatbotWidgetProps) {
           {/* Logo in a small circle */}
           <div className="relative w-12 h-12 rounded-full bg-yellow-500 flex items-center justify-center overflow-hidden flex-shrink-0 ring-2 ring-yellow-400 group-hover:ring-yellow-500 transition">
             <Image
-              src="/logo.jpg"
+              src="/logo.svg"
               alt="LOANATICKS"
               width={36}
               height={36}
@@ -181,7 +181,7 @@ export default function ChatbotWidget({ currentStep }: ChatbotWidgetProps) {
           <div className="bg-yellow-500 rounded-t-2xl p-4 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Image
-                src="/logo.jpg"
+                src="/logo.svg"
                 alt="LOANATICKS"
                 width={32}
                 height={32}

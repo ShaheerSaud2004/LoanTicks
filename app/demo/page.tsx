@@ -204,7 +204,7 @@ export default function DemoShowcasePage() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="h-12 sm:h-14 flex items-center">
-                <img src="/logo.jpg" alt="LOANATICKS" className="h-full w-auto object-contain" />
+                <img src="/logo.svg" alt="LOANATICKS" className="h-full w-auto object-contain" />
               </div>
               <div>
                 <h1 className="text-3xl font-bold text-white">LOANATICKS Demo Showcase</h1>

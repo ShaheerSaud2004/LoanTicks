@@ -151,7 +151,7 @@ Form Data:
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="h-9 sm:h-10 flex items-center">
-                <img src="/logo.jpg" alt="LOANATICKS" className="h-full w-auto object-contain" />
+                <img src="/logo.svg" alt="LOANATICKS" className="h-full w-auto object-contain" />
               </div>
               <div>
                 <h1 className="text-lg sm:text-2xl font-bold">LOANATICKS API</h1>

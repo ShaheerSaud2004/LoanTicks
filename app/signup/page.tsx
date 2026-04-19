@@ -108,7 +108,7 @@ export default function SignUpPage() {
           <div className="text-center mb-8">
             <div className="flex items-center justify-center gap-3 mb-4">
               <div className="h-12 flex items-center">
-                <img src="/logo.jpg" alt="LOANATICKS" className="h-full w-auto object-contain" />
+                <img src="/logo.svg" alt="LOANATICKS" className="h-full w-auto object-contain" />
               </div>
               <h1 className="text-2xl font-semibold text-slate-900">LOANATICKS</h1>
             </div>

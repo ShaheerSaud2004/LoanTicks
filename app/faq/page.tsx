@@ -41,7 +41,7 @@ export default function FAQPage() {
           <div className="flex items-center justify-between h-16">
             <Link href="/" className="flex items-center gap-3">
               <div className="h-10 flex items-center flex-shrink-0">
-                <img src="/logo.jpg" alt="LOANATICKS" className="h-full w-auto object-contain" />
+                <img src="/logo.svg" alt="LOANATICKS" className="h-full w-auto object-contain" />
               </div>
               <span className="text-xl font-bold text-slate-900">LOANATICKS</span>
             </Link>
