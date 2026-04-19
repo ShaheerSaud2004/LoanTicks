@@ -30,6 +30,9 @@ export function rateLimit(options: RateLimitOptions) {
 
   return async (request: NextRequest): Promise<NextResponse | null> => {
     try {
+      if (process.env.DISABLE_RATE_LIMIT === '1' || process.env.E2E_MODE === '1') {
+        return null;
+      }
       // Get client identifier (IP address)
       const forwarded = request.headers.get('x-forwarded-for');
       const ip = forwarded ? forwarded.split(',')[0] : request.headers.get('x-real-ip') || 'unknown';

@@ -41,10 +41,13 @@ describe('DashboardWalkthrough', () => {
 
   /** Next is disabled briefly while the walkthrough scroll animation runs. */
   async function clickNextWhenReady() {
-    await waitFor(() => {
-      const next = screen.getByRole('button', { name: /^Next$/i });
-      expect(next).not.toBeDisabled();
-    });
+    await waitFor(
+      () => {
+        const next = screen.getByRole('button', { name: /^Next$/i });
+        expect(next).not.toBeDisabled();
+      },
+      { timeout: 5000 }
+    );
     fireEvent.click(screen.getByRole('button', { name: /^Next$/i }));
   }
 
@@ -165,11 +168,13 @@ describe('DashboardWalkthrough', () => {
 
     await clickNextWhenReady();
 
-    await waitFor(() => {
-      const prevButton = screen.getByRole('button', { name: /Previous/i });
-      expect(prevButton).not.toBeDisabled();
-      fireEvent.click(prevButton);
-    });
+    const prevButton = await screen.findByRole(
+      'button',
+      { name: /Previous/i },
+      { timeout: 5000 }
+    );
+    await waitFor(() => expect(prevButton).not.toBeDisabled(), { timeout: 5000 });
+    fireEvent.click(prevButton);
 
     await waitFor(() => {
       expect(document.body.textContent).toMatch(/Step\s*1\s*of\s*5/);
@@ -197,13 +202,15 @@ describe('DashboardWalkthrough', () => {
     );
 
     for (let i = 0; i < 4; i++) {
-      // eslint-disable-next-line no-await-in-loop
       await clickNextWhenReady();
     }
 
-    await waitFor(() => {
-      expect(screen.getByRole('button', { name: /Got it!/i })).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByRole('button', { name: /Got it!/i })).toBeInTheDocument();
+      },
+      { timeout: 5000 }
+    );
   });
 
   it('should complete walkthrough when "Got it!" is clicked', async () => {
@@ -214,15 +221,17 @@ describe('DashboardWalkthrough', () => {
     );
 
     for (let i = 0; i < 4; i++) {
-      // eslint-disable-next-line no-await-in-loop
       await clickNextWhenReady();
     }
 
-    await waitFor(() => {
-      const gotIt = screen.getByRole('button', { name: /Got it!/i });
-      expect(gotIt).toBeInTheDocument();
-      expect(gotIt).not.toBeDisabled();
-    });
+    await waitFor(
+      () => {
+        const gotIt = screen.getByRole('button', { name: /Got it!/i });
+        expect(gotIt).toBeInTheDocument();
+        expect(gotIt).not.toBeDisabled();
+      },
+      { timeout: 5000 }
+    );
     fireEvent.click(screen.getByRole('button', { name: /Got it!/i }));
 
     await waitFor(

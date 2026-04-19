@@ -58,7 +58,20 @@ export default [
     },
   },
   {
+    files: ['e2e/**/*.ts'],
+    languageOptions: {
+      globals: {
+        process: 'readonly',
+        Buffer: 'readonly',
+        test: 'readonly',
+        expect: 'readonly',
+        describe: 'readonly',
+      },
+    },
+  },
+  {
     files: ['__mocks__/**', '**/__tests__/**', '**/*.test.ts', '**/*.test.tsx', '**/*.spec.ts', '**/*.spec.tsx'],
+    ignores: ['e2e/**'],
     languageOptions: {
       globals: {
         jest: 'readonly',
@@ -83,6 +96,24 @@ export default [
     rules: {
       '@typescript-eslint/no-require-imports': 'off',
       '@typescript-eslint/no-unused-vars': 'off',
+    },
+  },
+  {
+    files: ['scripts/**/*.mjs', 'scripts/**/*.cjs'],
+    languageOptions: {
+      globals: {
+        process: 'readonly',
+        console: 'readonly',
+        Buffer: 'readonly',
+        setTimeout: 'readonly',
+        clearTimeout: 'readonly',
+        fetch: 'readonly',
+        URL: 'readonly',
+        URLSearchParams: 'readonly',
+        document: 'readonly',
+        window: 'readonly',
+        localStorage: 'readonly',
+      },
     },
   },
   {

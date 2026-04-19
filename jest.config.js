@@ -21,6 +21,7 @@ const customJestConfig = {
   testPathIgnorePatterns: [
     '/node_modules/',
     '/.next/',
+    '/e2e/',
     // Skip component tests in CI due to next-auth ESM issues (works in production)
     process.env.CI ? '__tests__/components/' : '',
     // Skip API route tests that pull in next/server (Request) or mongoose/bson ESM

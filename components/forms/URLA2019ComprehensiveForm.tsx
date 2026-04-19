@@ -2013,7 +2013,8 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
           </div>
         );
 
-      case 11: // Declarations (Section 12)
+      case 11: {
+        // Declarations (Section 12)
         const DeclareYesNo = ({ name, question, value, onChange, children }: { name: string; question: string; value: boolean; onChange: (v: boolean) => void; children?: React.ReactNode }) => (
           <div className="space-y-2">
             <p className="text-sm font-semibold text-gray-700">{question}</p>
@@ -2093,6 +2094,7 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
             </div>
           </div>
         );
+      }
 
       case 12: // Military Service
         return (
@@ -2593,8 +2595,10 @@ export default function URLA2019ComprehensiveForm({ onSubmit, saving }: URLA2019
               </div>
             </div>
 
-            {/* Step Content */}
-            {renderStep()}
+            {/* Step Content — aria-label scopes E2E (Playwright) to the active wizard step */}
+            <section data-testid="urla-active-step" aria-label={steps[currentStep].title}>
+              {renderStep()}
+            </section>
 
             {/* Navigation */}
             <div className="flex flex-col sm:flex-row justify-between gap-4 mt-8 sticky bottom-0 bg-white pb-4 pt-4 border-t border-gray-200 -mx-6 px-6 z-10">

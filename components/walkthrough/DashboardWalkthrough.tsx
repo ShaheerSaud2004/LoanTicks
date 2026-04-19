@@ -148,11 +148,12 @@ export default function DashboardWalkthrough({ role, onComplete }: DashboardWalk
       if (wasTriggered === 'true') {
         sessionStorage.removeItem(`walkthrough_${role}_triggered`);
       }
-      setTimeout(() => {
+      const showTimer = window.setTimeout(() => {
         setIsVisible(true);
         setTooltipPosition({ top: '50%', left: '50%' });
         scrollToStep(0);
       }, 300);
+      return () => window.clearTimeout(showTimer);
     }
   }, [role, scrollToStep]);
 

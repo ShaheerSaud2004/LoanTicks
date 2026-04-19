@@ -73,8 +73,8 @@ function buildMismo34Xml(app: Record<string, unknown>, ssnPlain: string): string
   const monthlyIncome = numStr(emp.monthlyIncome);
   const employmentStatus = esc(emp.employmentStatus);
 
-  const grossMonthlyIncome = numStr(fin.grossMonthlyIncome);
-  const otherIncome = numStr(fin.otherIncome);
+  const _grossMonthlyIncome = numStr(fin.grossMonthlyIncome);
+  const _otherIncome = numStr(fin.otherIncome);
   const totalAssets = numStr(fin.totalAssets);
   const totalLiabilities = numStr(fin.totalLiabilities);
   const checkingBalance = numStr(fin.checkingAccountBalance);

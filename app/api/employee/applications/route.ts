@@ -149,7 +149,7 @@ export async function PATCH(request: NextRequest) {
         application.markModified('statusHistory');
         break;
 
-      case 'decision':
+      case 'decision': {
         // Make approval/rejection decision
         if (!updateData.decision) {
           return NextResponse.json({ error: 'Decision is required' }, { status: 400 });
@@ -184,6 +184,7 @@ export async function PATCH(request: NextRequest) {
           }
         }
         break;
+      }
 
       case 'update_status':
         // Update application status

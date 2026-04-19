@@ -7,7 +7,6 @@ import type { NextRequest } from 'next/server';
 // in the server-rendered pages (Node), which have consistent access to AUTH_SECRET/NEXTAUTH_SECRET.
 
 export default async function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
   const host = request.headers.get('host') || '';
 
   // Redirect loanaticks.com (no www) to www

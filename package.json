@@ -22,7 +22,12 @@
     "test:ci": "jest --ci --coverage --maxWorkers=2",
     "smoke:prod": "node scripts/prod-smoke-browser.mjs",
     "smoke:prod:ui": "SMOKE_SKIP_GOOGLE_OAUTH=1 node scripts/prod-smoke-browser.mjs",
-    "smoke:prod:e2e": "SMOKE_LINK_CRAWL=1 node scripts/prod-smoke-browser.mjs"
+    "smoke:prod:e2e": "SMOKE_LINK_CRAWL=1 node scripts/prod-smoke-browser.mjs",
+    "e2e:workflow": "npx tsx scripts/e2e-workflow-seed.ts && node scripts/e2e-workflow-browser.mjs",
+    "e2e:workflow:browser": "node scripts/e2e-workflow-browser.mjs",
+    "e2e:playwright": "playwright test",
+    "e2e:playwright:ui": "playwright test --ui",
+    "e2e:playwright:install": "playwright install chromium"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -46,6 +51,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@playwright/test": "^1.52.0",
     "@tailwindcss/postcss": "^4",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",
